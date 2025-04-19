@@ -1,5 +1,4 @@
 #include "SceneController.h"
-#include "../Game/Score/ScoreManager.h"
 #include <memory>
 //継承元の関数も認識してくれる
 #include "TitleScene.h"
@@ -9,9 +8,6 @@ SceneController::SceneController()
 	//一番最初のシーンだけは割り当てる
 	//自分自身のインスタンスを渡してあげる
 	m_scene = std::make_shared<TitleScene>(*this);
-
-	//スコア
-	m_scoreManager = std::make_shared<ScoreManager>();
 }
 
 void SceneController::Update(Input& input)

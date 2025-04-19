@@ -77,8 +77,6 @@ void Application::Run()
 	//ゲームループ
 	while (ProcessMessage() == 0) // Windowsが行う処理を待つ
 	{
-		
-
 		//今回のループが始まった時間を覚えておく
 		LONGLONG time = GetNowHiPerformanceCount();
 

@@ -1,9 +1,9 @@
 #pragma once
 #include "SceneBase.h"
 #include <memory>
-#include  "../General/Geometry.h"
 
 class Input;
+class SceneController;
 class TitleScene :
     public SceneBase
 {
