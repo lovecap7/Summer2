@@ -19,7 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
+    <ClCompile Include="General\Collision\Collidable.cpp" />
+    <ClCompile Include="General\Collision\ColliderBase.cpp" />
+    <ClCompile Include="General\Collision\PolygonCollider.cpp" />
+    <ClCompile Include="General\Collision\SphereCollider.cpp" />
     <ClCompile Include="General\Input.cpp" />
+    <ClCompile Include="General\Math\Clamp.cpp" />
+    <ClCompile Include="General\Math\Matrix3x3.cpp" />
+    <ClCompile Include="General\Math\Matrix4x4.cpp" />
+    <ClCompile Include="General\Math\Vector2.cpp" />
+    <ClCompile Include="General\Math\Vector3.cpp" />
+    <ClCompile Include="General\Physics.cpp" />
+    <ClCompile Include="General\Rigidbody.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\main.cpp" />
     <ClCompile Include="Scene\DebugScene.cpp" />
@@ -33,8 +45,21 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="General\Collision\CapsuleCollider.h" />
+    <ClInclude Include="General\Collision\Collidable.h" />
+    <ClInclude Include="General\Collision\ColliderBase.h" />
+    <ClInclude Include="General\Collision\PolygonCollider.h" />
+    <ClInclude Include="General\Collision\SphereCollider.h" />
     <ClInclude Include="General\game.h" />
     <ClInclude Include="General\Input.h" />
+    <ClInclude Include="General\Math\Clamp.h" />
+    <ClInclude Include="General\Math\Matrix3x3.h" />
+    <ClInclude Include="General\Math\Matrix4x4.h" />
+    <ClInclude Include="General\Math\MyMath.h" />
+    <ClInclude Include="General\Math\Vector2.h" />
+    <ClInclude Include="General\Math\Vector3.h" />
+    <ClInclude Include="General\Physics.h" />
+    <ClInclude Include="General\Rigidbody.h" />
     <ClInclude Include="Main\Application.h" />
     <ClInclude Include="Scene\DebugScene.h" />
     <ClInclude Include="Scene\ResultScene.h" />

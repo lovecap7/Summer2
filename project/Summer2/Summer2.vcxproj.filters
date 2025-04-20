@@ -28,6 +28,21 @@
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{fc022255-3311-4513-9430-94687d6ea8af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\General\Math">
+      <UniqueIdentifier>{bf79fb63-51ee-4b87-898d-378bc9c376ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\General">
+      <UniqueIdentifier>{7ae01a99-d109-4086-8311-a504209b4bab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\General\Math">
+      <UniqueIdentifier>{81eab5b5-2eb2-427b-9260-faa5a410a63a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\General\Collision">
+      <UniqueIdentifier>{51dac2a2-6ad8-4c15-b30f-3eec61bc0a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\General\Collision">
+      <UniqueIdentifier>{251abc8c-27cd-4831-902c-ce1e9854870a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -66,6 +81,42 @@
     <ClCompile Include="Scene\DebugScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="General\Math\Clamp.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Matrix3x3.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Matrix4x4.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Vector2.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Vector3.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Collision\CapsuleCollider.cpp">
+      <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Collision\Collidable.cpp">
+      <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Collision\ColliderBase.cpp">
+      <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Collision\PolygonCollider.cpp">
+      <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Collision\SphereCollider.cpp">
+      <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Rigidbody.cpp">
+      <Filter>ソース ファイル\General</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Physics.cpp">
+      <Filter>ソース ファイル\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -103,6 +154,45 @@
     </ClInclude>
     <ClInclude Include="Scene\DebugScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Clamp.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Matrix3x3.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Matrix4x4.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\MyMath.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Vector3.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Vector2.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collision\CapsuleCollider.h">
+      <Filter>ヘッダー ファイル\General\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collision\Collidable.h">
+      <Filter>ヘッダー ファイル\General\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collision\ColliderBase.h">
+      <Filter>ヘッダー ファイル\General\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collision\PolygonCollider.h">
+      <Filter>ヘッダー ファイル\General\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collision\SphereCollider.h">
+      <Filter>ヘッダー ファイル\General\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Rigidbody.h">
+      <Filter>ヘッダー ファイル\General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Physics.h">
+      <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
