@@ -1,26 +1,21 @@
 #pragma once
 #include "SceneBase.h"
-#include  <vector>
-#include  <memory>
 
 class Input;
 class SceneController;
-class GameScene :
+class SelectStageScene :
     public SceneBase
 {
 public:
-    GameScene(SceneController& controller);
-  
-    ~GameScene();
+    SelectStageScene(SceneController& controller);
+    ~SelectStageScene();
     /// <summary>
     /// 派生クラスで実装を実装
+    /// virtual はこれを継承するかもしれないから
+    /// overrideは明示的にオーバーライドをエディタに示すため
     /// </summary>
-    /// <param name="input"></param>
     virtual void Update(Input& input) override;
-
-  
     virtual void Draw() override;
 private:
-   
 };
 

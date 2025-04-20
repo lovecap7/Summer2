@@ -2,8 +2,12 @@
 #include "Dxlib.h"
 #include  "../General/Input.h"
 #include "SceneController.h"
-#include "GameScene.h"
+#include "SelectStageScene.h"
 #include <memory>
+#if _DEBUG
+//デバッグモード
+#include "DebugScene.h"
+#endif
 
 namespace
 {
@@ -20,15 +24,27 @@ TitleScene::~TitleScene()
 
 void TitleScene::Update(Input& input)
 {
+#if _DEBUG
+	//デバッグシーン
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		//次のシーンへ
+		m_controller.ChangeScene(std::make_shared<DebugScene>(m_controller));
+		return;
+	}
+#endif
 	if (input.IsTriggered("Pause"))
 	{
 		//次のシーンへ
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<SelectStageScene>(m_controller));
 		return;
 	}
 }
 
 void TitleScene::Draw()
 {
+#if _DEBUG
 	DrawString(0, 0, "Title Scene", 0xffffff);
+	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
+#endif
 }

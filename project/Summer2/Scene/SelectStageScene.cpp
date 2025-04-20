@@ -1,0 +1,63 @@
+#include "SelectStageScene.h"
+#include "Stage1Scene.h"
+#include "Stage2Scene.h"
+#include "Stage3Scene.h"
+#include "SceneController.h"
+#include "../General/Input.h"
+#include <memory>
+#include <DxLib.h>
+#if _DEBUG
+//デバッグモード
+#include "DebugScene.h"
+#endif
+
+SelectStageScene::SelectStageScene(SceneController& controller):
+	SceneBase(controller)
+{
+}
+
+SelectStageScene::~SelectStageScene()
+{
+}
+
+void SelectStageScene::Update(Input& input)
+{
+#if _DEBUG
+	//デバッグシーン
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		//次のシーンへ
+		m_controller.ChangeScene(std::make_shared<DebugScene>(m_controller));
+		return;
+	}
+#endif
+	if (input.IsTriggered("A"))
+	{
+		//次のシーンへ
+		m_controller.ChangeScene(std::make_shared<Stage1Scene>(m_controller));
+		return;
+	}
+	if (input.IsTriggered("B"))
+	{
+		//次のシーンへ
+		m_controller.ChangeScene(std::make_shared<Stage2Scene>(m_controller));
+		return;
+	}
+	if (input.IsTriggered("X"))
+	{
+		//次のシーンへ
+		m_controller.ChangeScene(std::make_shared<Stage3Scene>(m_controller));
+		return;
+	}
+}
+
+void SelectStageScene::Draw()
+{
+#if _DEBUG
+	DrawString(0, 0, "SelectStage Scene", 0xffffff);
+	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
+	DrawString(0, 32, "A Bottun : Stage 1", 0xffff00);
+	DrawString(0, 48, "B Bottun : Stage 2", 0xffff00);
+	DrawString(0, 64, "X Bottun : Stage 3", 0xffff00);
+#endif
+}

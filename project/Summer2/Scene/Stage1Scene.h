@@ -1,14 +1,13 @@
 #pragma once
 #include "SceneBase.h"
-
-class Input;
 class SceneController;
-class TitleScene :
+class Input;
+class Stage1Scene :
     public SceneBase
 {
 public:
-    TitleScene(SceneController& controller);
-    ~TitleScene();
+    Stage1Scene(SceneController& controller);
+    ~Stage1Scene();
     /// <summary>
     /// ”h¶ƒNƒ‰ƒX‚ÅÀ‘•‚ğÀ‘•
     /// virtual ‚Í‚±‚ê‚ğŒp³‚·‚é‚©‚à‚µ‚ê‚È‚¢‚©‚ç

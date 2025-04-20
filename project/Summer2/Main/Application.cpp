@@ -97,7 +97,11 @@ void Application::Run()
 
 		}
 
-		printf("%f\n",GetFPS());
+		//ESCÉLÅ[Ç≈èIóπ
+		if (CheckHitKey(KEY_INPUT_ESCAPE))
+		{
+			Terminate();
+		}
 	}
 }
 

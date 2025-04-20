@@ -1,9 +1,9 @@
 #pragma once
 //スマートポインタを使う
 #include<memory>
+#include<list>
 class SceneBase;
 class Input;
-class ScoreManager;
 /// <summary>
 /// 各シーンを管理するクラス
 /// 管理はするが、繊維を管理はしない(繊維はクラスどもがやる)
@@ -28,19 +28,25 @@ public:
 	/// 各シーンがコントローラーを見て切り替えさせる
 	/// </summary>
 	/// <param name="">次の状態のポインタ</param>
-	void ChangeScene(std::shared_ptr<SceneBase>);
-
+	void ChangeScene(std::shared_ptr<SceneBase> scene);
 	/// <summary>
-	/// スコアマネージャーの参照
+	/// 最初に入れたシーンを切り替える
 	/// </summary>
-	/// <returns></returns>
-	std::shared_ptr<ScoreManager>& GetScoreManager() { return m_scoreManager; }
-private:
-	//現在実行中のシーン(中が何かは知らない)
-	std::shared_ptr<SceneBase> m_scene;
+	/// <param name=""></param>
+	void ChangeBaseScene(std::shared_ptr<SceneBase> scene);
+	/// <summary>
+	/// シーンをプッシュ(入れる)する
+	/// </summary>
+	/// <param name=""></param>
+	void PushScene(std::shared_ptr<SceneBase> scene);
+	/// <summary>
+	/// シーンをポップ(取り出す)する
+	/// </summary>
+	/// <param name=""></param>
+	void PopScene(std::shared_ptr<SceneBase> scene);
 
 private:
-	//スコア(各シーンで使うので)
-	std::shared_ptr<ScoreManager> m_scoreManager;
+	using SceneStack_t = std::list<std::shared_ptr<SceneBase>>;//シーンをスタック構造にするための型
+	SceneStack_t m_scenes;//現在実行中のシーン(中が何かは知らない)
 };
 

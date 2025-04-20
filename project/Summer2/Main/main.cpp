@@ -19,7 +19,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	app.Terminate();
 
 #if _DEBUG
-
 	fclose(out); fclose(in); FreeConsole();//コンソール解放
 #endif
 	return 0;				// ソフトの終了 
