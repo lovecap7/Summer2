@@ -5,7 +5,7 @@ class CapsuleCollider :
     public ColliderBase
 {
 public:
-    CapsuleCollider();
+    CapsuleCollider(Position3 endPos,float radius);
     virtual ~CapsuleCollider() {};
     //自分の座標とm_endPosの2点で構成されたカプセル
     Position3 GetEndPos() { return m_endPos; };

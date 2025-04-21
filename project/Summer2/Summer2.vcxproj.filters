@@ -43,6 +43,30 @@
     <Filter Include="ヘッダー ファイル\General\Collision">
       <UniqueIdentifier>{251abc8c-27cd-4831-902c-ce1e9854870a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game">
+      <UniqueIdentifier>{a6509d56-cccf-47c7-96b3-526edd9b6f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game">
+      <UniqueIdentifier>{5fade8ae-c805-4424-bdca-c704df6da841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Camera">
+      <UniqueIdentifier>{6c165bf2-e621-4e01-bcc0-d4d0c787e446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Camera">
+      <UniqueIdentifier>{e6f693e8-77ec-4be3-ae21-74c91e52b16a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors">
+      <UniqueIdentifier>{51ea9c91-be23-422f-a433-b8af8ff62fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors\Player">
+      <UniqueIdentifier>{6556588a-3999-4680-8f64-24c705363d0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Actors">
+      <UniqueIdentifier>{dfa11560-2f60-4aaa-9759-2d78a5df4b17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Actors\Player">
+      <UniqueIdentifier>{6e762c3c-919c-4a0f-8d71-e4fbd918cd18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -50,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="Main\main.cpp">
       <Filter>ソース ファイル\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="General\Input.cpp">
-      <Filter>ヘッダー ファイル\General</Filter>
     </ClCompile>
     <ClCompile Include="Scene\ResultScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
@@ -99,9 +120,6 @@
     <ClCompile Include="General\Collision\CapsuleCollider.cpp">
       <Filter>ソース ファイル\General\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="General\Collision\Collidable.cpp">
-      <Filter>ソース ファイル\General\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="General\Collision\ColliderBase.cpp">
       <Filter>ソース ファイル\General\Collision</Filter>
     </ClCompile>
@@ -114,8 +132,20 @@
     <ClCompile Include="General\Rigidbody.cpp">
       <Filter>ソース ファイル\General</Filter>
     </ClCompile>
-    <ClCompile Include="General\Physics.cpp">
+    <ClCompile Include="General\Input.cpp">
       <Filter>ソース ファイル\General</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Collidable.cpp">
+      <Filter>ソース ファイル\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\Player.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Actor.cpp">
+      <Filter>ソース ファイル\Game\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\Camera.cpp">
+      <Filter>ソース ファイル\Game\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +206,6 @@
     <ClInclude Include="General\Collision\CapsuleCollider.h">
       <Filter>ヘッダー ファイル\General\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="General\Collision\Collidable.h">
-      <Filter>ヘッダー ファイル\General\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="General\Collision\ColliderBase.h">
       <Filter>ヘッダー ファイル\General\Collision</Filter>
     </ClInclude>
@@ -191,8 +218,25 @@
     <ClInclude Include="General\Rigidbody.h">
       <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
-    <ClInclude Include="General\Physics.h">
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collidable.h">
       <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Actors\Player\Player.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Actor.h">
+      <Filter>ヘッダー ファイル\Game\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\Camera.h">
+      <Filter>ヘッダー ファイル\Game\Camera</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Summer2.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

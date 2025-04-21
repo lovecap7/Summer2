@@ -2,16 +2,32 @@
 #include "ResultScene.h"
 #include "SceneController.h"
 #include "../General/Input.h"
-#include <memory>
 #include <DxLib.h>
+#include "../General/Collidable.h"
+#include "../General/Rigidbody.h"
+
+//アクター
+#include "../Game/Actors/Actor.h"
+#include "../Game/Actors/Player/Player.h"
+//カメラ
+#include "../Game/Camera/Camera.h"
+
 #if _DEBUG
 //デバッグモード
 #include "DebugScene.h"
 #endif
 
 Stage1Scene::Stage1Scene(SceneController& controller):
-	SceneBase(controller)
+	SceneBase(controller),
+	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1"))
 {
+	//プレイヤーの初期位置
+	Position3 firstPos(0.0f, 0.0f, 0.0f);
+	//プレイヤーの初期化
+	m_player = std::make_shared<Player>(m_playerHandle, firstPos);
+	m_actors.push_back(m_player);
+	//カメラの初期化
+	m_camera = std::make_shared<Camera>(Vector3(0.0f,300.0f,700.0f), firstPos);
 }
 
 Stage1Scene::~Stage1Scene()
@@ -35,6 +51,21 @@ void Stage1Scene::Update(Input& input)
 		m_controller.ChangeScene(std::make_shared<ResultScene>(m_controller));
 		return;
 	}
+	//アクターの更新
+	for (auto& actor : m_actors)
+	{
+		actor->Update(input);
+	}
+	//アクターの衝突処理
+
+	//更新確定
+	for (auto& actor : m_actors)
+	{
+		actor->Complete();
+	}
+
+	//カメラの更新
+	m_camera->Update(m_player->GetCollidable()->GetRb()->GetPos());
 }
 
 void Stage1Scene::Draw()
@@ -43,4 +74,9 @@ void Stage1Scene::Draw()
 	DrawString(0, 0, "Stage1 Scene", 0xffffff);
 	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
 #endif
+	//アクターの描画
+	for (auto& actor : m_actors)
+	{
+		actor->Draw();
+	}
 }

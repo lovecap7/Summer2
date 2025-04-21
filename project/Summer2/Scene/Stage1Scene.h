@@ -1,5 +1,10 @@
 #pragma once
 #include "SceneBase.h"
+#include <vector>
+#include <memory>
+class Actor;
+class Player;
+class Camera;
 class SceneController;
 class Input;
 class Stage1Scene :
@@ -16,5 +21,13 @@ public:
     virtual void Update(Input& input) override;
     virtual void Draw() override;
 private:
+	std::vector<std::shared_ptr<Actor>> m_actors;
+    //プレイヤー
+	std::shared_ptr<Player> m_player;
+	//カメラ
+	std::shared_ptr<Camera> m_camera;
+private:
+    //ハンドル
+	int m_playerHandle;
 };
 

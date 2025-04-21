@@ -1,9 +1,9 @@
 #include "CapsuleCollider.h"
 
-CapsuleCollider::CapsuleCollider():
+CapsuleCollider::CapsuleCollider(Position3 endPos, float radius):
 	ColliderBase(ColliderKind::Capsule),
-	m_endPos(0.0f,0.0f,0.0f),
-	m_radius(0.0f),
+	m_endPos(endPos),
+	m_radius(radius),
 	m_hitNearPos(0.0f, 0.0f, 0.0f)
 {
 }

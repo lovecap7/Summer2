@@ -6,8 +6,10 @@ public:
 	Rigidbody();
 	Rigidbody(Vector3 pos);
 	virtual ~Rigidbody() {};
+	//位置
 	Vector3 GetPos() { return m_pos; };
 	void SetPos(Position3 pos) { m_pos = pos; };
+	//ベクトル
 	Vector3 GetVec() { return m_vec; };
 	void SetVec(Vector3 vec) { m_vec = vec; };
 	//次の座標
