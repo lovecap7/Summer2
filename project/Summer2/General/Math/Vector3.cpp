@@ -60,6 +60,11 @@ Vector3 Vector3::Zero()const
     return zero;
 }
 
+DxLib::VECTOR Vector3::ToDxLibVector() const
+{
+    return VGet(this->x,this->y,this->z);
+}
+
 Vector3 Vector3::operator+(const Vector3& right) const
 {
     Vector3 ans;

@@ -9,10 +9,13 @@ class PolygonCollider :
 {
 public:
 	PolygonCollider(int modelHandle);
-	MV1_COLL_RESULT_POLY_DIM GetHitDim() { return m_hitDim; }
+	MV1_COLL_RESULT_POLY_DIM GetHitDim()const { return m_hitDim; }
+	void SetHitDim(MV1_COLL_RESULT_POLY_DIM& dim){ m_hitDim = dim; }
     //ï«Ç∆è∞ÇÃãﬂÇ¢ç¿ïW
-	Vector3 GetNearWallHitPos() { return m_nearWallHitPos; }
-	Vector3 GetNearFloorHitPos() { return m_nearFloorHitPos; }
+	Vector3 GetNearWallHitPos() const { return m_nearWallHitPos; }
+	Vector3 GetNearFloorHitPos() const { return m_nearFloorHitPos; }
+    //ÉÇÉfÉã
+	int GetModelHandle() const{ return m_modelHandle; }
 private:
     //ìñÇΩÇËîªíËÇÇ∑ÇÈÉÇÉfÉã
     int m_modelHandle;

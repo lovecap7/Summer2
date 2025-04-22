@@ -70,9 +70,10 @@ bool Application::Init()
 void Application::Run()
 {
 	//アプリケーション以外はここで宣言と初期化
-	SceneController sceneController;
+	SceneController* sceneController = new SceneController();
 	//コントローラー
-	Input input;
+	Input* input = new Input(DX_INPUT_PAD1);
+	Input* input2 = new Input(DX_INPUT_PAD2);
 
 	//ゲームループ
 	while (ProcessMessage() == 0) // Windowsが行う処理を待つ
@@ -83,10 +84,11 @@ void Application::Run()
 		//画面全体をクリア
 		ClearDrawScreen();
 
-		////ここにゲームの処理を書く
-		input.Update();
-		sceneController.Update(input);
-		sceneController.Draw();
+		//ここにゲームの処理を書く
+		input->Update();
+		input2->Update();
+		sceneController->Update(*input);
+		sceneController->Draw();
 
 		//画面の切り替わりを待つ必要がある
 		ScreenFlip();//1/60秒経過するまで待つ
@@ -100,7 +102,14 @@ void Application::Run()
 		//ESCキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
 		{
-			Terminate();
+			//消す
+			delete input;
+			input = nullptr;
+			delete input2;
+			input2 = nullptr;
+			delete sceneController;
+			sceneController = nullptr;
+			break;
 		}
 	}
 }

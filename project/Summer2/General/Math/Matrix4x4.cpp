@@ -5,7 +5,7 @@ Matrix4x4::Matrix4x4()
 {
 }
 //単位行列
-Matrix4x4 Matrix4x4::IdentityMat4x4()
+Matrix4x4 IdentityMat4x4()
 {
     Matrix4x4 identity = {};//要素をすべて0にする
     identity.mat[0][0] = 1.0f;
@@ -16,7 +16,7 @@ Matrix4x4 Matrix4x4::IdentityMat4x4()
 }
 
 //平行移動
-Matrix4x4 Matrix4x4::TranslateMat4x4(float x, float y, float z)
+Matrix4x4 TranslateMat4x4(float x, float y, float z)
 {
     Matrix4x4 translate = {};
     translate = IdentityMat4x4();//単位行列にする
@@ -27,7 +27,7 @@ Matrix4x4 Matrix4x4::TranslateMat4x4(float x, float y, float z)
 }
 
 //X軸回転
-Matrix4x4 Matrix4x4::RotateXMat4x4(float angle)
+Matrix4x4 RotateXMat4x4(float angle)
 {
     Matrix4x4 rotaX{};
     rotaX = IdentityMat4x4();//単位行列
@@ -39,7 +39,7 @@ Matrix4x4 Matrix4x4::RotateXMat4x4(float angle)
 }
 
 //Y軸回転
-Matrix4x4 Matrix4x4::RotateYMat4x4(float angle)
+Matrix4x4 RotateYMat4x4(float angle)
 {
     Matrix4x4 rotaY{};
     rotaY = IdentityMat4x4();//単位行列
@@ -51,7 +51,7 @@ Matrix4x4 Matrix4x4::RotateYMat4x4(float angle)
 }
 
 //Z軸回転
-Matrix4x4 Matrix4x4::RotateZMat4x4(float angle)
+Matrix4x4 RotateZMat4x4(float angle)
 {
     Matrix4x4 rotaZ{};
     rotaZ = IdentityMat4x4();//単位行列
@@ -101,7 +101,7 @@ Vector3 Matrix4x4::operator*(const Vector3& v)
 }
 
 //ある座標を中心にY軸回転した座標
-Matrix4x4 Matrix4x4::RotateYPositionMatrix4x4(const Position3& center, float angle)
+Matrix4x4 RotateYPositionMatrix4x4(const Position3& center, float angle)
 {
     //中心を原点に平行移動させる
      //原点中心に回転
@@ -114,7 +114,7 @@ Matrix4x4 Matrix4x4::RotateYPositionMatrix4x4(const Position3& center, float ang
 
 
 //ある座標を中心にX軸回転した座標
-Matrix4x4 Matrix4x4::RotateXPositionMatrix4x4(const Position3& center, float angle)
+Matrix4x4 RotateXPositionMatrix4x4(const Position3& center, float angle)
 {
     //中心を原点に平行移動させる
      //原点中心に回転
@@ -125,7 +125,7 @@ Matrix4x4 Matrix4x4::RotateXPositionMatrix4x4(const Position3& center, float ang
     return rotaMat;
 }
 
-Matrix4x4 Matrix4x4::RotateZPositionMatrix4x4(const Position3& center, float angle)
+Matrix4x4 RotateZPositionMatrix4x4(const Position3& center, float angle)
 {
     //中心を原点に平行移動させる
     //原点中心に回転
@@ -136,7 +136,7 @@ Matrix4x4 Matrix4x4::RotateZPositionMatrix4x4(const Position3& center, float ang
     return rotaMat;
 }
 //ある座標を中心にX軸回転してY軸回転した座標
-Matrix4x4 Matrix4x4::RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float vAngle)
+Matrix4x4 RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float vAngle)
 {
     //中心を原点に平行移動させる
      //原点中心に回転

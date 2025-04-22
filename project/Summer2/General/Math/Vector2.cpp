@@ -115,3 +115,23 @@ bool Vector2::operator!=(const Vector2& right) const
     bool isY = this->y != right.y;
     return isX || isY;
 }
+
+float Theata(Vector2 vec1, Vector2 vec2)
+{
+    //“àÏ‚©‚çŠÔ‚ÌŠp“x‚ğæ“¾
+    float dot = vec1.Dot(vec2);
+    //cosƒ¦‚ğ‹‚ß‚é  “àÏ‚ÌŒö®dot = |a||b|cosƒ¦
+    float cosTheta = dot / (vec1.Magnitude() * vec2.Magnitude());
+    //ƒ¦(Šp“x)‚ğæ“¾
+    float theta = acosf(cosTheta);
+
+    //ŠOÏ‚©‚ç‰ñ“]‚ÌŒü‚«‚ğæ“¾
+    float cross = vec1.Cross(vec2);
+    //¶‰ñ“]
+    if (cross > 0)
+    {
+        theta *= -1;
+    }
+
+	return theta;
+}

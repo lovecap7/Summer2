@@ -12,6 +12,7 @@ enum class ActorKind
 };
 
 class Input;
+class Camera;
 class Collidable;
 /// <summary>
 /// ゲーム中に配置可能な物体の基底クラス
@@ -29,7 +30,7 @@ public:
 	/// 位置などの更新を行う
 	/// </summary>
 	/// <param name="">入力オブジェクト</param>
-	virtual void Update(const Input& input) abstract;
+	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera) abstract;
 	/// <summary>
 	/// 対象のアクターを表示
 	/// </summary>

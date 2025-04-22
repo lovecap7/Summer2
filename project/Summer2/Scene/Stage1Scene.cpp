@@ -27,7 +27,7 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	m_player = std::make_shared<Player>(m_playerHandle, firstPos);
 	m_actors.push_back(m_player);
 	//カメラの初期化
-	m_camera = std::make_shared<Camera>(Vector3(0.0f,300.0f,700.0f), firstPos);
+	m_camera = std::make_unique<Camera>(Vector3(100.0f,100.0f,300.0f), firstPos);
 }
 
 Stage1Scene::~Stage1Scene()
@@ -54,7 +54,7 @@ void Stage1Scene::Update(Input& input)
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input);
+		actor->Update(input,m_camera);
 	}
 	//アクターの衝突処理
 
@@ -73,6 +73,9 @@ void Stage1Scene::Draw()
 #if _DEBUG
 	DrawString(0, 0, "Stage1 Scene", 0xffffff);
 	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
+	DrawLine3D(VGet(0,0,500), VGet(0, 0, -500), 0x00ff00);
+	DrawLine3D(VGet(500,0,0), VGet(-500, 0, 00), 0x00ffff);
+	DrawLine3D(VGet(0,500,0), VGet(0, -500, 0), 0xff0000);
 #endif
 	//アクターの描画
 	for (auto& actor : m_actors)

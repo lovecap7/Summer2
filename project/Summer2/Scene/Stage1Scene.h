@@ -25,7 +25,7 @@ private:
     //プレイヤー
 	std::shared_ptr<Player> m_player;
 	//カメラ
-	std::shared_ptr<Camera> m_camera;
+	std::unique_ptr<Camera> m_camera;
 private:
     //ハンドル
 	int m_playerHandle;

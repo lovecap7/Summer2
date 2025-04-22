@@ -10,6 +10,7 @@ public:
     //自分の座標とm_endPosの2点で構成されたカプセル
     Position3 GetEndPos() { return m_endPos; };
     void SetEndPos(Position3 pos) { m_endPos = pos; };
+    void SetNextEndPos(Vector3 addVec) { m_endPos += addVec; };
     //2点の球の半径
     float GetRadius() { return m_radius; };
     void SetRadius(float radius) { m_radius = radius; };

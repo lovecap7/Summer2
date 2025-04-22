@@ -10,7 +10,7 @@ using namespace std;
 class Input
 {
 public:
-	Input();
+	Input(int padID);
 	~Input();
 	/// <summary>
 	/// 入力情報を更新する(毎フレーム呼び出してください)
@@ -76,7 +76,7 @@ private:
 	/// </summary>
 	unsigned int buttonID;
 	//自分のパッドのID
-	unsigned int m_padID;
+	int m_padID;
 
 
 	//ゲームパッド限定のテーブル

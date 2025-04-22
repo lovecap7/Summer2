@@ -1,4 +1,5 @@
 #pragma once
+#include <DxLib.h>
 class Vector3
 {
 public:
@@ -37,6 +38,11 @@ public:
 	/// </summary>
 	Vector3 Zero()const;
 
+	/// <summary>
+	/// DxLibのベクトルに変換します
+	/// </summary>
+	/// <returns></returns>
+	VECTOR ToDxLibVector()const;
 
 
 	//演算子オーバーロード

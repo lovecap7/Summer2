@@ -12,8 +12,10 @@ public:
 	//ベクトル
 	Vector3 GetVec() { return m_vec; };
 	void SetVec(Vector3 vec) { m_vec = vec; };
+	void ResetVec() { m_vec = m_vec.Zero(); };
 	//次の座標
 	Vector3 GetNextPos() { return m_pos + m_vec; };
+	void SetNextPos() { m_pos += m_vec; };
 private:
 	Vector3 m_pos;
 	Vector3 m_vec;

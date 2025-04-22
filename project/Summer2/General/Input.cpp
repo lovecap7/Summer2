@@ -1,29 +1,9 @@
 #include "Input.h"
 #include <DxLib.h>
 
-Input::Input()
+Input::Input(int padID):
+	m_padID(std::move(padID))
 {
-	//パッドの接続数がIDになる
-	switch (GetJoypadNum())
-	{
-	case 1:
-		m_padID = DX_INPUT_PAD1;
-		break;
-	case 2:
-		m_padID = DX_INPUT_PAD2;
-		break;
-	case 3:
-		m_padID = DX_INPUT_PAD3;
-		break;
-	case 4:
-		m_padID = DX_INPUT_PAD4;
-		break;
-	default:
-		//接続されていない場合は1にする
-		m_padID = DX_INPUT_PAD1;
-		break;
-	}
-
 	//ゲームパッドの連想配列
 	m_gamePadActionMap["OK"] = { PAD_INPUT_R };
 	m_gamePadActionMap["Pause"] = { PAD_INPUT_L };
@@ -79,9 +59,9 @@ void Input::Update()
 	
 	//スティックの入力をチェックする
 	//左スティック
-	GetJoypadAnalogInput(&m_stickInfo.leftStickX, &m_stickInfo.leftStickY, m_padID);
+	DxLib::GetJoypadAnalogInput(&m_stickInfo.leftStickX, &m_stickInfo.leftStickY, m_padID);
 	//右スティック
-	GetJoypadAnalogInputRight(&m_stickInfo.rightStickX, &m_stickInfo.rightStickY, m_padID);
+	DxLib::GetJoypadAnalogInputRight(&m_stickInfo.rightStickX, &m_stickInfo.rightStickY, m_padID);
 }
 
 //押しているか

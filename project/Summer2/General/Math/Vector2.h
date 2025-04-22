@@ -51,6 +51,7 @@ public:
 	bool operator==(const Vector2& right)const;
 	bool operator!=(const Vector2& right)const;
 };
+float Theata(Vector2 vec1,Vector2 vec2);
 //À•W‚Å•\‚·‚Æ‚«‚Ég‚¤
 typedef Vector2 Position2;
 
