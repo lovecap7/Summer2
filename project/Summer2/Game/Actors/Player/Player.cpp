@@ -19,6 +19,8 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_stickVec(0.0f,0.0f),
 	m_update(&Player::IdleUpdate)
 {
+	//アクターの種類をセット
+	m_actorKind = ActorKind::Player;
 	//初期位置
 	Vector3 endPos = firstPos;
 	endPos.y += kCapsuleHeight; //カプセルの上端

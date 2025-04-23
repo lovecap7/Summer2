@@ -38,5 +38,13 @@ public:
     /// <param name="actorB">ポリゴン</param>
      /// <returns>当たってる true : 当たってない false</returns>
     bool CheckCollSP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB);
+
+    /// <summary>
+    /// カプセルとポリゴンの当たり判定
+    /// </summary>
+    /// <param name="actorA">カプセル</param>
+    /// <param name="actorB">ポリゴン</param>
+    /// <returns></returns>
+    bool CheckCollCP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB);
 };
 

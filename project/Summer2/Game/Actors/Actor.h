@@ -20,6 +20,8 @@ class Collidable;
 class Actor abstract//newできなくなる
 {
 protected:
+	//このアクターの種類
+	ActorKind m_actorKind;
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
 public:
@@ -40,9 +42,14 @@ public:
 	/// </summary>
 	virtual void Complete() abstract;
 	/// <summary>
+	/// アクターの種類
+	/// </summary>
+	/// <returns></returns>
+	ActorKind GetActorKind() { return m_actorKind; };
+	/// <summary>
 	/// 当たり判定と衝突処理に使う
 	/// </summary>
 	/// <returns></returns>
-	std::shared_ptr<Collidable> GetCollidable(){ return m_collidable; }
+	const std::shared_ptr<Collidable>& GetCollidable() const { return m_collidable; }
 };
 

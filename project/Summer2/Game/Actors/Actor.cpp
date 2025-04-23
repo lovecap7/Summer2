@@ -1,5 +1,6 @@
 #include "Actor.h"
 
-Actor::Actor()
+Actor::Actor():
+	m_actorKind(ActorKind::None)
 {
 }

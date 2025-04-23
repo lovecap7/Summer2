@@ -5,7 +5,7 @@ class SphereCollider :
 {
 public:
 	SphereCollider(float radius);
-	float GetRadius() { return m_radius; }
+	float GetRadius() const { return m_radius; }
 	void SetRadius(float radius) { m_radius = radius; }
 private:
     //”¼Œa

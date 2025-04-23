@@ -17,6 +17,7 @@ public:
 	Vector3 GetNextPos() { return m_pos + m_vec; };
 	void SetNextPos() { m_pos += m_vec; };
 private:
+	//座標とベクトル
 	Vector3 m_pos;
 	Vector3 m_vec;
 };

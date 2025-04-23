@@ -5,7 +5,7 @@
 /// お互いがどの形の当たり判定をしているのかを
 /// 先にチェックする際に使う
 /// </summary>
-enum class ColliderKind
+enum class Shape
 {
 	Sphere,
 	Capsule,
@@ -19,16 +19,16 @@ enum class ColliderKind
 class ColliderBase abstract
 {
 public:
-	ColliderBase(ColliderKind kind);
+	ColliderBase(Shape kind);
 	virtual ~ColliderBase() {};
 
 	/// <summary>
 	/// 当たり判定の形を取得
 	/// </summary>
 	/// <returns>当たり判定の形</returns>
-	ColliderKind GetCollKind()const { return m_kind; }
+	Shape GetShape()const { return m_kind; }
 private:
 	//当たり判定の形
-	ColliderKind m_kind;
+	Shape m_kind;
 };
 

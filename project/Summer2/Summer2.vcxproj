@@ -26,6 +26,7 @@
     <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="General\Collision\ColliderBase.cpp" />
     <ClCompile Include="General\Collision\CollisionChecker.cpp" />
+    <ClCompile Include="General\Collision\CollisionManager.cpp" />
     <ClCompile Include="General\Collision\PolygonCollider.cpp" />
     <ClCompile Include="General\Collision\SphereCollider.cpp" />
     <ClCompile Include="General\Input.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="General\Collision\CapsuleCollider.h" />
     <ClInclude Include="General\Collision\ColliderBase.h" />
     <ClInclude Include="General\Collision\CollisionChecker.h" />
+    <ClInclude Include="General\Collision\CollisionManager.h" />
     <ClInclude Include="General\Collision\PolygonCollider.h" />
     <ClInclude Include="General\Collision\SphereCollider.h" />
     <ClInclude Include="General\game.h" />

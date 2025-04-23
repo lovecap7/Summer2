@@ -1,6 +1,6 @@
 #include "ColliderBase.h"
 
-ColliderBase::ColliderBase(ColliderKind kind):
+ColliderBase::ColliderBase(Shape kind):
 	m_kind(kind)
 {
 }

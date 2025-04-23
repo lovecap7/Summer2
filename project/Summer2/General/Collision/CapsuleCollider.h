@@ -8,14 +8,16 @@ public:
     CapsuleCollider(Position3 endPos,float radius);
     virtual ~CapsuleCollider() {};
     //自分の座標とm_endPosの2点で構成されたカプセル
-    Position3 GetEndPos() { return m_endPos; };
+    Position3 GetEndPos() const { return m_endPos; };
     void SetEndPos(Position3 pos) { m_endPos = pos; };
+    //次の座標
+    Position3 GetNextEndPos(Vector3 vec) const { return m_endPos + vec; };
     void SetNextEndPos(Vector3 addVec) { m_endPos += addVec; };
     //2点の球の半径
-    float GetRadius() { return m_radius; };
+    float GetRadius() const { return m_radius; };
     void SetRadius(float radius) { m_radius = radius; };
     //当たった物体と近い座標
-    Vector3 GetNearPos() { return m_hitNearPos; };
+    Vector3 GetNearPos() const { return m_hitNearPos; };
     void SetNearPos(Position3 hitNearPos) { m_hitNearPos = hitNearPos; };
 private:
     //自分の座標とm_endPosの2点で構成されたカプセル

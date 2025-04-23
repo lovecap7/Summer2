@@ -237,16 +237,38 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 
 bool CollisionChecker::CheckCollSP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
 {
-	//球の座標
-	VECTOR spherePos = actorA->GetRb()->GetNextPos().ToDxLibVector();
 	//当たってるポリゴンの数
 	auto hitDim = MV1CollCheck_Sphere(
 		std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->GetModelHandle(),
 		-1,
-		spherePos,
+		actorA->GetRb()->GetNextPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<SphereCollider>(actorA->GetColl())->GetRadius());
 	//一つも当たっていないならfalse
 	if (hitDim.HitNum <= 0)
+	{
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		MV1CollResultPolyDimTerminate(hitDim);
+		return false;
+	}
+
+	//当たり判定に使うので保存
+	std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->SetHitDim(hitDim);
+
+	return true;
+}
+
+bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+{
+	//当たってるポリゴンの数
+	auto hitDim = MV1CollCheck_Capsule(
+		std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->GetModelHandle(),
+		-1,
+		actorA->GetRb()->GetNextPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetNextEndPos(actorA->GetRb()->GetVec()).ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius(),
+		-1);
+	//当たっていないならfalse
+	if (!hitDim.Dim->HitFlag)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(hitDim);
