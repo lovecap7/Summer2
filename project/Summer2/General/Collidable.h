@@ -16,13 +16,18 @@ public:
 	//当たり判定を行うかどうか
 	bool IsCollide() const { return m_isCollide; };
 	void SetIsCollide(bool isCollide) { m_isCollide = isCollide; }
+	//動かないかどうか
+	bool IsStatic() const { return m_isStatic; };
+	void SetIsStatic(bool isStatic) { m_isStatic = isStatic; }
 private:
 	//当たり判定
 	std::shared_ptr<ColliderBase> m_coll;
 	//座標とベクトル
 	std::shared_ptr<Rigidbody> m_rb;
 	//衝突判定を行う
-	bool m_isCollide
+	bool m_isCollide;
+	//動かない
+	bool m_isStatic;
 };
 
 
