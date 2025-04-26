@@ -16,6 +16,11 @@ public:
 	Vector3 GetNearFloorHitPos() const { return m_nearFloorHitPos; }
     //モデル
 	int GetModelHandle() const{ return m_modelHandle; }
+    //床と壁のフラグ
+    void ResetHitFlag() { m_isFloor = m_isWall = false; };
+    bool IsFloor() { return m_isFloor; };
+    bool IsWall() { return m_isWall; };
+    void SetHitFlag(bool isFloor, bool isWall) { m_isFloor = isFloor, m_isWall = isWall; };
 private:
     //当たり判定をするモデル
     int m_modelHandle;

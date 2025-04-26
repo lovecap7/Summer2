@@ -1,5 +1,12 @@
 #pragma once
 #include <memory>
+#include <DxLib.h>
+#include "../Math/MyMath.h"
+namespace
+{
+	//ポリゴンの当たり判定の配列の最大数
+	constexpr int kMaxHitPolygon = 2048;
+}
 class Collidable;
 class CollisionProcess
 {
@@ -36,5 +43,14 @@ public:
 	/// <param name="otherA">カプセル</param>
 	/// <param name="otherB">ポリゴン</param>
 	void ProcessCP(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB);
+private:
+	int	m_wallNum;			// 壁ポリゴンと判断されたポリゴンの数
+	int	m_floorNum;			// 床ポリゴンと判断されたポリゴンの数
+	MV1_COLL_RESULT_POLY_DIM* m_wall[kMaxHitPolygon];
+	MV1_COLL_RESULT_POLY_DIM* m_floor[kMaxHitPolygon];
+	/// <summary>
+	/// 床ポリゴンと壁ポリゴンに分ける
+	/// </summary>
+	void AnalyzeWallAndFloor(const MV1_COLL_RESULT_POLY_DIM& hitDim, const Vector3& oldPos);
 };
 
