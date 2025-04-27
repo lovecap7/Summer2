@@ -20,7 +20,8 @@ public:
     void ResetHitFlag() { m_isFloor = m_isWall = false; };
     bool IsFloor() { return m_isFloor; };
     bool IsWall() { return m_isWall; };
-    void SetHitFlag(bool isFloor, bool isWall) { m_isFloor = isFloor, m_isWall = isWall; };
+    void SetIsFloor(bool isFloor) { m_isFloor = isFloor; };
+    void SetIsWall(bool isWall) { m_isWall = isWall; };
 private:
     //“–‚½‚è”»’è‚ð‚·‚éƒ‚ƒfƒ‹
     int m_modelHandle;

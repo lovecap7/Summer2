@@ -2,6 +2,15 @@
 #include <memory>
 #include "Math/MyMath.h"
 
+//ó‘Ô‚É‡‚í‚¹‚Ä“–‚½‚è”»’è‚ğs‚¤‚Ég‚¤
+enum class State
+{
+	None,
+	Jump,
+	Fall,
+	Dead
+};
+
 class ColliderBase;
 class Rigidbody;
 class Collidable
@@ -19,6 +28,9 @@ public:
 	//“®‚©‚È‚¢‚©‚Ç‚¤‚©
 	bool IsStatic() const { return m_isStatic; };
 	void SetIsStatic(bool isStatic) { m_isStatic = isStatic; }
+	//ó‘Ô
+	State GetState() { return m_state; };
+	void SetState(State state) { m_state = state; };
 private:
 	//“–‚½‚è”»’è
 	std::shared_ptr<ColliderBase> m_coll;
@@ -28,6 +40,8 @@ private:
 	bool m_isCollide;
 	//“®‚©‚È‚¢
 	bool m_isStatic;
+	//ó‘Ô
+	State m_state;
 };
 
 

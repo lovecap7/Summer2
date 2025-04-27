@@ -46,11 +46,15 @@ public:
 private:
 	int	m_wallNum;			// 壁ポリゴンと判断されたポリゴンの数
 	int	m_floorNum;			// 床ポリゴンと判断されたポリゴンの数
-	MV1_COLL_RESULT_POLY_DIM* m_wall[kMaxHitPolygon];
-	MV1_COLL_RESULT_POLY_DIM* m_floor[kMaxHitPolygon];
+	MV1_COLL_RESULT_POLY* m_wall[kMaxHitPolygon];
+	MV1_COLL_RESULT_POLY* m_floor[kMaxHitPolygon];
 	/// <summary>
 	/// 床ポリゴンと壁ポリゴンに分ける
 	/// </summary>
-	void AnalyzeWallAndFloor(const MV1_COLL_RESULT_POLY_DIM& hitDim, const Vector3& oldPos);
+	void AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const Vector3& oldPos);
+	/// <summary>
+	/// ポリゴンとの押し戻しベクトルを返す
+	/// </summary>
+	Vector3 OverlapVecWithPoly(int hitNum, const Vector3& nextPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
 };
 
