@@ -67,14 +67,18 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 	//床と当たったなら
 	if (m_floorNum > 0)
 	{
-		//床に当たっているので
-		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
-
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecWithPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
 
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
+
+		//修正方向が上向きなら床
+		if (overlapVec.y > 0)
+		{
+			//床に当たっているので
+			std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+		}
 	}
 
 	//壁と当たっているなら
@@ -133,6 +137,60 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 {
 	//お互い動かないオブジェクトなら衝突しない
 	if (otherA->IsStatic() && otherB->IsStatic())return;
+
+	//初期化
+	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(false);
+	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsWall(false);
+
+	//壁と床とのフラグリセット
+	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->ResetHitFlag();
+	//お互い動かないオブジェクトなら衝突しない
+	if (otherA->IsStatic() && otherB->IsStatic())return;
+
+	//当たったポリゴンの情報
+	auto hitDim = std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->GetHitDim();
+	//カプセルの頭座標と足座標
+	Position3 headPos = std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNextEndPos();//移動後
+	Position3 legPos = otherA->GetRb()->GetNextPos();//移動後
+	//頭より足のほうが低い位置にあるなら入れ替える
+	if (headPos.y < legPos.y)
+	{
+		Position3 temp = legPos;
+		legPos = headPos;
+		headPos = temp;
+	}
+
+	//床ポリゴンと壁ポリゴンに分ける
+	AnalyzeWallAndFloor(hitDim, legPos);
+	//床と当たったなら
+	if (m_floorNum > 0)
+	{
+		//床に当たっているので
+		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+
+		//補正するベクトルを返す
+		Vector3 overlapVec = OverlapVecWithPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
+
+		//ポリゴンは固定(static)なので球のみ動かす
+		otherA->GetRb()->AddVec(overlapVec);
+	}
+
+	//壁と当たっているなら
+	if (m_wallNum > 0)
+	{
+		//壁に当たっているので
+		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsWall(true);
+
+		//補正するベクトルを返す
+		Vector3 overlapVec = OverlapVecWithPoly(m_wallNum, nextPos, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
+
+		//ポリゴンは固定(static)なので球のみ動かす
+		otherA->GetRb()->AddVec(overlapVec);
+	}
+
+	// 検出したプレイヤーの周囲のポリゴン情報を開放する
+	DxLib::MV1CollResultPolyDimTerminate(hitDim);
+
 }
 
 void CollisionProcess::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const Vector3& nextPos)

@@ -5,6 +5,7 @@
 #include <DxLib.h>
 #include "../General/Collidable.h"
 #include "../General/Rigidbody.h"
+#include "../General/Collision/CollisionManager.h"
 
 //アクター
 #include "../Game/Actors/Actor.h"
@@ -28,6 +29,8 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	m_actors.push_back(m_player);
 	//カメラの初期化
 	m_camera = std::make_unique<Camera>(Vector3(100.0f,100.0f,300.0f), firstPos);
+	//コリジョンマネージャー
+	m_collManager = std::make_unique<CollisionManager>();
 }
 
 Stage1Scene::~Stage1Scene()
@@ -57,7 +60,7 @@ void Stage1Scene::Update(Input& input)
 		actor->Update(input,m_camera);
 	}
 	//アクターの衝突処理
-
+	m_collManager->Update(m_actors);
 	//更新確定
 	for (auto& actor : m_actors)
 	{

@@ -3,6 +3,7 @@
 #include <memory>
 class Actor;
 class CollisionChecker;
+class CollisionProcess;
 class CollisionManager
 {
 public:
@@ -12,5 +13,7 @@ public:
 private:
 	//当たり判定のチェックをするクラス
 	std::unique_ptr<CollisionChecker> m_collChecker;
+	//衝突処理
+	std::unique_ptr<CollisionProcess> m_collProcessor;
 };
 

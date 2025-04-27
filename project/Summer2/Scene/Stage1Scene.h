@@ -7,6 +7,7 @@ class Player;
 class Camera;
 class SceneController;
 class Input;
+class CollisionManager;
 class Stage1Scene :
     public SceneBase
 {
@@ -26,6 +27,8 @@ private:
 	std::shared_ptr<Player> m_player;
 	//ƒJƒƒ‰
 	std::unique_ptr<Camera> m_camera;
+    //“–‚½‚è”»’è‚ÆÕ“Ëˆ—
+	std::unique_ptr<CollisionManager> m_collManager;
 private:
     //ƒnƒ“ƒhƒ‹
 	int m_playerHandle;

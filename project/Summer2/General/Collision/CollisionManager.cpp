@@ -1,12 +1,14 @@
 #include "CollisionManager.h"
 #include "../../Game/Actors/Actor.h"
 #include "CollisionChecker.h"
+#include "CollisionProcess.h"
 #include "../Rigidbody.h"
 #include "ColliderBase.h"
 #include "../Collidable.h"
 
 CollisionManager::CollisionManager():
-	m_collChecker(std::make_unique<CollisionChecker>())
+	m_collChecker(std::make_unique<CollisionChecker>()),
+	m_collProcessor(std::make_unique<CollisionProcess>())
 {
 }
 
@@ -38,16 +40,31 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 				if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
 				{
 					isHit = m_collChecker->CheckCollSS(actorA->GetCollidable(), actorB->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessSS(actorA->GetCollidable(), actorB->GetCollidable());
+					}
 				}
 				//カプセル
 				else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
 				{
 					isHit = m_collChecker->CheckCollCS(actorB->GetCollidable(), actorA->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessCS(actorB->GetCollidable(), actorA->GetCollidable());
+					}
 				}
 				//ポリゴン
 				else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Polygon)
 				{
 					isHit = m_collChecker->CheckCollSP(actorA->GetCollidable(), actorB->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessSP(actorA->GetCollidable(), actorB->GetCollidable());
+					}
 				}
 			}
 			//カプセルと
@@ -57,16 +74,31 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 				if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
 				{
 					isHit = m_collChecker->CheckCollCS(actorA->GetCollidable(), actorB->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessCS(actorA->GetCollidable(), actorB->GetCollidable());
+					}
 				}
 				//カプセル
 				else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
 				{
 					isHit = m_collChecker->CheckCollCC(actorA->GetCollidable(), actorB->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessCC(actorA->GetCollidable(), actorB->GetCollidable());
+					}
 				}
 				//ポリゴン
 				else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Polygon)
 				{
 					isHit = m_collChecker->CheckCollCP(actorA->GetCollidable(), actorB->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessCP(actorA->GetCollidable(), actorB->GetCollidable());
+					}
 				}
 			}
 			//ポリゴンと
@@ -76,11 +108,21 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 				if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
 				{
 					isHit = m_collChecker->CheckCollSP(actorB->GetCollidable(), actorA->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessSP(actorB->GetCollidable(), actorA->GetCollidable());
+					}
 				}
 				//カプセル
 				else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
 				{
 					isHit = m_collChecker->CheckCollCP(actorB->GetCollidable(), actorA->GetCollidable());
+					if (isHit)
+					{
+						//ベクトルを補正する
+						m_collProcessor->ProcessCP(actorB->GetCollidable(), actorA->GetCollidable());
+					}
 				}
 			}
 
