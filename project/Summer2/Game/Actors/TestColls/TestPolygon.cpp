@@ -11,6 +11,8 @@ TestPolygon::TestPolygon(Position3 pos, int modelHandle):
 {
 	//‰ŠúˆÊ’u
 	m_collidable = std::make_shared<Collidable>(std::make_shared<PolygonCollider>(modelHandle), std::make_shared<Rigidbody>(pos));
+
+	DxLib::MV1SetScale(m_modelHandle, VGet(5.0f, 5.0f, 5.0f));
 }
 
 TestPolygon::~TestPolygon()

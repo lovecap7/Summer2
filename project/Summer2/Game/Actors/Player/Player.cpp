@@ -134,7 +134,6 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	else
 	{
 		//ˆÚ“®
-		m_collidable->GetRb()->ResetVec();
 		m_collidable->GetRb()->SetVec(GetForwardVec(camera) * kMoveSpeed);
 	}
 }

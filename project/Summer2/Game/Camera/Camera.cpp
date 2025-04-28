@@ -3,7 +3,9 @@
 #include "../../General/Collidable.h"
 #include "../Actors/Actor.h"
 #include <DxLib.h>
-
+#if _DEBUG
+#include "../../General/Input.h"
+#endif
 
 
 Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
@@ -19,6 +21,11 @@ Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
 
 	//ディレクショナルライト
 	ChangeLightTypeDir(VGet(0.0f, 0.0f, -1.0f));
+
+#if _DEBUG
+	m_cameraHAngle = 0.0f;
+	m_cameraVAngle = -20.0f;
+#endif
 }
 
 Camera::~Camera()
@@ -39,3 +46,10 @@ Vector3 Camera::GetDir()
 	dir = dir.Normalize();
 	return dir;
 }
+
+#if _DEBUG
+void Camera::RotaCamera(const Input& input)
+{
+	
+}
+#endif

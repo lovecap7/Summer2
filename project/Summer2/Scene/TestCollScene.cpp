@@ -30,7 +30,7 @@ namespace
 TestCollScene::TestCollScene(SceneController& controller) :
 	SceneBase(controller),
 	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1")),
-	m_polygonHandle(MV1LoadModel("Data/Model/Test/Test.mv1"))
+	m_polygonHandle(MV1LoadModel("Data/Model/Test/city.mv1"))
 {
 	//プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
@@ -41,17 +41,17 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	m_collManager = std::make_unique<CollisionManager>();
 
 	//当たり判定のテストを行うので適当にオブジェクトを追加
-	//動く
-	m_actors.push_back(std::make_shared<TestSphere>(Vector3{ 100.0f,0.0f,0.0f }, 20.0f,false));//球
-	m_actors.push_back(std::make_shared<TestSphere>(Vector3{ 200.0f,10.0f,0.0f }, 50.0f,false));//球
-	m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ 100.0f,0.0f,100.0f }, Vector3{ 100.0f,100.0f,100.0f }, 50.0f,false));//カプセル
-	m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ 300.0f,10.0f,0.0f }, Vector3{ 500.0f,10.0f, 0.0f }, 50.0f,false));//カプセル
-	//動かない
-	m_actors.push_back(std::make_shared<TestSphere>(Vector3{ -100.0f,0.0f,0.0f }, 20.0f, true));//球
-	m_actors.push_back(std::make_shared<TestSphere>(Vector3{ -200.0f,10.0f,0.0f }, 50.0f, true));//球
-	m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -100.0f,0.0f,100.0f }, Vector3{ -100.0f,100.0f,-100.0f }, 50.0f, true));//カプセル
-	m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -300.0f,10.0f,0.0f }, Vector3{ -500.0f,10.0f, 0.0f }, 50.0f, true));//カプセル
-	m_actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-10.0f,0.0f }, m_polygonHandle));//カプセル
+	////動く
+	//m_actors.push_back(std::make_shared<TestSphere>(Vector3{ 100.0f,0.0f,0.0f }, 20.0f,false));//球
+	//m_actors.push_back(std::make_shared<TestSphere>(Vector3{ 200.0f,10.0f,0.0f }, 50.0f,false));//球
+	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ 100.0f,0.0f,100.0f }, Vector3{ 100.0f,100.0f,100.0f }, 50.0f,false));//カプセル
+	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ 300.0f,10.0f,0.0f }, Vector3{ 500.0f,10.0f, 0.0f }, 50.0f,false));//カプセル
+	////動かない
+	//m_actors.push_back(std::make_shared<TestSphere>(Vector3{ -100.0f,0.0f,0.0f }, 20.0f, true));//球
+	//m_actors.push_back(std::make_shared<TestSphere>(Vector3{ -200.0f,10.0f,0.0f }, 50.0f, true));//球
+	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -100.0f,0.0f,100.0f }, Vector3{ -100.0f,100.0f,-100.0f }, 50.0f, true));//カプセル
+	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -300.0f,10.0f,0.0f }, Vector3{ -500.0f,10.0f, 0.0f }, 50.0f, true));//カプセル
+	m_actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));//カプセル
 }
 
 TestCollScene::~TestCollScene()
@@ -97,6 +97,9 @@ void TestCollScene::Update(Input& input)
 
 	//カメラの更新
 	m_camera->Update();
+#if _DEBUG
+	m_camera->RotaCamera(input);
+#endif
 }
 
 void TestCollScene::Draw()
