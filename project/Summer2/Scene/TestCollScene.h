@@ -32,5 +32,6 @@ private:
 private:
     //ƒnƒ“ƒhƒ‹
     int m_playerHandle;
+    int m_polygonHandle;
 };
 

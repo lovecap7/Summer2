@@ -130,7 +130,8 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 			if (isHit)
 			{
 				//“–‚½‚Á‚½Žž‚Ìˆ—
-
+				actorA->OnHitColl(actorB->GetCollidable());
+				actorB->OnHitColl(actorA->GetCollidable());
 			}
 		}
 	}

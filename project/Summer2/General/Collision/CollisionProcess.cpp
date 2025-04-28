@@ -9,7 +9,7 @@
 namespace
 {
 	//押し戻しの値に足して密着するのを防ぐ
-	constexpr float kOverlapGap = 1.0f;
+	constexpr float kOverlapGap = 0.5f;
 }
 
 CollisionProcess::CollisionProcess() :
@@ -61,11 +61,18 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 
 	//壁と床とのフラグリセット
 	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->ResetHitFlag();
-	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic() && otherB->IsStatic())return;
-
+	
 	//当たったポリゴンの情報
 	auto hitDim = std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->GetHitDim();
+
+	//お互い動かないオブジェクトなら衝突しない
+	if (otherA->IsStatic())
+	{
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		DxLib::MV1CollResultPolyDimTerminate(hitDim);
+		return;
+	}
+
 	//球の座標
 	Position3 nextPos = otherA->GetRb()->GetNextPos();//移動後
 
@@ -168,20 +175,23 @@ void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, cons
 
 void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB)
 {
-	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic() && otherB->IsStatic())return;
-
 	//初期化
 	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(false);
 	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsWall(false);
 
 	//壁と床とのフラグリセット
 	std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->ResetHitFlag();
-	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic() && otherB->IsStatic())return;
 
 	//当たったポリゴンの情報
 	auto hitDim = std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->GetHitDim();
+	//お互い動かないオブジェクトなら衝突しない
+	if (otherA->IsStatic())
+	{
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		DxLib::MV1CollResultPolyDimTerminate(hitDim);
+		return;
+	}
+
 	//カプセルの頭座標と足座標
 	Position3 headPos = std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNextEndPos(otherA->GetRb()->GetVec());//移動後
 	Position3 legPos = otherA->GetRb()->GetNextPos();//移動後
@@ -198,13 +208,17 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 	//床と当たったなら
 	if (m_floorNum > 0)
 	{
-		//床に当たっているので
-		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
-
 		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_floorNum, headPos, legPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
 
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
+
+		//修正方向が上向きなら床
+		if (overlapVec.y > 0)
+		{
+			//床に当たっているので
+			std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+		}
 	}
 
 	//壁と当たっているなら

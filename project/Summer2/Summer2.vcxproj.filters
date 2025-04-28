@@ -171,6 +171,9 @@
     <ClCompile Include="Scene\TestCollScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\TestColls\TestPolygon.cpp">
+      <Filter>ソース ファイル\Game\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="Scene\TestCollScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\TestColls\TestPolygon.h">
+      <Filter>ヘッダー ファイル\Game\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

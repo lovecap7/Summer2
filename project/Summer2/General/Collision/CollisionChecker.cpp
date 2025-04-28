@@ -267,8 +267,9 @@ bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable>& actorA, co
 		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetNextEndPos(actorA->GetRb()->GetVec()).ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius(),
 		-1);
+
 	//当たっていないならfalse
-	if (!hitDim.Dim->HitFlag)
+	if (hitDim.HitNum <= 0)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(hitDim);

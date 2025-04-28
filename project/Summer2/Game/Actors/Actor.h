@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "../../General/Math/MyMath.h"
 
 enum class ActorKind
 {
@@ -33,6 +34,16 @@ public:
 	/// </summary>
 	/// <param name="">入力オブジェクト</param>
 	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera) abstract;
+	/// <summary>
+	/// 重力を受ける
+	/// </summary>
+	/// <param name="gravity"></param>
+	virtual void Gravity(const Vector3& gravity)abstract;
+	/// <summary>
+	/// 衝突したときのイベント関数
+	/// </summary>
+	/// <param name="other"></param>
+	virtual void OnHitColl(const std::shared_ptr<Collidable>& other)abstract;
 	/// <summary>
 	/// 対象のアクターを表示
 	/// </summary>

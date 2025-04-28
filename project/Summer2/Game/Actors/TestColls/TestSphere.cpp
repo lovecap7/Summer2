@@ -21,6 +21,14 @@ void TestSphere::Update(const Input& input, const std::unique_ptr<Camera>& camer
 	m_collidable->GetRb()->ResetVec();
 }
 
+void TestSphere::Gravity(const Vector3& gravity)
+{
+}
+
+void TestSphere::OnHitColl(const std::shared_ptr<Collidable>& other)
+{
+}
+
 void TestSphere::Draw() const
 {
 	DrawSphere3D(

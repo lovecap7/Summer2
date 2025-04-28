@@ -5,7 +5,7 @@ Input::Input(int padID):
 	m_padID(std::move(padID))
 {
 	//ゲームパッドの連想配列
-	m_gamePadActionMap["OK"] = { PAD_INPUT_R };
+	m_gamePadActionMap["Start"] = { PAD_INPUT_R };
 	m_gamePadActionMap["Pause"] = { PAD_INPUT_L };
 	m_gamePadActionMap["Cancel"] = { PAD_INPUT_Z };
 	m_gamePadActionMap["Up"] = { PAD_INPUT_UP };

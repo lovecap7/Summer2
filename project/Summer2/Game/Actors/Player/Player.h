@@ -12,6 +12,8 @@ public:
 	Player(int modelHandle, Position3 firstPos);
 	virtual ~Player();
 	void Update(const Input& input,const std::unique_ptr<Camera>& camera) override;
+	void Gravity(const Vector3& gravity)override;
+	void OnHitColl(const std::shared_ptr<Collidable>& other)override;
 	void Draw()const override;
 	void Complete() override;
 private:
@@ -19,6 +21,8 @@ private:
 	int m_modelHandle;
 	//スティックの向きを持つベクトル
 	Vector2 m_stickVec;
+	//地面に付いているかどうか
+	bool m_isGround;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera);

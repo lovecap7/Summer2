@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "../../../General/Collision/CapsuleCollider.h"
+#include "../../../General/Collision/PolygonCollider.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Rigidbody.h"
 #include "../../../General/Collidable.h"
@@ -12,13 +13,17 @@ namespace
 {
 	const Vector3 kCapsuleHeight = { 0.0f,20.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 10.0f; //カプセルの半径
+	constexpr float kMoveSpeed = 4.0f;
+	constexpr float kAirMoveSpeed = 1.0f;
+	const Vector3 kJumpVec = { 0.0f,10.0f,0.0f };//ジャンプ
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
 	m_modelHandle(modelHandle),
 	m_stickVec(0.0f,0.0f),
-	m_update(&Player::IdleUpdate)
+	m_update(&Player::IdleUpdate),
+	m_isGround(true)
 {
 	//初期位置
 	Vector3 endPos = firstPos;
@@ -37,6 +42,20 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera)
 	m_stickVec.y = static_cast<float>(input.GetStickInfo().leftStickY);
 	//更新
 	(this->*m_update)(input,camera);
+}
+
+void Player::Gravity(const Vector3& gravity)
+{
+	//重力
+	m_collidable->GetRb()->AddVec(gravity);
+}
+
+void Player::OnHitColl(const std::shared_ptr<Collidable>& other)
+{
+	if (other->GetColl()->GetShape() == Shape::Polygon)
+	{
+		m_isGround = std::dynamic_pointer_cast<PolygonCollider>(other->GetColl())->IsFloor();
+	}
 }
 
 void Player::Draw() const
@@ -60,13 +79,25 @@ void Player::Complete()
 {
 	m_collidable->GetRb()->SetNextPos();
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetNextEndPos(m_collidable->GetRb()->GetVec());
-	// ３Dモデルのポジション設定
+
 	//DxLib::MV1SetPosition(m_modelHandle, m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
 
 void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
-	//入力がないなら待機状態へ
+	//ジャンプボタンを押してるならジャンプ
+	if (input.IsTriggered("A") && m_isGround)
+	{
+		//飛んでるので
+		m_isGround = false;
+		//力を与える
+		m_collidable->GetRb()->ResetVec();
+		m_collidable->GetRb()->SetVec(kJumpVec);
+		//ジャンプ
+		m_update = &Player::JumpUpdate;
+		return;
+	}
+	//入力があるなら移動
 	if (m_stickVec.Magnitude() != 0)
 	{
 		//移動
@@ -75,13 +106,24 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	Vector3 vec = m_collidable->GetRb()->GetVec();
 	vec.x *= 0.8f;
-	vec.y *= 0.8f;
 	vec.z *= 0.8f;
 	m_collidable->GetRb()->SetVec(vec);
 }
 
 void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//ジャンプボタンを押してるならジャンプ
+	if (input.IsTriggered("A") && m_isGround)
+	{
+		//飛んでるので
+		m_isGround = false;
+		//力を与える
+		m_collidable->GetRb()->ResetVec();
+		m_collidable->GetRb()->SetVec(kJumpVec);
+		//ジャンプ
+		m_update = &Player::JumpUpdate;
+		return;
+	}
 	//入力がないなら待機状態へ
 	if (m_stickVec.Magnitude() == 0)
 	{
@@ -93,12 +135,25 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	{
 		//移動
 		m_collidable->GetRb()->ResetVec();
-		m_collidable->GetRb()->SetVec(GetForwardVec(camera) * 2.0f);
+		m_collidable->GetRb()->SetVec(GetForwardVec(camera) * kMoveSpeed);
 	}
 }
 
 void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//地面に付いているなら
+	if (m_isGround)
+	{
+		//待機
+		m_update = &Player::IdleUpdate;
+		return;
+	}
+	//空中移動
+	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
+	Vector3 vec = m_collidable->GetRb()->GetVec();
+	vec.x *= 0.8f;
+	vec.z *= 0.8f;
+	m_collidable->GetRb()->SetVec(vec);
 }
 
 Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)
@@ -117,7 +172,7 @@ Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)
 	//カメラの向き(角度)
 	float cameraTheata = Theata(z, cameraDir);
 	//基準に対してスティックがどのくらい向いているのかを計算
-	float stickTheata = Theata(z, m_stickVec);
+	float stickTheata = Theata(z, m_stickVec.Normalize());
 	//プレイヤーを中心に次の座標を回転
 	Matrix4x4 rotaMat = RotateYMat4x4(cameraTheata + stickTheata);
 	//ベクトルにかける(回転)

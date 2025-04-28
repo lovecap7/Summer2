@@ -22,6 +22,14 @@ void TestCapsule::Update(const Input& input, const std::unique_ptr<Camera>& came
 	m_collidable->GetRb()->ResetVec();
 }
 
+void TestCapsule::Gravity(const Vector3& gravity)
+{
+}
+
+void TestCapsule::OnHitColl(const std::shared_ptr<Collidable>& other)
+{
+}
+
 void TestCapsule::Draw() const
 {
 	DrawCapsule3D(

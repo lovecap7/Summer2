@@ -39,6 +39,7 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 
 Stage1Scene::~Stage1Scene()
 {
+	MV1DeleteModel(m_playerHandle);
 }
 
 void Stage1Scene::Update(Input& input)
