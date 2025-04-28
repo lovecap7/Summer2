@@ -6,6 +6,12 @@
 #include "PolygonCollider.h"
 #include <vector>
 
+namespace
+{
+	//押し戻しの値に足して密着するのを防ぐ
+	constexpr float kOverlapGap = 1.0f;
+}
+
 CollisionProcess::CollisionProcess() :
 	m_wallNum(0),
 	m_floorNum(0),
@@ -29,13 +35,14 @@ void CollisionProcess::ProcessSS(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius();
 	//どのくらい重ねっているか
 	float overlap = shortDis - aToB.Magnitude();
+	overlap += kOverlapGap;
 
 	//動かす物体とそうじゃない物体とで処理を分ける
-	if (otherA->IsStatic())
+	if (otherA->IsStatic() && !otherB->IsStatic())
 	{
 		otherB->GetRb()->AddVec(aToB.Normalize() * overlap);
 	}
-	else if (otherA->IsStatic())
+	else if (otherB->IsStatic() && !otherA->IsStatic())
 	{
 		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap);
 	}
@@ -68,7 +75,7 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 	if (m_floorNum > 0)
 	{
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecWithPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
+		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
 
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
@@ -88,7 +95,7 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsWall(true);
 
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecWithPoly(m_wallNum, nextPos, *m_wall, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
+		Vector3 overlapVec = OverlapVecSphereAndPoly(m_wallNum, nextPos, *m_wall, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
 
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
@@ -102,6 +109,31 @@ void CollisionProcess::ProcessCC(const std::shared_ptr<Collidable>& otherA, cons
 {
 	//お互い動かないオブジェクトなら衝突しない
 	if (otherA->IsStatic() && otherB->IsStatic())return;
+
+	//カプセルの押し戻しはそれぞれの当たったポイントから計算します
+
+	//AからBへのベクトル
+	Vector3 aToB = std::dynamic_pointer_cast<CapsuleCollider>(otherB->GetColl())->GetNearPos() - std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNearPos();
+	//最短距離
+	float shortDis = std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherB->GetColl())->GetRadius();
+	//どのくらい重ねっているか
+	float overlap = shortDis - aToB.Magnitude();
+	overlap += kOverlapGap;
+
+	//動かす物体とそうじゃない物体とで処理を分ける
+	if (otherA->IsStatic() && !otherB->IsStatic())
+	{
+		otherB->GetRb()->AddVec(aToB.Normalize() * overlap);
+	}
+	else if (otherB->IsStatic() && !otherA->IsStatic())
+	{
+		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap);
+	}
+	else
+	{
+		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap / 2.0f);
+		otherB->GetRb()->AddVec(aToB.Normalize() * overlap / 2.0f);
+	}
 }
 
 void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB)
@@ -113,16 +145,17 @@ void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, cons
 	Vector3 aToB = otherB->GetRb()->GetNextPos() - std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNearPos();
 
 	//最短距離
-	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherB->GetColl())->GetRadius();
+	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius();
 	//どのくらい重ねっているか
 	float overlap = shortDis - aToB.Magnitude();
+	overlap += kOverlapGap;
 
 	//動かす物体とそうじゃない物体とで処理を分ける
-	if (otherA->IsStatic())
+	if (otherA->IsStatic() && !otherB->IsStatic())
 	{
 		otherB->GetRb()->AddVec(aToB.Normalize() * overlap);
 	}
-	else if (otherA->IsStatic())
+	else if (otherB->IsStatic() && !otherA->IsStatic())
 	{
 		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap);
 	}
@@ -150,7 +183,7 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 	//当たったポリゴンの情報
 	auto hitDim = std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->GetHitDim();
 	//カプセルの頭座標と足座標
-	Position3 headPos = std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNextEndPos();//移動後
+	Position3 headPos = std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNextEndPos(otherA->GetRb()->GetVec());//移動後
 	Position3 legPos = otherA->GetRb()->GetNextPos();//移動後
 	//頭より足のほうが低い位置にあるなら入れ替える
 	if (headPos.y < legPos.y)
@@ -168,8 +201,7 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 		//床に当たっているので
 		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
 
-		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecWithPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
+		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_floorNum, headPos, legPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
 
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
@@ -182,7 +214,7 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsWall(true);
 
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecWithPoly(m_wallNum, nextPos, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
+		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_wallNum, headPos, legPos, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
 
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
@@ -234,7 +266,7 @@ void CollisionProcess::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, cons
 	}
 }
 
-Vector3 CollisionProcess::OverlapVecWithPoly(int hitNum ,const Vector3& nextPos,MV1_COLL_RESULT_POLY* dim ,float shortDis)
+Vector3 CollisionProcess::OverlapVecSphereAndPoly(int hitNum ,const Vector3& nextPos,MV1_COLL_RESULT_POLY* dim ,float shortDis)
 {
 	//垂線を下して近い点を探して最短距離を求める
 	float hitShortDis = 0;//最短距離
@@ -266,6 +298,36 @@ Vector3 CollisionProcess::OverlapVecWithPoly(int hitNum ,const Vector3& nextPos,
 	//押し戻し
 	//どれくらい押し戻すか
 	float overlap = shortDis - hitShortDis;
+	overlap += kOverlapGap;
+
+	return nom * overlap;
+}
+
+Vector3 CollisionProcess::OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos,MV1_COLL_RESULT_POLY* dim, float shortDis)
+{
+	//垂線を下して近い点を探して最短距離を求める
+	float hitShortDis = 0;//最短距離
+	//法線
+	Vector3 nom = {};
+	for (int i = 0; i < hitNum; ++i)
+	{
+		//最短距離の2乗を返す
+		float dis = Segment_Triangle_MinLength_Square(headPos.ToDxLibVector(), legPos.ToDxLibVector(), dim[i].Position[0], dim[i].Position[1], dim[i].Position[2]);
+		//平方根を返す
+		dis = sqrtf(dis);
+		//初回または前回より距離が短いなら
+		if (i <= 0 || hitShortDis > dis)
+		{
+			//現状の最短
+			hitShortDis = dis;
+			//法線
+			nom = Vector3{ dim[i].Normal.x,dim[i].Normal.y ,dim[i].Normal.z };
+		}
+	}
+	//押し戻し
+	//どれくらい押し戻すか
+	float overlap = shortDis - hitShortDis;
+	overlap += kOverlapGap;
 
 	return nom * overlap;
 }

@@ -53,8 +53,17 @@ private:
 	/// </summary>
 	void AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const Vector3& oldPos);
 	/// <summary>
-	/// ポリゴンとの押し戻しベクトルを返す
+	/// 球とポリゴンの押し戻しベクトルを返す
 	/// </summary>
-	Vector3 OverlapVecWithPoly(int hitNum, const Vector3& nextPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	Vector3 OverlapVecSphereAndPoly(int hitNum, const Vector3& nextPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	/// <summary>
+	/// カプセルとポリゴンの押し戻しベクトルを返す
+	/// </summary>
+	/// <param name="hitNum"></param>
+	/// <param name="nextPos"></param>
+	/// <param name="dim"></param>
+	/// <param name="shortDis"></param>
+	/// <returns></returns>
+	Vector3 OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
 };
 

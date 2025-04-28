@@ -43,7 +43,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 	//球の座標
 	Vector3 sPos = actorB->GetRb()->GetNextPos();
 	//最短距離
-	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider>(actorB->GetRb())->GetRadius();
+	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider>(actorB->GetColl())->GetRadius();
 
 	//カプセルの座標Aから球へのベクトル
 	Vector3 AtoS = sPos - cPosA;
@@ -60,7 +60,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 	float rate = dotVer / dotAB;//割合
 
 	//1より大きいならposBが球に一番近い座標
-	if (rate > 1.0f)
+	if (rate >= 1.0f)
 	{
 		//衝突判定で使うので一番近い座標を覚えておく
 		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosB);
@@ -74,7 +74,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 		}
 	}
 	//0より小さいならposAが球に一番近い座標
-	else if (rate < 0.0f)
+	else if (rate <= 0.0f)
 	{
 		//衝突判定で使うので一番近い座標を覚えておく
 		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosA);
@@ -113,10 +113,10 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 	//カプセルのそれぞれの座標
 	//カプセルA
 	Vector3 cPosA = actorA->GetRb()->GetNextPos();
-	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetEndPos() + actorA->GetRb()->GetVec();
+	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetNextEndPos(actorA->GetRb()->GetVec());
 	//カプセルB
 	Vector3 cPosC = actorB->GetRb()->GetNextPos();
-	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetEndPos() + actorB->GetRb()->GetVec();
+	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetNextEndPos(actorB->GetRb()->GetVec());
 	//最短距離
 	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetRadius();
 	//今の最短距離
@@ -128,7 +128,7 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 		Vector3 lineA;
 		Vector3 lineB;
 		//最初にカプセルBに対してカプセルAのそれぞれの点から最短の座標を出す
-		if (i == 0)
+		if (i <= 0)
 		{
 			//線分CD
 			lineA = cPosC;
@@ -147,17 +147,17 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 			//確認する座標
 			Vector3 checkPoint;
 			//Aから線分に下ろす
-			if (i == 0 && j == 0)
+			if (i <= 0 && j <= 0)
 			{
 				checkPoint = cPosA;
 			}
 			//Bから線分に下ろす
-			else if (i == 0 && j == 1)
+			else if (i <= 0 && j >= 1)
 			{
 				checkPoint = cPosB;
 			}
 			//Cから線分に下ろす
-			else if (i == 1 && j == 0)
+			else if (i >= 1 && j <= 0)
 			{
 				checkPoint = cPosC;
 			}
@@ -186,13 +186,13 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 			Vector3 shortCandidate;
 			//衝突判定に使うので最短座標を入れる
 			Vector3 shortPos;
-			if (rate > 1.0f)
+			if (rate >= 1.0f)
 			{
 				//座標Bに近い
 				shortCandidate = lineB - checkPoint;
 				shortPos = lineB;
 			}
-			else if (rate < 0.0f)
+			else if (rate <= 0.0f)
 			{
 				//座標Aに近い
 				shortCandidate = lineA - checkPoint;
@@ -206,7 +206,7 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 			}
 
 			//初回または前回の最短距離より小さいなら現在の最短距離とする
-			if (nowShortDis.Magnitude() == 0 || nowShortDis.Magnitude() > shortCandidate.Magnitude())
+			if (nowShortDis.Magnitude() <= 0 || nowShortDis.Magnitude() > shortCandidate.Magnitude())
 			{
 				nowShortDis = shortCandidate;
 

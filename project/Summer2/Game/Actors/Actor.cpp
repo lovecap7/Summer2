@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-Actor::Actor():
-	m_actorKind(ActorKind::None)
+Actor::Actor(ActorKind kind):
+	m_actorKind(kind)
 {
 }

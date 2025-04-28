@@ -5,6 +5,7 @@
 #include "Stage2Scene.h"
 #include "Stage3Scene.h"
 #include "ResultScene.h"
+#include "TestCollScene.h"
 #include <DxLib.h>
 #include  "../General/Input.h"
 #include "SceneController.h"
@@ -58,12 +59,17 @@ void DebugScene::Update(Input& input)
 		m_controller.ChangeScene(std::make_shared<ResultScene>(m_controller));
 		return;
 	}
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		//次のシーンへ
+		m_controller.ChangeScene(std::make_shared<TestCollScene>(m_controller));
+		return;
+	}
 #endif
 }
 
 void DebugScene::Draw()
 {
-#if _DEBUG
 	DrawString(0, 0, "Debug Scene", 0xff0000);
 	DrawString(100, 50, "Title Scene", 0xffff00);
 	DrawString(100, 70, "SelectStage Scene", 0xffff00);
@@ -77,5 +83,7 @@ void DebugScene::Draw()
 	DrawString(300, 110, ": [R]キー", 0xffffff);
 	DrawString(300, 130, ": [T]キー", 0xffffff);
 	DrawString(300, 150, ": [Y]キー", 0xffffff);
-#endif
+
+	DrawString(100, 200, "TestCollt Scene", 0x00ff00);
+	DrawString(300, 200, ": [A]キー", 0xffffff);
 }

@@ -18,17 +18,21 @@
 #include "DebugScene.h"
 #endif
 
+namespace
+{
+	const Vector3 kPlayerPos = { 0.0f, 0.0f, 0.0f };
+	const Vector3 kCameraPos = { 0.0f, 100.0f, 100.0f };
+}
+
 Stage1Scene::Stage1Scene(SceneController& controller):
 	SceneBase(controller),
 	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1"))
 {
-	//プレイヤーの初期位置
-	Position3 firstPos(0.0f, 0.0f, 0.0f);
 	//プレイヤーの初期化
-	m_player = std::make_shared<Player>(m_playerHandle, firstPos);
+	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
 	m_actors.push_back(m_player);
 	//カメラの初期化
-	m_camera = std::make_unique<Camera>(Vector3(100.0f,100.0f,300.0f), firstPos);
+	m_camera = std::make_unique<Camera>(kCameraPos,m_player);
 	//コリジョンマネージャー
 	m_collManager = std::make_unique<CollisionManager>();
 }
@@ -68,7 +72,7 @@ void Stage1Scene::Update(Input& input)
 	}
 
 	//カメラの更新
-	m_camera->Update(m_player->GetCollidable()->GetRb()->GetPos());
+	m_camera->Update();
 }
 
 void Stage1Scene::Draw()

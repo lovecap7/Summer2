@@ -67,6 +67,12 @@
     <Filter Include="ソース ファイル\Game\Actors\Player">
       <UniqueIdentifier>{6e762c3c-919c-4a0f-8d71-e4fbd918cd18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Test">
+      <UniqueIdentifier>{9526487d-38ae-4b1d-bd7b-748c16b79fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Test">
+      <UniqueIdentifier>{48e9f999-7d78-42a7-8574-81a164307f78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -155,6 +161,15 @@
     </ClCompile>
     <ClCompile Include="General\Collision\CollisionProcess.cpp">
       <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp">
+      <Filter>ソース ファイル\Game\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\TestColls\TestCapsule.cpp">
+      <Filter>ソース ファイル\Game\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TestCollScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +265,15 @@
     </ClInclude>
     <ClInclude Include="General\Collision\CollisionProcess.h">
       <Filter>ヘッダー ファイル\General\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\TestColls\TestSphere.h">
+      <Filter>ヘッダー ファイル\Game\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\TestColls\TestCapsule.h">
+      <Filter>ヘッダー ファイル\Game\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TestCollScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

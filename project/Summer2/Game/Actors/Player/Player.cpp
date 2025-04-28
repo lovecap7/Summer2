@@ -10,20 +10,19 @@
 
 namespace
 {
-	constexpr float kCapsuleHeight = 20.0f; //カプセルの上端
+	const Vector3 kCapsuleHeight = { 0.0f,20.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 10.0f; //カプセルの半径
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
+	Actor(ActorKind::Player),
 	m_modelHandle(modelHandle),
 	m_stickVec(0.0f,0.0f),
 	m_update(&Player::IdleUpdate)
 {
-	//アクターの種類をセット
-	m_actorKind = ActorKind::Player;
 	//初期位置
 	Vector3 endPos = firstPos;
-	endPos.y += kCapsuleHeight; //カプセルの上端
+	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
 }
 
@@ -38,16 +37,6 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera)
 	m_stickVec.y = static_cast<float>(input.GetStickInfo().leftStickY);
 	//更新
 	(this->*m_update)(input,camera);
-
-	DrawCapsule3D(
-		m_collidable->GetRb()->GetPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetRadius(),
-		16,
-		0xff00ff,
-		0xff00ff,
-		false
-	);
 }
 
 void Player::Draw() const
@@ -86,6 +75,7 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	Vector3 vec = m_collidable->GetRb()->GetVec();
 	vec.x *= 0.8f;
+	vec.y *= 0.8f;
 	vec.z *= 0.8f;
 	m_collidable->GetRb()->SetVec(vec);
 }

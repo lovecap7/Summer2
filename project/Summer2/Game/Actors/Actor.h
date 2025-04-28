@@ -25,7 +25,7 @@ protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
 public:
-	Actor();
+	Actor(ActorKind kind);
 	virtual ~Actor() {};
 	//(純粋仮想関数)
 	/// <summary>

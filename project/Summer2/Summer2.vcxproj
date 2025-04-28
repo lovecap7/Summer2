@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="Game\Actors\Actor.cpp" />
     <ClCompile Include="Game\Actors\Player\Player.cpp" />
+    <ClCompile Include="Game\Actors\TestColls\TestCapsule.cpp" />
+    <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="General\Collidable.cpp" />
     <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
@@ -47,11 +49,14 @@
     <ClCompile Include="Scene\Stage1Scene.cpp" />
     <ClCompile Include="Scene\Stage2Scene.cpp" />
     <ClCompile Include="Scene\Stage3Scene.cpp" />
+    <ClCompile Include="Scene\TestCollScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Actors\Actor.h" />
     <ClInclude Include="Game\Actors\Player\Player.h" />
+    <ClInclude Include="Game\Actors\TestColls\TestCapsule.h" />
+    <ClInclude Include="Game\Actors\TestColls\TestSphere.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="General\Collidable.h" />
     <ClInclude Include="General\Collision\CapsuleCollider.h" />
@@ -80,6 +85,7 @@
     <ClInclude Include="Scene\Stage1Scene.h" />
     <ClInclude Include="Scene\Stage2Scene.h" />
     <ClInclude Include="Scene\Stage3Scene.h" />
+    <ClInclude Include="Scene\TestCollScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
