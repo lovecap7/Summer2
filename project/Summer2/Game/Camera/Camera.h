@@ -20,8 +20,6 @@ public:
 #if _DEBUG
 	//ƒJƒƒ‰‰ñ“]
 	void RotaCamera(const Input& input);
-	float m_cameraHAngle;
-	float m_cameraVAngle;
 #endif
 private:
 	//©•ª‚ÌÀ•W

@@ -66,7 +66,10 @@ void Player::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
 	if (other->GetColl()->GetShape() == Shape::Polygon)
 	{
-		m_isGround = std::dynamic_pointer_cast<PolygonCollider>(other->GetColl())->IsFloor();
+		if (std::dynamic_pointer_cast<PolygonCollider>(other->GetColl())->IsFloor())
+		{
+			m_isGround = true;
+		}
 	}
 }
 
@@ -173,7 +176,7 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//ジャンプできるなら
-	if (input.IsTriggered("A") && (m_jumpNum <= kMaxJumpNum))
+	if (input.IsTriggered("A") && (m_jumpNum < kMaxJumpNum))
 	{
 		//ジャンプ
 		m_update = &Player::JumpUpdate;
