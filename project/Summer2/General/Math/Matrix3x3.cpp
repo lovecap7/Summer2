@@ -6,7 +6,7 @@ Matrix3x3::Matrix3x3()
 }
 
 //単位行列
-Matrix3x3 Matrix3x3::IdentityMat3x3()
+Matrix3x3 IdentityMat3x3()
 {
     Matrix3x3 identity = {};//要素をすべて0にする
     identity.mat[0][0] = 1.0f;
@@ -16,7 +16,7 @@ Matrix3x3 Matrix3x3::IdentityMat3x3()
 }
 
 //平行移動行列
-Matrix3x3 Matrix3x3::TranslateMat3x3(float x, float y)
+Matrix3x3 TranslateMat3x3(float x, float y)
 {
     Matrix3x3 translate = {};
     translate = IdentityMat3x3();//単位行列にする
@@ -26,7 +26,7 @@ Matrix3x3 Matrix3x3::TranslateMat3x3(float x, float y)
 }
 
 //回転行列
-Matrix3x3 Matrix3x3::RotateMat3x3(float angle)
+Matrix3x3 RotateMat3x3(float angle)
 {
     Matrix3x3 rotate = {};
     rotate = IdentityMat3x3();//単位行列にする
@@ -87,7 +87,7 @@ Vector2 Matrix3x3::operator*(const Vector2& v)
 
 
 ///とある点を中心に回転して、その回転後の座標を返します
-Matrix3x3 Matrix3x3::RotatePositionMatrix3x3(const Vector2& center, float angle)
+Matrix3x3 RotatePositionMatrix3x3(const Vector2& center, float angle)
 {
     //中心を原点に平行移動させる
     //原点中心に回転

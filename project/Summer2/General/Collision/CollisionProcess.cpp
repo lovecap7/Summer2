@@ -9,7 +9,7 @@
 namespace
 {
 	//押し戻しの値に足して密着するのを防ぐ
-	constexpr float kOverlapGap = 0.5f;
+	constexpr float kOverlapGap = 0.8f;
 }
 
 CollisionProcess::CollisionProcess() :
@@ -83,15 +83,21 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 	{
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
-
-		//ポリゴンは固定(static)なので球のみ動かす
-		otherA->GetRb()->AddVec(overlapVec);
-
-		//修正方向が上向きなら床
-		if (overlapVec.y > 0)
+		//Y方向のみ補正する
+		overlapVec.x = 0.0f;
+		overlapVec.z = 0.0f;
+		overlapVec.Normalize();
+		//上昇中ではないかつ天井ではないなら
+		if (!(otherA->GetState() == State::Jump) && overlapVec.y < 0)
 		{
-			//床に当たっているので
-			std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+			//ポリゴンは固定(static)なので球のみ動かす
+			otherA->GetRb()->AddVec(overlapVec);
+			//修正方向が上向きなら床
+			if (overlapVec.y > 0)
+			{
+				//床に当たっているので
+				std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+			}
 		}
 	}
 
@@ -103,7 +109,9 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_wallNum, nextPos, *m_wall, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
-
+		//平面方向のみ補正する
+		overlapVec.y = 0.0f;
+		overlapVec.Normalize();
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
 	}
@@ -209,7 +217,10 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 	if (m_floorNum > 0)
 	{
 		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_floorNum, headPos, legPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
-
+		//Y方向のみ補正する
+		overlapVec.x = 0.0f;
+		overlapVec.z = 0.0f;
+		overlapVec.Normalize();
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
 
@@ -229,7 +240,9 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_wallNum, headPos, legPos, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
-
+		//平面方向のみ補正する
+		overlapVec.y = 0.0f;
+		overlapVec.Normalize();
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
 	}
@@ -249,7 +262,7 @@ void CollisionProcess::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, cons
 	for (int i = 0; i < hitDim.HitNum;++i)
 	{
 		//XZ平面に垂直かどうかはポリゴンの法線のY成分が0に近いかどうかで判断する
-		if (hitDim.Dim[i].Normal.y < 0.0001f && hitDim.Dim[i].Normal.y > -0.0001f)
+		if (hitDim.Dim[i].Normal.y < 0.000001f && hitDim.Dim[i].Normal.y > -0.000001f)
 		{
 			//壁ポリゴンと判断された場合でも、プレイヤーのY座標＋1.0fより高いポリゴンのみ当たり判定を行う
 			//段さで突っかかるのを防ぐため

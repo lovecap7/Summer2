@@ -13,6 +13,7 @@ public:
 	Vector3 GetVec() { return m_vec; };
 	void SetVec(Vector3 vec) { m_vec = vec; };
 	void AddVec(Vector3 vec) { m_vec += vec; };
+	void SetMoveVec(Vector3 vec);
 	void ResetVec() { m_vec = m_vec.Zero(); };
 	//éüÇÃç¿ïW
 	Vector3 GetNextPos() { return m_pos + m_vec; };

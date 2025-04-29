@@ -23,16 +23,23 @@ private:
 	Vector2 m_stickVec;
 	//地面に付いているかどうか
 	bool m_isGround;
+	//ジャンプの回数
+	unsigned int m_jumpNum;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera);
 	UpdateFunc_t m_update;
+	UpdateFunc_t m_lastUpdate;//直前の状態を覚えておく
 	//待機状態
 	void IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//移動
 	void MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ジャンプ
 	void JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	//落下中
+	void FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	//状態に合わせて初期化すべきものを初期化する
+	void StateInit();
 private:
 	//進行方向を返すベクトル
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);

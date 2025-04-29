@@ -8,28 +8,6 @@ public:
 	~Matrix3x3() {};
 
 	float mat[3][3];
-
-	/// <summary>
-	/// /単位行列を返す(3x3)
-	/// </summary>
-	/// <returns></returns>
-	Matrix3x3 IdentityMat3x3();
-
-	/// <summary>
-	/// 平行移動行列を返す(3x3)
-	/// </summary>
-	/// <param name="x">X方向の移動量</param>
-	/// <param name="y">Y方向の移動量</param>
-	/// <returns></returns>
-	Matrix3x3 TranslateMat3x3(float x, float y);
-
-	/// <summary>
-	/// 回転行列を返す(3x3)
-	/// </summary>
-	/// <param name="angle">回転角度</param>
-	/// <returns></returns>
-	Matrix3x3 RotateMat3x3(float angle);
-
 	/// <summary>
 	/// ２つの行列の乗算を返す(乗算の順番に注意)
 	/// </summary>
@@ -48,13 +26,34 @@ public:
 	Vector2 MultipleVec2(const Matrix3x3& m, const Vector2& v);
 	Vector2 operator*(const Vector2& v);
 
-	/// <summary>
-	/// とある点を中心に回転して、その回転後の座標を返します
-	/// </summary>
-	/// <param name="center">回転中心点</param>
-	/// <param name="angle">回転角度</param>
-	/// <returns></returns>
-	Matrix3x3 RotatePositionMatrix3x3(const Vector2& center, float angle);
-
 };
+
+/// <summary>
+/// /単位行列を返す(3x3)
+/// </summary>
+/// <returns></returns>
+Matrix3x3 IdentityMat3x3();
+
+/// <summary>
+/// 平行移動行列を返す(3x3)
+/// </summary>
+/// <param name="x">X方向の移動量</param>
+/// <param name="y">Y方向の移動量</param>
+/// <returns></returns>
+Matrix3x3 TranslateMat3x3(float x, float y);
+
+/// <summary>
+/// 回転行列を返す(3x3)
+/// </summary>
+/// <param name="angle">回転角度</param>
+/// <returns></returns>
+Matrix3x3 RotateMat3x3(float angle);
+
+/// <summary>
+/// とある点を中心に回転して、その回転後の座標を返します
+/// </summary>
+/// <param name="center">回転中心点</param>
+/// <param name="angle">回転角度</param>
+/// <returns></returns>
+Matrix3x3 RotatePositionMatrix3x3(const Vector2& center, float angle);
 

@@ -1,7 +1,8 @@
 #include "Matrix4x4.h"
 #include <cmath>
 
-Matrix4x4::Matrix4x4()
+Matrix4x4::Matrix4x4():
+    mat{}
 {
 }
 //単位行列
@@ -67,16 +68,25 @@ Matrix4x4 Matrix4x4::MultipleMat4x4(const Matrix4x4& left, const Matrix4x4& righ
 {
     //これに乗算結果を入れていく
     Matrix4x4 mul = {};
-    for (int k = 0;k <= 3;++k)
-    {
-        for (int j = 0;j <= 3;++j)
-        {
-            for (int i = 0;i <= 3;++i)
-            {
-                mul.mat[k][j] += left.mat[k][i] * right.mat[i][j];
-            }
-        }
-    }
+    mul.mat[0][0] = left.mat[0][0] * right.mat[0][0] + left.mat[0][1] * right.mat[1][0] + left.mat[0][2] * right.mat[2][0] + left.mat[0][3] * right.mat[3][0];
+    mul.mat[0][1] = left.mat[0][0] * right.mat[0][1] + left.mat[0][1] * right.mat[1][1] + left.mat[0][2] * right.mat[2][1] + left.mat[0][3] * right.mat[3][1];
+    mul.mat[0][2] = left.mat[0][0] * right.mat[0][2] + left.mat[0][1] * right.mat[1][2] + left.mat[0][2] * right.mat[2][2] + left.mat[0][3] * right.mat[3][2];
+    mul.mat[0][3] = left.mat[0][0] * right.mat[0][3] + left.mat[0][1] * right.mat[1][3] + left.mat[0][2] * right.mat[2][3] + left.mat[0][3] * right.mat[3][3];
+
+    mul.mat[1][0] = left.mat[1][0] * right.mat[0][0] + left.mat[1][1] * right.mat[1][0] + left.mat[1][2] * right.mat[2][0] + left.mat[1][3] * right.mat[3][0];
+    mul.mat[1][1] = left.mat[1][0] * right.mat[0][1] + left.mat[1][1] * right.mat[1][1] + left.mat[1][2] * right.mat[2][1] + left.mat[1][3] * right.mat[3][1];
+    mul.mat[1][2] = left.mat[1][0] * right.mat[0][2] + left.mat[1][1] * right.mat[1][2] + left.mat[1][2] * right.mat[2][2] + left.mat[1][3] * right.mat[3][2];
+    mul.mat[1][3] = left.mat[1][0] * right.mat[0][3] + left.mat[1][1] * right.mat[1][3] + left.mat[1][2] * right.mat[2][3] + left.mat[1][3] * right.mat[3][3];
+
+    mul.mat[2][0] = left.mat[2][0] * right.mat[0][0] + left.mat[2][1] * right.mat[1][0] + left.mat[2][2] * right.mat[2][0] + left.mat[2][3] * right.mat[3][0];
+    mul.mat[2][1] = left.mat[2][0] * right.mat[0][1] + left.mat[2][1] * right.mat[1][1] + left.mat[2][2] * right.mat[2][1] + left.mat[2][3] * right.mat[3][1];
+    mul.mat[2][2] = left.mat[2][0] * right.mat[0][2] + left.mat[2][1] * right.mat[1][2] + left.mat[2][2] * right.mat[2][2] + left.mat[2][3] * right.mat[3][2];
+    mul.mat[2][3] = left.mat[2][0] * right.mat[0][3] + left.mat[2][1] * right.mat[1][3] + left.mat[2][2] * right.mat[2][3] + left.mat[2][3] * right.mat[3][3];
+
+    mul.mat[3][0] = left.mat[3][0] * right.mat[0][0] + left.mat[3][1] * right.mat[1][0] + left.mat[3][2] * right.mat[2][0] + left.mat[3][3] * right.mat[3][0];
+    mul.mat[3][1] = left.mat[3][0] * right.mat[0][1] + left.mat[3][1] * right.mat[1][1] + left.mat[3][2] * right.mat[2][1] + left.mat[3][3] * right.mat[3][1];
+    mul.mat[3][2] = left.mat[3][0] * right.mat[0][2] + left.mat[3][1] * right.mat[1][2] + left.mat[3][2] * right.mat[2][2] + left.mat[3][3] * right.mat[3][2];
+    mul.mat[3][3] = left.mat[3][0] * right.mat[0][3] + left.mat[3][1] * right.mat[1][3] + left.mat[3][2] * right.mat[2][3] + left.mat[3][3] * right.mat[3][3];
     return mul;
 }
 
@@ -141,10 +151,10 @@ Matrix4x4 RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float
     //中心を原点に平行移動させる
      //原点中心に回転
      //中心をもとの座標に戻す
-    Matrix4x4 rotaMat = TranslateMat4x4(center.x, center.y, center.z) *//元の座標
+    Matrix4x4 rotaMat = TranslateMat4x4(-center.x, -center.y, -center.z) *//元の座標
         RotateYMat4x4(hAngle) *//回転
         RotateXMat4x4(vAngle) *//回転
-        TranslateMat4x4(-center.x, -center.y, -center.z);//原点に戻す
+        TranslateMat4x4(center.x, center.y, center.z);//原点に戻す
     return rotaMat;
 }
 
