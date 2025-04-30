@@ -30,7 +30,7 @@ namespace
 TestCollScene::TestCollScene(SceneController& controller) :
 	SceneBase(controller),
 	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1")),
-	m_polygonHandle(MV1LoadModel("Data/Model/Test/city.mv1"))
+	m_polygonHandle(MV1LoadModel("Data/Model/Stage/Stage1.mv1"))
 {
 	//ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
 	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);

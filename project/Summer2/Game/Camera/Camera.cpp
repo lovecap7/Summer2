@@ -20,7 +20,7 @@ Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLibVector(), m_target.ToDxLibVector());
 
 	//ディレクショナルライト
-	ChangeLightTypeDir(VGet(0.0f, 0.0f, -1.0f));
+	ChangeLightTypeDir(VGet(0.0f, 1.0f, 1.0f));
 }
 
 Camera::~Camera()
