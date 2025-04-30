@@ -9,7 +9,7 @@
 namespace
 {
 	//押し戻しの値に足して密着するのを防ぐ
-	constexpr float kOverlapGap = 0.8f;
+	constexpr float kOverlapGap = 1.0f;
 }
 
 CollisionProcess::CollisionProcess() :
@@ -83,10 +83,7 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 	{
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
-		//Y方向のみ補正する
-		overlapVec.x = 0.0f;
-		overlapVec.z = 0.0f;
-		overlapVec.Normalize();
+	
 		//上昇中ではないかつ天井ではないなら
 		if (!(otherA->GetState() == State::Jump) && overlapVec.y < 0)
 		{
@@ -109,9 +106,7 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_wallNum, nextPos, *m_wall, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
-		//平面方向のみ補正する
-		overlapVec.y = 0.0f;
-		overlapVec.Normalize();
+		
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
 	}
@@ -217,10 +212,7 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 	if (m_floorNum > 0)
 	{
 		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_floorNum, headPos, legPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
-		//Y方向のみ補正する
-		overlapVec.x = 0.0f;
-		overlapVec.z = 0.0f;
-		overlapVec.Normalize();
+	
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
 
@@ -240,9 +232,6 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_wallNum, headPos, legPos, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
-		//平面方向のみ補正する
-		overlapVec.y = 0.0f;
-		overlapVec.Normalize();
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
 	}
@@ -262,7 +251,7 @@ void CollisionProcess::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, cons
 	for (int i = 0; i < hitDim.HitNum;++i)
 	{
 		//XZ平面に垂直かどうかはポリゴンの法線のY成分が0に近いかどうかで判断する
-		if (hitDim.Dim[i].Normal.y < 0.000001f && hitDim.Dim[i].Normal.y > -0.000001f)
+		if (hitDim.Dim[i].Normal.y < 0.5f && hitDim.Dim[i].Normal.y > -0.5f)
 		{
 			//壁ポリゴンと判断された場合でも、プレイヤーのY座標＋1.0fより高いポリゴンのみ当たり判定を行う
 			//段さで突っかかるのを防ぐため
@@ -304,6 +293,7 @@ Vector3 CollisionProcess::OverlapVecSphereAndPoly(int hitNum ,const Vector3& nex
 		//内積と法線ベクトルから当たってる座標を求める
 		VECTOR bToA = VSub(nextPos.ToDxLibVector(), dim[i].Position[0]);
 		float dot = VDot(dim[i].Normal, bToA);
+
 		//ポリゴンと当たったオブジェクトが法線方向にいるなら向きを反転
 		if ((bToA.y > 0 && dim[i].Normal.y > 0) || (bToA.y < 0 && dim[i].Normal.y < 0))
 		{
@@ -327,10 +317,10 @@ Vector3 CollisionProcess::OverlapVecSphereAndPoly(int hitNum ,const Vector3& nex
 	float overlap = shortDis - hitShortDis;
 	overlap += kOverlapGap;
 
-	return nom * overlap;
+	return nom.Normalize() * overlap;
 }
 
-Vector3 CollisionProcess::OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos,MV1_COLL_RESULT_POLY* dim, float shortDis)
+Vector3 CollisionProcess::OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos, MV1_COLL_RESULT_POLY* dim, float shortDis)
 {
 	//垂線を下して近い点を探して最短距離を求める
 	float hitShortDis = 0;//最短距離
