@@ -1,11 +1,7 @@
 #include "Clamp.h"
 
-Clamp::Clamp()
-{
-}
-
 //ƒNƒ‰ƒ“ƒvŠÖ”
-int Clamp::ClampInt(int value, int min, int max)
+int ClampInt(int value, int min, int max)
 {
     //”ÍˆÍ“à‚Éû‚Ü‚Á‚Ä‚¢‚é‚È‚ç‚»‚Ì‚Ü‚Ü•Ô‚·
     int clampValue = value;
@@ -22,7 +18,7 @@ int Clamp::ClampInt(int value, int min, int max)
     return clampValue;
 }
 
-float Clamp::ClampFloat(float value, float min, float max)
+float ClampFloat(float value, float min, float max)
 {
     //”ÍˆÍ“à‚Éû‚Ü‚Á‚Ä‚¢‚é‚È‚ç‚»‚Ì‚Ü‚Ü•Ô‚·
     float clampValue = value;

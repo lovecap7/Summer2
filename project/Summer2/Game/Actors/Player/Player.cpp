@@ -5,26 +5,44 @@
 #include "../../../General/Rigidbody.h"
 #include "../../../General/Collidable.h"
 #include "../../../General/Input.h"
+#include "../../../General/Model.h"
+#include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
 #include <DxLib.h>
 #include <cmath>
 
 namespace
 {
-	const Vector3 kCapsuleHeight = { 0.0f,20.0f,0.0f };//カプセルの上端
-	constexpr float kCapsuleRadius = 10.0f; //カプセルの半径
-	constexpr float kMoveSpeed = 4.0f;
-	constexpr float kAirMoveSpeed = 1.0f;
+	const Vector3 kCapsuleHeight = { 0.0f,150.0f,0.0f };//カプセルの上端
+	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
+	constexpr float kMoveSpeed = 10.0f;
+	constexpr float kAirMoveSpeed = 1.5f;
 	constexpr float kMaxGravity = -10.0f;
 	const Vector3 kJumpVec = { 0.0f,10.0f,0.0f };//ジャンプ
 	constexpr unsigned int kMaxJumpNum = 2;
 	constexpr float kChangeFall = -2.0f;
-
+	//減速率
+	constexpr float kMoveDeceRate = 0.8f;
+	constexpr float kAirMoveDeceRate = 0.9f;
+}
+namespace Anim
+{
+	//アニメーションの名前
+	const char* kIdle = "Player|Idle";//待機
+	const char* kWalk = "Player|Walk";//歩く
+	const char* kRun = "Player|Run";//走る
+	const char* kRolling = "Player|Rolling";//回避
+	const char* kJump1 = "Player|Jump1";//ジャンプ1
+	const char* kJump2 = "Player|Jump2";//ジャンプ2
+	const char* kAttack_L1 = "Player|Attack_L1";//弱攻撃1
+	const char* kAttack_L2 = "Player|Attack_L2";//弱攻撃2
+	const char* kAttack_L3 = "Player|Attack_L3";//弱攻撃3
+	const char* kAttack_H1 = "Player|Attack_H1";//強攻撃1
+	const char* kAttack_H2 = "Player|Attack_H2";//強攻撃2
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
-	m_modelHandle(modelHandle),
 	m_stickVec(0.0f,0.0f),
 	m_update(&Player::IdleUpdate),
 	m_lastUpdate(&Player::IdleUpdate),
@@ -35,6 +53,8 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	Vector3 endPos = firstPos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
+	//モデル
+	m_model = std::make_unique<Model>(modelHandle, firstPos.ToDxLibVector());
 }
 
 Player::~Player()
@@ -50,6 +70,8 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera)
 	StateInit();
 	//更新
 	(this->*m_update)(input,camera);
+	//アニメーションの更新
+	m_model->Update();
 }
 
 void Player::Gravity(const Vector3& gravity)
@@ -85,16 +107,20 @@ void Player::Draw() const
 		0xff0000,
 		m_isGround
 	);
-	printf("m_jumpNum = %d\n", m_jumpNum);
+	printf("POS = %2f, %2f, %2f\n", m_collidable->GetRb()->GetPos().x, m_collidable->GetRb()->GetPos().y, m_collidable->GetRb()->GetPos().z);
+	printf("VEC = %2f, %2f, %2f\n", m_collidable->GetRb()->GetVec().x, m_collidable->GetRb()->GetVec().y, m_collidable->GetRb()->GetVec().z);
 #endif
+	m_model->Draw();
 }
 
 void Player::Complete()
 {
 	m_collidable->GetRb()->SetNextPos();
-	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetNextEndPos(m_collidable->GetRb()->GetVec());
-
-	//DxLib::MV1SetPosition(m_modelHandle, m_collidable->GetRb()->GetPos().ToDxLibVector());
+	Vector3 endPos = m_collidable->GetRb()->GetPos();
+	endPos += kCapsuleHeight;
+	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);
+	//モデルの座標更新
+	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
 
 void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
@@ -121,8 +147,8 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 		return;
 	}
 	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= 0.8f;
-	vec.z *= 0.8f;
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
 	m_collidable->GetRb()->SetVec(vec);
 }
 
@@ -153,6 +179,8 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	{
 		//移動
 		m_collidable->GetRb()->SetMoveVec(GetForwardVec(camera) * kMoveSpeed);
+		//向きの更新
+		m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 	}
 }
 
@@ -168,9 +196,11 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	//空中移動
 	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
 	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= 0.8f;
-	vec.z *= 0.8f;
+	vec.x *= kAirMoveDeceRate;
+	vec.z *= kAirMoveDeceRate;
 	m_collidable->GetRb()->SetVec(vec);
+	//向きの更新
+	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
 
 void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
@@ -192,9 +222,11 @@ void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	//空中移動
 	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
 	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= 0.8f;
-	vec.z *= 0.8f;
+	vec.x *= kAirMoveDeceRate;
+	vec.z *= kAirMoveDeceRate;
 	m_collidable->GetRb()->SetVec(vec);
+	//向きの更新
+	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
 
 //状態に合わせて初期化処理
@@ -205,18 +237,24 @@ void Player::StateInit()
 	m_lastUpdate = m_update;
 	if (m_update == &Player::IdleUpdate)
 	{
+		//待機状態
+		m_model->SetAnim(Anim::kIdle, true);
 		//ジャンプカウントリセット
 		m_jumpNum = 0;
 		m_collidable->SetState(State::None);
 	}
 	else if (m_update == &Player::MoveUpdate)
 	{
+		//走る
+		m_model->SetAnim(Anim::kRun, true);
 		//ジャンプカウントリセット
 		m_jumpNum = 0;
 		m_collidable->SetState(State::None);
 	}
 	else if (m_update == &Player::JumpUpdate)
 	{
+		//ジャンプ
+		m_model->SetAnim(Anim::kJump2, false);
 		//飛んでるので
 		m_isGround = false;
 		m_collidable->SetState(State::Jump);
@@ -226,6 +264,8 @@ void Player::StateInit()
 	}
 	else if (m_update == &Player::FallUpdate)
 	{
+		//落下
+		m_model->SetAnim(Anim::kJump1, true);
 		//落下してるので
 		m_isGround = false;
 		//ジャンプカウントは落下状態になってからカウントを進める

@@ -5,6 +5,7 @@
 class Input;
 class CameraBase;
 class Camera;
+class Model;
 class Player :
 	public Actor
 {
@@ -17,8 +18,8 @@ public:
 	void Draw()const override;
 	void Complete() override;
 private:
-	//モデルハンドル
-	int m_modelHandle;
+	//モデル
+	std::unique_ptr<Model> m_model;
 	//スティックの向きを持つベクトル
 	Vector2 m_stickVec;
 	//地面に付いているかどうか

@@ -20,7 +20,7 @@ Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLibVector(), m_target.ToDxLibVector());
 
 	//ディレクショナルライト
-	ChangeLightTypeDir(VGet(0.0f, 1.0f, 1.0f));
+	ChangeLightTypeDir(VGet(0.0f, 0.5f, -1.0f));
 }
 
 Camera::~Camera()
@@ -29,10 +29,12 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+#if _DEBUG
 	m_target = m_player->GetCollidable()->GetRb()->GetPos();
-	m_pos += m_player->GetCollidable()->GetRb()->GetVec();
+	m_pos.x = m_target.x;
 	//カメラの座標と注視点
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLibVector(), m_target.ToDxLibVector());
+#endif
 }
 
 Vector3 Camera::GetDir()

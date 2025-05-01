@@ -65,5 +65,13 @@ private:
 	/// <param name="shortDis"></param>
 	/// <returns></returns>
 	Vector3 OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	/// <summary>
+	/// 床の高さに合わせる
+	/// </summary>
+	void HitFloorY(const std::shared_ptr<Collidable>& other, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	/// <summary>
+	/// Y軸上にあるかチェック
+	/// </summary>
+	bool CheckHitYLine(const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
 };
 

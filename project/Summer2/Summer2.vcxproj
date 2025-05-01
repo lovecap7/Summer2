@@ -25,6 +25,7 @@
     <ClCompile Include="Game\Actors\TestColls\TestPolygon.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
+    <ClCompile Include="General\Animator.cpp" />
     <ClCompile Include="General\Collidable.cpp" />
     <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="General\Collision\ColliderBase.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="General\Math\Matrix4x4.cpp" />
     <ClCompile Include="General\Math\Vector2.cpp" />
     <ClCompile Include="General\Math\Vector3.cpp" />
+    <ClCompile Include="General\Model.cpp" />
     <ClCompile Include="General\Rigidbody.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -60,6 +62,7 @@
     <ClInclude Include="Game\Actors\TestColls\TestPolygon.h" />
     <ClInclude Include="Game\Actors\TestColls\TestSphere.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
+    <ClInclude Include="General\Animator.h" />
     <ClInclude Include="General\Collidable.h" />
     <ClInclude Include="General\Collision\CapsuleCollider.h" />
     <ClInclude Include="General\Collision\ColliderBase.h" />
@@ -76,6 +79,7 @@
     <ClInclude Include="General\Math\MyMath.h" />
     <ClInclude Include="General\Math\Vector2.h" />
     <ClInclude Include="General\Math\Vector3.h" />
+    <ClInclude Include="General\Model.h" />
     <ClInclude Include="General\Rigidbody.h" />
     <ClInclude Include="Main\Application.h" />
     <ClInclude Include="resource.h" />

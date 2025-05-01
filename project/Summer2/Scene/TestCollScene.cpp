@@ -22,7 +22,7 @@
 namespace
 {
 	const Vector3 kPlayerPos = { 0.0f, 0.0f, 0.0f };
-	const Vector3 kCameraPos = { 0.0f, 100.0f, 200.0f };
+	const Vector3 kCameraPos = { 0.0f, 400.0f, 500.0f };
 	//èdóÕ
 	const Vector3 kGravity = { 0.0f, -0.5f, 0.0f };
 }
