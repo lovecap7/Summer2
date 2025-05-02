@@ -17,13 +17,17 @@ namespace
 	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
 	constexpr float kMoveSpeed = 10.0f;
 	constexpr float kAirMoveSpeed = 1.5f;
+	constexpr float kAttackMoveSpeed = 0.5f;
 	constexpr float kMaxGravity = -10.0f;
-	const Vector3 kJumpVec = { 0.0f,10.0f,0.0f };//ジャンプ
+	const Vector3 kJumpVec = { 0.0f,13.0f,0.0f };//ジャンプ
 	constexpr unsigned int kMaxJumpNum = 2;
+	constexpr int kNextJumpFrame = 5;
 	constexpr float kChangeFall = -2.0f;
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	constexpr float kAirMoveDeceRate = 0.9f;
+	//先行入力フレーム
+	constexpr float kAdvanceInput = 15.0f;
 }
 namespace Anim
 {
@@ -47,7 +51,9 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_update(&Player::IdleUpdate),
 	m_lastUpdate(&Player::IdleUpdate),
 	m_isGround(true),
-	m_jumpNum(0)
+	m_jumpNum(0),
+	m_nextJumpFrame(kNextJumpFrame),
+	m_isNextAttackInput(false)
 {
 	//初期位置
 	Vector3 endPos = firstPos;
@@ -139,6 +145,13 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 		m_update = &Player::JumpUpdate;
 		return;
 	}
+	//弱攻撃ボタンを押したら
+	if (input.IsTriggered("X"))
+	{
+		//弱攻撃
+		m_update = &Player::AttackLight1Update;
+		return;
+	}
 	//入力があるなら移動
 	if (m_stickVec.Magnitude() != 0)
 	{
@@ -168,6 +181,13 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 		m_update = &Player::JumpUpdate;
 		return;
 	}
+	//弱攻撃ボタンを押したら
+	if (input.IsTriggered("X"))
+	{
+		//弱攻撃
+		m_update = &Player::AttackLight1Update;
+		return;
+	}
 	//入力がないなら待機状態へ
 	if (m_stickVec.Magnitude() == 0)
 	{
@@ -190,6 +210,15 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	if (m_collidable->GetRb()->GetVec().y < 0.0f)
 	{
 		//落下
+		m_update = &Player::FallUpdate;
+		return;
+	}
+	//次のジャンプのクールタイム
+	--m_nextJumpFrame;
+	if (m_nextJumpFrame <= 0)
+	{
+		m_nextJumpFrame = 0;
+		//落下状態に遷移して遷移先でジャンプ
 		m_update = &Player::FallUpdate;
 		return;
 	}
@@ -229,12 +258,96 @@ void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
 
+void Player::AttackLight1Update(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//モデルのアニメーションが終わったら
+	if (m_model->IsFinishAnim())
+	{
+		//攻撃の入力があるなら
+		if (m_isNextAttackInput)
+		{
+			//2段目
+			m_update = &Player::AttackLight2Update;
+			return;
+		}
+		else
+		{
+			//待機
+			m_update = &Player::IdleUpdate;
+			return;
+		}
+	}
+	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
+	if (m_model->GetTatalAnimFrame() - kAdvanceInput <= m_model->GetNowAnimFrame())
+	{
+		if (input.IsTriggered("X"))
+		{
+			m_isNextAttackInput = true;
+		}
+	}
+
+	//少しずつ減速する
+	Vector3 vec = m_collidable->GetRb()->GetVec();
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
+	m_collidable->GetRb()->SetVec(vec);
+}
+
+void Player::AttackLight2Update(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//モデルのアニメーションが終わったら
+	if (m_model->IsFinishAnim())
+	{
+		//攻撃の入力があるなら
+		if (m_isNextAttackInput)
+		{
+			//3段目
+			m_update = &Player::AttackLight3Update;
+			return;
+		}
+		else
+		{
+			//待機
+			m_update = &Player::IdleUpdate;
+			return;
+		}
+	}
+	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
+	if (m_model->GetTatalAnimFrame() - kAdvanceInput <= m_model->GetNowAnimFrame())
+	{
+		if (input.IsTriggered("X"))
+		{
+			m_isNextAttackInput = true;
+		}
+	}
+
+	//少しずつ減速する
+	Vector3 vec = m_collidable->GetRb()->GetVec();
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
+	m_collidable->GetRb()->SetVec(vec);
+}
+void Player::AttackLight3Update(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//モデルのアニメーションが終わったら
+	if (m_model->IsFinishAnim())
+	{
+		//待機
+		m_update = &Player::IdleUpdate;
+		return;
+	}
+
+	//少しずつ減速する
+	Vector3 vec = m_collidable->GetRb()->GetVec();
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
+	m_collidable->GetRb()->SetVec(vec);
+}
 //状態に合わせて初期化処理
 void Player::StateInit()
 {
 	//状態が変わっていないなら早期リターン
 	if (m_lastUpdate == m_update)return;
-	m_lastUpdate = m_update;
 	if (m_update == &Player::IdleUpdate)
 	{
 		//待機状態
@@ -253,25 +366,70 @@ void Player::StateInit()
 	}
 	else if (m_update == &Player::JumpUpdate)
 	{
-		//ジャンプ
-		m_model->SetAnim(Anim::kJump2, false);
+		if (m_lastUpdate == &Player::FallUpdate)
+		{
+			//2回目ジャンプ
+			m_model->SetAnim(Anim::kJump2, false);
+		}
+		else
+		{
+			//1回目ジャンプ
+			m_model->SetAnim(Anim::kJump1, true);
+		}
 		//飛んでるので
 		m_isGround = false;
 		m_collidable->SetState(State::Jump);
 		//力を与える
 		m_collidable->GetRb()->ResetVec();
 		m_collidable->GetRb()->SetVec(kJumpVec);
+		//クールタイム
+		m_nextJumpFrame = kNextJumpFrame;
 	}
 	else if (m_update == &Player::FallUpdate)
 	{
-		//落下
-		m_model->SetAnim(Anim::kJump1, true);
+		//ジャンプ以外でこの状態になったなら
+		if (m_lastUpdate != &Player::JumpUpdate)
+		{
+			//落下
+			m_model->SetAnim(Anim::kJump1, true);
+		}
 		//落下してるので
 		m_isGround = false;
 		//ジャンプカウントは落下状態になってからカウントを進める
 		++m_jumpNum;
 		m_collidable->SetState(State::Fall);
 	}
+	else if (m_update == &Player::AttackLight1Update)
+	{
+		m_collidable->SetState(State::None);
+		//弱攻撃1
+		m_model->SetAnim(Anim::kAttack_L1, false);
+		//向きの更新
+		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+		//先行入力の準備
+		m_isNextAttackInput = false;
+	}
+	else if (m_update == &Player::AttackLight2Update)
+	{
+		m_collidable->SetState(State::None);
+		//弱攻撃2
+		m_model->SetAnim(Anim::kAttack_L2, false);
+		//向きの更新
+		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+		//先行入力の準備
+		m_isNextAttackInput = false;
+	}
+	else if (m_update == &Player::AttackLight3Update)
+	{
+		m_collidable->SetState(State::None);
+		//弱攻撃3
+		m_model->SetAnim(Anim::kAttack_L3, false);
+		//向きの更新
+		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+		//先行入力の準備
+		m_isNextAttackInput = false;
+	}
+	m_lastUpdate = m_update;
 }
 
 Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)

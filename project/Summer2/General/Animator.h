@@ -3,12 +3,25 @@
 class Animator
 {
 private:
-	int m_attachAnim;//再生中のアニメーション名
-	int m_attachAnimIndex;//アニメーションのアタッチされた番号
-	float m_animTimer;//アニメーションのタイマー
-	float m_animStopTime;//アニメーションの終了タイマー
-	bool m_isLoopAnim;//ループするアニメーションかどうか
-	bool m_isFinishAnim;//アニメーションが終わったらtrue
+	struct Anim
+	{
+		int m_attachAnim = -1;//再生中のアニメーション名
+		int m_attachAnimIndex = -1;//アニメーションのアタッチされた番号
+		float m_animTimer = 0.0f;//アニメーションのタイマー
+		float m_animStopTime = 0.0f;//アニメーションの終了タイマー
+		bool m_isLoopAnim = false;//ループするアニメーションかどうか
+		bool m_isFinishAnim = false;//アニメーションが終わったらtrue
+	};
+	Anim m_animNow;//今のアニメーション
+	Anim m_animNext;//次のアニメーション
+	//ブレンドに使う
+	float m_blendRate;
+	//アニメーションを進める
+	void UpdateAnim(const int& modelHandle, Anim& anim);
+	//ブレンド率の更新
+	void UpdateBlend(const int& modelHandle);
+	//再生速度
+	float m_animSpeed;
 public:
 	//コンストラクタ
 	Animator();
@@ -28,7 +41,7 @@ public:
 	/// </summary>
 	/// <param name="modelHandle">モデルのハンドル</param>
 	/// <param name="anim">animation enum</param>
-	void RemoveAnim(const int& modelHandle);
+	void RemoveAnim(const int& modelHandle, Anim& anim);
 
 	/// <summary>
 	/// アニメーションの再生
@@ -40,5 +53,10 @@ public:
 	/// アニメーションが終わったかどうか
 	/// </summary>
 	/// <returns></returns>
-	bool IsFinishAnim() { return m_isFinishAnim; }
+	bool IsFinishAnim();
+
+	//アニメーションが終わるフレーム(全体フレーム / 再生速度)
+	float GetTotalAnimFrame() { return  m_animNext.m_animStopTime / m_animSpeed; };
+	//現在のアニメフレーム(現在のフレーム / 再生速度)
+	float GetNowAnimFrame() { return  m_animNext.m_animTimer / m_animSpeed; };
 };

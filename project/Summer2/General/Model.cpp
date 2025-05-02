@@ -63,8 +63,14 @@ bool Model::IsFinishAnim()
 	return m_animator->IsFinishAnim();
 }
 
-void Model::RemoveAnim()
+float Model::GetTatalAnimFrame()
 {
-	//削除
-	m_animator->RemoveAnim(m_modelHandle);
+	//全体フレーム
+	return m_animator->GetTotalAnimFrame();
+}
+
+float Model::GetNowAnimFrame()
+{
+	//現在のフレーム
+	return m_animator->GetNowAnimFrame();
 }

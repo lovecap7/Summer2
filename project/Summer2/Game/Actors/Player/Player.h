@@ -26,6 +26,9 @@ private:
 	bool m_isGround;
 	//ジャンプの回数
 	unsigned int m_jumpNum;
+	int m_nextJumpFrame;//2回目のジャンプが行えるまでの時間
+	//次の攻撃の入力があるか
+	bool m_isNextAttackInput;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera);
@@ -39,6 +42,10 @@ private:
 	void JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//落下中
 	void FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	//弱攻撃
+	void AttackLight1Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackLight2Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackLight3Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	//状態に合わせて初期化すべきものを初期化する
 	void StateInit();
 private:

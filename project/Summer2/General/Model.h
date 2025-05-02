@@ -16,7 +16,8 @@ public:
 	//アニメーション関係
 	void SetAnim(const char* animName,bool isLoop);//アニメーション変更
 	bool IsFinishAnim();//アニメーションが終わったかどうか
-	void RemoveAnim();//アニメーション削除
+	float GetTatalAnimFrame();//全体フレーム
+	float GetNowAnimFrame();//現在のアニメーションフレーム
 private:
 	int m_modelHandle;
 	//アニメーション

@@ -1,13 +1,14 @@
 #include "Animator.h"
 #include <DxLib.h>
+namespace
+{
+	constexpr float kMaxBlend = 1.0f;//ブレンド率の最大
+	constexpr float kAnimSpeed = 0.5f;//再生速度
+}
 
 Animator::Animator():
-	m_attachAnim(-1),
-	m_attachAnimIndex(-1),
-	m_animStopTime(0.0f),
-	m_animTimer(0.0f),
-	m_isLoopAnim(false),
-	m_isFinishAnim(false)
+	m_blendRate(kMaxBlend),
+	m_animSpeed(kAnimSpeed)
 {
 }
 
@@ -17,59 +18,100 @@ Animator::~Animator()
 
 void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLoop)
 {
-	//現在再生中のアニメーションを指定されても再設定しない
-	if (anim == m_attachAnim)return;
+	//メインかサブのアニメーションと同じなら設定しない
+	if (anim == m_animNext.m_attachAnim)return;
 
-	//今のモーションを消す
-	RemoveAnim(modelHandle);
+	if (m_animNow.m_attachAnim != -1)
+	{
+		//古いアニメーションは消す
+		RemoveAnim(modelHandle, m_animNow);
+	}
+	//新しいアニメーションを古いアニメーションにする
+	m_animNow = m_animNext;
 
 	//新しいモーションに更新
-	m_attachAnimIndex = MV1AttachAnim(modelHandle, anim, -1, false);
+	m_animNext.m_attachAnimIndex = MV1AttachAnim(modelHandle, anim, -1, false);
+	m_animNext.m_attachAnim = anim;//今のアニメーションの番号
+	m_animNext.m_animStopTime = MV1GetAttachAnimTotalTime(modelHandle, m_animNext.m_attachAnimIndex);//アニメーションの終了時間
+	m_animNext.m_animTimer = 0.0f;//タイマー初期化
+	m_animNext.m_isLoopAnim = isLoop;//ループするか
+	m_animNext.m_isFinishAnim = false;
+	//ブレンド率リセット
+	m_blendRate = 0.0f;
 
-	m_attachAnim = anim;//今のアニメーションの番号
-	m_animStopTime = MV1GetAttachAnimTotalTime(modelHandle, m_attachAnimIndex);//アニメーションの終了時間
-	m_animTimer = 0.0f;//タイマー初期化
-	m_isLoopAnim = isLoop;//ループするか
-
+	//ブレンド
+	MV1SetAttachAnimBlendRate(modelHandle, m_animNow.m_attachAnim, kMaxBlend - m_blendRate);
+	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnim, m_blendRate);
 }
 
-void Animator::RemoveAnim(const int& modelHandle)
+void Animator::RemoveAnim(const int& modelHandle, Anim& anim)
 {
 	//そもそも何もアタッチされていないなら早期リターン
-	if (m_attachAnimIndex == -1)return;
+	if (anim.m_attachAnimIndex == -1)return;
 	
 	//今のモーションを消す
-	MV1DetachAnim(modelHandle, m_attachAnimIndex);
-	m_attachAnim = -1;
-	m_attachAnimIndex = -1;
-	m_animStopTime = 0.0f;
-	m_animTimer = 0.0f;
-	m_isLoopAnim = false;
+	MV1DetachAnim(modelHandle, anim.m_attachAnimIndex);
+	anim.m_attachAnim = -1;
+	anim.m_attachAnimIndex = -1;
+	anim.m_animStopTime = 0.0f;
+	anim.m_animTimer = 0.0f;
+	anim.m_isLoopAnim = false;
+	anim.m_isFinishAnim = false;
 }
 
 void Animator::PlayAnim(const int& modelHandle)
 {
+	//更新
+	UpdateBlend(modelHandle);
+	UpdateAnim(modelHandle, m_animNow);
+	UpdateAnim(modelHandle, m_animNext);
+}
+
+bool Animator::IsFinishAnim()
+{
+	return m_animNext.m_isFinishAnim;
+}
+
+void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
+{
 	//何もアタッチされてないなら再生しない
-	if (m_attachAnimIndex == -1)return;
+	if (anim.m_attachAnimIndex == -1)return;
 
 	//アニメーションが終わっていないかもしれないのでfalse
-	m_isFinishAnim = false;
+	anim.m_isFinishAnim = false;
 	//アニメーションの終わりまで再生
-	if (m_animStopTime <= m_animTimer)
+	if (anim.m_animStopTime <= anim.m_animTimer)
 	{
-		if (m_isLoopAnim)
+		if (anim.m_isLoopAnim)
 		{
 			//ループする
-			m_animTimer = 0.0f;
+			anim.m_animTimer = 0.0f;
+			//終わりがないので終わったことにしておく
+			anim.m_isFinishAnim = true;
 		}
 		else
 		{
 			//終わったらtrue
-			m_isFinishAnim = true;
+			anim.m_isFinishAnim = true;
 		}
 	}
 	//アニメーションを進める
-	MV1SetAttachAnimTime(modelHandle, m_attachAnimIndex, m_animTimer);
-	
-	m_animTimer += 0.5f;
+	MV1SetAttachAnimTime(modelHandle, anim.m_attachAnimIndex, anim.m_animTimer);
+	anim.m_animTimer += m_animSpeed;
+}
+
+void Animator::UpdateBlend(const int& modelHandle)
+{
+	//アニメーションがないならブレンドしない
+	if (m_animNow.m_attachAnim == -1)return;
+	if (m_animNext.m_attachAnim == -1)return;
+	//ブレンド
+	MV1SetAttachAnimBlendRate(modelHandle, m_animNow.m_attachAnimIndex, kMaxBlend - m_blendRate);
+	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnimIndex, m_blendRate);
+	m_blendRate += 0.1f;
+	//ブレンド率が最大なら
+	if (m_blendRate >= kMaxBlend)
+	{
+		m_blendRate = kMaxBlend;
+	}
 }
