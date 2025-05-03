@@ -29,6 +29,8 @@ private:
 	int m_nextJumpFrame;//2回目のジャンプが行えるまでの時間
 	//次の攻撃の入力があるか
 	bool m_isNextAttackInput;
+	//強攻撃のタメ時間
+	int m_chargeHighAttackFrame;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera);
@@ -46,10 +48,15 @@ private:
 	void AttackLight1Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	void AttackLight2Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	void AttackLight3Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	//強攻撃
+	void AttackHigh1Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackHigh2Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	//状態に合わせて初期化すべきものを初期化する
 	void StateInit();
 private:
 	//進行方向を返すベクトル
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
+	//減速していく
+	void SpeedDown();
 };
 

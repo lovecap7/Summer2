@@ -3,12 +3,11 @@
 namespace
 {
 	constexpr float kMaxBlend = 1.0f;//ブレンド率の最大
-	constexpr float kAnimSpeed = 0.5f;//再生速度
+	constexpr float kDefAnimSpeed = 0.5f;//デフォルトの再生速度
 }
 
 Animator::Animator():
-	m_blendRate(kMaxBlend),
-	m_animSpeed(kAnimSpeed)
+	m_blendRate(kMaxBlend)
 {
 }
 
@@ -35,7 +34,39 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 	m_animNext.m_animStopTime = MV1GetAttachAnimTotalTime(modelHandle, m_animNext.m_attachAnimIndex);//アニメーションの終了時間
 	m_animNext.m_animTimer = 0.0f;//タイマー初期化
 	m_animNext.m_isLoopAnim = isLoop;//ループするか
-	m_animNext.m_isFinishAnim = false;
+	m_animNext.m_isFinishAnim = false;//再生終了
+	m_animNext.m_animSpeed = kDefAnimSpeed;//再生速度
+
+	//ブレンド率リセット
+	m_blendRate = 0.0f;
+
+	//ブレンド
+	MV1SetAttachAnimBlendRate(modelHandle, m_animNow.m_attachAnim, kMaxBlend - m_blendRate);
+	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnim, m_blendRate);
+}
+
+void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLoop, const float animSpeed)
+{
+	//メインかサブのアニメーションと同じなら設定しない
+	if (anim == m_animNext.m_attachAnim)return;
+
+	if (m_animNow.m_attachAnim != -1)
+	{
+		//古いアニメーションは消す
+		RemoveAnim(modelHandle, m_animNow);
+	}
+	//新しいアニメーションを古いアニメーションにする
+	m_animNow = m_animNext;
+
+	//新しいモーションに更新
+	m_animNext.m_attachAnimIndex = MV1AttachAnim(modelHandle, anim, -1, false);
+	m_animNext.m_attachAnim = anim;//今のアニメーションの番号
+	m_animNext.m_animStopTime = MV1GetAttachAnimTotalTime(modelHandle, m_animNext.m_attachAnimIndex);//アニメーションの終了時間
+	m_animNext.m_animTimer = 0.0f;//タイマー初期化
+	m_animNext.m_isLoopAnim = isLoop;//ループするか
+	m_animNext.m_isFinishAnim = false;//再生終了
+	m_animNext.m_animSpeed = animSpeed;//再生速度
+
 	//ブレンド率リセット
 	m_blendRate = 0.0f;
 
@@ -97,7 +128,7 @@ void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
 	}
 	//アニメーションを進める
 	MV1SetAttachAnimTime(modelHandle, anim.m_attachAnimIndex, anim.m_animTimer);
-	anim.m_animTimer += m_animSpeed;
+	anim.m_animTimer += anim.m_animSpeed;
 }
 
 void Animator::UpdateBlend(const int& modelHandle)

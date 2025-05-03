@@ -1,5 +1,4 @@
 #pragma once
-
 class Animator
 {
 private:
@@ -11,6 +10,7 @@ private:
 		float m_animStopTime = 0.0f;//アニメーションの終了タイマー
 		bool m_isLoopAnim = false;//ループするアニメーションかどうか
 		bool m_isFinishAnim = false;//アニメーションが終わったらtrue
+		float m_animSpeed = 0.5f;//再生速度
 	};
 	Anim m_animNow;//今のアニメーション
 	Anim m_animNext;//次のアニメーション
@@ -20,8 +20,6 @@ private:
 	void UpdateAnim(const int& modelHandle, Anim& anim);
 	//ブレンド率の更新
 	void UpdateBlend(const int& modelHandle);
-	//再生速度
-	float m_animSpeed;
 public:
 	//コンストラクタ
 	Animator();
@@ -35,6 +33,9 @@ public:
 	/// <param name="anim">animation enum</param>
 	/// <param name="isLoop">ループするか</param>
 	void SetAnim(const int& modelHandle, const int& anim, const bool& isLoop);
+
+	//アニメーションのアタッチと再生速度変更
+	void SetAnim(const int& modelHandle, const int& anim, const bool& isLoop,const float animSpeed);
 
 	/// <summary>
 	/// 指定されたアニメーションが再生中なら削除
@@ -56,7 +57,7 @@ public:
 	bool IsFinishAnim();
 
 	//アニメーションが終わるフレーム(全体フレーム / 再生速度)
-	float GetTotalAnimFrame() { return  m_animNext.m_animStopTime / m_animSpeed; };
+	float GetTotalAnimFrame() { return  m_animNext.m_animStopTime / m_animNext.m_animSpeed; };
 	//現在のアニメフレーム(現在のフレーム / 再生速度)
-	float GetNowAnimFrame() { return  m_animNext.m_animTimer / m_animSpeed; };
+	float GetNowAnimFrame() { return  m_animNext.m_animTimer / m_animNext.m_animSpeed; };
 };

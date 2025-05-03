@@ -50,6 +50,7 @@ public:
 	Vector3 operator-(const Vector3& right)const;
 	Vector3 operator*(const float& right)const;
 	Vector3 operator/(const float& right)const;
+	Vector3 operator=(const float& right)const;
 	Vector3 operator+=(const Vector3& right);
 	Vector3 operator-=(const Vector3& right);
 	Vector3 operator*=(const float& right);

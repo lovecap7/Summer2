@@ -13,21 +13,33 @@
 
 namespace
 {
+	//当たり判定
 	const Vector3 kCapsuleHeight = { 0.0f,150.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
-	constexpr float kMoveSpeed = 10.0f;
-	constexpr float kAirMoveSpeed = 1.5f;
-	constexpr float kAttackMoveSpeed = 0.5f;
-	constexpr float kMaxGravity = -10.0f;
+	//移動速度
+	constexpr float kMoveSpeed = 10.0f;//地上の移動速度
+	constexpr float kAirMoveSpeed = 1.5f;//空中移動速度
+	constexpr float kLightAttackMoveSpeed = 0.5f;//弱攻撃中の移動速度
+	constexpr float kHighAttackMoveSpeed = 13.0f;//強攻撃中の移動速度
+	//ジャンプ
+	constexpr float kMaxGravity = -10.0f;//落下スピードが大きくなりすぎないように
 	const Vector3 kJumpVec = { 0.0f,13.0f,0.0f };//ジャンプ
-	constexpr unsigned int kMaxJumpNum = 2;
-	constexpr int kNextJumpFrame = 5;
-	constexpr float kChangeFall = -2.0f;
+	constexpr unsigned int kMaxJumpNum = 2;//ジャンプ回数
+	constexpr int kNextJumpFrame = 5;//次のジャンプができるまでのフレーム
+	constexpr float kChangeStateFall = -2.0f;//落下状態に切り替わる落下ベクトルの大きさ
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	constexpr float kAirMoveDeceRate = 0.9f;
 	//先行入力フレーム
 	constexpr float kAdvanceInput = 15.0f;
+	//強攻撃の段階別攻撃フレーム
+	constexpr float kOneChargeHighAttackFrame = 30.0f;
+	constexpr float kTwoChargeHighAttackFrame = 70.0f;
+	constexpr float kThreeChargeHighAttackFrame = 100.0f;
+	//強攻撃の段階別アニメーションの速度
+	constexpr float kOneChargeHighAttackAnimSpeed = 0.3f;
+	constexpr float kTwoChargeHighAttackAnimSpeed = 0.5f;
+	constexpr float kThreeChargeHighAttackAnimSpeed = 1.0f;
 }
 namespace Anim
 {
@@ -53,7 +65,8 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_isGround(true),
 	m_jumpNum(0),
 	m_nextJumpFrame(kNextJumpFrame),
-	m_isNextAttackInput(false)
+	m_isNextAttackInput(false),
+	m_chargeHighAttackFrame(0)
 {
 	//初期位置
 	Vector3 endPos = firstPos;
@@ -132,7 +145,7 @@ void Player::Complete()
 void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//落下しているかチェック
-	if (m_collidable->GetRb()->GetVec().y <= kChangeFall)
+	if (m_collidable->GetRb()->GetVec().y <= kChangeStateFall)
 	{
 		//落下
 		m_update = &Player::FallUpdate;
@@ -152,6 +165,13 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 		m_update = &Player::AttackLight1Update;
 		return;
 	}
+	//強攻撃ボタンを押したら
+	if (input.IsTriggered("Y"))
+	{
+		//強攻撃
+		m_update = &Player::AttackHigh1Update;
+		return;
+	}
 	//入力があるなら移動
 	if (m_stickVec.Magnitude() != 0)
 	{
@@ -159,16 +179,14 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 		m_update = &Player::MoveUpdate;
 		return;
 	}
-	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kMoveDeceRate;
-	vec.z *= kMoveDeceRate;
-	m_collidable->GetRb()->SetVec(vec);
+	//少しずつ減速する
+	SpeedDown();
 }
 
 void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//落下しているかチェック
-	if (m_collidable->GetRb()->GetVec().y <= kChangeFall)
+	if (m_collidable->GetRb()->GetVec().y <= kChangeStateFall)
 	{
 		//落下
 		m_update = &Player::FallUpdate;
@@ -186,6 +204,13 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	{
 		//弱攻撃
 		m_update = &Player::AttackLight1Update;
+		return;
+	}
+	//強攻撃ボタンを押したら
+	if (input.IsTriggered("Y"))
+	{
+		//強攻撃
+		m_update = &Player::AttackHigh1Update;
 		return;
 	}
 	//入力がないなら待機状態へ
@@ -224,10 +249,8 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	//空中移動
 	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
-	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kAirMoveDeceRate;
-	vec.z *= kAirMoveDeceRate;
-	m_collidable->GetRb()->SetVec(vec);
+	//少しずつ減速する
+	SpeedDown();
 	//向きの更新
 	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
@@ -250,10 +273,8 @@ void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	//空中移動
 	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
-	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kAirMoveDeceRate;
-	vec.z *= kAirMoveDeceRate;
-	m_collidable->GetRb()->SetVec(vec);
+	//少しずつ減速する
+	SpeedDown();
 	//向きの更新
 	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
@@ -287,10 +308,7 @@ void Player::AttackLight1Update(const Input& input, const std::unique_ptr<Camera
 	}
 
 	//少しずつ減速する
-	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kMoveDeceRate;
-	vec.z *= kMoveDeceRate;
-	m_collidable->GetRb()->SetVec(vec);
+	SpeedDown();
 }
 
 void Player::AttackLight2Update(const Input& input, const std::unique_ptr<Camera>& camera)
@@ -322,10 +340,7 @@ void Player::AttackLight2Update(const Input& input, const std::unique_ptr<Camera
 	}
 
 	//少しずつ減速する
-	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kMoveDeceRate;
-	vec.z *= kMoveDeceRate;
-	m_collidable->GetRb()->SetVec(vec);
+	SpeedDown();
 }
 void Player::AttackLight3Update(const Input& input, const std::unique_ptr<Camera>& camera)
 {
@@ -338,10 +353,47 @@ void Player::AttackLight3Update(const Input& input, const std::unique_ptr<Camera
 	}
 
 	//少しずつ減速する
-	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kMoveDeceRate;
-	vec.z *= kMoveDeceRate;
-	m_collidable->GetRb()->SetVec(vec);
+	SpeedDown();
+}
+//タメ
+void Player::AttackHigh1Update(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//少しずつ減速する
+	SpeedDown();
+	//向きの更新
+	m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+	//溜めてる時
+	if (input.IsPressed("Y"))
+	{
+		//タメ攻撃チャージ
+		++m_chargeHighAttackFrame;
+		//最大
+		if (m_chargeHighAttackFrame >= kThreeChargeHighAttackFrame)
+		{
+			m_chargeHighAttackFrame = kThreeChargeHighAttackFrame;
+		}
+	}
+	//ボタンを離す
+	else
+	{
+		//タメ攻撃
+		m_update = &Player::AttackHigh2Update;
+		return;
+	}
+}
+
+void Player::AttackHigh2Update(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//持続フレームが終了したら
+	if (m_chargeHighAttackFrame <= 0.0f)
+	{
+		//待機
+		m_update = &Player::IdleUpdate;
+		return;
+	}
+	 //向いてる方向に移動
+	 m_collidable->GetRb()->SetMoveVec(m_model->GetDir() * kHighAttackMoveSpeed);
+	 --m_chargeHighAttackFrame;
 }
 //状態に合わせて初期化処理
 void Player::StateInit()
@@ -429,6 +481,38 @@ void Player::StateInit()
 		//先行入力の準備
 		m_isNextAttackInput = false;
 	}
+	else if (m_update == &Player::AttackHigh1Update)
+	{
+		m_collidable->SetState(State::None);
+		//強攻撃1
+		m_model->SetAnim(Anim::kAttack_H1, true);
+	}
+	else if (m_update == &Player::AttackHigh2Update)
+	{
+		m_collidable->SetState(State::None);
+		//チャージ時間に合わせて持続させる
+		//1段回目
+		if (m_chargeHighAttackFrame <= kOneChargeHighAttackFrame)
+		{
+			//強攻撃2
+			m_model->SetAnim(Anim::kAttack_H2, true, kOneChargeHighAttackAnimSpeed);
+			m_chargeHighAttackFrame = kOneChargeHighAttackFrame;
+		}
+		//2段回目
+		else if (m_chargeHighAttackFrame <= kTwoChargeHighAttackFrame)
+		{
+			//強攻撃2
+			m_model->SetAnim(Anim::kAttack_H2, true, kTwoChargeHighAttackAnimSpeed);
+			m_chargeHighAttackFrame = kTwoChargeHighAttackFrame;
+		}
+		//3段回目
+		else if (m_chargeHighAttackFrame <= kThreeChargeHighAttackFrame)
+		{
+			//強攻撃2
+			m_model->SetAnim(Anim::kAttack_H2, true, kThreeChargeHighAttackAnimSpeed);
+			m_chargeHighAttackFrame = kThreeChargeHighAttackFrame;
+		}
+	}
 	m_lastUpdate = m_update;
 }
 
@@ -456,4 +540,13 @@ Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)
 	moveVec = rotaMat * moveVec;
 	moveVec.y = 0.0f; //Y軸は無視
 	return moveVec.Normalize();
+}
+
+void Player::SpeedDown()
+{
+	//減速
+	Vector3 vec = m_collidable->GetRb()->GetVec();
+	vec.x *= kAirMoveDeceRate;
+	vec.z *= kAirMoveDeceRate;
+	m_collidable->GetRb()->SetVec(vec);
 }

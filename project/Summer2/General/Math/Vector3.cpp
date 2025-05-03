@@ -101,6 +101,15 @@ Vector3 Vector3::operator/(const float& right) const
     return ans;
 }
 
+Vector3 Vector3::operator=(const float& right) const
+{
+    Vector3 ans;
+    ans.x = right;
+    ans.y = right;
+    ans.z = right;
+    return ans;
+}
+
 Vector3 Vector3::operator+=(const Vector3& right)
 {
     this->x = this->x + right.x;

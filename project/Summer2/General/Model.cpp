@@ -2,8 +2,14 @@
 #include "Math/MyMath.h"
 #include "Animator.h"
 
-Model::Model(int modelHandle, VECTOR pos):
-	m_modelHandle(modelHandle)
+namespace
+{
+	constexpr float kAnimSpeed = 0.5f;//再生速度
+}
+
+Model::Model(int modelHandle, VECTOR pos) :
+	m_modelHandle(modelHandle),
+	m_dir{ 0.0f,0.0f,-1.0f }
 {
 	//座標
 	MV1SetPosition(m_modelHandle, pos);
@@ -49,12 +55,25 @@ void Model::SetDir(VECTOR vec)
 	dir = dir.Normalize();
 	float angle = Theata(z, dir);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, angle, 0.0f));
+	//向きをセット
+	m_dir = { vec.x,vec.y,vec.z };
+}
+
+Vector3 Model::GetDir()
+{
+	return m_dir.Normalize();
 }
 
 void Model::SetAnim(const char* animName, bool isLoop)
 {
 	//アニメーションを変更
 	m_animator->SetAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, animName), isLoop);
+}
+
+void Model::SetAnim(const char* animName, bool isLoop, const float animSpeed)
+{
+	//アニメーションを変更
+	m_animator->SetAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, animName), isLoop, animSpeed);
 }
 
 bool Model::IsFinishAnim()
