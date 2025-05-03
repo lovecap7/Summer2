@@ -33,5 +33,6 @@ private:
     //ƒnƒ“ƒhƒ‹
     int m_playerHandle;
     int m_polygonHandle;
+    int m_wallHandle;
 };
 

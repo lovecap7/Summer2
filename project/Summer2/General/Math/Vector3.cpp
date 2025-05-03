@@ -1,5 +1,6 @@
 #include "Vector3.h"
 #include <cmath>
+#include <cassert>
 
 //3D—p
 Vector3::Vector3() :
@@ -24,6 +25,7 @@ float Vector3::Magnitude() const
 
 Vector3 Vector3::Normalize() const
 {
+    assert(this->Magnitude() != -1);
     //³‹K‰»
     Vector3 ans;
     ans = (*this) / Magnitude();

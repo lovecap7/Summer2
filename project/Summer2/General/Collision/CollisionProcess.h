@@ -45,9 +45,9 @@ public:
 	void ProcessCP(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB);
 private:
 	int	m_wallNum;			// 壁ポリゴンと判断されたポリゴンの数
-	int	m_floorNum;			// 床ポリゴンと判断されたポリゴンの数
+	int	m_floorAndRoofNum;			// 床ポリゴンと判断されたポリゴンの数
 	MV1_COLL_RESULT_POLY* m_wall[kMaxHitPolygon];
-	MV1_COLL_RESULT_POLY* m_floor[kMaxHitPolygon];
+	MV1_COLL_RESULT_POLY* m_floorAndRoof[kMaxHitPolygon];
 	/// <summary>
 	/// 床ポリゴンと壁ポリゴンに分ける
 	/// </summary>
@@ -57,21 +57,16 @@ private:
 	/// </summary>
 	Vector3 OverlapVecSphereAndPoly(int hitNum, const Vector3& nextPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
 	/// <summary>
-	/// カプセルとポリゴンの押し戻しベクトルを返す
+	/// 壁と当たった時の処理 カプセル
 	/// </summary>
-	/// <param name="hitNum"></param>
-	/// <param name="nextPos"></param>
-	/// <param name="dim"></param>
-	/// <param name="shortDis"></param>
-	/// <returns></returns>
-	Vector3 OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	Vector3 HitWallCP(const Vector3& headPos, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
 	/// <summary>
-	/// 床の高さに合わせる
+	/// 床の高さに合わせる カプセル
 	/// </summary>
-	void HitFloorY(const std::shared_ptr<Collidable>& other, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	bool HitFloorCP(const std::shared_ptr<Collidable>& other, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
 	/// <summary>
-	/// Y軸上にあるかチェック
+	/// 天井に当たった時の処理 カプセル
 	/// </summary>
-	bool CheckHitYLine(const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	void HitRoofCP(const std::shared_ptr<Collidable>& other, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
 };
 

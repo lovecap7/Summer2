@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Game\Actors\Actor.cpp" />
     <ClCompile Include="Game\Actors\Player\Player.cpp" />
+    <ClCompile Include="Game\Actors\Stage\InvisibleWall.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestCapsule.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestPolygon.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp" />
@@ -58,6 +59,7 @@
   <ItemGroup>
     <ClInclude Include="Game\Actors\Actor.h" />
     <ClInclude Include="Game\Actors\Player\Player.h" />
+    <ClInclude Include="Game\Actors\Stage\InvisibleWall.h" />
     <ClInclude Include="Game\Actors\TestColls\TestCapsule.h" />
     <ClInclude Include="Game\Actors\TestColls\TestPolygon.h" />
     <ClInclude Include="Game\Actors\TestColls\TestSphere.h" />

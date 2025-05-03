@@ -13,6 +13,7 @@
 #include "../Game/Actors/TestColls/TestSphere.h"
 #include "../Game/Actors/TestColls/TestCapsule.h"
 #include "../Game/Actors/TestColls/TestPolygon.h"
+#include "../Game/Actors/Stage/InvisibleWall.h"
 //カメラ
 #include "../Game/Camera/Camera.h"
 
@@ -30,7 +31,8 @@ namespace
 TestCollScene::TestCollScene(SceneController& controller) :
 	SceneBase(controller),
 	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1")),
-	m_polygonHandle(MV1LoadModel("Data/Model/Stage/Stage1.mv1"))
+	m_polygonHandle(MV1LoadModel("Data/Model/Stage/Stage1.mv1")),
+	m_wallHandle(MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1"))
 {
 	//プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
@@ -51,7 +53,8 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	//m_actors.push_back(std::make_shared<TestSphere>(Vector3{ -200.0f,10.0f,0.0f }, 50.0f, true));//球
 	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -100.0f,0.0f,100.0f }, Vector3{ -100.0f,100.0f,-100.0f }, 50.0f, true));//カプセル
 	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -300.0f,10.0f,0.0f }, Vector3{ -500.0f,10.0f, 0.0f }, 50.0f, true));//カプセル
-	m_actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));//カプセル
+	m_actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));
+	m_actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle,Vector3{ -100.0f,-50.0f,0.0f },VGet(1.0f,1.0f,1.0f), VGet(0.0f, 0.0f, 0.0f)));//透明壁
 }
 
 TestCollScene::~TestCollScene()

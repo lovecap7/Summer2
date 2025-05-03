@@ -56,7 +56,7 @@ void Model::SetDir(VECTOR vec)
 	float angle = Theata(z, dir);
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, angle, 0.0f));
 	//Œü‚«‚ðƒZƒbƒg
-	m_dir = { vec.x,vec.y,vec.z };
+	m_dir = { vec.x,0.0f,vec.z };
 }
 
 Vector3 Model::GetDir()

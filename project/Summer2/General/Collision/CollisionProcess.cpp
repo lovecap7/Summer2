@@ -16,9 +16,9 @@ namespace
 
 CollisionProcess::CollisionProcess() :
 	m_wallNum(0),
-	m_floorNum(0),
+	m_floorAndRoofNum(0),
 	m_wall{ nullptr },
-	m_floor{ nullptr }
+	m_floorAndRoof{ nullptr }
 {
 }
 
@@ -81,10 +81,10 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 	//床ポリゴンと壁ポリゴンに分ける
 	AnalyzeWallAndFloor(hitDim, nextPos);
 	//床と当たったなら
-	if (m_floorNum > 0)
+	if (m_floorAndRoofNum > 0)
 	{
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorNum, nextPos, *m_floor, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
+		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorAndRoofNum, nextPos, *m_floorAndRoof, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
 	
 		//上昇中ではないかつ天井ではないなら
 		if (!(otherA->GetState() == State::Jump) && overlapVec.y < 0)
@@ -211,20 +211,23 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 	//床ポリゴンと壁ポリゴンに分ける
 	AnalyzeWallAndFloor(hitDim, legPos);
 	//床と当たったなら
-	if (m_floorNum > 0)
+	if (m_floorAndRoofNum > 0)
 	{
-		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_floorNum, headPos, legPos, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
-		//ポリゴンは固定(static)なので球のみ動かす
-		otherA->GetRb()->AddVec(overlapVec);
-		//床の高さに合わせる
-		HitFloorY(otherA, legPos, m_floorNum, *m_floor, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
-		//修正方向が上向きでジャンプをしていないなら
-		if (overlapVec.y > 0)
+		//ジャンプしているなら
+		if (otherA->GetState() == State::Jump)
 		{
-			//床に当たっているので
-			std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+			//天井に当たった処理
+			HitRoofCP(otherA, headPos, m_floorAndRoofNum, *m_floorAndRoof, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
 		}
-	
+		else
+		{
+			//床の高さに合わせる
+			if (HitFloorCP(otherA, legPos, m_floorAndRoofNum, *m_floorAndRoof, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius()))
+			{
+				//床に当たっているので
+				std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
+			}
+		}
 	}
 
 	//壁と当たっているなら
@@ -234,7 +237,7 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 		std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsWall(true);
 
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecCapsuleAndPoly(m_wallNum, headPos, legPos, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
+		Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius());
 		
 		//ポリゴンは固定(static)なので球のみ動かす
 		otherA->GetRb()->AddVec(overlapVec);
@@ -249,13 +252,13 @@ void CollisionProcess::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, cons
 {
 	//壁ポリゴンと床ポリゴンの数を初期化する
 	m_wallNum = 0;
-	m_floorNum = 0;
+	m_floorAndRoofNum = 0;
 
 	//検出されたポリゴンの数だけ繰り返す
 	for (int i = 0; i < hitDim.HitNum;++i)
 	{
 		//XZ平面に垂直かどうかはポリゴンの法線のY成分が0に近いかどうかで判断する
-		if (hitDim.Dim[i].Normal.y < 0.000001f && hitDim.Dim[i].Normal.y > -0.000001f)
+		if (hitDim.Dim[i].Normal.y < 0.1f && hitDim.Dim[i].Normal.y > -0.1f)
 		{
 			//壁ポリゴンと判断された場合でも、プレイヤーのY座標＋1.0fより高いポリゴンのみ当たり判定を行う
 			//段さで突っかかるのを防ぐため
@@ -276,11 +279,11 @@ void CollisionProcess::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, cons
 		else
 		{
 			//ポリゴンの数が列挙できる限界数に達していなかったらポリゴン配列に保存
-			if (m_floorNum < kMaxHitPolygon)
+			if (m_floorAndRoofNum < kMaxHitPolygon)
 			{
 				//ポリゴンの構造体のアドレスを床ポリゴン配列に保存
-				m_floor[m_floorNum] = &hitDim.Dim[i];
-				++m_floorNum;
+				m_floorAndRoof[m_floorAndRoofNum] = &hitDim.Dim[i];
+				++m_floorAndRoofNum;
 			}
 		}
 	}
@@ -325,10 +328,10 @@ Vector3 CollisionProcess::OverlapVecSphereAndPoly(int hitNum ,const Vector3& nex
 	return nom.Normalize() * overlap;
 }
 
-Vector3 CollisionProcess::OverlapVecCapsuleAndPoly(int hitNum, const Vector3& headPos, const Vector3& legPos, MV1_COLL_RESULT_POLY* dim, float shortDis)
+Vector3 CollisionProcess::HitWallCP(const Vector3& headPos, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
 {
 	//垂線を下して近い点を探して最短距離を求める
-	float hitShortDis = 0;//最短距離
+	float hitShortDis = shortDis;//最短距離
 	//法線
 	Vector3 nom = {};
 	for (int i = 0; i < hitNum; ++i)
@@ -338,12 +341,12 @@ Vector3 CollisionProcess::OverlapVecCapsuleAndPoly(int hitNum, const Vector3& he
 		//平方根を返す
 		dis = sqrtf(dis);
 		//初回または前回より距離が短いなら
-		if (i <= 0 || hitShortDis > dis)
+		if (hitShortDis > dis)
 		{
 			//現状の最短
 			hitShortDis = dis;
 			//法線
-			nom = Vector3{ dim[i].Normal.x,dim[i].Normal.y ,dim[i].Normal.z };
+			nom = Vector3{ dim[i].Normal.x,0.0f ,dim[i].Normal.z };
 		}
 	}
 	//押し戻し
@@ -351,12 +354,16 @@ Vector3 CollisionProcess::OverlapVecCapsuleAndPoly(int hitNum, const Vector3& he
 	float overlap = shortDis - hitShortDis;
 	overlap = ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
-
+	//正規化
+	if (nom.Magnitude() != 0.0f)
+	{
+		nom = nom.Normalize();
+	}
 	return nom * overlap;
 }
 
 
-void CollisionProcess::HitFloorY(const std::shared_ptr<Collidable>& other, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+bool CollisionProcess::HitFloorCP(const std::shared_ptr<Collidable>& other, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
 {
 	//垂線を下して近い点を探して最短距離を求める
 	float hitShortDis = shortDis;//最短距離
@@ -366,6 +373,8 @@ void CollisionProcess::HitFloorY(const std::shared_ptr<Collidable>& other, const
 	bool hitFloor = false;
 	for (int i = 0; i < hitNum; ++i)
 	{
+		//下向きの法線ベクトルなら飛ばす
+		if (dim[i].Normal.y < 0.0f)continue;
 		// 足の下にポリゴンがあるかをチェック
 		 HITRESULT_LINE lineResult = HitCheck_Line_Triangle(legPos.ToDxLibVector(), VAdd(legPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), dim[i].Position[0], dim[i].Position[1], dim[i].Position[2]);
 
@@ -391,12 +400,50 @@ void CollisionProcess::HitFloorY(const std::shared_ptr<Collidable>& other, const
 		other->GetRb()->SetPosY(lowHitPosY);
 		other->GetRb()->SetVecY(0.0f);
 	}
+	return hitFloor;
 }
 
-bool CollisionProcess::CheckHitYLine( const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+void CollisionProcess::HitRoofCP(const std::shared_ptr<Collidable>& other, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
 {
-	bool under = HitCheck_Line_Triangle(legPos.ToDxLibVector(), VAdd(legPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), dim->Position[0], dim->Position[1], dim->Position[2]).HitFlag;
-	//bool under = HitCheck_Line_Triangle(legPos.ToDxLibVector(), VAdd(legPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), dim->Position[0], dim->Position[1], dim->Position[2]).HitFlag;
-	return false;
+	//垂線を下して近い点を探して最短距離を求める
+	float hitShortDis = shortDis;//最短距離
+	//当たった中で足元に一番近いY座標に合わせる
+	float lowHitPosY = other->GetRb()->GetPos().y;
+	//天井と当たったか
+	bool hitRoof = false;
+	for (int i = 0; i < hitNum; ++i)
+	{
+		//上向きの法線ベクトルなら飛ばす
+		if (dim[i].Normal.y > 0.0f)continue;
+		// 頭の上にポリゴンがあるかをチェック
+		HITRESULT_LINE lineResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), VAdd(headPos.ToDxLibVector(), VGet(0.0f, kCheckTop, 0.0f)), dim[i].Position[0], dim[i].Position[1], dim[i].Position[2]);
+
+		if (lineResult.HitFlag)
+		{
+			hitRoof = true;
+			//距離
+			float dis = VSize(VSub(lineResult.Position, headPos.ToDxLibVector()));
+			//初回または前回より距離が短いなら
+			if (hitShortDis > dis)
+			{
+				//現状の最短
+				hitShortDis = dis;
+			}
+		}
+	}
+	//当たったいるなら
+	if (hitRoof)
+	{
+		//押し戻し
+		//どれくらい押し戻すか
+		float overlap = shortDis - hitShortDis;
+		overlap = ClampFloat(overlap, 0, shortDis);
+		overlap += kOverlapGap;
+		//法線
+		Vector3 nom = { 0.0f,-1.0f,0.0f };
+		//力を与える
+		other->GetRb()->AddVec(nom * overlap);
+	}
 }
+
 
