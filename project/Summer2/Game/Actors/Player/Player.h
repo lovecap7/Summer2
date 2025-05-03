@@ -51,6 +51,8 @@ private:
 	//‹­UŒ‚
 	void AttackHigh1Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	void AttackHigh2Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	//‰ñ”ğ
+	void RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»‚·‚×‚«‚à‚Ì‚ğ‰Šú‰»‚·‚é
 	void StateInit();
 private:

@@ -21,6 +21,7 @@ namespace
 	constexpr float kAirMoveSpeed = 1.5f;//空中移動速度
 	constexpr float kLightAttackMoveSpeed = 0.5f;//弱攻撃中の移動速度
 	constexpr float kHighAttackMoveSpeed = 13.0f;//強攻撃中の移動速度
+	constexpr float kRollingMoveSpeed = 10.0f;//回避速度
 	//ジャンプ
 	constexpr float kMaxGravity = -10.0f;//落下スピードが大きくなりすぎないように
 	const Vector3 kJumpVec = { 0.0f,13.0f,0.0f };//ジャンプ
@@ -151,6 +152,13 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 		m_update = &Player::FallUpdate;
 		return;
 	}
+	//回避ボタンを押したら
+	if (input.IsTriggered("RB"))
+	{
+		//回避
+		m_update = &Player::RollingUpdate;
+		return;
+	}
 	//ジャンプボタンを押してるならジャンプ
 	if (input.IsTriggered("A") && m_isGround)
 	{
@@ -190,6 +198,13 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	{
 		//落下
 		m_update = &Player::FallUpdate;
+		return;
+	}
+	//回避ボタンを押したら
+	if (input.IsTriggered("RB"))
+	{
+		//回避
+		m_update = &Player::RollingUpdate;
 		return;
 	}
 	//ジャンプ
@@ -395,6 +410,18 @@ void Player::AttackHigh2Update(const Input& input, const std::unique_ptr<Camera>
 	 m_collidable->GetRb()->SetMoveVec(m_model->GetDir() * kHighAttackMoveSpeed);
 	 --m_chargeHighAttackFrame;
 }
+void Player::RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//モデルのアニメーションが終わったら
+	if (m_model->IsFinishAnim())
+	{
+		//待機
+		m_update = &Player::IdleUpdate;
+		return;
+	}
+	//向いてる方向に移動
+	m_collidable->GetRb()->SetMoveVec(m_model->GetDir() * kRollingMoveSpeed);
+}
 //状態に合わせて初期化処理
 void Player::StateInit()
 {
@@ -512,6 +539,14 @@ void Player::StateInit()
 			m_model->SetAnim(Anim::kAttack_H2, true, kThreeChargeHighAttackAnimSpeed);
 			m_chargeHighAttackFrame = kThreeChargeHighAttackFrame;
 		}
+	}
+	else if (m_update == &Player::RollingUpdate)
+	{
+		m_collidable->SetState(State::None);
+		//回避
+		m_model->SetAnim(Anim::kRolling, false);
+		//向きの更新
+		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 	}
 	m_lastUpdate = m_update;
 }
