@@ -46,5 +46,13 @@ public:
     /// <param name="actorB">ポリゴン</param>
     /// <returns></returns>
     bool CheckCollCP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB);
+private:
+    /// <summary>
+    /// カプセル同士で平行の場合の当たり判定処理
+    /// </summary>
+    /// <param name="actorA">カプセル</param>
+    /// <param name="actorB">カプセル</param>
+    /// <returns></returns>
+    bool ParallelCC(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB);
 };
 

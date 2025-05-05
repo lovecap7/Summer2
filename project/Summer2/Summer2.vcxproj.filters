@@ -79,6 +79,12 @@
     <Filter Include="ヘッダー ファイル\Game\Actors\Stage">
       <UniqueIdentifier>{9813c07d-f942-4030-887a-e96a70f83d81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors\Enemy">
+      <UniqueIdentifier>{035e9103-5ad7-41ed-abd3-37ccf5918e94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Actors\Enemy">
+      <UniqueIdentifier>{8d392897-e80d-46b8-92ac-f6b0ab803a8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -188,6 +194,15 @@
     </ClCompile>
     <ClCompile Include="Game\Actors\Stage\InvisibleWall.cpp">
       <Filter>ソース ファイル\Game\Actors\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\EnemyBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Common1.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EnemyManager.cpp">
+      <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +319,15 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Stage\InvisibleWall.h">
       <Filter>ヘッダー ファイル\Game\Actors\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\EnemyBase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Common1.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyManager.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

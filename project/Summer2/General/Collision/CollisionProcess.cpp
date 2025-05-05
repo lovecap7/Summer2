@@ -37,6 +37,7 @@ void CollisionProcess::ProcessSS(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius();
 	//‚Ç‚Ì‚­‚ç‚¢d‚Ë‚Á‚Ä‚¢‚é‚©
 	float overlap = shortDis - aToB.Magnitude();
+	overlap = ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
 	//“®‚©‚·•¨‘Ì‚Æ‚»‚¤‚¶‚á‚È‚¢•¨‘Ì‚Æ‚Åˆ—‚ğ•ª‚¯‚é
@@ -130,7 +131,11 @@ void CollisionProcess::ProcessCC(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherB->GetColl())->GetRadius();
 	//‚Ç‚Ì‚­‚ç‚¢d‚Ë‚Á‚Ä‚¢‚é‚©
 	float overlap = shortDis - aToB.Magnitude();
+	overlap = ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
+
+	//‰¡•ûŒü‚É‚¾‚¯“®‚©‚µ‚½‚¢‚Ì‚Å
+	aToB.y = 0.0f;
 
 	//“®‚©‚·•¨‘Ì‚Æ‚»‚¤‚¶‚á‚È‚¢•¨‘Ì‚Æ‚Åˆ—‚ğ•ª‚¯‚é
 	if (otherA->IsStatic() && !otherB->IsStatic())
@@ -160,6 +165,7 @@ void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius();
 	//‚Ç‚Ì‚­‚ç‚¢d‚Ë‚Á‚Ä‚¢‚é‚©
 	float overlap = shortDis - aToB.Magnitude();
+	overlap = ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
 	//“®‚©‚·•¨‘Ì‚Æ‚»‚¤‚¶‚á‚È‚¢•¨‘Ì‚Æ‚Åˆ—‚ğ•ª‚¯‚é

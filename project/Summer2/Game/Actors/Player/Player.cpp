@@ -41,28 +41,26 @@ namespace
 	constexpr float kOneChargeHighAttackAnimSpeed = 0.3f;
 	constexpr float kTwoChargeHighAttackAnimSpeed = 0.5f;
 	constexpr float kThreeChargeHighAttackAnimSpeed = 1.0f;
-}
-namespace Anim
-{
+
 	//アニメーションの名前
-	const char* kIdle = "Player|Idle";//待機
-	const char* kWalk = "Player|Walk";//歩く
-	const char* kRun = "Player|Run";//走る
-	const char* kRolling = "Player|Rolling";//回避
-	const char* kJump1 = "Player|Jump1";//ジャンプ1
-	const char* kJump2 = "Player|Jump2";//ジャンプ2
-	const char* kAttack_L1 = "Player|Attack_L1";//弱攻撃1
-	const char* kAttack_L2 = "Player|Attack_L2";//弱攻撃2
-	const char* kAttack_L3 = "Player|Attack_L3";//弱攻撃3
-	const char* kAttack_H1 = "Player|Attack_H1";//強攻撃1
-	const char* kAttack_H2 = "Player|Attack_H2";//強攻撃2
+	const char* kIdleAnim = "Player|Idle";//待機
+	const char* kWalkAnim = "Player|Walk";//歩く
+	const char* kRunAnim = "Player|Run";//走る
+	const char* kRollingAnim = "Player|Rolling";//回避
+	const char* kJump1Anim = "Player|Jump1";//ジャンプ1
+	const char* kJump2Anim = "Player|Jump2";//ジャンプ2
+	const char* kAttack_L1Anim = "Player|Attack_L1";//弱攻撃1
+	const char* kAttack_L2Anim = "Player|Attack_L2";//弱攻撃2
+	const char* kAttack_L3Anim = "Player|Attack_L3";//弱攻撃3
+	const char* kAttack_H1Anim = "Player|Attack_H1";//強攻撃1
+	const char* kAttack_H2Anim = "Player|Attack_H2";//強攻撃2
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
 	m_stickVec(0.0f,0.0f),
 	m_update(&Player::IdleUpdate),
-	m_lastUpdate(&Player::IdleUpdate),
+	m_lastUpdate(&Player::FallUpdate),
 	m_isGround(true),
 	m_jumpNum(0),
 	m_nextJumpFrame(kNextJumpFrame),
@@ -135,10 +133,10 @@ void Player::Draw() const
 
 void Player::Complete()
 {
-	m_collidable->GetRb()->SetNextPos();
+	m_collidable->GetRb()->SetNextPos();//次の座標へ
 	Vector3 endPos = m_collidable->GetRb()->GetPos();
 	endPos += kCapsuleHeight;
-	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);
+	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);//カプセルの移動
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
@@ -430,7 +428,7 @@ void Player::StateInit()
 	if (m_update == &Player::IdleUpdate)
 	{
 		//待機状態
-		m_model->SetAnim(Anim::kIdle, true);
+		m_model->SetAnim(kIdleAnim, true);
 		//ジャンプカウントリセット
 		m_jumpNum = 0;
 		m_collidable->SetState(State::None);
@@ -438,7 +436,7 @@ void Player::StateInit()
 	else if (m_update == &Player::MoveUpdate)
 	{
 		//走る
-		m_model->SetAnim(Anim::kRun, true);
+		m_model->SetAnim(kRunAnim, true);
 		//ジャンプカウントリセット
 		m_jumpNum = 0;
 		m_collidable->SetState(State::None);
@@ -448,12 +446,12 @@ void Player::StateInit()
 		if (m_lastUpdate == &Player::FallUpdate)
 		{
 			//2回目ジャンプ
-			m_model->SetAnim(Anim::kJump2, false);
+			m_model->SetAnim(kJump2Anim, false);
 		}
 		else
 		{
 			//1回目ジャンプ
-			m_model->SetAnim(Anim::kJump1, true);
+			m_model->SetAnim(kJump1Anim, true);
 		}
 		//飛んでるので
 		m_isGround = false;
@@ -470,7 +468,7 @@ void Player::StateInit()
 		if (m_lastUpdate != &Player::JumpUpdate)
 		{
 			//落下
-			m_model->SetAnim(Anim::kJump1, true);
+			m_model->SetAnim(kJump1Anim, true);
 		}
 		//落下してるので
 		m_isGround = false;
@@ -482,7 +480,7 @@ void Player::StateInit()
 	{
 		m_collidable->SetState(State::None);
 		//弱攻撃1
-		m_model->SetAnim(Anim::kAttack_L1, false);
+		m_model->SetAnim(kAttack_L1Anim, false);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 		//先行入力の準備
@@ -492,7 +490,7 @@ void Player::StateInit()
 	{
 		m_collidable->SetState(State::None);
 		//弱攻撃2
-		m_model->SetAnim(Anim::kAttack_L2, false);
+		m_model->SetAnim(kAttack_L2Anim, false);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 		//先行入力の準備
@@ -502,7 +500,7 @@ void Player::StateInit()
 	{
 		m_collidable->SetState(State::None);
 		//弱攻撃3
-		m_model->SetAnim(Anim::kAttack_L3, false);
+		m_model->SetAnim(kAttack_L3Anim, false);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 		//先行入力の準備
@@ -512,7 +510,7 @@ void Player::StateInit()
 	{
 		m_collidable->SetState(State::None);
 		//強攻撃1
-		m_model->SetAnim(Anim::kAttack_H1, true);
+		m_model->SetAnim(kAttack_H1Anim, true);
 	}
 	else if (m_update == &Player::AttackHigh2Update)
 	{
@@ -522,21 +520,21 @@ void Player::StateInit()
 		if (m_chargeHighAttackFrame <= kOneChargeHighAttackFrame)
 		{
 			//強攻撃2
-			m_model->SetAnim(Anim::kAttack_H2, true, kOneChargeHighAttackAnimSpeed);
+			m_model->SetAnim(kAttack_H2Anim, true, kOneChargeHighAttackAnimSpeed);
 			m_chargeHighAttackFrame = kOneChargeHighAttackFrame;
 		}
 		//2段回目
 		else if (m_chargeHighAttackFrame <= kTwoChargeHighAttackFrame)
 		{
 			//強攻撃2
-			m_model->SetAnim(Anim::kAttack_H2, true, kTwoChargeHighAttackAnimSpeed);
+			m_model->SetAnim(kAttack_H2Anim, true, kTwoChargeHighAttackAnimSpeed);
 			m_chargeHighAttackFrame = kTwoChargeHighAttackFrame;
 		}
 		//3段回目
 		else if (m_chargeHighAttackFrame <= kThreeChargeHighAttackFrame)
 		{
 			//強攻撃2
-			m_model->SetAnim(Anim::kAttack_H2, true, kThreeChargeHighAttackAnimSpeed);
+			m_model->SetAnim(kAttack_H2Anim, true, kThreeChargeHighAttackAnimSpeed);
 			m_chargeHighAttackFrame = kThreeChargeHighAttackFrame;
 		}
 	}
@@ -544,7 +542,7 @@ void Player::StateInit()
 	{
 		m_collidable->SetState(State::None);
 		//回避
-		m_model->SetAnim(Anim::kRolling, false);
+		m_model->SetAnim(kRollingAnim, false);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 	}
@@ -581,7 +579,15 @@ void Player::SpeedDown()
 {
 	//減速
 	Vector3 vec = m_collidable->GetRb()->GetVec();
-	vec.x *= kAirMoveDeceRate;
-	vec.z *= kAirMoveDeceRate;
+	if (m_isGround)
+	{
+		vec.x *= kMoveDeceRate;
+		vec.z *= kMoveDeceRate;
+	}
+	else
+	{
+		vec.x *= kAirMoveDeceRate;
+		vec.z *= kAirMoveDeceRate;
+	}
 	m_collidable->GetRb()->SetVec(vec);
 }

@@ -1,0 +1,19 @@
+#pragma once
+#include <memory>
+#include <vector>
+class Actor;
+class Player;
+class CollisionChecker;
+class EnemyManager
+{
+public:
+	EnemyManager(std::shared_ptr<Player> player);
+	virtual ~EnemyManager() {};
+	void Update(std::vector<std::shared_ptr<Actor>> actors);
+private:
+	//トリガーの当たり判定のチェックをするクラス
+	std::unique_ptr<CollisionChecker> m_collChecker;
+	//プレイヤーのポインタ
+	std::shared_ptr<Player> m_player;
+};
+

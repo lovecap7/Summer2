@@ -9,10 +9,16 @@
 
 //アクター
 #include "../Game/Actors/Actor.h"
+//プレイヤー
 #include "../Game/Actors/Player/Player.h"
+//敵
+#include "../Game/Actors/Enemy/Common1.h"
+#include "../Game/Actors/Enemy/EnemyBase.h"
+//テスター
 #include "../Game/Actors/TestColls/TestSphere.h"
 #include "../Game/Actors/TestColls/TestCapsule.h"
 #include "../Game/Actors/TestColls/TestPolygon.h"
+//ステージ
 #include "../Game/Actors/Stage/InvisibleWall.h"
 //カメラ
 #include "../Game/Camera/Camera.h"
@@ -30,9 +36,10 @@ namespace
 
 TestCollScene::TestCollScene(SceneController& controller) :
 	SceneBase(controller),
-	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1")),
+	m_playerHandle(MV1LoadModel("Data/Model/Player/Player.mv1")),
 	m_polygonHandle(MV1LoadModel("Data/Model/Stage/Stage1.mv1")),
-	m_wallHandle(MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1"))
+	m_wallHandle(MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1")),
+	m_common1Handle(MV1LoadModel("Data/Model/Enemy/Common1.mv1"))
 {
 	//プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
@@ -42,6 +49,8 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	//コリジョンマネージャー
 	m_collManager = std::make_unique<CollisionManager>();
 
+	std::shared_ptr<EnemyBase> enemy = std::make_shared<Common1>(m_common1Handle, Vector3{ -200.0f,-50.0f,0.0f });
+	m_actors.push_back(enemy);
 	//当たり判定のテストを行うので適当にオブジェクトを追加
 	////動く
 	//m_actors.push_back(std::make_shared<TestSphere>(Vector3{ 100.0f,0.0f,0.0f }, 20.0f,false));//球
