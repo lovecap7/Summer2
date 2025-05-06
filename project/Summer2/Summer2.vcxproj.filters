@@ -85,6 +85,12 @@
     <Filter Include="ソース ファイル\Game\Actors\Enemy">
       <UniqueIdentifier>{8d392897-e80d-46b8-92ac-f6b0ab803a8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Attack">
+      <UniqueIdentifier>{52fb2788-c96b-437c-9990-95e65e09e372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Attack">
+      <UniqueIdentifier>{0e3bd8cf-df1e-4ca9-b54d-51c691cd4bb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -203,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="Game\EnemyManager.cpp">
       <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Attack\AttackBase.cpp">
+      <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Game\EnemyManager.h">
       <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\AttackBase.h">
+      <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
