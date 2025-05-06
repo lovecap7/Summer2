@@ -44,7 +44,5 @@ private:
 	State m_state;
 };
 
-//À•W‚Å•\‚·‚Æ‚«‚Ég‚¤
-typedef Collidable Trigger;
 
 

@@ -9,12 +9,12 @@ class EnemyBase abstract:
 public:
     EnemyBase();
     virtual ~EnemyBase() {};
-    virtual void HitSearch(const Vector3& playerPos) abstract;
-    std::shared_ptr<Trigger>& GetSearchTrigger() { return m_searchTrigger; };
+    virtual void OnHitSearch(const Vector3& playerPos) abstract;
+    std::shared_ptr<Collidable>& GetSearchTrigger() { return m_searchTrigger; };
 protected:
     //モデル
     std::unique_ptr<Model> m_model;
     //プレイヤーが近くにいるかをチェックするトリガー
-    std::shared_ptr<Trigger> m_searchTrigger;
+    std::shared_ptr<Collidable> m_searchTrigger;
 };
 

@@ -12,6 +12,7 @@
 //プレイヤー
 #include "../Game/Actors/Player/Player.h"
 //敵
+#include "../Game/EnemyManager.h"
 #include "../Game/Actors/Enemy/Common1.h"
 #include "../Game/Actors/Enemy/EnemyBase.h"
 //テスター
@@ -48,6 +49,8 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	m_camera = std::make_unique<Camera>(kCameraPos, m_player);
 	//コリジョンマネージャー
 	m_collManager = std::make_unique<CollisionManager>();
+	//エネミーマネージャー
+	m_enemyManager = std::make_unique<EnemyManager>(m_player);
 
 	std::shared_ptr<EnemyBase> enemy = std::make_shared<Common1>(m_common1Handle, Vector3{ -200.0f,-50.0f,0.0f });
 	m_actors.push_back(enemy);
@@ -93,6 +96,10 @@ void TestCollScene::Update(Input& input)
 		m_controller.ChangeScene(std::make_shared<TestCollScene>(m_controller));
 		return;
 	}
+
+	//敵の前処理
+	m_enemyManager->Update(m_actors);
+
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{

@@ -14,13 +14,16 @@ namespace
 	const Vector3 kCapsuleHeight = { 0.0f,100.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
 	//トリガーの半径
-	constexpr float kSearchTriggerRadius = 100.0f;
+	constexpr float kSearchTriggerRadius = 500.0f;
 	//プレイヤーを追いかける距離
-	constexpr float kRunDistance = 50.0f;
+	constexpr float kRunDistance = 200.0f;
 	//プレイヤーを追いかける速度
-	constexpr float kChaseSpeed = 10.0f;
+	constexpr float kChaseSpeed = 5.0f;
 	//プレイヤーを攻撃距離
-	constexpr float kAttackDistance = 10.0f;
+	constexpr float kAttackDistance = 100.0f;
+	//攻撃のクールタイム
+	constexpr int kAttackCoolTime = 180;
+
 	//重力
 	constexpr float kMaxGravity = -10.0f;//落下スピードが大きくなりすぎないように
 	//減速
@@ -37,7 +40,10 @@ namespace
 
 Common1::Common1(int modelHandle, Vector3 pos):
 	m_update(&Common1::IdleUpdate),
-	m_lastUpdate(&Common1::AttackUpdate)
+	m_lastUpdate(&Common1::AttackUpdate),
+	m_isBattleMode(false),
+	m_isHitSearch(false),
+	m_attackCoolTime(kAttackCoolTime)
 {
 	//モデルの初期化
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
@@ -91,6 +97,14 @@ void Common1::Draw() const
 		0xff0000,
 		false
 	);
+	DrawSphere3D(
+		m_searchTrigger->GetRb()->GetPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<SphereCollider>(m_searchTrigger->GetColl())->GetRadius(),
+		16,
+		0xff00ff,
+		0xff00ff,
+		false
+	);
 #endif
 	m_model->Draw();
 }
@@ -106,20 +120,27 @@ void Common1::Complete()
 	m_searchTrigger->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
+
+	//戦闘状態解除
+	m_isBattleMode = false;
+	//探知解除
+	m_isHitSearch = false;
 }
 
-void Common1::HitSearch(const Vector3& playerPos)
+void Common1::OnHitSearch(const Vector3& playerPos)
 {
+	//探知したのでtrue
+	m_isHitSearch = true;
 	//距離をチェック
 	Vector3 dist = playerPos - m_searchTrigger->GetRb()->GetPos();
-
 	//遠いなら
 	if (dist.Magnitude() > kRunDistance)
 	{
 		//攻撃中じゃなければ
 		if (m_update != &Common1::AttackUpdate)
 		{
-			//追いかける
+			//移動
+			dist.y = 0.0f;
 			m_collidable->GetRb()->SetMoveVec(dist.Normalize() * kChaseSpeed);
 			//状態変化
 			if (m_update != &Common1::MoveUpdate)
@@ -131,36 +152,39 @@ void Common1::HitSearch(const Vector3& playerPos)
 	//攻撃の範囲内なら
 	else if (dist.Magnitude() > kAttackDistance)
 	{
+		//戦闘状態
+		m_isBattleMode = true;
 		//状態変化
 		if (m_update != &Common1::AttackUpdate)
 		{
 			//向きの更新
 			m_model->SetDir(VGet(dist.Normalize().x, 0.0f, dist.Normalize().z));
-			m_update = &Common1::AttackUpdate;
-		}
-	}
-	else
-	{
-		//攻撃中じゃなければ
-		if (m_update != &Common1::AttackUpdate)
-		{
-			//状態変化
-			if (m_update != &Common1::IdleUpdate)
-			{
-				m_update = &Common1::IdleUpdate;
-			}
 		}
 	}
 }
 
 void Common1::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//攻撃のクールタイム
+	--m_attackCoolTime;
+	if (m_attackCoolTime <= 0 && m_isBattleMode)
+	{
+		m_attackCoolTime = kAttackCoolTime;
+		m_update = &Common1::AttackUpdate;
+		return;
+	}
 	//減速
 	SpeedDown();
 }
 
 void Common1::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//戦闘状態
+	if (m_isBattleMode || !m_isHitSearch)
+	{
+		m_update = &Common1::IdleUpdate;
+		return;
+	}
 	//減速
 	SpeedDown();
 	//向きの更新

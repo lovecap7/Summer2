@@ -13,7 +13,7 @@ public:
 	void OnHitColl(const std::shared_ptr<Collidable>& other)override;
 	void Draw()const override;
 	void Complete() override;
-	void HitSearch(const Vector3& playerPos)override;
+	void OnHitSearch(const Vector3& playerPos)override;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Common1::*)(const Input& input, const std::unique_ptr<Camera>& camera);
@@ -31,5 +31,12 @@ private:
 	void StateInit();
 	//減速
 	void SpeedDown();
+private:
+	//戦闘状態
+	bool m_isBattleMode;
+	//サーチ
+	bool m_isHitSearch;
+	//攻撃のクールタイム
+	int m_attackCoolTime;
 };
 
