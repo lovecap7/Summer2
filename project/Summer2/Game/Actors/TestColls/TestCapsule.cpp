@@ -1,8 +1,8 @@
 #include "TestCapsule.h"
-#include "../../General/Math/MyMath.h"
-#include "../../General/Collision/CapsuleCollider.h"
-#include "../../General/Rigidbody.h"
-#include "../../General/Collidable.h"
+#include "../../../General/Math/MyMath.h"
+#include "../../../General/Collision/CapsuleCollider.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../General/Collidable.h"
 #include <DxLib.h>
 
 TestCapsule::TestCapsule(Position3 startPos, Position3 endPos, float radius, bool isStatic):

@@ -1,12 +1,12 @@
 #include "Common1.h"
 #include <memory>
-#include "../../General/Model.h"
-#include "../../General/Input.h"
-#include "../../Game/Camera/Camera.h"
-#include "../../General/Rigidbody.h"
-#include "../../General/Collidable.h"
-#include "../../General/Collision/CapsuleCollider.h"
-#include "../../General/Collision/SphereCollider.h"
+#include "../../../General/Model.h"
+#include "../../../General/Input.h"
+#include "../../../Game/Camera/Camera.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../General/Collidable.h"
+#include "../../../General/Collision/CapsuleCollider.h"
+#include "../../../General/Collision/SphereCollider.h"
 
 namespace
 {

@@ -1,7 +1,7 @@
 #include "TestPolygon.h"
-#include "../../General/Collision/PolygonCollider.h"
-#include "../../General/Rigidbody.h"
-#include "../../General/Collidable.h"
+#include "../../../General/Collision/PolygonCollider.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../General/Collidable.h"
 #include <DxLib.h>
 
 TestPolygon::TestPolygon(Position3 pos, int modelHandle):

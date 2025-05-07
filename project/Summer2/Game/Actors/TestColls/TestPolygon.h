@@ -1,6 +1,9 @@
 #pragma once
 #include "../Actor.h"
-#include "../../General/Math/MyMath.h"
+#include "../../../General/Math/MyMath.h"
+#include <memory>
+class Camera;
+class Collidable;
 class TestPolygon :
     public Actor
 {

@@ -1,7 +1,7 @@
 #include "InvisibleWall.h"
-#include "../../General/Collision/PolygonCollider.h"
-#include "../../General/Rigidbody.h"
-#include "../../General/Collidable.h"
+#include "../../../General/Collision/PolygonCollider.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../General/Collidable.h"
 
 InvisibleWall::InvisibleWall(int modelHandle, Vector3 pos, VECTOR scale, VECTOR angle):
 	Actor(ActorKind::Obstacle),

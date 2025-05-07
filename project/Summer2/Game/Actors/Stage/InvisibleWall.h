@@ -1,6 +1,6 @@
 #pragma once
 #include "../Actor.h"
-#include "../../General/Math/MyMath.h"
+#include "../../../General/Math/MyMath.h"
 #include <DxLib.h>
 class InvisibleWall :
     public Actor

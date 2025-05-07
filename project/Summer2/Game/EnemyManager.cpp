@@ -3,9 +3,9 @@
 #include "Actors/Player/Player.h"
 #include "Actors/Actor.h"
 #include "Actors/Enemy/EnemyBase.h"
-#include "../../General/Collidable.h"
-#include "../../General/Rigidbody.h"
-#include "../../General/Collision/SphereCollider.h"
+#include "../General/Collidable.h"
+#include "../General/Rigidbody.h"
+#include "../General/Collision/SphereCollider.h"
 
 EnemyManager::EnemyManager(std::shared_ptr<Player> player):
 	m_player(player),

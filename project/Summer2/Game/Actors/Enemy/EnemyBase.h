@@ -1,7 +1,7 @@
 #pragma once
 #include "../Actor.h"
 #include <memory>
-#include "../../General/Model.h"
+#include "../../../General/Model.h"
 class Trigger;
 class EnemyBase abstract:
     public Actor

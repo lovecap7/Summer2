@@ -1,7 +1,7 @@
 #include "TestSphere.h"
-#include "../../General/Collision/SphereCollider.h"
-#include "../../General/Rigidbody.h"
-#include "../../General/Collidable.h"
+#include "../../../General/Collision/SphereCollider.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../General/Collidable.h"
 #include <DxLib.h>
 
 TestSphere::TestSphere(Position3 pos, float radius, bool isStatic):
