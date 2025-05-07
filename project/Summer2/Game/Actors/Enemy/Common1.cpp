@@ -19,8 +19,7 @@ namespace
 	constexpr float kRunDistance = 200.0f;
 	//プレイヤーを追いかける速度
 	constexpr float kChaseSpeed = 5.0f;
-	//プレイヤーを攻撃距離
-	constexpr float kAttackDistance = 100.0f;
+	
 	//攻撃のクールタイム
 	constexpr int kAttackCoolTime = 180;
 
@@ -150,7 +149,7 @@ void Common1::OnHitSearch(const Vector3& playerPos)
 		}
 	}
 	//攻撃の範囲内なら
-	else if (dist.Magnitude() > kAttackDistance)
+	else
 	{
 		//戦闘状態
 		m_isBattleMode = true;
@@ -188,7 +187,7 @@ void Common1::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& came
 	//減速
 	SpeedDown();
 	//向きの更新
-	m_model->SetDir(VGet(m_collidable->GetRb()->GetVec().x, 0.0f, m_collidable->GetRb()->GetVec().y));
+	m_model->SetDir(VGet(m_collidable->GetRb()->GetVec().x, 0.0f, m_collidable->GetRb()->GetVec().z));
 }
 
 void Common1::AttackUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
