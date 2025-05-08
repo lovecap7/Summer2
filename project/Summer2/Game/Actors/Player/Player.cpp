@@ -262,6 +262,14 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	//‹ó’†ˆÚ“®
 	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
+	//‰¡ˆÚ“®‘¬“x‚ÉãŒÀ‚ğ‚Â‚¯‚é
+	float speed = m_collidable->GetRb()->GetMoveVec().Magnitude();
+	if (speed > 0.0f)
+	{
+		speed = ClampFloat(speed, 0.0f, kAirMoveSpeed);
+		m_collidable->GetRb()->SetMoveVec(m_collidable->GetRb()->GetMoveVec().Normalize() * speed);
+	}
+
 	//­‚µ‚¸‚ÂŒ¸‘¬‚·‚é
 	SpeedDown();
 	//Œü‚«‚ÌXV
