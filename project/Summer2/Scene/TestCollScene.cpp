@@ -72,6 +72,8 @@ TestCollScene::TestCollScene(SceneController& controller) :
 TestCollScene::~TestCollScene()
 {
 	MV1DeleteModel(m_playerHandle);
+	MV1DeleteModel(m_wallHandle);
+	MV1DeleteModel(m_common1Handle);
 	MV1DeleteModel(m_polygonHandle);
 }
 

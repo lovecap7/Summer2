@@ -213,6 +213,9 @@
     <ClCompile Include="Game\Attack\AttackBase.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Attack\Slash.cpp">
+      <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -339,6 +342,9 @@
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
     <ClInclude Include="Game\Attack\AttackBase.h">
+      <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\Slash.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
   </ItemGroup>
