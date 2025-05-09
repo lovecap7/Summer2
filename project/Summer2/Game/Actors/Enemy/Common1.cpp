@@ -1,4 +1,5 @@
 #include "Common1.h"
+#include "../../EnemyManager.h"
 #include <memory>
 #include "../../../General/Model.h"
 #include "../../../General/Input.h"
@@ -37,7 +38,8 @@ namespace
 	const char* kBigHitAnim = "CharacterArmature|Death";//‘å‹ò‚ç‚¢
 }
 
-Common1::Common1(int modelHandle, Vector3 pos):
+Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, Vector3 pos):
+	EnemyBase(enemyManager),
 	m_update(&Common1::IdleUpdate),
 	m_lastUpdate(&Common1::AttackUpdate),
 	m_isBattleMode(false),

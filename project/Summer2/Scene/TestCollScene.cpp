@@ -52,7 +52,7 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	//エネミーマネージャー
 	m_enemyManager = std::make_unique<EnemyManager>(m_player);
 
-	std::shared_ptr<EnemyBase> enemy = std::make_shared<Common1>(m_common1Handle, Vector3{ -200.0f,-50.0f,0.0f });
+	std::shared_ptr<EnemyBase> enemy = std::make_shared<Common1>(m_enemyManager,m_common1Handle, Vector3{ -200.0f,-50.0f,0.0f });
 	m_actors.push_back(enemy);
 	//当たり判定のテストを行うので適当にオブジェクトを追加
 	////動く

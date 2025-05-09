@@ -9,7 +9,8 @@
 
 EnemyManager::EnemyManager(std::shared_ptr<Player> player):
 	m_player(player),
-	m_collChecker(std::make_shared<CollisionChecker>())
+	m_collChecker(std::make_shared<CollisionChecker>()),
+	m_enemyId(0)
 {
 }
 
@@ -28,4 +29,11 @@ void EnemyManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 			std::dynamic_pointer_cast<EnemyBase>(enemy)->OnHitSearch(m_player->GetCollidable()->GetRb()->GetPos());
 		}
 	}
+}
+
+int EnemyManager::GetEnemyID()
+{
+	//Š„‚èU‚é‘O‚É‰ÁZ‚·‚é
+	m_enemyId++;
+	return m_enemyId;
 }

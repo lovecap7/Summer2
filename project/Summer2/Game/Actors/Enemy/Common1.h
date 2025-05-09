@@ -2,11 +2,12 @@
 #include "EnemyBase.h"
 class Input;
 class Camera;
+class EnemyManager;
 class Common1 :
     public EnemyBase
 {
 public:
-    Common1(int modelHandle,Vector3 pos);
+    Common1(std::unique_ptr<EnemyManager>& enemyManager,int modelHandle,Vector3 pos);
     ~Common1();
 	void Update(const Input& input, const std::unique_ptr<Camera>& camera) override;
 	void Gravity(const Vector3& gravity)override;
