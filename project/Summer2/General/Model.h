@@ -9,6 +9,7 @@ class Model
 public:
 	Model(int modelHandle, VECTOR pos);
 	virtual ~Model();
+	int GetModelHandle() { return m_modelHandle; };
 	void Update();
 	void Draw()const;
 	void SetPos(VECTOR pos);

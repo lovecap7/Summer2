@@ -129,6 +129,9 @@ void Player::Draw() const
 	printf("VEC = %2f, %2f, %2f\n", m_collidable->GetRb()->GetVec().x, m_collidable->GetRb()->GetVec().y, m_collidable->GetRb()->GetVec().z);
 #endif
 	m_model->Draw();
+
+	DrawSphere3D(MV1GetFramePosition(m_model->GetModelHandle(), 73), 100.0f, 32, 0xffffff, 0xffffff, true);
+	
 }
 
 void Player::Complete()
