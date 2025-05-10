@@ -216,6 +216,12 @@
     <ClCompile Include="Game\Attack\Slash.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Attack\AttackManager.cpp">
+      <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Attack\HurtPoint.cpp">
+      <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -345,6 +351,12 @@
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Game\Attack\Slash.h">
+      <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\AttackManager.h">
+      <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\HurtPoint.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
   </ItemGroup>

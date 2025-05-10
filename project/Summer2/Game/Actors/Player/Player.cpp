@@ -8,6 +8,7 @@
 #include "../../../General/Model.h"
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
+#include "../../Attack/HurtPoint.h"
 #include <DxLib.h>
 #include <cmath>
 
@@ -42,6 +43,14 @@ namespace
 	constexpr float kTwoChargeHighAttackAnimSpeed = 0.5f;
 	constexpr float kThreeChargeHighAttackAnimSpeed = 1.0f;
 
+	//武器
+	//右手の薬指のフレーム
+	constexpr int kRightHandPinky1 = 55;
+	constexpr int kRightHandPinky2 = 43;
+	//武器の長さと半径
+	constexpr float kSwordHeight = 100.0f;
+	constexpr float kSwordRadius = 20.0f;
+
 	//アニメーションの名前
 	const char* kIdleAnim = "Player|Idle";//待機
 	const char* kWalkAnim = "Player|Walk";//歩く
@@ -67,12 +76,25 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_isNextAttackInput(false),
 	m_chargeHighAttackFrame(0)
 {
-	//初期位置
+	//衝突判定
 	Vector3 endPos = firstPos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
+
+	//やられ判定(衝突判定と同じにする)
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable,100);
+
 	//モデル
 	m_model = std::make_unique<Model>(modelHandle, firstPos.ToDxLibVector());
+
+	//武器
+	//右手の薬指と人差し指の座標から武器の座標を出す
+	VECTOR rightHand = MV1GetFramePosition(m_model->GetModelHandle(), kRightHandPinky1);
+	//武器の矛先
+	VECTOR swordDir = VNorm(VSub(MV1GetFramePosition(m_model->GetModelHandle(), kRightHandPinky2),rightHand));
+	swordDir = VScale(swordDir, kSwordHeight);//武器の長さ
+	swordDir = VAdd(rightHand, swordDir);//持ち手の座標に加算して剣先の座標を出す
+	m_rightSword = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(swordDir.x, swordDir.y, swordDir.z), kSwordRadius), std::make_shared<Rigidbody>(Vector3(rightHand.x, rightHand.y, rightHand.z)));
 }
 
 Player::~Player()
@@ -90,6 +112,10 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera)
 	(this->*m_update)(input,camera);
 	//アニメーションの更新
 	m_model->Update();
+	//衝突判定をもとにやられ判定の位置更新
+
+	//武器の位置更新
+	WeaponUpdate();
 }
 
 void Player::Gravity(const Vector3& gravity)
@@ -125,13 +151,28 @@ void Player::Draw() const
 		0xff0000,
 		m_isGround
 	);
+	DrawCapsule3D(
+		m_hurtPoint->GetCollidable()->GetRb()->GetPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable())->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable())->GetRadius(),
+		16,
+		0x0000ff,
+		0x0000ff,
+		true
+	);
 	printf("POS = %2f, %2f, %2f\n", m_collidable->GetRb()->GetPos().x, m_collidable->GetRb()->GetPos().y, m_collidable->GetRb()->GetPos().z);
 	printf("VEC = %2f, %2f, %2f\n", m_collidable->GetRb()->GetVec().x, m_collidable->GetRb()->GetVec().y, m_collidable->GetRb()->GetVec().z);
+	DrawCapsule3D(
+		m_rightSword->GetRb()->GetPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_rightSword->GetColl())->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_rightSword->GetColl())->GetRadius(),
+		16,
+		0xffff00,
+		0xffff00,
+		m_isGround
+	);
 #endif
 	m_model->Draw();
-
-	DrawSphere3D(MV1GetFramePosition(m_model->GetModelHandle(), 73), 100.0f, 32, 0xffffff, 0xffffff, true);
-	
 }
 
 void Player::Complete()
@@ -601,4 +642,28 @@ void Player::SpeedDown()
 		vec.z *= kAirMoveDeceRate;
 	}
 	m_collidable->GetRb()->SetVec(vec);
+}
+
+void Player::WeaponUpdate()
+{
+	//武器
+	//右手の薬指と人差し指の座標から武器の座標を出す
+	VECTOR rightHand = MV1GetFramePosition(m_model->GetModelHandle(), kRightHandPinky1);
+	//武器の剣先
+	VECTOR swordDir = VNorm(VSub(MV1GetFramePosition(m_model->GetModelHandle(), kRightHandPinky2),rightHand));
+	swordDir = VScale(swordDir, kSwordHeight);//武器の長さ
+	swordDir = VAdd(rightHand, swordDir);//持ち手の座標に加算して剣先の座標を出す
+	//武器の持ち手をセット
+	m_rightSword->GetRb()->SetPos(Position3(rightHand.x, rightHand.y, rightHand.z));
+	//武器の剣先をセット
+	std::dynamic_pointer_cast<CapsuleCollider>(m_rightSword->GetColl())->SetEndPos(Position3(swordDir.x, swordDir.y, swordDir.z));
+}
+
+void Player::HurtPointUpdate()
+{
+	//移動量を取得
+	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
+	//座標更新
+	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
+	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
 }

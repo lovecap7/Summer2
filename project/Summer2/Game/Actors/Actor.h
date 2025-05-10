@@ -15,6 +15,7 @@ enum class ActorKind
 class Input;
 class Camera;
 class Collidable;
+class HurtPoint;
 /// <summary>
 /// ゲーム中に配置可能な物体の基底クラス
 /// </summary>
@@ -25,6 +26,8 @@ protected:
 	ActorKind m_actorKind;
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
+	//やられ判定
+	std::shared_ptr<HurtPoint> m_hurtPoint;
 public:
 	Actor(ActorKind kind);
 	virtual ~Actor() {};

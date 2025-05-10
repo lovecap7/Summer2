@@ -28,6 +28,8 @@
     <ClCompile Include="Game\Actors\TestColls\TestPolygon.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
+    <ClCompile Include="Game\Attack\AttackManager.cpp" />
+    <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\Slash.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\EnemyManager.cpp" />
@@ -71,6 +73,8 @@
     <ClInclude Include="Game\Actors\TestColls\TestPolygon.h" />
     <ClInclude Include="Game\Actors\TestColls\TestSphere.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />
+    <ClInclude Include="Game\Attack\AttackManager.h" />
+    <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\Slash.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\EnemyManager.h" />

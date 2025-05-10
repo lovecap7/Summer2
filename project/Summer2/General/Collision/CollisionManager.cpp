@@ -13,8 +13,8 @@ namespace
 }
 
 CollisionManager::CollisionManager():
-	m_collChecker(std::make_unique<CollisionChecker>()),
-	m_collProcessor(std::make_unique<CollisionProcess>())
+	m_collChecker(std::make_shared<CollisionChecker>()),
+	m_collProcessor(std::make_shared<CollisionProcess>())
 {
 }
 

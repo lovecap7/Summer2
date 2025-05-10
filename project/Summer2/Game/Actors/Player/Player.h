@@ -31,6 +31,8 @@ private:
 	bool m_isNextAttackInput;
 	//強攻撃のタメ時間
 	int m_chargeHighAttackFrame;
+	//武器
+	std::shared_ptr<Collidable> m_rightSword;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera);
@@ -60,5 +62,9 @@ private:
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
 	//減速していく
 	void SpeedDown();
+	//武器の位置更新
+	void WeaponUpdate();
+	//やられ判定の更新
+	void HurtPointUpdate();
 };
 

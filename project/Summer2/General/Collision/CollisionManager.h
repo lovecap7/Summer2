@@ -12,8 +12,8 @@ public:
 	void Update(std::vector<std::shared_ptr<Actor>> actors);
 private:
 	//当たり判定のチェックをするクラス
-	std::unique_ptr<CollisionChecker> m_collChecker;
+	std::shared_ptr<CollisionChecker> m_collChecker;
 	//衝突処理
-	std::unique_ptr<CollisionProcess> m_collProcessor;
+	std::shared_ptr<CollisionProcess> m_collProcessor;
 };
 
