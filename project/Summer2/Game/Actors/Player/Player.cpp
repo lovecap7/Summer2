@@ -20,6 +20,7 @@ namespace
 	//移動速度
 	constexpr float kMoveSpeed = 10.0f;//地上の移動速度
 	constexpr float kAirMoveSpeed = 1.5f;//空中移動速度
+	constexpr float kMaxAirMoveSpeed = 20.0f;//空中移動最高速度
 	constexpr float kLightAttackMoveSpeed = 0.5f;//弱攻撃中の移動速度
 	constexpr float kHighAttackMoveSpeed = 13.0f;//強攻撃中の移動速度
 	constexpr float kRollingMoveSpeed = 10.0f;//回避速度
@@ -32,16 +33,21 @@ namespace
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	constexpr float kAirMoveDeceRate = 0.9f;
-	//先行入力フレーム
-	constexpr float kAdvanceInput = 15.0f;
-	//強攻撃の段階別攻撃フレーム
-	constexpr float kOneChargeHighAttackFrame = 30.0f;
-	constexpr float kTwoChargeHighAttackFrame = 70.0f;
-	constexpr float kThreeChargeHighAttackFrame = 100.0f;
+	//キャンセル可能フレーム
+	constexpr float kCancelAttackFrame = 15.0f;
+
 	//強攻撃の段階別アニメーションの速度
-	constexpr float kOneChargeHighAttackAnimSpeed = 0.3f;
-	constexpr float kTwoChargeHighAttackAnimSpeed = 0.5f;
-	constexpr float kThreeChargeHighAttackAnimSpeed = 1.0f;
+	constexpr float kAN1AnimSpeed = 1.1f;
+	constexpr float kAN2AnimSpeed = 1.1f;
+	constexpr float kAN3AnimSpeed = 1.2f;
+	//強攻撃の段階別攻撃フレーム
+	constexpr float kCharge1Frame = 30.0f;
+	constexpr float kCharge2Fraem = 60.0f;
+	constexpr float kCharge3Frame = 100.0f;
+	//強攻撃の段階別アニメーションの速度
+	constexpr float kCharge1AnimSpeed = 1.0f;
+	constexpr float kCharge2AnimSpeed = 1.5f;
+	constexpr float kCharge3AnimSpeed = 2.0f;
 
 	//武器
 	//右手の薬指のフレーム
@@ -53,16 +59,15 @@ namespace
 
 	//アニメーションの名前
 	const char* kIdleAnim = "Player|Idle";//待機
-	const char* kWalkAnim = "Player|Walk";//歩く
 	const char* kRunAnim = "Player|Run";//走る
 	const char* kRollingAnim = "Player|Rolling";//回避
-	const char* kJump1Anim = "Player|Jump1";//ジャンプ1
-	const char* kJump2Anim = "Player|Jump2";//ジャンプ2
-	const char* kAttack_L1Anim = "Player|Attack_L1";//弱攻撃1
-	const char* kAttack_L2Anim = "Player|Attack_L2";//弱攻撃2
-	const char* kAttack_L3Anim = "Player|Attack_L3";//弱攻撃3
-	const char* kAttack_H1Anim = "Player|Attack_H1";//強攻撃1
-	const char* kAttack_H2Anim = "Player|Attack_H2";//強攻撃2
+	const char* kJumpAnim = "Player|Jump";//ジャンプ
+	const char* kFallAnim = "Player|Fall";//落ちる
+	const char* kAttack_N1Anim = "Player|Attack_N1";//通常攻撃1
+	const char* kAttack_N2Anim = "Player|Attack_N2";//通常攻撃2
+	const char* kAttack_N3Anim = "Player|Attack_N3";//通常攻撃3
+	const char* kAttack_C1Anim = "Player|Attack_C1";//チャージ
+	const char* kAttack_C2Anim = "Player|Attack_C2";//チャージ攻撃
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
@@ -73,7 +78,6 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_isGround(true),
 	m_jumpNum(0),
 	m_nextJumpFrame(kNextJumpFrame),
-	m_isNextAttackInput(false),
 	m_chargeHighAttackFrame(0)
 {
 	//衝突判定
@@ -214,14 +218,14 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	if (input.IsTriggered("X"))
 	{
 		//弱攻撃
-		m_update = &Player::AttackLight1Update;
+		m_update = &Player::AttackNormal1Update;
 		return;
 	}
 	//強攻撃ボタンを押したら
 	if (input.IsTriggered("Y"))
 	{
 		//強攻撃
-		m_update = &Player::AttackHigh1Update;
+		m_update = &Player::AttackCharge1Update;
 		return;
 	}
 	//入力があるなら移動
@@ -262,14 +266,14 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	if (input.IsTriggered("X"))
 	{
 		//弱攻撃
-		m_update = &Player::AttackLight1Update;
+		m_update = &Player::AttackNormal1Update;
 		return;
 	}
 	//強攻撃ボタンを押したら
 	if (input.IsTriggered("Y"))
 	{
 		//強攻撃
-		m_update = &Player::AttackHigh1Update;
+		m_update = &Player::AttackCharge1Update;
 		return;
 	}
 	//入力がないなら待機状態へ
@@ -299,7 +303,7 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	//次のジャンプのクールタイム
 	--m_nextJumpFrame;
-	if (m_nextJumpFrame <= 0)
+	if (m_nextJumpFrame <= 0 && input.IsTriggered("A"))//上昇中にジャンプを押した場合
 	{
 		m_nextJumpFrame = 0;
 		//落下状態に遷移して遷移先でジャンプ
@@ -312,7 +316,7 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	float speed = m_collidable->GetRb()->GetMoveVec().Magnitude();
 	if (speed > 0.0f)
 	{
-		speed = ClampFloat(speed, 0.0f, kAirMoveSpeed);
+		speed = ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
 		m_collidable->GetRb()->SetMoveVec(m_collidable->GetRb()->GetMoveVec().Normalize() * speed);
 	}
 
@@ -340,37 +344,36 @@ void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	//空中移動
 	m_collidable->GetRb()->AddVec(GetForwardVec(camera) * kAirMoveSpeed);
+	//横移動速度に上限をつける
+	float speed = m_collidable->GetRb()->GetMoveVec().Magnitude();
+	if (speed > 0.0f)
+	{
+		speed = ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
+		m_collidable->GetRb()->SetMoveVec(m_collidable->GetRb()->GetMoveVec().Normalize() * speed);
+	}
 	//少しずつ減速する
 	SpeedDown();
 	//向きの更新
 	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
 
-void Player::AttackLight1Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
 	{
-		//攻撃の入力があるなら
-		if (m_isNextAttackInput)
+		//待機
+		m_update = &Player::IdleUpdate;
+		return;
+	}
+	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
+	if (m_model->GetTatalAnimFrame() - kCancelAttackFrame <= m_model->GetNowAnimFrame())
+	{
+		if (input.IsTriggered("X"))
 		{
 			//2段目
-			m_update = &Player::AttackLight2Update;
+			m_update = &Player::AttackNormal2Update;
 			return;
-		}
-		else
-		{
-			//待機
-			m_update = &Player::IdleUpdate;
-			return;
-		}
-	}
-	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
-	if (m_model->GetTatalAnimFrame() - kAdvanceInput <= m_model->GetNowAnimFrame())
-	{
-		if (input.IsTriggered("X"))
-		{
-			m_isNextAttackInput = true;
 		}
 	}
 
@@ -378,38 +381,30 @@ void Player::AttackLight1Update(const Input& input, const std::unique_ptr<Camera
 	SpeedDown();
 }
 
-void Player::AttackLight2Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
 	{
-		//攻撃の入力があるなら
-		if (m_isNextAttackInput)
-		{
-			//3段目
-			m_update = &Player::AttackLight3Update;
-			return;
-		}
-		else
-		{
-			//待機
-			m_update = &Player::IdleUpdate;
-			return;
-		}
+		//待機
+		m_update = &Player::IdleUpdate;
+		return;
 	}
 	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
-	if (m_model->GetTatalAnimFrame() - kAdvanceInput <= m_model->GetNowAnimFrame())
+	if (m_model->GetTatalAnimFrame() - kCancelAttackFrame <= m_model->GetNowAnimFrame())
 	{
 		if (input.IsTriggered("X"))
 		{
-			m_isNextAttackInput = true;
+			//3段目
+			m_update = &Player::AttackNormal3Update;
+			return;
 		}
 	}
 
 	//少しずつ減速する
 	SpeedDown();
 }
-void Player::AttackLight3Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
@@ -423,7 +418,7 @@ void Player::AttackLight3Update(const Input& input, const std::unique_ptr<Camera
 	SpeedDown();
 }
 //タメ
-void Player::AttackHigh1Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//少しずつ減速する
 	SpeedDown();
@@ -435,21 +430,21 @@ void Player::AttackHigh1Update(const Input& input, const std::unique_ptr<Camera>
 		//タメ攻撃チャージ
 		++m_chargeHighAttackFrame;
 		//最大
-		if (m_chargeHighAttackFrame >= kThreeChargeHighAttackFrame)
+		if (m_chargeHighAttackFrame >= kCharge3Frame)
 		{
-			m_chargeHighAttackFrame = kThreeChargeHighAttackFrame;
+			m_chargeHighAttackFrame = kCharge3Frame;
 		}
 	}
 	//ボタンを離す
 	else
 	{
 		//タメ攻撃
-		m_update = &Player::AttackHigh2Update;
+		m_update = &Player::AttackCharge2Update;
 		return;
 	}
 }
 
-void Player::AttackHigh2Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera)
 {
 	//持続フレームが終了したら
 	if (m_chargeHighAttackFrame <= 0.0f)
@@ -497,16 +492,8 @@ void Player::StateInit()
 	}
 	else if (m_update == &Player::JumpUpdate)
 	{
-		if (m_lastUpdate == &Player::FallUpdate)
-		{
-			//2回目ジャンプ
-			m_model->SetAnim(kJump2Anim, false);
-		}
-		else
-		{
-			//1回目ジャンプ
-			m_model->SetAnim(kJump1Anim, true);
-		}
+		//ジャンプ
+		m_model->SetAnim(kJumpAnim, false);
 		//飛んでるので
 		m_isGround = false;
 		m_collidable->SetState(State::Jump);
@@ -518,78 +505,68 @@ void Player::StateInit()
 	}
 	else if (m_update == &Player::FallUpdate)
 	{
-		//ジャンプ以外でこの状態になったなら
-		if (m_lastUpdate != &Player::JumpUpdate)
-		{
-			//落下
-			m_model->SetAnim(kJump1Anim, true);
-		}
+		//落下
+		m_model->SetAnim(kFallAnim, true);
 		//落下してるので
 		m_isGround = false;
 		//ジャンプカウントは落下状態になってからカウントを進める
 		++m_jumpNum;
 		m_collidable->SetState(State::Fall);
 	}
-	else if (m_update == &Player::AttackLight1Update)
+	else if (m_update == &Player::AttackNormal1Update)
 	{
 		m_collidable->SetState(State::None);
-		//弱攻撃1
-		m_model->SetAnim(kAttack_L1Anim, false);
+		//攻撃1
+		m_model->SetAnim(kAttack_N1Anim, false, kAN1AnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
-		//先行入力の準備
-		m_isNextAttackInput = false;
 	}
-	else if (m_update == &Player::AttackLight2Update)
+	else if (m_update == &Player::AttackNormal2Update)
 	{
 		m_collidable->SetState(State::None);
-		//弱攻撃2
-		m_model->SetAnim(kAttack_L2Anim, false);
+		//攻撃2
+		m_model->SetAnim(kAttack_N2Anim, false, kAN2AnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
-		//先行入力の準備
-		m_isNextAttackInput = false;
 	}
-	else if (m_update == &Player::AttackLight3Update)
+	else if (m_update == &Player::AttackNormal3Update)
 	{
 		m_collidable->SetState(State::None);
-		//弱攻撃3
-		m_model->SetAnim(kAttack_L3Anim, false);
+		//攻撃3
+		m_model->SetAnim(kAttack_N3Anim, false, kAN3AnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
-		//先行入力の準備
-		m_isNextAttackInput = false;
 	}
-	else if (m_update == &Player::AttackHigh1Update)
+	else if (m_update == &Player::AttackCharge1Update)
 	{
 		m_collidable->SetState(State::None);
-		//強攻撃1
-		m_model->SetAnim(kAttack_H1Anim, true);
+		//チャージ攻撃1
+		m_model->SetAnim(kAttack_C1Anim, true);
 	}
-	else if (m_update == &Player::AttackHigh2Update)
+	else if (m_update == &Player::AttackCharge2Update)
 	{
 		m_collidable->SetState(State::None);
 		//チャージ時間に合わせて持続させる
 		//1段回目
-		if (m_chargeHighAttackFrame <= kOneChargeHighAttackFrame)
+		if (m_chargeHighAttackFrame <= kCharge1Frame)
 		{
-			//強攻撃2
-			m_model->SetAnim(kAttack_H2Anim, true, kOneChargeHighAttackAnimSpeed);
-			m_chargeHighAttackFrame = kOneChargeHighAttackFrame;
+			//チャージ攻撃2
+			m_model->SetAnim(kAttack_C2Anim, true, kCharge1AnimSpeed);
+			m_chargeHighAttackFrame = kCharge1Frame;
 		}
 		//2段回目
-		else if (m_chargeHighAttackFrame <= kTwoChargeHighAttackFrame)
+		else if (m_chargeHighAttackFrame <= kCharge2Fraem)
 		{
-			//強攻撃2
-			m_model->SetAnim(kAttack_H2Anim, true, kTwoChargeHighAttackAnimSpeed);
-			m_chargeHighAttackFrame = kTwoChargeHighAttackFrame;
+			//チャージ攻撃2
+			m_model->SetAnim(kAttack_C2Anim, true, kCharge2AnimSpeed);
+			m_chargeHighAttackFrame = kCharge2Fraem;
 		}
 		//3段回目
-		else if (m_chargeHighAttackFrame <= kThreeChargeHighAttackFrame)
+		else if (m_chargeHighAttackFrame <= kCharge3Frame)
 		{
-			//強攻撃2
-			m_model->SetAnim(kAttack_H2Anim, true, kThreeChargeHighAttackAnimSpeed);
-			m_chargeHighAttackFrame = kThreeChargeHighAttackFrame;
+			//チャージ攻撃2
+			m_model->SetAnim(kAttack_C2Anim, true, kCharge3AnimSpeed);
+			m_chargeHighAttackFrame = kCharge3Frame;
 		}
 	}
 	else if (m_update == &Player::RollingUpdate)

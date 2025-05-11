@@ -27,8 +27,6 @@ private:
 	//ƒWƒƒƒ“ƒv‚Ì‰ñ”
 	unsigned int m_jumpNum;
 	int m_nextJumpFrame;//2‰ñ–Ú‚ÌƒWƒƒƒ“ƒv‚ªs‚¦‚é‚Ü‚Å‚ÌŠÔ
-	//Ÿ‚ÌUŒ‚‚Ì“ü—Í‚ª‚ ‚é‚©
-	bool m_isNextAttackInput;
 	//‹­UŒ‚‚Ìƒ^ƒŠÔ
 	int m_chargeHighAttackFrame;
 	//•Ší
@@ -47,12 +45,12 @@ private:
 	//—‰º’†
 	void FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ãUŒ‚
-	void AttackLight1Update(const Input& input, const std::unique_ptr<Camera>& camera);
-	void AttackLight2Update(const Input& input, const std::unique_ptr<Camera>& camera);
-	void AttackLight3Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	//‹­UŒ‚
-	void AttackHigh1Update(const Input& input, const std::unique_ptr<Camera>& camera);
-	void AttackHigh2Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera);
 	//‰ñ”ğ
 	void RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»‚·‚×‚«‚à‚Ì‚ğ‰Šú‰»‚·‚é
