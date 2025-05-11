@@ -3,12 +3,13 @@
 #include <memory>
 class AttackBase;
 class CollisionChecker;
+class Actor;
 class AttackManager
 {
 public:
 	AttackManager();
 	~AttackManager();
-	void Update();
+	void Update(std::vector<std::shared_ptr<Actor>> actors);
 	void SetAttack(std::shared_ptr<AttackBase> attack);
 private:
 	//UŒ‚

@@ -19,3 +19,10 @@ void Slash::Update()
 		m_isDead = true;
 	}
 }
+
+void Slash::OnHit()
+{
+#if _DEBUG
+	printf("UŒ‚‚ª“–‚½‚Á‚½");
+#endif
+}

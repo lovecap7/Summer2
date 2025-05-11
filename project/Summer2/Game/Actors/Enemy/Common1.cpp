@@ -8,6 +8,7 @@
 #include "../../../General/Collidable.h"
 #include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Collision/SphereCollider.h"
+#include "../../Attack/HurtPoint.h"
 
 namespace
 {
@@ -50,10 +51,12 @@ Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, V
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
 	//モデルの大きさ調整
 	m_model->SetScale(VGet(0.5f, 0.5f, 0.5f));
-	//初期位置
+	//衝突判定
 	Vector3 endPos = pos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
+	//やられ判定(衝突判定と同じにする)
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100);
 	//トリガー
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
 }
@@ -97,6 +100,16 @@ void Common1::Draw() const
 		0xff0000,
 		0xff0000,
 		false
+	);
+	//やられ判定
+	DrawCapsule3D(
+		m_hurtPoint->GetCollidable()->GetRb()->GetPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->GetRadius(),
+		32,
+		0x0000ff,
+		0x0000ff,
+		m_hurtPoint->IsNoDamege()//無敵の時は塗りつぶされる
 	);
 	DrawSphere3D(
 		m_searchTrigger->GetRb()->GetPos().ToDxLibVector(),

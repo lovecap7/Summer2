@@ -8,10 +8,15 @@ class AttackBase abstract
 public:
 	AttackBase(std::shared_ptr<Collidable> coll, float& damege, int& keepFrame);
 	virtual ~AttackBase() {};
-	//コライダー
-	std::shared_ptr<Collidable>& GetCollidable() { return m_collidable; };
 	//更新処理
 	virtual void Update() abstract;
+	//当たった時
+	virtual void OnHit() abstract;
+	//コライダー
+	std::shared_ptr<Collidable>& GetCollidable() { return m_collidable; };
+	//消滅
+	bool IsDead() { return m_isDead; };
+	
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -22,6 +27,6 @@ protected:
 	//消滅フラグ
 	bool m_isDead;
 	//当てたことのあるCollidableを覚えておく
-	std::vector<std::weak_ptr<Collidable>> m_hitCollidables;
+	std::vector<int> m_hitCollidables;
 };
 

@@ -8,6 +8,8 @@ public:
 	~Slash();
 	//XVˆ—
 	void Update() override;
+	//“–‚½‚Á‚½
+	void OnHit() override;
 private:
 
 };
