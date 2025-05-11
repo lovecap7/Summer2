@@ -142,6 +142,7 @@ void Player::OnHitColl(const std::shared_ptr<Collidable>& other)
 void Player::Draw() const
 {
 #if _DEBUG
+	//Õ“Ë”»’è
 	DrawCapsule3D(
 		m_collidable->GetRb()->GetPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),
@@ -149,16 +150,17 @@ void Player::Draw() const
 		16,
 		0xff0000,
 		0xff0000,
-		m_isGround
+		m_isGround//’n–Ê‚É‚¢‚é‚Æ“h‚è‚Â‚Ô‚³‚ê‚é
 	);
+	//‚â‚ç‚ê”»’è
 	DrawCapsule3D(
 		m_hurtPoint->GetCollidable()->GetRb()->GetPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable())->GetEndPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable())->GetRadius(),
-		16,
+		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->GetRadius(),
+		32,
 		0x0000ff,
 		0x0000ff,
-		true
+		m_hurtPoint->IsNoDamege()//–³“G‚ÌŽž‚Í“h‚è‚Â‚Ô‚³‚ê‚é
 	);
 	printf("POS = %2f, %2f, %2f\n", m_collidable->GetRb()->GetPos().x, m_collidable->GetRb()->GetPos().y, m_collidable->GetRb()->GetPos().z);
 	printf("VEC = %2f, %2f, %2f\n", m_collidable->GetRb()->GetVec().x, m_collidable->GetRb()->GetVec().y, m_collidable->GetRb()->GetVec().z);
@@ -169,7 +171,7 @@ void Player::Draw() const
 		16,
 		0xffff00,
 		0xffff00,
-		m_isGround
+		false
 	);
 #endif
 	m_model->Draw();
