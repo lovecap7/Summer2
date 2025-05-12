@@ -65,5 +65,10 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const std::shared_ptr<Collidable>& GetCollidable() const { return m_collidable; }
+	/// <summary>
+	/// ‚â‚ç‚ê”»’è
+	/// </summary>
+	/// <returns></returns>
+	const std::shared_ptr<HurtPoint>& GetHurtPoint() const { return m_hurtPoint; }
 };
 

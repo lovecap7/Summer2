@@ -11,12 +11,13 @@ public:
 	//更新処理
 	virtual void Update() abstract;
 	//当たった時
-	virtual void OnHit() abstract;
+	virtual void OnHit(std::shared_ptr<Actor> actor) abstract;
 	//コライダー
 	std::shared_ptr<Collidable>& GetCollidable() { return m_collidable; };
 	//消滅
 	bool IsDead() { return m_isDead; };
-	
+	//ダメージ
+	float GetDamege() { return m_damege; };
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -27,6 +28,6 @@ protected:
 	//消滅フラグ
 	bool m_isDead;
 	//当てたことのあるCollidableを覚えておく
-	std::vector<int> m_hitCollidables;
+	std::vector<int> m_hitEnemyId;
 };
 

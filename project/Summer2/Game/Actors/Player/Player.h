@@ -6,6 +6,7 @@ class Input;
 class CameraBase;
 class Camera;
 class Model;
+class Slash;
 class Player :
 	public Actor
 {
@@ -64,5 +65,11 @@ private:
 	void WeaponUpdate();
 	//‚â‚ç‚ê”»’è‚ÌXV
 	void HurtPointUpdate();
+private:
+	//UŒ‚
+	std::shared_ptr<Slash> m_attackN1;//’Êí1
+	std::shared_ptr<Slash> m_attackN2;//’Êí2
+	std::shared_ptr<Slash> m_attackN3;//’Êí3
+	std::shared_ptr<Slash> m_attackC;//‚½‚ßUŒ‚
 };
 

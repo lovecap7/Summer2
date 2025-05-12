@@ -1,5 +1,6 @@
 #include "Slash.h"
-
+#include "../Actors/Actor.h"
+#include "../Actors/Enemy/EnemyBase.h"
 Slash::Slash(std::shared_ptr<Collidable> coll, float& damege, int& keepFrame):
 	AttackBase(coll, damege, keepFrame)
 {
@@ -20,8 +21,14 @@ void Slash::Update()
 	}
 }
 
-void Slash::OnHit()
+void Slash::OnHit(std::shared_ptr<Actor> actor)
 {
+	//ìGÇ…ìñÇΩÇ¡ÇΩèÍçáIDÇãLò^Ç∑ÇÈ
+	if (actor->GetActorKind() == ActorKind::Enemy)
+	{
+		m_hitEnemyId.emplace_back(std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
+	}
+
 #if _DEBUG
 	printf("çUåÇÇ™ìñÇΩÇ¡ÇΩ");
 #endif

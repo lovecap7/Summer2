@@ -1,5 +1,6 @@
 #pragma once
 #include "AttackBase.h"
+class Actor;
 class Slash :
     public AttackBase
 {
@@ -9,7 +10,7 @@ public:
 	//XVˆ—
 	void Update() override;
 	//“–‚½‚Á‚½
-	void OnHit() override;
+	void OnHit(std::shared_ptr<Actor> actor) override;
 private:
 
 };
