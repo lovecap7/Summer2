@@ -16,7 +16,7 @@ TestSphere::~TestSphere()
 {
 }
 
-void TestSphere::Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void TestSphere::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	m_collidable->GetRb()->ResetVec();
 }

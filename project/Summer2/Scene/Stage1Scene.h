@@ -8,6 +8,7 @@ class Camera;
 class SceneController;
 class Input;
 class CollisionManager;
+class AttackManager;
 class Stage1Scene :
     public SceneBase
 {
@@ -29,6 +30,8 @@ private:
 	std::unique_ptr<Camera> m_camera;
     //“–‚½‚è”»’è‚ÆÕ“Ëˆ—
 	std::unique_ptr<CollisionManager> m_collManager;
+    //UŒ‚‚Ìˆ—
+    std::unique_ptr<AttackManager> m_attackManger;
 private:
     //ƒnƒ“ƒhƒ‹
 	int m_playerHandle;

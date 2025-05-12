@@ -19,6 +19,13 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 {
 	if (m_attacks.empty())return;//空なら何もしない
 
+	//攻撃の更新処理
+	for (auto& attack : m_attacks)
+	{
+		attack->Update();
+	}
+
+
 	//消えた攻撃判定のイテレータを取得
 	auto remIt = std::remove_if(m_attacks.begin(), m_attacks.end(), [](std::shared_ptr<AttackBase> attack) {return attack->IsDead();});
 	m_attacks.erase(remIt, m_attacks.end());//削除

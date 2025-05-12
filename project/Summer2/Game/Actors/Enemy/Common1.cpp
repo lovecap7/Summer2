@@ -65,7 +65,7 @@ Common1::~Common1()
 {
 }
 
-void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»
 	StateInit();

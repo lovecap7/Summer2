@@ -7,13 +7,14 @@ class CameraBase;
 class Camera;
 class Model;
 class Slash;
+class AttackManager;
 class Player :
 	public Actor
 {
 public:
 	Player(int modelHandle, Position3 firstPos);
 	virtual ~Player();
-	void Update(const Input& input,const std::unique_ptr<Camera>& camera) override;
+	void Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 	void Gravity(const Vector3& gravity)override;
 	void OnHitColl(const std::shared_ptr<Collidable>& other)override;
 	void Draw()const override;
@@ -34,26 +35,26 @@ private:
 	std::shared_ptr<Collidable> m_rightSword;
 private:
 	//ó‘Ô‘JˆÚ
-	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera);
+	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	UpdateFunc_t m_update;
 	UpdateFunc_t m_lastUpdate;//’¼‘O‚Ìó‘Ô‚ğŠo‚¦‚Ä‚¨‚­
 	//‘Ò‹@ó‘Ô
-	void IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//ˆÚ“®
-	void MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//ƒWƒƒƒ“ƒv
-	void JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//—‰º’†
-	void FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//ãUŒ‚
-	void AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera);
-	void AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera);
-	void AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//‹­UŒ‚
-	void AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera);
-	void AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//‰ñ”ğ
-	void RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»‚·‚×‚«‚à‚Ì‚ğ‰Šú‰»‚·‚é
 	void StateInit();
 private:

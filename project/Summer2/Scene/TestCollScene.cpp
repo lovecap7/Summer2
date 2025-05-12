@@ -6,6 +6,7 @@
 #include "../General/Collidable.h"
 #include "../General/Rigidbody.h"
 #include "../General/Collision/CollisionManager.h"
+#include "../Game/Attack/AttackManager.h"
 
 //アクター
 #include "../Game/Actors/Actor.h"
@@ -67,6 +68,9 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	//m_actors.push_back(std::make_shared<TestCapsule>(Vector3{ -300.0f,10.0f,0.0f }, Vector3{ -500.0f,10.0f, 0.0f }, 50.0f, true));//カプセル
 	m_actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));
 	m_actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle,Vector3{ -100.0f,-50.0f,0.0f },VGet(1.0f,1.0f,1.0f), VGet(0.0f, 0.0f, 0.0f)));//透明壁
+
+	//攻撃の処理
+	m_attackManger = std::make_unique<AttackManager>();
 }
 
 TestCollScene::~TestCollScene()
@@ -105,9 +109,11 @@ void TestCollScene::Update(Input& input)
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input, m_camera);
+		actor->Update(input, m_camera, m_attackManger);
 		actor->Gravity(kGravity);
 	}
+	//攻撃の処理
+	m_attackManger->Update(m_actors);
 	//アクターの衝突処理
 	m_collManager->Update(m_actors);
 	//更新確定

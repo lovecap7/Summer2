@@ -9,6 +9,9 @@
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
 #include "../../Attack/HurtPoint.h"
+#include "../../Attack/AttackBase.h"
+#include "../../Attack/Slash.h"
+#include "../../Attack/AttackManager.h"
 #include <DxLib.h>
 #include <cmath>
 
@@ -99,13 +102,18 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	swordDir = VScale(swordDir, kSwordHeight);//武器の長さ
 	swordDir = VAdd(rightHand, swordDir);//持ち手の座標に加算して剣先の座標を出す
 	m_rightSword = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(swordDir.x, swordDir.y, swordDir.z), kSwordRadius), std::make_shared<Rigidbody>(Vector3(rightHand.x, rightHand.y, rightHand.z)));
+
+
+	//攻撃の準備
+	m_attackN1 = std::make_shared<Slash>(m_rightSword, 10.0f, 60);
+
 }
 
 Player::~Player()
 {
 }
 
-void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera)
+void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//スティックの向きを入れる
 	m_stickVec.x = -static_cast<float>(input.GetStickInfo().leftStickX);
@@ -113,7 +121,7 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera)
 	//状態に合わせて初期化
 	StateInit();
 	//更新
-	(this->*m_update)(input,camera);
+	(this->*m_update)(input,camera, attackManager);
 	//アニメーションの更新
 	m_model->Update();
 	//衝突判定をもとにやられ判定の位置更新
@@ -191,7 +199,7 @@ void Player::Complete()
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
 
-void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//落下しているかチェック
 	if (m_collidable->GetRb()->GetVec().y <= kChangeStateFall)
@@ -217,6 +225,10 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	//弱攻撃ボタンを押したら
 	if (input.IsTriggered("X"))
 	{
+		//攻撃を入れる(テスト)
+		attackManager->SetAttack(m_attackN1);
+		m_attackN1->Init();
+
 		//弱攻撃
 		m_update = &Player::AttackNormal1Update;
 		return;
@@ -239,7 +251,7 @@ void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	SpeedDown();
 }
 
-void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//落下しているかチェック
 	if (m_collidable->GetRb()->GetVec().y <= kChangeStateFall)
@@ -292,7 +304,7 @@ void Player::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 }
 
-void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//落下しているなら
 	if (m_collidable->GetRb()->GetVec().y < 0.0f)
@@ -326,7 +338,7 @@ void Player::JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
 
-void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//ジャンプできるなら
 	if (input.IsTriggered("A") && (m_jumpNum < kMaxJumpNum))
@@ -357,7 +369,7 @@ void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 	m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 }
 
-void Player::AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
@@ -381,7 +393,7 @@ void Player::AttackNormal1Update(const Input& input, const std::unique_ptr<Camer
 	SpeedDown();
 }
 
-void Player::AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
@@ -404,7 +416,7 @@ void Player::AttackNormal2Update(const Input& input, const std::unique_ptr<Camer
 	//少しずつ減速する
 	SpeedDown();
 }
-void Player::AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
@@ -418,7 +430,7 @@ void Player::AttackNormal3Update(const Input& input, const std::unique_ptr<Camer
 	SpeedDown();
 }
 //タメ
-void Player::AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//少しずつ減速する
 	SpeedDown();
@@ -444,7 +456,7 @@ void Player::AttackCharge1Update(const Input& input, const std::unique_ptr<Camer
 	}
 }
 
-void Player::AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//持続フレームが終了したら
 	if (m_chargeHighAttackFrame <= 0.0f)
@@ -457,7 +469,7 @@ void Player::AttackCharge2Update(const Input& input, const std::unique_ptr<Camer
 	 m_collidable->GetRb()->SetMoveVec(m_model->GetDir() * kHighAttackMoveSpeed);
 	 --m_chargeHighAttackFrame;
 }
-void Player::RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+void Player::RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())

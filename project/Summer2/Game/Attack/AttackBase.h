@@ -6,8 +6,10 @@ class Actor;
 class AttackBase abstract
 {
 public:
-	AttackBase(std::shared_ptr<Collidable> coll, float& damege, int& keepFrame);
+	AttackBase(std::shared_ptr<Collidable> coll, float damege, int keepFrame);
 	virtual ~AttackBase() {};
+	//‰Šú‰»
+	virtual void Init() abstract;
 	//XVˆ—
 	virtual void Update() abstract;
 	//“–‚½‚Á‚½

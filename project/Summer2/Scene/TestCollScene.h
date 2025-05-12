@@ -9,6 +9,7 @@ class SceneController;
 class Input;
 class CollisionManager;
 class EnemyManager;
+class AttackManager;
 class TestCollScene :
     public SceneBase
 {
@@ -32,6 +33,8 @@ private:
     std::unique_ptr<CollisionManager> m_collManager;
     //“G‚Ì•â•“I‚Èˆ—‚ğ‚·‚é
     std::unique_ptr<EnemyManager> m_enemyManager;
+    //UŒ‚‚Ìˆ—
+    std::unique_ptr<AttackManager> m_attackManger;
 private:
     //ƒnƒ“ƒhƒ‹
     int m_playerHandle;

@@ -6,6 +6,7 @@
 #include "../General/Collidable.h"
 #include "../General/Rigidbody.h"
 #include "../General/Collision/CollisionManager.h"
+#include "../Game/Attack/AttackManager.h"
 
 //アクター
 #include "../Game/Actors/Actor.h"
@@ -35,6 +36,8 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	m_camera = std::make_unique<Camera>(kCameraPos,m_player);
 	//コリジョンマネージャー
 	m_collManager = std::make_unique<CollisionManager>();
+	//攻撃の処理
+	m_attackManger = std::make_unique<AttackManager>();
 }
 
 Stage1Scene::~Stage1Scene()
@@ -62,7 +65,7 @@ void Stage1Scene::Update(Input& input)
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input,m_camera);
+		actor->Update(input,m_camera, m_attackManger);
 	}
 	//アクターの衝突処理
 	m_collManager->Update(m_actors);

@@ -1,13 +1,25 @@
 #include "Slash.h"
 #include "../Actors/Actor.h"
+#include "../../General/Collidable.h"
 #include "../Actors/Enemy/EnemyBase.h"
-Slash::Slash(std::shared_ptr<Collidable> coll, float& damege, int& keepFrame):
-	AttackBase(coll, damege, keepFrame)
+Slash::Slash(std::shared_ptr<Collidable> coll, float damege, int keepFrame) :
+	AttackBase(coll, damege, keepFrame),
+	m_initDamege(damege),
+	m_initKeepFrame(keepFrame)
 {
 }
 
 Slash::~Slash()
 {
+	
+}
+
+void Slash::Init()
+{
+	//‰Šú‰»ˆ—
+	m_damege = m_initDamege;
+	m_keepFrame = m_initKeepFrame;
+	m_isDead = false;
 }
 
 void Slash::Update()
