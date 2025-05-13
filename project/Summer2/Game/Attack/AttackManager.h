@@ -10,6 +10,7 @@ public:
 	AttackManager();
 	~AttackManager();
 	void Update(std::vector<std::shared_ptr<Actor>> actors);
+	void Draw()const;
 	void SetAttack(std::shared_ptr<AttackBase> attack);
 private:
 	//UŒ‚

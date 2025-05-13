@@ -1,6 +1,7 @@
 #pragma once
 #include "../Actor.h"
 #include "../../../General/Math/MyMath.h"
+#include <memory>
 
 class Input;
 class CameraBase;
@@ -19,6 +20,7 @@ public:
 	void OnHitColl(const std::shared_ptr<Collidable>& other)override;
 	void Draw()const override;
 	void Complete() override;
+	void HitReaction() override;
 private:
 	//ƒ‚ƒfƒ‹
 	std::unique_ptr<Model> m_model;
@@ -33,6 +35,8 @@ private:
 	int m_chargeHighAttackFrame;
 	//•Ší
 	std::shared_ptr<Collidable> m_rightSword;
+	//UŒ‚‚ÌƒtƒŒ[ƒ€‚ğ”‚¦‚é
+	int m_attackCountFrame;
 private:
 	//ó‘Ô‘JˆÚ
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);

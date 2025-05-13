@@ -22,6 +22,7 @@ public:
 	bool IsFinishAnim();//アニメーションが終わったかどうか
 	float GetTatalAnimFrame();//全体フレーム
 	float GetNowAnimFrame();//現在のアニメーションフレーム
+	void ReplayAnim();//アニメーションを最初から再生
 private:
 	int m_modelHandle;
 	//アニメーション

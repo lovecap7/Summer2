@@ -75,6 +75,12 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnim, m_blendRate);
 }
 
+void Animator::Replay()
+{
+	//今のモーションを最初から再生
+	m_animNow.m_animTimer = 0.0f;
+}
+
 void Animator::RemoveAnim(const int& modelHandle, Anim& anim)
 {
 	//そもそも何もアタッチされていないなら早期リターン

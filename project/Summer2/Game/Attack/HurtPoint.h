@@ -2,10 +2,16 @@
 //やられ判定クラス
 #include <memory>
 class Collidable;
+class Actor;
 class HurtPoint
 {
 public:
-	HurtPoint(std::shared_ptr<Collidable> coll,int hp);
+	/// <summary>
+	/// やられ判定と体力と所有者を持つクラス
+	/// </summary>
+	/// <param name="coll">やられ判定</param>
+	/// <param name="hp">体力</param>
+	HurtPoint(std::shared_ptr<Collidable> coll,int hp, Actor& owner);
 	~HurtPoint();
 	//攻撃を喰らったかどうかをチェックする際に使う
 	const std::shared_ptr<Collidable>& GetCollidable() const { return m_collidable; }
@@ -26,5 +32,7 @@ private:
 	int m_hp;
 	//死亡
 	bool m_isDead;
+	//持ち主
+	Actor* m_owner;
 };
 

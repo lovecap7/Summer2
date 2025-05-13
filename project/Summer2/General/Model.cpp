@@ -93,3 +93,9 @@ float Model::GetNowAnimFrame()
 	//現在のフレーム
 	return m_animator->GetNowAnimFrame();
 }
+
+void Model::ReplayAnim()
+{
+	//アニメーションを再生
+	m_animator->Replay();
+}

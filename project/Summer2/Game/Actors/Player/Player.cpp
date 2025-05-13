@@ -60,6 +60,19 @@ namespace
 	constexpr float kSwordHeight = 100.0f;
 	constexpr float kSwordRadius = 20.0f;
 
+	//通常攻撃1のダメージと持続フレームと発生フレーム
+	constexpr float kAttackN1Damege = 10.0f;
+	constexpr int kAttackN1KeepFrame = 20;
+	constexpr int kAttackN1StartFrame = 10;
+	//通常攻撃2のダメージと持続フレーム
+	constexpr float kAttackN2Damege = 20.0f;
+	constexpr int kAttackN2KeepFrame = 20;
+	constexpr int kAttackN2StartFrame = 10;
+	//通常攻撃3のダメージと持続フレーム
+	constexpr float kAttackN3Damege = 30.0f;
+	constexpr int kAttackN3KeepFrame = 40;
+	constexpr int kAttackN3StartFrame = 10;
+
 	//アニメーションの名前
 	const char* kIdleAnim = "Player|Idle";//待機
 	const char* kRunAnim = "Player|Run";//走る
@@ -81,7 +94,8 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_isGround(true),
 	m_jumpNum(0),
 	m_nextJumpFrame(kNextJumpFrame),
-	m_chargeHighAttackFrame(0)
+	m_chargeHighAttackFrame(0),
+	m_attackCountFrame(0)
 {
 	//衝突判定
 	Vector3 endPos = firstPos;
@@ -89,7 +103,7 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
 
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable,100);
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, *this);
 
 	//モデル
 	m_model = std::make_unique<Model>(modelHandle, firstPos.ToDxLibVector());
@@ -105,7 +119,9 @@ Player::Player(int modelHandle, Position3 firstPos) :
 
 
 	//攻撃の準備
-	m_attackN1 = std::make_shared<Slash>(m_rightSword, 10.0f, 60);
+	m_attackN1 = std::make_shared<Slash>(m_rightSword, kAttackN1Damege, kAttackN1KeepFrame);
+	m_attackN2 = std::make_shared<Slash>(m_rightSword, kAttackN2Damege, kAttackN2KeepFrame);
+	m_attackN3 = std::make_shared<Slash>(m_rightSword, kAttackN3Damege, kAttackN3KeepFrame);
 
 }
 
@@ -197,6 +213,11 @@ void Player::Complete()
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);//カプセルの移動
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
+}
+
+void Player::HitReaction()
+{
+	//やられリアクション
 }
 
 void Player::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
@@ -371,6 +392,15 @@ void Player::FallUpdate(const Input& input, const std::unique_ptr<Camera>& camer
 
 void Player::AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//カウント
+	++m_attackCountFrame;
+	//攻撃発生フレーム
+	if (m_attackCountFrame == kAttackN1StartFrame)
+	{
+		//攻撃を入れる
+		attackManager->SetAttack(m_attackN1);
+		m_attackN1->Init();
+	}
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
 	{
@@ -395,6 +425,15 @@ void Player::AttackNormal1Update(const Input& input, const std::unique_ptr<Camer
 
 void Player::AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//カウント
+	++m_attackCountFrame;
+	//攻撃発生フレーム
+	if (m_attackCountFrame == kAttackN2StartFrame)
+	{
+		//攻撃を入れる
+		attackManager->SetAttack(m_attackN2);
+		m_attackN2->Init();
+	}
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
 	{
@@ -418,6 +457,15 @@ void Player::AttackNormal2Update(const Input& input, const std::unique_ptr<Camer
 }
 void Player::AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//カウント
+	++m_attackCountFrame;
+	//攻撃発生フレーム
+	if (m_attackCountFrame == kAttackN3StartFrame)
+	{
+		//攻撃を入れる
+		attackManager->SetAttack(m_attackN3);
+		m_attackN3->Init();
+	}
 	//モデルのアニメーションが終わったら
 	if (m_model->IsFinishAnim())
 	{
@@ -532,6 +580,8 @@ void Player::StateInit()
 		m_model->SetAnim(kAttack_N1Anim, false, kAN1AnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+		//攻撃フレームリセット
+		m_attackCountFrame = 0;
 	}
 	else if (m_update == &Player::AttackNormal2Update)
 	{
@@ -540,6 +590,8 @@ void Player::StateInit()
 		m_model->SetAnim(kAttack_N2Anim, false, kAN2AnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+		//攻撃フレームリセット
+		m_attackCountFrame = 0;
 	}
 	else if (m_update == &Player::AttackNormal3Update)
 	{
@@ -548,6 +600,8 @@ void Player::StateInit()
 		m_model->SetAnim(kAttack_N3Anim, false, kAN3AnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
+		//攻撃フレームリセット
+		m_attackCountFrame = 0;
 	}
 	else if (m_update == &Player::AttackCharge1Update)
 	{

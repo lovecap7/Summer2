@@ -11,6 +11,8 @@ public:
 	void Init() override;
 	//XVˆ—
 	void Update() override;
+	//•`‰æ
+	void Draw() override;
 	//“–‚½‚Á‚½
 	void OnHit(std::shared_ptr<Actor> actor) override;
 private:

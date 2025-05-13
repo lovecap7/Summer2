@@ -25,7 +25,6 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 		attack->Update();
 	}
 
-
 	//Á‚¦‚½UŒ‚”»’è‚ÌƒCƒeƒŒ[ƒ^‚ğæ“¾
 	auto remIt = std::remove_if(m_attacks.begin(), m_attacks.end(), [](std::shared_ptr<AttackBase> attack) {return attack->IsDead();});
 	m_attacks.erase(remIt, m_attacks.end());//íœ
@@ -79,10 +78,18 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 			if (isHit)
 			{
 				//“–‚½‚Á‚½‚Ìˆ—
-				actor->GetHurtPoint()->OnHitDamage(attack->GetDamege());//ƒ_ƒ[ƒW‚ğ—^‚¦‚é
-				attack->OnHit(actor);//UŒ‚‘¤‚Ì“–‚½‚Á‚½‚Ìˆ—
+				attack->OnHit(actor);
 			}
 		}
+	}
+}
+
+void AttackManager::Draw() const
+{
+	//UŒ‚‚Ì•`‰æ
+	for (auto& attack : m_attacks)
+	{
+		attack->Draw();
 	}
 }
 

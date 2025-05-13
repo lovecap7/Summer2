@@ -46,3 +46,7 @@ void TestSphere::Complete()
 	//ˆÊ’uXV
 	m_collidable->GetRb()->SetNextPos();
 }
+
+void TestSphere::HitReaction()
+{
+}

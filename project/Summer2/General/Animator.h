@@ -38,6 +38,11 @@ public:
 	void SetAnim(const int& modelHandle, const int& anim, const bool& isLoop,const float animSpeed);
 
 	/// <summary>
+	/// 最初から再生
+	/// </summary>
+	void Replay();
+
+	/// <summary>
 	/// 指定されたアニメーションが再生中なら削除
 	/// </summary>
 	/// <param name="modelHandle">モデルのハンドル</param>

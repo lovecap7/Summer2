@@ -41,3 +41,8 @@ void TestPolygon::Complete()
 {
 	
 }
+
+void TestPolygon::HitReaction()
+{
+
+}

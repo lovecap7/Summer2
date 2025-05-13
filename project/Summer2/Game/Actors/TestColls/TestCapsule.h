@@ -16,5 +16,6 @@ public:
     void OnHitColl(const std::shared_ptr<Collidable>& other)override;
     void Draw()const override;
     void Complete() override;
+    void HitReaction() override;
 };
 

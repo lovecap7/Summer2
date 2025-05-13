@@ -29,6 +29,8 @@ protected:
 	std::shared_ptr<Collidable> m_collidable;
 	//やられ判定
 	std::shared_ptr<HurtPoint> m_hurtPoint;
+	//消滅
+	bool m_isDead;
 public:
 	Actor(ActorKind kind);
 	virtual ~Actor() {};
@@ -71,5 +73,14 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const std::shared_ptr<HurtPoint>& GetHurtPoint() const { return m_hurtPoint; }
+	/// <summary>
+	/// 消滅フラグ
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead() { return m_isDead; };
+	/// <summary>
+	/// 攻撃を受けたときのリアクション
+	/// </summary>
+	virtual void HitReaction() abstract;
 };
 

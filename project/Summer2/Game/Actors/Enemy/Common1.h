@@ -15,6 +15,7 @@ public:
 	void Draw()const override;
 	void Complete() override;
 	void OnHitSearch(const Vector3& playerPos)override;
+	void HitReaction() override;
 private:
 	//ó‘Ô‘JˆÚ
 	using UpdateFunc_t = void(Common1::*)(const Input& input, const std::unique_ptr<Camera>& camera);
@@ -28,6 +29,8 @@ private:
 	void AttackUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//‹ò‚ç‚¢
 	void HitUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	//€–S
+	void DeadUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»‚·‚×‚«‚à‚Ì‚ğ‰Šú‰»‚·‚é
 	void StateInit();
 	//Œ¸‘¬

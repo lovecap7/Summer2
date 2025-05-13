@@ -35,8 +35,8 @@ namespace
 	const char* kWalkAnim = "CharacterArmature|Walk";//歩く
 	const char* kRunAnim = "CharacterArmature|Run";//走る
 	const char* kAttackAnim = "CharacterArmature|Weapon";//攻撃
-	const char* kSmallHitAnim = "CharacterArmature|HitReact";//小喰らい
-	const char* kBigHitAnim = "CharacterArmature|Death";//大喰らい
+	const char* kHitAnim = "CharacterArmature|HitReact";//小喰らい
+	const char* kDeadAnim = "CharacterArmature|Death";//大喰らい
 }
 
 Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, Vector3 pos):
@@ -56,7 +56,7 @@ Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, V
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100);
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, *this);
 	//トリガー
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
 }
@@ -143,6 +143,7 @@ void Common1::Complete()
 
 void Common1::OnHitSearch(const Vector3& playerPos)
 {
+	if (m_update == &Common1::DeadUpdate)return;//死亡中は無視
 	//探知したのでtrue
 	m_isHitSearch = true;
 	//距離をチェック
@@ -177,8 +178,27 @@ void Common1::OnHitSearch(const Vector3& playerPos)
 	}
 }
 
+void Common1::HitReaction()
+{
+	m_collidable->SetState(State::None);
+	//やられ
+	m_model->SetAnim(kHitAnim, false);
+	//最初から再生
+	m_model->ReplayAnim();
+	//やられリアクション
+	m_update = &Common1::HitUpdate;
+	return;
+}
+
 void Common1::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//死んでるなら
+	if (m_hurtPoint->IsDead())
+	{
+		m_update = &Common1::DeadUpdate;
+		return;
+	}
+
 	//攻撃のクールタイム
 	--m_attackCoolTime;
 	if (m_attackCoolTime <= 0 && m_isBattleMode)
@@ -193,6 +213,13 @@ void Common1::IdleUpdate(const Input& input, const std::unique_ptr<Camera>& came
 
 void Common1::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//死んでるなら
+	if (m_hurtPoint->IsDead())
+	{
+		m_update = &Common1::DeadUpdate;
+		return;
+	}
+
 	//戦闘状態
 	if (m_isBattleMode || !m_isHitSearch)
 	{
@@ -207,6 +234,13 @@ void Common1::MoveUpdate(const Input& input, const std::unique_ptr<Camera>& came
 
 void Common1::AttackUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//死んでるなら
+	if (m_hurtPoint->IsDead())
+	{
+		m_update = &Common1::DeadUpdate;
+		return;
+	}
+
 	//アニメーション終了後
 	if (m_model->IsFinishAnim())
 	{
@@ -220,6 +254,33 @@ void Common1::AttackUpdate(const Input& input, const std::unique_ptr<Camera>& ca
 
 void Common1::HitUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	//死んでるなら
+	if (m_hurtPoint->IsDead())
+	{
+		m_update = &Common1::DeadUpdate;
+		return;
+	}
+
+	//アニメーション終了後
+	if (m_model->IsFinishAnim())
+	{
+		m_update = &Common1::IdleUpdate;
+		return;
+	}
+
+	//減速
+	SpeedDown();
+}
+
+void Common1::DeadUpdate(const Input& input, const std::unique_ptr<Camera>& camera)
+{
+	//アニメーション終了後
+	if (m_model->IsFinishAnim())
+	{
+		m_isDead = true;//死亡
+	}
+	//減速
+	SpeedDown();
 }
 
 void Common1::StateInit()
@@ -243,6 +304,12 @@ void Common1::StateInit()
 		m_collidable->SetState(State::None);
 		//攻撃
 		m_model->SetAnim(kAttackAnim, false);
+	}
+	else if (m_update == &Common1::DeadUpdate)
+	{
+		m_collidable->SetState(State::Dead);
+		//死亡
+		m_model->SetAnim(kDeadAnim, false);
 	}
 	m_lastUpdate = m_update;
 }

@@ -12,6 +12,8 @@ public:
 	virtual void Init() abstract;
 	//更新処理
 	virtual void Update() abstract;
+	//描画
+	virtual void Draw() abstract;
 	//当たった時
 	virtual void OnHit(std::shared_ptr<Actor> actor) abstract;
 	//コライダー
@@ -20,6 +22,7 @@ public:
 	bool IsDead() { return m_isDead; };
 	//ダメージ
 	float GetDamege() { return m_damege; };
+
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;

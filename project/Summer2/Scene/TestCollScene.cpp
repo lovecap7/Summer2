@@ -114,6 +114,11 @@ void TestCollScene::Update(Input& input)
 	}
 	//攻撃の処理
 	m_attackManger->Update(m_actors);
+
+	//消滅フラグチェック
+	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [](std::shared_ptr<Actor> actor) {return actor->IsDead();});
+	m_actors.erase(remIt, m_actors.end());//削除
+
 	//アクターの衝突処理
 	m_collManager->Update(m_actors);
 	//更新確定
@@ -142,4 +147,6 @@ void TestCollScene::Draw()
 	{
 		actor->Draw();
 	}
+	//攻撃の描画
+	m_attackManger->Draw();
 }
