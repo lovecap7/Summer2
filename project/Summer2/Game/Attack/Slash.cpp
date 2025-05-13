@@ -82,14 +82,13 @@ void Slash::OnHit(std::shared_ptr<Actor> actor)
 			m_hitEnemyId.emplace_back(std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
 			//ダメージを与える
 			actor->GetHurtPoint()->OnHitDamage(m_damege);
+			//ノックバック
+			actor->GetHurtPoint()->OnHitKnockBack(m_collidable);
+
 #if _DEBUG
 			//攻撃を当てたことを報告
 			printfDx("攻撃が当たった ID = %d\n", std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
 #endif
 		}
 	}
-
-#if _DEBUG
-	printf("攻撃が当たった");
-#endif
 }

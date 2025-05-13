@@ -50,6 +50,12 @@ public:
 	void RemoveAnim(const int& modelHandle, Anim& anim);
 
 	/// <summary>
+	/// アニメーションを全て削除
+	/// </summary>
+	/// <param name="modelHandle"></param>
+	void AllRemoveAnim(const int& modelHandle);
+
+	/// <summary>
 	/// アニメーションの再生
 	/// </summary>
 	/// <param name="modelHandle"></param>

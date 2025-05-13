@@ -96,6 +96,12 @@ void Animator::RemoveAnim(const int& modelHandle, Anim& anim)
 	anim.m_isFinishAnim = false;
 }
 
+void Animator::AllRemoveAnim(const int& modelHandle)
+{
+	RemoveAnim(modelHandle, m_animNow);
+	RemoveAnim(modelHandle, m_animNext);
+}
+
 void Animator::PlayAnim(const int& modelHandle)
 {
 	//çXêV

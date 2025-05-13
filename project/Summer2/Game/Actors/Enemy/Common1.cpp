@@ -181,10 +181,12 @@ void Common1::OnHitSearch(const Vector3& playerPos)
 void Common1::HitReaction()
 {
 	m_collidable->SetState(State::None);
+	//のけぞる
+
+	//アニメーションを削除
+	m_model->DeleteAnim();
 	//やられ
 	m_model->SetAnim(kHitAnim, false);
-	//最初から再生
-	m_model->ReplayAnim();
 	//やられリアクション
 	m_update = &Common1::HitUpdate;
 	return;

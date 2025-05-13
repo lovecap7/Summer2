@@ -21,6 +21,8 @@ public:
 	void SetIsNoDamege(bool isNoDamage) { m_isNoDamage = isNoDamage; };
 	//ƒ_ƒ[ƒW‚ğ‹ò‚ç‚¤
 	void OnHitDamage(int damage);
+	//‚Ì‚¯‚¼‚é
+	void OnHitKnockBack(const std::shared_ptr<Collidable>& other);
 	//€–S
 	bool IsDead() { return m_isDead; };
 private:

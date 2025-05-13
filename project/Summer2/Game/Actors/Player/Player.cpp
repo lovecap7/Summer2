@@ -58,7 +58,7 @@ namespace
 	constexpr int kRightHandPinky2 = 43;
 	//武器の長さと半径
 	constexpr float kSwordHeight = 100.0f;
-	constexpr float kSwordRadius = 20.0f;
+	constexpr float kSwordRadius = 30.0f;
 
 	//通常攻撃1のダメージと持続フレームと発生フレーム
 	constexpr float kAttackN1Damege = 10.0f;

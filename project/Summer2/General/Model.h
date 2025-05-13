@@ -23,6 +23,7 @@ public:
 	float GetTatalAnimFrame();//全体フレーム
 	float GetNowAnimFrame();//現在のアニメーションフレーム
 	void ReplayAnim();//アニメーションを最初から再生
+	void DeleteAnim();//再生中のアニメーションを削除
 private:
 	int m_modelHandle;
 	//アニメーション

@@ -99,3 +99,9 @@ void Model::ReplayAnim()
 	//アニメーションを再生
 	m_animator->Replay();
 }
+
+void Model::DeleteAnim()
+{
+	//削除
+	m_animator->AllRemoveAnim(m_modelHandle);
+}
