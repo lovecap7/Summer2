@@ -39,5 +39,5 @@ void HurtPoint::OnHitKnockBack(const std::shared_ptr<Collidable>& other)
 	Vector3 knockBackVec = m_owner->GetCollidable()->GetRb()->GetNextPos() - other->GetRb()->GetNextPos();//自分へのベクトル
 	knockBackVec.y = 0.0f;//Y成分はなし
 	knockBackVec = knockBackVec.Normalize() * 10.0f;//ノックバック
-	m_owner->GetCollidable()->GetRb()->SetVec(knockBackVec);
+	m_owner->GetCollidable()->GetRb()->SetMoveVec(knockBackVec);
 }

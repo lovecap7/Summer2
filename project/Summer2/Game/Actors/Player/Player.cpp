@@ -119,9 +119,9 @@ Player::Player(int modelHandle, Position3 firstPos) :
 
 
 	//çUåÇÇÃèÄîı
-	m_attackN1 = std::make_shared<Slash>(m_rightSword, kAttackN1Damege, kAttackN1KeepFrame);
-	m_attackN2 = std::make_shared<Slash>(m_rightSword, kAttackN2Damege, kAttackN2KeepFrame);
-	m_attackN3 = std::make_shared<Slash>(m_rightSword, kAttackN3Damege, kAttackN3KeepFrame);
+	m_attackN1 = std::make_shared<Slash>(m_rightSword, kAttackN1Damege, kAttackN1KeepFrame, *this);
+	m_attackN2 = std::make_shared<Slash>(m_rightSword, kAttackN2Damege, kAttackN2KeepFrame, *this);
+	m_attackN3 = std::make_shared<Slash>(m_rightSword, kAttackN3Damege, kAttackN3KeepFrame, *this);
 
 }
 

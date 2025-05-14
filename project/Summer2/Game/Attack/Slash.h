@@ -5,7 +5,7 @@ class Slash :
     public AttackBase
 {
 public:
-	Slash(std::shared_ptr<Collidable> coll, float damege, int keepFrame);
+	Slash(std::shared_ptr<Collidable> coll, float damege, int keepFrame, Actor& owner);
 	~Slash();
 	//‰Šú‰»
 	void Init() override;
@@ -18,5 +18,6 @@ public:
 private:
 	float m_initDamege;//‰Šú‰»—p
 	float m_initKeepFrame;//‰Šú‰»—p
+	
 };
 

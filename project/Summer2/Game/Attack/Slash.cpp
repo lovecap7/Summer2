@@ -10,8 +10,8 @@
 #include "../../General/Rigidbody.h"
 #endif
 
-Slash::Slash(std::shared_ptr<Collidable> coll, float damege, int keepFrame) :
-	AttackBase(coll, damege, keepFrame),
+Slash::Slash(std::shared_ptr<Collidable> coll, float damege, int keepFrame, Actor& owner) :
+	AttackBase(coll, damege, keepFrame, owner),
 	m_initDamege(damege),
 	m_initKeepFrame(keepFrame)
 {
@@ -83,7 +83,7 @@ void Slash::OnHit(std::shared_ptr<Actor> actor)
 			//ダメージを与える
 			actor->GetHurtPoint()->OnHitDamage(m_damege);
 			//ノックバック
-			actor->GetHurtPoint()->OnHitKnockBack(m_collidable);
+			actor->GetHurtPoint()->OnHitKnockBack(m_owner->GetCollidable());
 
 #if _DEBUG
 			//攻撃を当てたことを報告

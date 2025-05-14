@@ -13,8 +13,8 @@
 namespace
 {
 	//当たり判定
-	const Vector3 kCapsuleHeight = { 0.0f,100.0f,0.0f };//カプセルの上端
-	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
+	const Vector3 kCapsuleHeight = { 0.0f,120.0f,0.0f };//カプセルの上端
+	constexpr float kCapsuleRadius = 40.0f; //カプセルの半径
 	//トリガーの半径
 	constexpr float kSearchTriggerRadius = 500.0f;
 	//プレイヤーを追いかける距離
@@ -144,6 +144,7 @@ void Common1::Complete()
 void Common1::OnHitSearch(const Vector3& playerPos)
 {
 	if (m_update == &Common1::DeadUpdate)return;//死亡中は無視
+	if (m_update == &Common1::HitUpdate)return;//やられ中は無視
 	//探知したのでtrue
 	m_isHitSearch = true;
 	//距離をチェック
@@ -181,8 +182,6 @@ void Common1::OnHitSearch(const Vector3& playerPos)
 void Common1::HitReaction()
 {
 	m_collidable->SetState(State::None);
-	//のけぞる
-
 	//アニメーションを削除
 	m_model->DeleteAnim();
 	//やられ

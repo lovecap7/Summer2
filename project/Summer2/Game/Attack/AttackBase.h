@@ -6,7 +6,7 @@ class Actor;
 class AttackBase abstract
 {
 public:
-	AttackBase(std::shared_ptr<Collidable> coll, float damege, int keepFrame);
+	AttackBase(std::shared_ptr<Collidable> coll, float damege, int keepFrame, Actor& owner);
 	virtual ~AttackBase() {};
 	//初期化
 	virtual void Init() abstract;
@@ -22,7 +22,6 @@ public:
 	bool IsDead() { return m_isDead; };
 	//ダメージ
 	float GetDamege() { return m_damege; };
-
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -34,5 +33,7 @@ protected:
 	bool m_isDead;
 	//当てたことのあるCollidableを覚えておく
 	std::vector<int> m_hitEnemyId;
+	//持ち主
+	Actor* m_owner;
 };
 
