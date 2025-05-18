@@ -31,7 +31,6 @@ void HurtPoint::OnHitDamage(int damage)
 	{
 		m_owner->HitReaction();//‚â‚ç‚êƒŠƒAƒNƒVƒ‡ƒ“
 	}
-	printfDx("‚í‚¢‚ÌHP = %d\n", m_hp);
 }
 
 void HurtPoint::OnHitKnockBack(const Vector3& knockBackVec)

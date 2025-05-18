@@ -213,7 +213,7 @@ void Player::Draw() const
 	//3’i‰ñ–Ú
 	else if (m_chargeFrame > kCharge2KeepFrame && m_chargeFrame <= kCharge3KeepFrame)
 	{
-		color = 0xffffff;
+		color = 0x00ffff;
 	}
 	DrawCapsule3D(
 		m_leftLeg->GetRb()->GetPos().ToDxLibVector(),

@@ -181,6 +181,7 @@ void Common1::OnHitSearch(const Vector3& playerPos)
 
 void Common1::HitReaction()
 {
+	printfDx("ID:%dの敵のHP = %d\n", m_id,m_hurtPoint->GetHp());
 	m_collidable->SetState(State::None);
 	//アニメーションを削除
 	m_model->DeleteAnim();

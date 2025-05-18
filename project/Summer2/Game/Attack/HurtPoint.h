@@ -26,6 +26,8 @@ public:
 	void OnHitKnockBack(const Vector3& knockBackVec);
 	//€–S
 	bool IsDead() { return m_isDead; };
+	//‘Ì—Í
+	int GetHp() { return m_hp; };
 private:
 	//“–‚½‚è”»’è‚âÀ•W‚ğ‚Á‚½ƒNƒ‰ƒX
 	std::shared_ptr<Collidable> m_collidable;
