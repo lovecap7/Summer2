@@ -31,6 +31,7 @@
     <ClCompile Include="Game\Attack\AttackManager.cpp" />
     <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\Slash.cpp" />
+    <ClCompile Include="Game\Attack\Strike.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\EnemyManager.cpp" />
     <ClCompile Include="General\Animator.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="Game\Attack\AttackManager.h" />
     <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\Slash.h" />
+    <ClInclude Include="Game\Attack\Strike.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="General\Animator.h" />

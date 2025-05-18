@@ -20,13 +20,18 @@ public:
 	std::shared_ptr<Collidable>& GetCollidable() { return m_collidable; };
 	//消滅
 	bool IsDead() { return m_isDead; };
+	//攻撃判定を消す
+	void Delete() { m_isDead = true; };
 	//ダメージ
-	float GetDamege() { return m_damege; };
+	float GetDamage() { return m_damage; };
+	void SetDamage(float damage);
+	//持続フレーム
+	void SetKeepFrame(int keepFrame);
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
 	//ダメージ
-	float m_damege;
+	float m_damage;
 	//持続フレーム
 	int m_keepFrame;
 	//消滅フラグ
@@ -35,5 +40,8 @@ protected:
 	std::vector<int> m_hitEnemyId;
 	//持ち主
 	Actor* m_owner;
+	//初期化用
+	float m_initDamage;//初期化用
+	float m_initKeepFrame;//初期化用
 };
 

@@ -1,4 +1,4 @@
-#include "Slash.h"
+#include "Strike.h"
 #include "../Actors/Actor.h"
 #include "HurtPoint.h"
 #include "../../General/Collidable.h"
@@ -10,17 +10,16 @@
 #include "../../General/Rigidbody.h"
 #endif
 
-Slash::Slash(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner) :
+Strike::Strike(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner):
 	AttackBase(coll, damage, keepFrame, owner)
 {
 }
 
-Slash::~Slash()
+Strike::~Strike()
 {
-	
 }
 
-void Slash::Init()
+void Strike::Init()
 {
 	//‰Šú‰»ˆ—
 	m_damage = m_initDamage;
@@ -33,7 +32,7 @@ void Slash::Init()
 	}
 }
 
-void Slash::Update()
+void Strike::Update()
 {
 	//‘±ƒtƒŒ[ƒ€‚ğŒ¸‚ç‚·
 	m_keepFrame--;
@@ -44,7 +43,7 @@ void Slash::Update()
 	}
 }
 
-void Slash::Draw()
+void Strike::Draw()
 {
 #if _DEBUG
 	DrawCapsule3D(
@@ -52,14 +51,14 @@ void Slash::Draw()
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetRadius(),
 		32,
-		0xff00ff,
-		0xff00ff,
+		0xfff0ff,
+		0xfff0ff,
 		true//–³“G‚Ì‚Í“h‚è‚Â‚Ô‚³‚ê‚é
 	);
 #endif
 }
 
-void Slash::OnHit(std::shared_ptr<Actor> actor)
+void Strike::OnHit(std::shared_ptr<Actor> actor)
 {
 	//“G‚É“–‚½‚Á‚½ê‡ID‚ğ‹L˜^‚·‚é
 	if (actor->GetActorKind() == ActorKind::Enemy)
@@ -88,7 +87,7 @@ void Slash::OnHit(std::shared_ptr<Actor> actor)
 
 #if _DEBUG
 			//UŒ‚‚ğ“–‚Ä‚½‚±‚Æ‚ğ•ñ
-			printfDx("aŒ‚‚ª“–‚½‚Á‚½ ID = %d\n", std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
+			printfDx("‘ÅŒ‚‚ª“–‚½‚Á‚½ ID = %d\n", std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
 #endif
 		}
 	}

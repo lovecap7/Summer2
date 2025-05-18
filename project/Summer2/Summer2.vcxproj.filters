@@ -201,9 +201,6 @@
     <ClCompile Include="Game\Actors\Stage\InvisibleWall.cpp">
       <Filter>ソース ファイル\Game\Actors\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actors\Enemy\EnemyBase.cpp">
-      <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Actors\Enemy\Common1.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
     </ClCompile>
@@ -221,6 +218,12 @@
     </ClCompile>
     <ClCompile Include="Game\Attack\HurtPoint.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Attack\Strike.cpp">
+      <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\EnemyBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +360,9 @@
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Game\Attack\HurtPoint.h">
+      <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\Strike.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,10 +20,13 @@ public:
 	void SetAnim(const char* animName,bool isLoop);//アニメーション変更
 	void SetAnim(const char* animName,bool isLoop,const float animSpeed);//アニメーション変更(再生速度も)
 	bool IsFinishAnim();//アニメーションが終わったかどうか
-	float GetTatalAnimFrame();//全体フレーム
+	float GetTotalAnimFrame();//全体フレーム
+	void SetTotalAnimFrame(float totalFrame);//全体フレームセット
 	float GetNowAnimFrame();//現在のアニメーションフレーム
 	void ReplayAnim();//アニメーションを最初から再生
 	void DeleteAnim();//再生中のアニメーションを削除
+	void SetFixedLoopFrame(float loopFrame);//指定ループ再生
+	bool IsFinishFixedLoop();//指定ループ再生終了
 private:
 	int m_modelHandle;
 	//アニメーション

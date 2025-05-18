@@ -8,6 +8,8 @@ class CameraBase;
 class Camera;
 class Model;
 class Slash;
+class Strike;
+class AttackBase;
 class AttackManager;
 class Player :
 	public Actor
@@ -31,50 +33,62 @@ private:
 	//ジャンプの回数
 	unsigned int m_jumpNum;
 	int m_nextJumpFrame;//2回目のジャンプが行えるまでの時間
-	//強攻撃のタメ時間
-	int m_chargeHighAttackFrame;
 	//武器
 	std::shared_ptr<Collidable> m_rightSword;
+	//左足
+	std::shared_ptr<Collidable> m_leftLeg;
 	//攻撃のフレームを数える
 	int m_attackCountFrame;
+	//タメ時間
+	int m_chargeFrame;
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	UpdateFunc_t m_update;
 	UpdateFunc_t m_lastUpdate;//直前の状態を覚えておく
 	//待機状態
-	void IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateIdle(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//移動
-	void MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateMove(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//ジャンプ
-	void JumpUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateJump(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//落下中
-	void FallUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateFall(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//弱攻撃
-	void AttackNormal1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	void AttackNormal2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	void AttackNormal3Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateAttackNormal1(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateAttackNormal2(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateAttackNormal3(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//強攻撃
-	void AttackCharge1Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	void AttackCharge2Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateAttackCharge1(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateAttackCharge2(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//回避
-	void RollingUpdate(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
+	void UpdateRolling(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//状態に合わせて初期化すべきものを初期化する
-	void StateInit();
+	void InitState();
+	//攻撃判定を出す
+	void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
 private:
 	//進行方向を返すベクトル
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
 	//減速していく
 	void SpeedDown();
-	//武器の位置更新
-	void WeaponUpdate();
 	//やられ判定の更新
-	void HurtPointUpdate();
+	void UpdateHurtPoint();
+	//剣のコンポーネント
+	void CreateRightSword();
+	//剣の位置更新
+	void UpdateRightSword();
+	//左足のコンポーネント
+	void CreateLeftLeg();
+	//左足の位置更新
+	void UpdateLeftLeg();
+	//攻撃のコンポーネント
+	void CreateAttack();
 private:
 	//攻撃
 	std::shared_ptr<Slash> m_attackN1;//通常1
 	std::shared_ptr<Slash> m_attackN2;//通常2
 	std::shared_ptr<Slash> m_attackN3;//通常3
-	std::shared_ptr<Slash> m_attackC;//ため攻撃
+	std::shared_ptr<Strike> m_attackC;//ため攻撃
 };
 

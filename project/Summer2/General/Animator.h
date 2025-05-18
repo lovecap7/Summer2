@@ -11,6 +11,9 @@ private:
 		bool m_isLoopAnim = false;//ループするアニメーションかどうか
 		bool m_isFinishAnim = false;//アニメーションが終わったらtrue
 		float m_animSpeed = 0.5f;//再生速度
+		//一定フレーム間ループ再生
+		bool m_isFixedLoop = false;
+		float m_fixedLoopFrame = 0.0f;
 	};
 	Anim m_animNow;//今のアニメーション
 	Anim m_animNext;//次のアニメーション
@@ -35,7 +38,7 @@ public:
 	void SetAnim(const int& modelHandle, const int& anim, const bool& isLoop);
 
 	//アニメーションのアタッチと再生速度変更
-	void SetAnim(const int& modelHandle, const int& anim, const bool& isLoop,const float animSpeed);
+	void SetAnim(const int& modelHandle, const int& anim, const bool& isLoop,const float& animSpeed);
 
 	/// <summary>
 	/// 最初から再生
@@ -71,4 +74,10 @@ public:
 	float GetTotalAnimFrame() { return  m_animNext.m_animStopTime / m_animNext.m_animSpeed; };
 	//現在のアニメフレーム(現在のフレーム / 再生速度)
 	float GetNowAnimFrame() { return  m_animNext.m_animTimer / m_animNext.m_animSpeed; };
+	//アニメーションの全体フレームをセットする
+	void SetTotalAnimFrame(float totalFrame) { m_animNext.m_animStopTime = totalFrame; };
+	//ループフレームをセットする
+	void SetFixedLoop(float loopFrame);
+	//ループ再生が終了したか
+	bool IsFinishFixedLoop();
 };

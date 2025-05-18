@@ -1,6 +1,7 @@
 #pragma once
 //やられ判定クラス
 #include <memory>
+#include "../../General/Math/MyMath.h"
 class Collidable;
 class Actor;
 class HurtPoint
@@ -22,7 +23,7 @@ public:
 	//ダメージを喰らう
 	void OnHitDamage(int damage);
 	//のけぞる
-	void OnHitKnockBack(const std::shared_ptr<Collidable>& other);
+	void OnHitKnockBack(const Vector3& knockBackVec);
 	//死亡
 	bool IsDead() { return m_isDead; };
 private:

@@ -36,6 +36,9 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 	m_animNext.m_isLoopAnim = isLoop;//ループするか
 	m_animNext.m_isFinishAnim = false;//再生終了
 	m_animNext.m_animSpeed = kDefAnimSpeed;//再生速度
+	//指定ループ
+	m_animNext.m_isFixedLoop = false;
+	m_animNext.m_fixedLoopFrame = 0.0f;
 
 	//ブレンド率リセット
 	m_blendRate = 0.0f;
@@ -45,7 +48,7 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnim, m_blendRate);
 }
 
-void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLoop, const float animSpeed)
+void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLoop, const float& animSpeed)
 {
 	//メインかサブのアニメーションと同じなら設定しない
 	if (anim == m_animNext.m_attachAnim)return;
@@ -66,7 +69,9 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 	m_animNext.m_isLoopAnim = isLoop;//ループするか
 	m_animNext.m_isFinishAnim = false;//再生終了
 	m_animNext.m_animSpeed = animSpeed;//再生速度
-
+	//指定ループ
+	m_animNext.m_isFixedLoop = false;
+	m_animNext.m_fixedLoopFrame = 0.0f;
 	//ブレンド率リセット
 	m_blendRate = 0.0f;
 
@@ -94,6 +99,8 @@ void Animator::RemoveAnim(const int& modelHandle, Anim& anim)
 	anim.m_animTimer = 0.0f;
 	anim.m_isLoopAnim = false;
 	anim.m_isFinishAnim = false;
+	anim.m_isFixedLoop = false;
+	anim.m_fixedLoopFrame = 0.0f;
 }
 
 void Animator::AllRemoveAnim(const int& modelHandle)
@@ -115,6 +122,19 @@ bool Animator::IsFinishAnim()
 	return m_animNext.m_isFinishAnim;
 }
 
+void Animator::SetFixedLoop(float loopFrame)
+{
+	//指定ループ
+	m_animNext.m_isFixedLoop = true;
+	m_animNext.m_fixedLoopFrame = loopFrame;
+}
+
+bool Animator::IsFinishFixedLoop()
+{
+	//指定ループ再生が終了したらtrue
+	return m_animNext.m_isFixedLoop && m_animNext.m_fixedLoopFrame <= 0.0f;
+}
+
 void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
 {
 	//何もアタッチされてないなら再生しない
@@ -122,12 +142,13 @@ void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
 
 	//アニメーションが終わっていないかもしれないのでfalse
 	anim.m_isFinishAnim = false;
-	//アニメーションの終わりまで再生
-	if (anim.m_animStopTime <= anim.m_animTimer)
+	//アニメーションの終わりまで再生(指定ループ再生の場合指定ループフレームが終了したら)
+	if ((anim.m_animStopTime <= anim.m_animTimer) || (anim.m_isFixedLoop && anim.m_fixedLoopFrame <= 0.0f))
 	{
-		if (anim.m_isLoopAnim)
+		//ループする(指定ループ再生の場合指定ループフレームが終了していないなら)
+		if (anim.m_isLoopAnim || (anim.m_isFixedLoop && anim.m_fixedLoopFrame > 0.0f))
 		{
-			//ループする
+			//最初から
 			anim.m_animTimer = 0.0f;
 			//終わりがないので終わったことにしておく
 			anim.m_isFinishAnim = true;
@@ -141,6 +162,11 @@ void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
 	//アニメーションを進める
 	MV1SetAttachAnimTime(modelHandle, anim.m_attachAnimIndex, anim.m_animTimer);
 	anim.m_animTimer += anim.m_animSpeed;
+	//指定ループ再生なら
+	if (anim.m_isFixedLoop && anim.m_fixedLoopFrame > 0.0f)
+	{
+		--anim.m_fixedLoopFrame;//ループフレームを減らしていく
+	}
 }
 
 void Animator::UpdateBlend(const int& modelHandle)

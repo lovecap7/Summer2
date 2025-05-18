@@ -22,17 +22,17 @@ private:
 	UpdateFunc_t m_update;
 	UpdateFunc_t m_lastUpdate;//’¼‘O‚Ìó‘Ô‚ğŠo‚¦‚Ä‚¨‚­
 	//‘Ò‹@ó‘Ô
-	void IdleUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void UpdateIdle(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ˆÚ“®
-	void MoveUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void UpdateMove(const Input& input, const std::unique_ptr<Camera>& camera);
 	//UŒ‚
-	void AttackUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void UpdateAttack(const Input& input, const std::unique_ptr<Camera>& camera);
 	//‹ò‚ç‚¢
-	void HitUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void UpdateHit(const Input& input, const std::unique_ptr<Camera>& camera);
 	//€–S
-	void DeadUpdate(const Input& input, const std::unique_ptr<Camera>& camera);
+	void UpdateDead(const Input& input, const std::unique_ptr<Camera>& camera);
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»‚·‚×‚«‚à‚Ì‚ğ‰Šú‰»‚·‚é
-	void StateInit();
+	void InitState();
 	//Œ¸‘¬
 	void SpeedDown();
 private:

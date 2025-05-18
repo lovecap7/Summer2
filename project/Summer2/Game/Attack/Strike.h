@@ -1,12 +1,12 @@
 #pragma once
 #include "AttackBase.h"
 class Actor;
-class Slash :
+class Strike :
     public AttackBase
 {
 public:
-	Slash(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner);
-	~Slash();
+    Strike(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner);
+    ~Strike();
 	//‰Šú‰»
 	void Init() override;
 	//XVˆ—
@@ -15,6 +15,5 @@ public:
 	void Draw() override;
 	//“–‚½‚Á‚½
 	void OnHit(std::shared_ptr<Actor> actor) override;
-private:
 };
 

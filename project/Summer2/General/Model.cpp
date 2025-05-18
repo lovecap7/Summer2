@@ -82,10 +82,16 @@ bool Model::IsFinishAnim()
 	return m_animator->IsFinishAnim();
 }
 
-float Model::GetTatalAnimFrame()
+float Model::GetTotalAnimFrame()
 {
 	//全体フレーム
 	return m_animator->GetTotalAnimFrame();
+}
+
+void Model::SetTotalAnimFrame(float totalFrame)
+{
+	//全体フレームセット
+	m_animator->SetTotalAnimFrame(totalFrame);
 }
 
 float Model::GetNowAnimFrame()
@@ -104,4 +110,16 @@ void Model::DeleteAnim()
 {
 	//削除
 	m_animator->AllRemoveAnim(m_modelHandle);
+}
+
+void Model::SetFixedLoopFrame(float loopFrame)
+{
+	//指定ループ
+	m_animator->SetFixedLoop(loopFrame);
+}
+
+bool Model::IsFinishFixedLoop()
+{
+	//指定ループ終了
+	return m_animator->IsFinishFixedLoop();
 }
