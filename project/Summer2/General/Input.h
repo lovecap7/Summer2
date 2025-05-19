@@ -74,17 +74,17 @@ public:
 	/// è≠ÇµÇæÇØì|ÇµÇƒÇ¢ÇÈÇ»ÇÁtrue
 	/// </summary>
 	/// <returns></returns>
-	bool IsLowPowerLeftStick();
+	bool IsLowPowerLeftStick()const;
 	/// <summary>
 	/// ê^ÇÒíÜÇÆÇÁÇ¢Ç≈ì|ÇµÇΩÇÁtrue
 	/// </summary>
 	/// <returns></returns>
-	bool IsMediumPowerLeftStick();
+	bool IsMediumPowerLeftStick()const;
 	/// <summary>
 	/// ç≈ëÂÇ‹Ç≈ì|ÇµÇΩÇÁ
 	/// </summary>
 	/// <returns></returns>
-	bool IsHighPowerLeftStick();
+	bool IsHighPowerLeftStick()const;
 
 private:
 	/// <summary>

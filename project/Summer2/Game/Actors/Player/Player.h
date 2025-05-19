@@ -63,10 +63,6 @@ private:
 	void UpdateAttackCharge2(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 	//回避
 	void UpdateRolling(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//状態に合わせて初期化すべきものを初期化する
-	void InitState();
-	//攻撃判定を出す
-	void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
 private:
 	//進行方向を返すベクトル
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
@@ -84,6 +80,12 @@ private:
 	void UpdateLeftLeg();
 	//攻撃のコンポーネント
 	void CreateAttack();
+	//状態に合わせて初期化すべきものを初期化する
+	void InitState();
+	//攻撃判定を出す
+	void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
+	//入力の大きさに合わせて速度を返す
+	float InputValueSpeed(const Input& input);
 private:
 	//攻撃
 	std::shared_ptr<Slash> m_attackN1;//通常1

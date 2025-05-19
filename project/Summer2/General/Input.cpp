@@ -118,7 +118,7 @@ bool Input::IsTriggered(const string& action) const
 	}
 }
 
-bool Input::IsLowPowerLeftStick()
+bool Input::IsLowPowerLeftStick()const
 {
 	//­‚µ‚¾‚¯“|‚µ‚Ä‚¢‚é‚È‚çtrue
 	if ((m_stickInfo.leftStickX > kLowPowerStickMin && m_stickInfo.leftStickX <= kLowPowerStickMax) ||
@@ -131,7 +131,7 @@ bool Input::IsLowPowerLeftStick()
 	return false;
 }
 
-bool Input::IsMediumPowerLeftStick()
+bool Input::IsMediumPowerLeftStick()const
 {
 	//‚»‚±‚»‚±“|‚µ‚Ä‚¢‚é‚È‚çtrue
 	if ((m_stickInfo.leftStickX > kMediumPowerStickMin && m_stickInfo.leftStickX <= kMediumPowerStickMax) ||
@@ -144,7 +144,7 @@ bool Input::IsMediumPowerLeftStick()
 	return false;
 }
 
-bool Input::IsHighPowerLeftStick()
+bool Input::IsHighPowerLeftStick() const
 {
 	//“|‚µØ‚Á‚Ä‚é‚È‚çtrue
 	if ((m_stickInfo.leftStickX > kHighPowerStickMin && m_stickInfo.leftStickX <= kHighPowerStickMax) ||

@@ -22,7 +22,9 @@ namespace
 	const Vector3 kCapsuleHeight = { 0.0f,150.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
 	//移動速度
-	constexpr float kMoveSpeed = 10.0f;//地上の移動速度
+	constexpr float kLowMoveSpeed = 2.0f;//地上の小移動速度
+	constexpr float kMediumMoveSpeed = 5.0f;//地上の中移動速度
+	constexpr float kHighMoveSpeed = 10.0f;//地上の大移動速度
 	constexpr float kAirMoveSpeed = 1.5f;//空中移動速度
 	constexpr float kMaxAirMoveSpeed = 20.0f;//空中移動最高速度
 	constexpr float kLightAttackMoveSpeed = 0.5f;//弱攻撃中の移動速度
@@ -342,7 +344,7 @@ void Player::UpdateMove(const Input& input, const std::unique_ptr<Camera>& camer
 	else
 	{
 		//移動
-		m_collidable->GetRb()->SetMoveVec(GetForwardVec(camera) * kMoveSpeed);
+		m_collidable->GetRb()->SetMoveVec(GetForwardVec(camera) * InputValueSpeed(input));
 		//向きの更新
 		m_model->SetDir(m_collidable->GetRb()->GetVec().ToDxLibVector());
 	}
@@ -693,6 +695,16 @@ void Player::AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::
 	//攻撃を入れる
 	attackManager->SetAttack(attack);
 	attack->Init();
+}
+
+float Player::InputValueSpeed(const Input& input)
+{
+	float moveSpeed = 0.0f;
+	//速度をスティック入力の深度に合わせる
+	if (input.IsLowPowerLeftStick())moveSpeed = kLowMoveSpeed;
+	if (input.IsMediumPowerLeftStick())moveSpeed = kMediumMoveSpeed;
+	if (input.IsHighPowerLeftStick())moveSpeed = kHighMoveSpeed;
+	return moveSpeed;
 }
 
 Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)
