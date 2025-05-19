@@ -70,6 +70,22 @@ public:
 	/// <returns>スティックがどれだけ倒れているか</returns>
 	StickInfo GetStickInfo() const { return m_stickInfo; }
 
+	/// <summary>
+	/// 少しだけ倒しているならtrue
+	/// </summary>
+	/// <returns></returns>
+	bool IsLowPowerLeftStick();
+	/// <summary>
+	/// 真ん中ぐらいで倒したらtrue
+	/// </summary>
+	/// <returns></returns>
+	bool IsMediumPowerLeftStick();
+	/// <summary>
+	/// 最大まで倒したら
+	/// </summary>
+	/// <returns></returns>
+	bool IsHighPowerLeftStick();
+
 private:
 	/// <summary>
 	/// 入力対応マップに使用する

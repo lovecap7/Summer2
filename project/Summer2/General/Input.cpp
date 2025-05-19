@@ -1,5 +1,19 @@
 #include "Input.h"
 #include <DxLib.h>
+#include "Math/Vector3.h"
+
+namespace
+{
+	//­‚µ‚¾‚¯“|‚µ‚Ä‚¢‚é‚Æ”»’è‚·‚é”ÍˆÍ
+	constexpr float kLowPowerStickMin = 50.0f;
+	constexpr float kLowPowerStickMax = 400.0f;
+	//‚»‚±‚»‚±“|‚µ‚Ä‚¢‚é‚Æ”»’è‚·‚é”ÍˆÍ
+	constexpr float kMediumPowerStickMin = kLowPowerStickMax;
+	constexpr float kMediumPowerStickMax = 800.0f;
+	//Å‘å‚Ü‚Å“|‚µ‚Ä‚¢‚é‚Æ”»’è‚·‚é”ÍˆÍ
+	constexpr float kHighPowerStickMin = kMediumPowerStickMax;
+	constexpr float kHighPowerStickMax = 1000.0f;
+}
 
 Input::Input(int padID):
 	m_padID(std::move(padID))
@@ -102,4 +116,43 @@ bool Input::IsTriggered(const string& action) const
 	{
 		return false;
 	}
+}
+
+bool Input::IsLowPowerLeftStick()
+{
+	//­‚µ‚¾‚¯“|‚µ‚Ä‚¢‚é‚È‚çtrue
+	if ((m_stickInfo.leftStickX > kLowPowerStickMin && m_stickInfo.leftStickX <= kLowPowerStickMax) ||
+		(m_stickInfo.leftStickX < -kLowPowerStickMin && m_stickInfo.leftStickX >= -kLowPowerStickMax) || 
+		(m_stickInfo.leftStickY > kLowPowerStickMin && m_stickInfo.leftStickY <= kLowPowerStickMax) ||
+		(m_stickInfo.leftStickY < -kLowPowerStickMin && m_stickInfo.leftStickY >= -kLowPowerStickMax))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Input::IsMediumPowerLeftStick()
+{
+	//‚»‚±‚»‚±“|‚µ‚Ä‚¢‚é‚È‚çtrue
+	if ((m_stickInfo.leftStickX > kMediumPowerStickMin && m_stickInfo.leftStickX <= kMediumPowerStickMax) ||
+		(m_stickInfo.leftStickX < -kMediumPowerStickMin && m_stickInfo.leftStickX >= -kMediumPowerStickMax) ||
+		(m_stickInfo.leftStickY > kMediumPowerStickMin && m_stickInfo.leftStickY <= kMediumPowerStickMax) ||
+		(m_stickInfo.leftStickY < -kMediumPowerStickMin && m_stickInfo.leftStickY >= -kMediumPowerStickMax))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Input::IsHighPowerLeftStick()
+{
+	//“|‚µØ‚Á‚Ä‚é‚È‚çtrue
+	if ((m_stickInfo.leftStickX > kHighPowerStickMin && m_stickInfo.leftStickX <= kHighPowerStickMax) ||
+		(m_stickInfo.leftStickX < -kHighPowerStickMin && m_stickInfo.leftStickX >= -kHighPowerStickMax) ||
+		(m_stickInfo.leftStickY > kHighPowerStickMin && m_stickInfo.leftStickY <= kHighPowerStickMax) ||
+		(m_stickInfo.leftStickY < -kHighPowerStickMin && m_stickInfo.leftStickY >= -kHighPowerStickMax))
+	{
+		return true;
+	}
+	return false;
 }

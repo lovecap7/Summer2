@@ -131,6 +131,19 @@ void TestCollScene::Update(Input& input)
 	m_camera->Update();
 #if _DEBUG
 	m_camera->RotaCamera(input);
+	//“ü—ÍƒeƒXƒg
+	if (input.IsLowPowerLeftStick())
+	{
+		printfDx("­‚µ‚¾‚¯“|‚µ‚Ä‚Ü‚·\n");
+	}
+	if (input.IsMediumPowerLeftStick())
+	{
+		printfDx("‚»‚±‚»‚±“|‚µ‚Ä‚Ü‚·\n");
+	}
+	if (input.IsHighPowerLeftStick())
+	{
+		printfDx("Å‘å‚Ü‚Å“|‚µ‚Ä‚Ü‚·\n");
+	}
 #endif
 }
 
