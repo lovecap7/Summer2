@@ -17,5 +17,11 @@ public:
     void Draw()const override;
     void Complete() override;
     void HitReaction() override;
+private:
+    Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
+    float InputValueSpeed(const Input& input);
+    //スティックの向きを持つベクトル
+    Vector2 m_stickVec;
+    bool m_isGround = false;
 };
 

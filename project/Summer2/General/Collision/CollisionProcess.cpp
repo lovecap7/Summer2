@@ -87,17 +87,13 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorAndRoofNum, nextPos, *m_floorAndRoof, std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius());
 	
-		//上昇中ではないかつ天井ではないなら
-		if (!(otherA->GetState() == State::Jump) && overlapVec.y < 0)
+		//ポリゴンは固定(static)なので球のみ動かす
+		otherA->GetRb()->AddVec(overlapVec);
+		//修正方向が上向きなら床
+		if (overlapVec.y > 0)
 		{
-			//ポリゴンは固定(static)なので球のみ動かす
-			otherA->GetRb()->AddVec(overlapVec);
-			//修正方向が上向きなら床
-			if (overlapVec.y > 0)
-			{
-				//床に当たっているので
-				std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
-			}
+			//床に当たっているので
+			std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->SetIsFloor(true);
 		}
 	}
 
