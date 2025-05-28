@@ -67,6 +67,16 @@ DxLib::VECTOR Vector3::ToDxLibVector() const
     return VGet(this->x,this->y,this->z);
 }
 
+Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t)
+{
+	//ê¸å`ï‚ä‘
+	if (t < 0.0f)t = 0.0f;
+	if (t > 1.0f)t = 1.0f;
+	Vector3 rV;
+	rV = start * (1.0f - t) + end * t;
+    return rV;
+}
+
 Vector3 Vector3::operator+(const Vector3& right) const
 {
     Vector3 ans;

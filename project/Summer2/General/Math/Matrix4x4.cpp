@@ -1,12 +1,13 @@
 #include "Matrix4x4.h"
 #include <cmath>
+#include <DxLib.h>
 
 Matrix4x4::Matrix4x4():
     mat{}
 {
 }
 //単位行列
-Matrix4x4 IdentityMat4x4()
+Matrix4x4 Matrix4x4::IdentityMat4x4()
 {
     Matrix4x4 identity = {};//要素をすべて0にする
     identity.mat[0][0] = 1.0f;
@@ -17,7 +18,7 @@ Matrix4x4 IdentityMat4x4()
 }
 
 //平行移動
-Matrix4x4 TranslateMat4x4(float x, float y, float z)
+Matrix4x4 Matrix4x4::TranslateMat4x4(float x, float y, float z)
 {
     Matrix4x4 translate = {};
     translate = IdentityMat4x4();//単位行列にする
@@ -28,7 +29,7 @@ Matrix4x4 TranslateMat4x4(float x, float y, float z)
 }
 
 //X軸回転
-Matrix4x4 RotateXMat4x4(float angle)
+Matrix4x4 Matrix4x4::RotateXMat4x4(float angle)
 {
     Matrix4x4 rotaX{};
     rotaX = IdentityMat4x4();//単位行列
@@ -40,7 +41,7 @@ Matrix4x4 RotateXMat4x4(float angle)
 }
 
 //Y軸回転
-Matrix4x4 RotateYMat4x4(float angle)
+Matrix4x4 Matrix4x4::RotateYMat4x4(float angle)
 {
     Matrix4x4 rotaY{};
     rotaY = IdentityMat4x4();//単位行列
@@ -52,7 +53,7 @@ Matrix4x4 RotateYMat4x4(float angle)
 }
 
 //Z軸回転
-Matrix4x4 RotateZMat4x4(float angle)
+Matrix4x4 Matrix4x4::RotateZMat4x4(float angle)
 {
     Matrix4x4 rotaZ{};
     rotaZ = IdentityMat4x4();//単位行列
@@ -111,7 +112,7 @@ Vector3 Matrix4x4::operator*(const Vector3& v)
 }
 
 //ある座標を中心にY軸回転した座標
-Matrix4x4 RotateYPositionMatrix4x4(const Position3& center, float angle)
+Matrix4x4 Matrix4x4::RotateYPositionMatrix4x4(const Position3& center, float angle)
 {
     //中心を原点に平行移動させる
      //原点中心に回転
@@ -124,7 +125,7 @@ Matrix4x4 RotateYPositionMatrix4x4(const Position3& center, float angle)
 
 
 //ある座標を中心にX軸回転した座標
-Matrix4x4 RotateXPositionMatrix4x4(const Position3& center, float angle)
+Matrix4x4 Matrix4x4::RotateXPositionMatrix4x4(const Position3& center, float angle)
 {
     //中心を原点に平行移動させる
      //原点中心に回転
@@ -135,7 +136,7 @@ Matrix4x4 RotateXPositionMatrix4x4(const Position3& center, float angle)
     return rotaMat;
 }
 
-Matrix4x4 RotateZPositionMatrix4x4(const Position3& center, float angle)
+Matrix4x4 Matrix4x4::RotateZPositionMatrix4x4(const Position3& center, float angle)
 {
     //中心を原点に平行移動させる
     //原点中心に回転
@@ -146,7 +147,7 @@ Matrix4x4 RotateZPositionMatrix4x4(const Position3& center, float angle)
     return rotaMat;
 }
 //ある座標を中心にX軸回転してY軸回転した座標
-Matrix4x4 RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float vAngle)
+Matrix4x4 Matrix4x4::RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float vAngle)
 {
     //中心を原点に平行移動させる
      //原点中心に回転
@@ -156,5 +157,58 @@ Matrix4x4 RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float
         RotateXMat4x4(vAngle) *//回転
         TranslateMat4x4(center.x, center.y, center.z);//原点に戻す
     return rotaMat;
+}
+
+MATRIX Matrix4x4::ToDxLibMATRIX()
+{
+    //DXライブラリのマトリクスに変換する
+    MATRIX rM = {};
+    for (int i = 0; i < 4;++i)
+    {
+        for (int j = 0; j < 4;++j)
+        {
+            rM.m[i][j] = this->mat[i][j];
+        }
+    }
+    return rM;
+}
+
+Matrix4x4 Matrix4x4::ToMatrix4x4(MATRIX dxMat)
+{
+    //DXライブラリのマトリクスを自作マトリクスに変換する
+    Matrix4x4 rM = {};
+    for (int i = 0; i < 4;++i)
+    {
+        for (int j = 0; j < 4;++j)
+        {
+            rM.mat[i][j] = dxMat.m[i][j];
+        }
+    }
+    return rM;
+}
+
+Matrix4x4 Matrix4x4::LookAt(const Vector3& targetDir, const Vector3 up)
+{
+    //単位行列
+    Matrix4x4 rM = IdentityMat4x4();
+    //向きたい方向横方向ベクトルを出す
+    Vector3 rightDir = up.Cross(targetDir);
+    //向きたい方向の上方向ベクトルを出す
+    Vector3 upDir = targetDir.Cross(rightDir);
+    //行列を作成する
+    //X軸
+    rM.mat[0][0] = rightDir.x;
+    rM.mat[0][1] = upDir.x;
+    rM.mat[0][2] = targetDir.x;
+    //Y軸
+    rM.mat[1][0] = rightDir.y;
+    rM.mat[1][1] = upDir.y;
+    rM.mat[1][2] = targetDir.y;
+    //Z軸
+    rM.mat[2][0] = rightDir.z;
+    rM.mat[2][1] = upDir.z;
+    rM.mat[2][2] = targetDir.z;
+    //行列を返す
+    return rM;
 }
 

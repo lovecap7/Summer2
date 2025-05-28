@@ -44,6 +44,14 @@ public:
 	/// <returns></returns>
 	VECTOR ToDxLibVector()const;
 
+	/// <summary>
+	/// Lerp(線形補間)を行います。
+	/// </summary>
+	/// <param name="start">開始位置(座標)</param>
+	/// <param name="end">終了位置(座標)</param>
+	/// <param name="t">補間の値</param>
+	/// <returns>補間後のベクトル(座標)</returns>
+	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 
 	//演算子オーバーロード
 	Vector3 operator+(const Vector3& right)const;
@@ -57,6 +65,15 @@ public:
 	Vector3 operator/=(const float& right);
 	bool operator==(const Vector3& right)const;
 	bool operator!=(const Vector3& right)const;
+
+	//基底ベクトル
+	static Vector3 Up() { return Vector3(0.0f, 1.0f, 0.0f); };
+	static Vector3 Down() { return Vector3(0.0f, -1.0f, 0.0f); };
+	static Vector3 Left() { return Vector3(-1.0f, 0.0f, 0.0f); };
+	static Vector3 Right() { return Vector3(1.0f, 0.0f, 0.0f); };
+	static Vector3 Forward() { return Vector3(0.0f, 0.0f, 1.0f); };
+	static Vector3 Back() { return Vector3(0.0f, 0.0f, -1.0f); };
+	
 };
 //座標で表すときに使う
 typedef Vector3 Position3;
