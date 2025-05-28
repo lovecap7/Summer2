@@ -3,6 +3,7 @@
 class Input;
 class Camera;
 class EnemyManager;
+class MeleeAttack;
 class Common1 :
     public EnemyBase
 {
@@ -31,10 +32,14 @@ private:
 	void UpdateHit(const Input& input, const std::unique_ptr<Camera>& camera);
 	//死亡
 	void UpdateDead(const Input& input, const std::unique_ptr<Camera>& camera);
-	//状態に合わせて初期化すべきものを初期化する
-	void InitState();
 	//減速
 	void SpeedDown();
+	//攻撃のコンポーネント
+	void CreateAttack() override;
+	//状態に合わせて初期化すべきものを初期化する
+	void InitState()override;
+	//やられ判定の更新
+	void UpdateHurtPoint()override;
 private:
 	//戦闘状態
 	bool m_isBattleMode;
@@ -42,5 +47,7 @@ private:
 	bool m_isHitSearch;
 	//攻撃のクールタイム
 	int m_attackCoolTime;
+	//攻撃
+	std::shared_ptr<MeleeAttack> m_punch;
 };
 

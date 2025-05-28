@@ -67,8 +67,6 @@ private:
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
 	//減速していく
 	void SpeedDown();
-	//やられ判定の更新
-	void UpdateHurtPoint();
 	//剣のコンポーネント
 	void CreateRightSword();
 	//剣の位置更新
@@ -81,6 +79,8 @@ private:
 	void CreateAttack();
 	//状態に合わせて初期化すべきものを初期化する
 	void InitState();
+	//やられ判定の更新
+	void UpdateHurtPoint();
 	//攻撃判定を出す
 	void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
 	//入力の大きさに合わせて速度を返す

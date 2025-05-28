@@ -1,6 +1,6 @@
 #include "AttackBase.h"
 
-AttackBase::AttackBase(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner):
+AttackBase::AttackBase(std::shared_ptr<Collidable> coll, int damage, int keepFrame, Actor& owner):
 	m_collidable(coll),
 	m_damage(damage),
 	m_keepFrame(keepFrame),
@@ -11,7 +11,7 @@ AttackBase::AttackBase(std::shared_ptr<Collidable> coll, float damage, int keepF
 {
 }
 
-void AttackBase::SetDamage(float damage)
+void AttackBase::SetDamage(int damage)
 {
 	m_initDamage = damage;
 	m_damage = damage;

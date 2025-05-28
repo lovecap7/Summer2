@@ -4,7 +4,7 @@ class MeleeAttack :
     public AttackBase
 {
 public:
-	MeleeAttack(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner);
+	MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, Actor& owner);
 	~MeleeAttack() override;
 	//‰Šú‰»
 	void Init() override;

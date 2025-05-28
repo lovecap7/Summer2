@@ -55,15 +55,15 @@ namespace
 	constexpr float kLeftLegRadius = 20.0f;
 
 	//通常攻撃1のダメージと持続フレームと発生フレーム
-	constexpr float kAttackN1Damege = 10.0f;
+	constexpr int kAttackN1Damege = 10.0f;
 	constexpr int kAttackN1KeepFrame = 20;
 	constexpr int kAttackN1StartFrame = 10;
 	//通常攻撃2のダメージと持続フレーム
-	constexpr float kAttackN2Damege = 20.0f;
+	constexpr int kAttackN2Damege = 20.0f;
 	constexpr int kAttackN2KeepFrame = 20;
 	constexpr int kAttackN2StartFrame = 10;
 	//通常攻撃3のダメージと持続フレーム
-	constexpr float kAttackN3Damege = 30.0f;
+	constexpr int kAttackN3Damege = 30.0f;
 	constexpr int kAttackN3KeepFrame = 40;
 	constexpr int kAttackN3StartFrame = 10;
 	//強攻撃の段階別アニメーションの速度
@@ -79,9 +79,9 @@ namespace
 	constexpr float kCharge2AnimSpeed = 2.5f;
 	constexpr float kCharge3AnimSpeed = 3.0f;
 	//強攻撃の段階別ダメージ
-	constexpr float kCharge1AnimDamage = 10.0f;
-	constexpr float kCharge2AnimDamage = 12.0f;
-	constexpr float kCharge3AnimDamage = 15.0f;
+	constexpr int kCharge1AnimDamage = 10.0f;
+	constexpr int kCharge2AnimDamage = 12.0f;
+	constexpr int kCharge3AnimDamage = 15.0f;
 	//回避モーションの速度
 	constexpr float kRollingAnimSpeed = 1.2f;
 
@@ -142,12 +142,12 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 	(this->*m_update)(input,camera, attackManager);
 	//アニメーションの更新
 	m_model->Update();
-	//衝突判定をもとにやられ判定の位置更新
-
 	//武器の位置更新
 	UpdateRightSword();
 	//左足の位置更新
 	UpdateLeftLeg();
+	//やられ判定の位置更新
+	UpdateHurtPoint();
 }
 
 void Player::Gravity(const Vector3& gravity)

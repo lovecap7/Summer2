@@ -22,8 +22,14 @@ namespace
 	//プレイヤーを追いかける速度
 	constexpr float kChaseSpeed = 5.0f;
 	
+	//体力
+	constexpr int kHp = 500;
 	//攻撃のクールタイム
 	constexpr int kAttackCoolTime = 180;
+	//攻撃のダメージ
+	constexpr int kAttackDamage = 100;
+	//攻撃の持続フレーム
+	constexpr int kAttackKeepFrame = 3;
 
 	//重力
 	constexpr float kMaxGravity = -10.0f;//落下スピードが大きくなりすぎないように
@@ -56,7 +62,7 @@ Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, V
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, *this);
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, *this);
 	//トリガー
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
 }
@@ -73,6 +79,8 @@ void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, 
 	(this->*m_update)(input, camera);
 	//アニメーションの更新
 	m_model->Update();
+	//やられ判定の位置更新
+	UpdateHurtPoint();
 }
 
 void Common1::Gravity(const Vector3& gravity)
@@ -316,6 +324,15 @@ void Common1::InitState()
 	m_lastUpdate = m_update;
 }
 
+void Common1::UpdateHurtPoint()
+{
+	//移動量を取得
+	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
+	//座標更新
+	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
+	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
+}
+
 void Common1::SpeedDown()
 {
 	//減速
@@ -323,4 +340,10 @@ void Common1::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	m_collidable->GetRb()->SetVec(vec);
+}
+
+void Common1::CreateAttack()
+{
+	//攻撃の準備
+	//m_punch = std::make_shared<MeleeAttack>(m_rightSword, kAttackDamage, kAttackKeepFrame, *this);
 }
