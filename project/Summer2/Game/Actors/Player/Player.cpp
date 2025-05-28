@@ -10,8 +10,7 @@
 #include "../../../Game/Camera/Camera.h"
 #include "../../Attack/HurtPoint.h"
 #include "../../Attack/AttackBase.h"
-#include "../../Attack/Slash.h"
-#include "../../Attack/Strike.h"
+#include "../../Attack/MeleeAttack.h"
 #include "../../Attack/AttackManager.h"
 #include <DxLib.h>
 #include <cmath>
@@ -83,6 +82,8 @@ namespace
 	constexpr float kCharge1AnimDamage = 10.0f;
 	constexpr float kCharge2AnimDamage = 12.0f;
 	constexpr float kCharge3AnimDamage = 15.0f;
+	//回避モーションの速度
+	constexpr float kRollingAnimSpeed = 1.2f;
 
 	//アニメーションの名前
 	const char* kIdleAnim = "Player|Idle";//待機
@@ -683,7 +684,7 @@ void Player::InitState()
 	{
 		m_collidable->SetState(State::None);
 		//回避
-		m_model->SetAnim(kRollingAnim, false);
+		m_model->SetAnim(kRollingAnim,false, kRollingAnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 	}
@@ -725,7 +726,7 @@ Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)
 	//基準に対してスティックがどのくらい向いているのかを計算
 	float stickTheata = Theata(z, m_stickVec.Normalize());
 	//プレイヤーを中心に次の座標を回転
-	Matrix4x4 rotaMat = RotateYMat4x4(cameraTheata + stickTheata);
+	Matrix4x4 rotaMat = Matrix4x4::RotateYMat4x4(cameraTheata + stickTheata);
 	//ベクトルにかける(回転)
 	Vector3 moveVec = Vector3{ 0.0f, 0.0f, -1.0f };
 	moveVec = rotaMat * moveVec;
@@ -812,8 +813,8 @@ void Player::UpdateLeftLeg()
 void Player::CreateAttack()
 {
 	//攻撃の準備
-	m_attackN1 = std::make_shared<Slash>(m_rightSword, kAttackN1Damege, kAttackN1KeepFrame, *this);
-	m_attackN2 = std::make_shared<Slash>(m_rightSword, kAttackN2Damege, kAttackN2KeepFrame, *this);
-	m_attackN3 = std::make_shared<Slash>(m_rightSword, kAttackN3Damege, kAttackN3KeepFrame, *this);
-	m_attackC = std::make_shared<Strike>(m_leftLeg, kCharge1AnimDamage, kCharge1KeepFrame, *this);
+	m_attackN1 = std::make_shared<MeleeAttack>(m_rightSword, kAttackN1Damege, kAttackN1KeepFrame, *this);
+	m_attackN2 = std::make_shared<MeleeAttack>(m_rightSword, kAttackN2Damege, kAttackN2KeepFrame, *this);
+	m_attackN3 = std::make_shared<MeleeAttack>(m_rightSword, kAttackN3Damege, kAttackN3KeepFrame, *this);
+	m_attackC = std::make_shared<MeleeAttack>(m_leftLeg, kCharge1AnimDamage, kCharge1KeepFrame, *this);
 }

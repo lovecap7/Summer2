@@ -1,4 +1,4 @@
-#include "Strike.h"
+#include "MeleeAttack.h"
 #include "../Actors/Actor.h"
 #include "HurtPoint.h"
 #include "../../General/Collidable.h"
@@ -10,16 +10,17 @@
 #include "../../General/Rigidbody.h"
 #endif
 
-Strike::Strike(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner):
+MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, float damage, int keepFrame, Actor& owner) :
 	AttackBase(coll, damage, keepFrame, owner)
 {
 }
 
-Strike::~Strike()
+MeleeAttack::~MeleeAttack()
 {
+
 }
 
-void Strike::Init()
+void MeleeAttack::Init()
 {
 	//‰Šú‰»ˆ—
 	m_damage = m_initDamage;
@@ -32,7 +33,7 @@ void Strike::Init()
 	}
 }
 
-void Strike::Update()
+void MeleeAttack::Update()
 {
 	//‘±ƒtƒŒ[ƒ€‚ğŒ¸‚ç‚·
 	m_keepFrame--;
@@ -43,7 +44,7 @@ void Strike::Update()
 	}
 }
 
-void Strike::Draw()
+void MeleeAttack::Draw()
 {
 #if _DEBUG
 	DrawCapsule3D(
@@ -51,14 +52,14 @@ void Strike::Draw()
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetRadius(),
 		32,
-		0xfff0ff,
-		0xfff0ff,
+		0xff00ff,
+		0xff00ff,
 		true//–³“G‚Ì‚Í“h‚è‚Â‚Ô‚³‚ê‚é
 	);
 #endif
 }
 
-void Strike::OnHit(std::shared_ptr<Actor> actor)
+void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 {
 	//“G‚É“–‚½‚Á‚½ê‡ID‚ğ‹L˜^‚·‚é
 	if (actor->GetActorKind() == ActorKind::Enemy)
@@ -87,7 +88,7 @@ void Strike::OnHit(std::shared_ptr<Actor> actor)
 
 #if _DEBUG
 			//UŒ‚‚ğ“–‚Ä‚½‚±‚Æ‚ğ•ñ
-			printfDx("‘ÅŒ‚‚ª“–‚½‚Á‚½ ID = %d\n", std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
+			printfDx("aŒ‚‚ª“–‚½‚Á‚½ ID = %d\n", std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
 #endif
 		}
 	}

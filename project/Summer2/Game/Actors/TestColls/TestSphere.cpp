@@ -92,7 +92,7 @@ Vector3 TestSphere::GetForwardVec(const std::unique_ptr<Camera>& camera)
 	//基準に対してスティックがどのくらい向いているのかを計算
 	float stickTheata = Theata(z, m_stickVec.Normalize());
 	//プレイヤーを中心に次の座標を回転
-	Matrix4x4 rotaMat = RotateYMat4x4(cameraTheata + stickTheata);
+	Matrix4x4 rotaMat = Matrix4x4::RotateYMat4x4(cameraTheata + stickTheata);
 	//ベクトルにかける(回転)
 	Vector3 moveVec = Vector3{ 0.0f, 0.0f, -1.0f };
 	moveVec = rotaMat * moveVec;

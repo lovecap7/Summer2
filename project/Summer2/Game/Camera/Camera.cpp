@@ -51,7 +51,7 @@ void Camera::RotaCamera(const Input& input)
 	float hAngle = 1.0f * input.GetStickInfo().rightStickX / 1000.0f;
 	//反映
 	//ターゲットをを中心に回転
-	m_pos = RotateYPositionMatrix4x4(m_target, hAngle / 180.0f * DX_PI_F) * m_pos;
+	m_pos = Matrix4x4::RotateYPositionMatrix4x4(m_target, hAngle / 180.0f * DX_PI_F) * m_pos;
 	//カメラの座標と注視点
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLibVector(), m_target.ToDxLibVector());
 }

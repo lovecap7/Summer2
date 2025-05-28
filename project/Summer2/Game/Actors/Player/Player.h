@@ -7,9 +7,8 @@ class Input;
 class CameraBase;
 class Camera;
 class Model;
-class Slash;
-class Strike;
 class AttackBase;
+class MeleeAttack;
 class AttackManager;
 class Player :
 	public Actor
@@ -88,9 +87,9 @@ private:
 	float InputValueSpeed(const Input& input);
 private:
 	//UŒ‚
-	std::shared_ptr<Slash> m_attackN1;//’Êí1
-	std::shared_ptr<Slash> m_attackN2;//’Êí2
-	std::shared_ptr<Slash> m_attackN3;//’Êí3
-	std::shared_ptr<Strike> m_attackC;//‚½‚ßUŒ‚
+	std::shared_ptr<MeleeAttack> m_attackN1;//’Êí1
+	std::shared_ptr<MeleeAttack> m_attackN2;//’Êí2
+	std::shared_ptr<MeleeAttack> m_attackN3;//’Êí3
+	std::shared_ptr<MeleeAttack> m_attackC;//‚½‚ßUŒ‚
 };
 
