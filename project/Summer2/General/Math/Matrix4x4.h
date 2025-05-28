@@ -31,7 +31,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	static Matrix4x4 IdentityMat4x4();
-
+	
 	/// <summary>
 	/// •½sˆÚ“®s—ñ‚ğ•Ô‚·(4x4)
 	/// </summary>
