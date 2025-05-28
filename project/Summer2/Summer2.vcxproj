@@ -46,6 +46,7 @@
     <ClCompile Include="General\Math\Clamp.cpp" />
     <ClCompile Include="General\Math\Matrix3x3.cpp" />
     <ClCompile Include="General\Math\Matrix4x4.cpp" />
+    <ClCompile Include="General\Math\Quaternion.cpp" />
     <ClCompile Include="General\Math\Vector2.cpp" />
     <ClCompile Include="General\Math\Vector3.cpp" />
     <ClCompile Include="General\Model.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="General\Math\Matrix3x3.h" />
     <ClInclude Include="General\Math\Matrix4x4.h" />
     <ClInclude Include="General\Math\MyMath.h" />
+    <ClInclude Include="General\Math\Quaternion.h" />
     <ClInclude Include="General\Math\Vector2.h" />
     <ClInclude Include="General\Math\Vector3.h" />
     <ClInclude Include="General\Model.h" />

@@ -19,10 +19,15 @@ public:
 	Quaternion operator *(const float& s)const;
 	//クオータニオン同士の足し算
 	Quaternion operator +(const Quaternion& q)const;
+	//クォータニオン同士の比較
+	bool operator ==(const Quaternion& q)const;
+	bool operator !=(const Quaternion& q)const;
 	//内積
 	float DotQ(const Quaternion& q)const;
-	//単位クォータニオンを返す
+	//クォータニオンを正規化
 	Quaternion NormQ()const;
+	//単位クォータニオン
+	static Quaternion IdentityQ();
 	//共役(逆)クォータニオン
 	Quaternion InverseQ()const;
 	//大きさ

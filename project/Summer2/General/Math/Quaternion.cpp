@@ -67,6 +67,14 @@ Quaternion Quaternion::operator+(const Quaternion& q) const
 	rQ.z = this->z + q.z;
 	return rQ;
 }
+bool Quaternion::operator==(const Quaternion& q) const
+{
+	return (this->w == q.w && this->x == q.x && this->y == q.y && this->z == q.z);
+}
+bool Quaternion::operator!=(const Quaternion& q) const
+{
+	return !(*this == q);
+}
 //二つのクォータニオンの間の角度を求める際に使う
 float Quaternion::DotQ(const Quaternion& q)const
 {
@@ -74,10 +82,11 @@ float Quaternion::DotQ(const Quaternion& q)const
 	return result;
 }
 
-//単位クォータニオン(回転の方向のみを表現する際に使う)
+//正規化クォータニオン(値の誤差をなくす)
 Quaternion Quaternion::NormQ()const
 {
-	Quaternion rQ;
+	//単位クォータニオン
+	Quaternion rQ = IdentityQ();
 	//自分の大きさを出す(絶対値)
 	float length = this->Magnitude();
 	assert(length > 0.0f && "正規化に失敗しました");
@@ -89,6 +98,12 @@ Quaternion Quaternion::NormQ()const
 	rQ.z = this->z / length;
 	return rQ;
 }
+//回転しないクォータニオン(単位クォータニオン)
+Quaternion Quaternion::IdentityQ()
+{
+	return Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
+}
+
 //共役(逆)クォータニオン
 Quaternion Quaternion::InverseQ()const
 {
@@ -103,7 +118,8 @@ float Quaternion::Magnitude() const
 
 Quaternion Quaternion::Euler(float xRad, float yRad, float zRad)
 {
-	Quaternion rQ;
+	//単位クォータニオン
+	Quaternion rQ = IdentityQ();
 	//各要素の回転クォータニオンを作成
 	Vector3 right = { 1.0f,0.0f,0.0f };
 	Quaternion xQ = AngleAxis(xRad, right);//ロール
@@ -158,10 +174,25 @@ Quaternion Quaternion::Slerp(const Quaternion& sRota, const Quaternion& eRota, f
 	if (t > 1.0f)t = 1.0f;
 	if (t < 0.0f)t = 0.0f;
 
+	//単位クォータニオン
+	Quaternion rQ = IdentityQ();
+	//正規化できない場合
+	if (sRota.Magnitude() <= 0.0f || 
+		eRota.Magnitude() <= 0.0f)
+	{
+		//回転しないクォータニオンを返す
+		return rQ;
+	}
+	//開始と終了のクォータニオンを正規化
 	Quaternion sRotaNom = sRota.NormQ();
 	Quaternion eRotaNom = eRota.NormQ();
+	//開始と終了のクォータニオンが同じなら
+	if (sRotaNom == eRotaNom)
+	{
+		//回転しないクォータニオンを返す
+		return rQ;
+	}
 
-	Quaternion rQ;
 	//内積から角度を求める
 	float dot = sRotaNom.DotQ(eRotaNom);
 	//負の時符号反転
@@ -180,7 +211,8 @@ Quaternion Quaternion::Slerp(const Quaternion& sRota, const Quaternion& eRota, f
 
 Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)
 {
-	Quaternion rQ;
+	//単位クォータニオン
+	Quaternion rQ = IdentityQ();
 	assert(targetDir.Magnitude() > 0.0f && "方向がありません");
 	Vector3 forwardDir = targetDir.Normalize();
 	//回転しないなら
@@ -189,10 +221,6 @@ Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)
 		//回転しないクォータニオンを返す
 		return rQ;
 	}
-	//向きたい方向横方向ベクトルを出す
-	Vector3 rightDir = up.Cross(targetDir);
-	//向きたい方向の上方向ベクトルを出す
-	Vector3 upDir = targetDir.Cross(rightDir);
 
 	//内積から角度を求める
 	float dot = Vector3::Forward().Dot(targetDir);

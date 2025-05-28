@@ -222,6 +222,9 @@
     <ClCompile Include="Game\Attack\MeleeAttack.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="General\Math\Quaternion.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="Game\Attack\MeleeAttack.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Quaternion.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
