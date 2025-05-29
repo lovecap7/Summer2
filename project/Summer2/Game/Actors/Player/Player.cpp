@@ -38,16 +38,15 @@ namespace
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	constexpr float kAirMoveDeceRate = 0.9f;
-	//キャンセル可能フレーム
-	constexpr float kCancelAttackFrame = 15.0f;
-
+	//攻撃終了前にキャンセル可能フレーム
+	constexpr float kAttackCancelFrame = 20.0f;
 	//武器
 	//右手の薬指のインデックス
 	constexpr int kRightRingFingerIndex = 55;
 	constexpr int kRightIndexFingerIndex = 43;
 	//武器の長さと半径
-	constexpr float kSwordHeight = 100.0f;
-	constexpr float kRightSwordRadius = 30.0f;
+	constexpr float kSwordHeight = 150.0f;
+	constexpr float kRightSwordRadius = 10.0f;
 	//左足の根本と足先のインデックス
 	constexpr int kRootIndex = 60;
 	constexpr int kToeIndex = 64;
@@ -56,20 +55,20 @@ namespace
 
 	//通常攻撃1のダメージと持続フレームと発生フレーム
 	constexpr int kAttackN1Damege = 10.0f;
-	constexpr int kAttackN1KeepFrame = 20;
-	constexpr int kAttackN1StartFrame = 10;
+	constexpr int kAttackN1KeepFrame = 4;
+	constexpr int kAttackN1StartFrame = 20;
 	//通常攻撃2のダメージと持続フレーム
 	constexpr int kAttackN2Damege = 20.0f;
-	constexpr int kAttackN2KeepFrame = 20;
+	constexpr int kAttackN2KeepFrame = 5;
 	constexpr int kAttackN2StartFrame = 10;
 	//通常攻撃3のダメージと持続フレーム
 	constexpr int kAttackN3Damege = 30.0f;
-	constexpr int kAttackN3KeepFrame = 40;
-	constexpr int kAttackN3StartFrame = 10;
-	//強攻撃の段階別アニメーションの速度
-	constexpr float kAN1AnimSpeed = 1.1f;
-	constexpr float kAN2AnimSpeed = 1.1f;
-	constexpr float kAN3AnimSpeed = 1.2f;
+	constexpr int kAttackN3KeepFrame = 5;
+	constexpr int kAttackN3StartFrame = 15;
+	//弱攻撃の段階別アニメーションの速度
+	constexpr float kAN1AnimSpeed = 1.3f;
+	constexpr float kAN2AnimSpeed = 1.3f;
+	constexpr float kAN3AnimSpeed = 1.3f;
 	//強攻撃の段階別攻撃フレーム
 	constexpr float kCharge1KeepFrame = 30.0f;
 	constexpr float kCharge2KeepFrame = 60.0f;
@@ -109,21 +108,15 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_attackCountFrame(0),
 	m_chargeFrame(0)
 {
+	//モデル
+	m_model = std::make_unique<Model>(modelHandle, firstPos.ToDxLibVector());
 	//衝突判定
 	Vector3 endPos = firstPos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
-
 	//やられ判定(衝突判定と同じにする)
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, *this);
-
-	//モデル
-	m_model = std::make_unique<Model>(modelHandle, firstPos.ToDxLibVector());
-	//剣
-	CreateRightSword();
-	//左足
-	CreateLeftLeg();
-	//攻撃
+	//攻撃の判定の準備
 	CreateAttack();
 }
 
@@ -138,16 +131,12 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 	m_stickVec.y = static_cast<float>(input.GetStickInfo().leftStickY);
 	//状態に合わせて初期化
 	InitState();
-	//更新
+	//状態に合わせた更新
 	(this->*m_update)(input,camera, attackManager);
 	//アニメーションの更新
 	m_model->Update();
-	//武器の位置更新
-	UpdateRightSword();
-	//左足の位置更新
-	UpdateLeftLeg();
-	//やられ判定の位置更新
-	UpdateHurtPoint();
+	//戦闘に関する更新処理
+	BattleUpdate();
 }
 
 void Player::Gravity(const Vector3& gravity)
@@ -162,6 +151,7 @@ void Player::Gravity(const Vector3& gravity)
 
 void Player::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
+	//地面に当たった時の処理
 	if (other->GetColl()->GetShape() == Shape::Polygon)
 	{
 		if (std::dynamic_pointer_cast<PolygonCollider>(other->GetColl())->IsFloor())
@@ -436,14 +426,33 @@ void Player::UpdateAttackNormal1(const Input& input, const std::unique_ptr<Camer
 		return;
 	}
 	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
-	if (m_model->GetTotalAnimFrame() - kCancelAttackFrame <= m_model->GetNowAnimFrame())
+	if (m_model->GetTotalAnimFrame() - kAttackCancelFrame <= m_model->GetNowAnimFrame())
 	{
+		//回避ボタンを押したら
+		if (input.IsTriggered("RB"))
+		{
+			//攻撃判定を消す
+			m_attackN1->Delete();
+			//回避
+			m_update = &Player::UpdateRolling;
+			return;
+		}
+		//2段目
 		if (input.IsTriggered("X"))
 		{
 			//攻撃判定を消す
 			m_attackN1->Delete();
 			//2段目
 			m_update = &Player::UpdateAttackNormal2;
+			return;
+		}
+		//タメ攻撃
+		if (input.IsPressed("Y"))
+		{
+			//攻撃判定を消す
+			m_attackN1->Delete();
+			//強攻撃
+			m_update = &Player::UpdateAttackCharge1;
 			return;
 		}
 	}
@@ -472,14 +481,33 @@ void Player::UpdateAttackNormal2(const Input& input, const std::unique_ptr<Camer
 		return;
 	}
 	//アニメーションのラスト数フレーム以内で入力があるなら2段回目の攻撃
-	if (m_model->GetTotalAnimFrame() - kCancelAttackFrame <= m_model->GetNowAnimFrame())
+	if (m_model->GetTotalAnimFrame() - kAttackCancelFrame <= m_model->GetNowAnimFrame())
 	{
+		//回避ボタンを押したら
+		if (input.IsTriggered("RB"))
+		{
+			//攻撃判定を消す
+			m_attackN2->Delete();
+			//回避
+			m_update = &Player::UpdateRolling;
+			return;
+		}
+		//3段目
 		if (input.IsTriggered("X"))
 		{
 			//攻撃判定を消す
 			m_attackN2->Delete();
 			//3段目
 			m_update = &Player::UpdateAttackNormal3;
+			return;
+		}
+		//タメ攻撃
+		if (input.IsPressed("Y"))
+		{
+			//攻撃判定を消す
+			m_attackN2->Delete();
+			//強攻撃
+			m_update = &Player::UpdateAttackCharge1;
 			return;
 		}
 	}
@@ -505,13 +533,39 @@ void Player::UpdateAttackNormal3(const Input& input, const std::unique_ptr<Camer
 		m_update = &Player::UpdateIdle;
 		return;
 	}
-
+	//アニメーションのラスト数フレーム以内で強攻撃の入力があるなら
+	if (m_model->GetTotalAnimFrame() - kAttackCancelFrame <= m_model->GetNowAnimFrame())
+	{
+		if (input.IsTriggered("RB"))
+		{
+			//攻撃判定を消す
+			m_attackN3->Delete();
+			//回避
+			m_update = &Player::UpdateRolling;
+			return;
+		}
+		if (input.IsPressed("Y"))
+		{
+			//攻撃判定を消す
+			m_attackN3->Delete();
+			//強攻撃
+			m_update = &Player::UpdateAttackCharge1;
+			return;
+		}
+	}
 	//少しずつ減速する
 	SpeedDown();
 }
 //タメ
 void Player::UpdateAttackCharge1(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//回避ボタンを押したら
+	if (input.IsTriggered("RB"))
+	{
+		//回避
+		m_update = &Player::UpdateRolling;
+		return;
+	}
 	//少しずつ減速する
 	SpeedDown();
 	//向きの更新
@@ -570,6 +624,7 @@ void Player::UpdateRolling(const Input& input, const std::unique_ptr<Camera>& ca
 	//向いてる方向に移動
 	m_collidable->GetRb()->SetMoveVec(m_model->GetDir() * kRollingMoveSpeed);
 }
+
 //状態に合わせて初期化処理
 void Player::InitState()
 {
@@ -684,29 +739,14 @@ void Player::InitState()
 	{
 		m_collidable->SetState(State::None);
 		//回避
-		m_model->SetAnim(kRollingAnim,false, kRollingAnimSpeed);
+		m_model->SetAnim(kRollingAnim, false, kRollingAnimSpeed);
 		//向きの更新
 		m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 	}
 	m_lastUpdate = m_update;
 }
 
-void Player::AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager)
-{
-	//攻撃を入れる
-	attackManager->SetAttack(attack);
-	attack->Init();
-}
 
-float Player::InputValueSpeed(const Input& input)
-{
-	float moveSpeed = 0.0f;
-	//速度をスティック入力の深度に合わせる
-	if (input.IsLowPowerLeftStick())moveSpeed = kLowMoveSpeed;
-	if (input.IsMediumPowerLeftStick())moveSpeed = kMediumMoveSpeed;
-	if (input.IsHighPowerLeftStick())moveSpeed = kHighMoveSpeed;
-	return moveSpeed;
-}
 
 Vector3 Player::GetForwardVec(const std::unique_ptr<Camera>& camera)
 {
@@ -751,13 +791,24 @@ void Player::SpeedDown()
 	m_collidable->GetRb()->SetVec(vec);
 }
 
-void Player::UpdateHurtPoint()
+float Player::InputValueSpeed(const Input& input)
 {
-	//移動量を取得
-	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
-	//座標更新
-	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
-	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
+	float moveSpeed = 0.0f;
+	//速度をスティック入力の深度に合わせる
+	if (input.IsLowPowerLeftStick())moveSpeed = kLowMoveSpeed;
+	if (input.IsMediumPowerLeftStick())moveSpeed = kMediumMoveSpeed;
+	if (input.IsHighPowerLeftStick())moveSpeed = kHighMoveSpeed;
+	return moveSpeed;
+}
+
+void Player::BattleUpdate()
+{
+	//武器の位置更新
+	UpdateRightSword();
+	//左足の位置更新
+	UpdateLeftLeg();
+	//やられ判定の位置更新
+	UpdateHurtPoint();
 }
 
 void Player::CreateRightSword()
@@ -795,15 +846,16 @@ void Player::CreateLeftLeg()
 	//付け根と足先
 	VECTOR root = MV1GetFramePosition(m_model->GetModelHandle(), kRootIndex);//付け根
 	VECTOR toe = MV1GetFramePosition(m_model->GetModelHandle(), kToeIndex);//足先
-	m_leftLeg = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(toe.x, toe.y, toe.z), kLeftLegRadius), std::make_shared<Rigidbody>(Vector3(root.x, root.y, root.z)));
+	m_leftLeg = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(toe.x, toe.y, toe.z), kLeftLegRadius), 
+		std::make_shared<Rigidbody>(Vector3(root.x, root.y, root.z)));
 }
 
 void Player::UpdateLeftLeg()
 {
 	//左足
 	//付け根と足先
-	VECTOR root = MV1GetFramePosition(m_model->GetModelHandle(), 60);//付け根
-	VECTOR toe = MV1GetFramePosition(m_model->GetModelHandle(), 64);//足先
+	VECTOR root = MV1GetFramePosition(m_model->GetModelHandle(), kRootIndex);//付け根
+	VECTOR toe = MV1GetFramePosition(m_model->GetModelHandle(), kToeIndex);//足先
 	//付け根をセット
 	m_leftLeg->GetRb()->SetPos(Position3(root.x, root.y, root.z));
 	//足先をセット
@@ -812,9 +864,30 @@ void Player::UpdateLeftLeg()
 
 void Player::CreateAttack()
 {
+	//攻撃に必要な判定の作成
+	//剣
+	CreateRightSword();
+	//左足
+	CreateLeftLeg();
 	//攻撃の準備
 	m_attackN1 = std::make_shared<MeleeAttack>(m_rightSword, kAttackN1Damege, kAttackN1KeepFrame, *this);
 	m_attackN2 = std::make_shared<MeleeAttack>(m_rightSword, kAttackN2Damege, kAttackN2KeepFrame, *this);
 	m_attackN3 = std::make_shared<MeleeAttack>(m_rightSword, kAttackN3Damege, kAttackN3KeepFrame, *this);
 	m_attackC = std::make_shared<MeleeAttack>(m_leftLeg, kCharge1AnimDamage, kCharge1KeepFrame, *this);
+}
+
+void Player::AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager)
+{
+	//攻撃を入れる
+	attackManager->SetAttack(attack);
+	attack->Init();
+}
+
+void Player::UpdateHurtPoint()
+{
+	//移動量を取得
+	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
+	//座標更新
+	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
+	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
 }

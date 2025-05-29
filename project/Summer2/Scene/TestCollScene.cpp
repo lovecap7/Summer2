@@ -83,6 +83,12 @@ TestCollScene::~TestCollScene()
 
 void TestCollScene::Update(Input& input)
 {
+#if _DEBUG
+	if (CheckHitKey(KEY_INPUT_P))
+	{
+
+	}
+
 	//デバッグシーン
 	if (CheckHitKey(KEY_INPUT_D))
 	{
@@ -90,6 +96,7 @@ void TestCollScene::Update(Input& input)
 		m_controller.ChangeScene(std::make_shared<DebugScene>(m_controller));
 		return;
 	}
+#endif
 	if (input.IsTriggered("Pause"))
 	{
 		//次のシーンへ

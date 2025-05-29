@@ -63,28 +63,30 @@ private:
 	//回避
 	void UpdateRolling(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
 private:
+	//状態に合わせて初期化すべきものを初期化する
+	void InitState();
 	//進行方向を返すベクトル
 	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
 	//減速していく
 	void SpeedDown();
-	//剣のコンポーネント
+	//入力の大きさに合わせて速度を返す
+	float InputValueSpeed(const Input& input);
+	//戦闘に関する更新処理
+	void BattleUpdate();
+	//剣の当たり判定作成
 	void CreateRightSword();
 	//剣の位置更新
 	void UpdateRightSword();
-	//左足のコンポーネント
+	//左足の当たり判定作成
 	void CreateLeftLeg();
 	//左足の位置更新
 	void UpdateLeftLeg();
-	//攻撃のコンポーネント
+	//攻撃の当たり判定作成
 	void CreateAttack();
-	//状態に合わせて初期化すべきものを初期化する
-	void InitState();
-	//やられ判定の更新
-	void UpdateHurtPoint();
 	//攻撃判定を出す
 	void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
-	//入力の大きさに合わせて速度を返す
-	float InputValueSpeed(const Input& input);
+	//やられ判定の更新
+	void UpdateHurtPoint();
 private:
 	//攻撃
 	std::shared_ptr<MeleeAttack> m_attackN1;//通常1

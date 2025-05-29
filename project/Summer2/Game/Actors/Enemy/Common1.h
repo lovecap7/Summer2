@@ -32,12 +32,19 @@ private:
 	void UpdateHit(const Input& input, const std::unique_ptr<Camera>& camera);
 	//死亡
 	void UpdateDead(const Input& input, const std::unique_ptr<Camera>& camera);
-	//減速
-	void SpeedDown();
-	//攻撃のコンポーネント
-	void CreateAttack() override;
+private:
 	//状態に合わせて初期化すべきものを初期化する
 	void InitState()override;
+	//減速
+	void SpeedDown();
+	//戦闘に関する更新処理
+	void BattleUpdate();
+	//左腕の当たり判定作成
+	void CreateLeftArm();
+	//左腕の位置更新
+	void UpdateLeftArm();
+	//攻撃のコンポーネント
+	void CreateAttack() override;
 	//やられ判定の更新
 	void UpdateHurtPoint()override;
 private:
@@ -49,5 +56,7 @@ private:
 	int m_attackCoolTime;
 	//攻撃
 	std::shared_ptr<MeleeAttack> m_punch;
+	//左腕
+	std::shared_ptr<Collidable> m_leftArm;
 };
 

@@ -9,6 +9,7 @@
 #include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Collision/SphereCollider.h"
 #include "../../Attack/HurtPoint.h"
+#include "../../Attack/MeleeAttack.h"
 
 namespace
 {
@@ -18,7 +19,7 @@ namespace
 	//トリガーの半径
 	constexpr float kSearchTriggerRadius = 500.0f;
 	//プレイヤーを追いかける距離
-	constexpr float kRunDistance = 100.0f;
+	constexpr float kRunDistance = 150.0f;
 	//プレイヤーを追いかける速度
 	constexpr float kChaseSpeed = 5.0f;
 	
@@ -35,6 +36,12 @@ namespace
 	constexpr float kMaxGravity = -10.0f;//落下スピードが大きくなりすぎないように
 	//減速
 	constexpr float kMoveDeceRate = 0.8f;
+
+	//左腕と左手のインデックス
+	constexpr int kLeftArmIndex = 13;
+	constexpr int kLeftHandIndex = 17;
+	//左腕の当たり判定の大きさ(攻撃の大きさ)
+	constexpr float kLeftArmRadius = 10.0f;
 
 	//アニメーションの名前
 	const char* kIdleAnim = "CharacterArmature|Idle";//待機
@@ -63,8 +70,10 @@ Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, V
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
 	//やられ判定(衝突判定と同じにする)
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, *this);
-	//トリガー
+	//索敵範囲
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
+	//攻撃の判定
+	CreateAttack();
 }
 
 Common1::~Common1()
@@ -79,8 +88,8 @@ void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, 
 	(this->*m_update)(input, camera);
 	//アニメーションの更新
 	m_model->Update();
-	//やられ判定の位置更新
-	UpdateHurtPoint();
+	//戦闘に関する更新処理
+	BattleUpdate();
 }
 
 void Common1::Gravity(const Vector3& gravity)
@@ -119,12 +128,23 @@ void Common1::Draw() const
 		0x0000ff,
 		m_hurtPoint->IsNoDamege()//無敵の時は塗りつぶされる
 	);
+	//索敵範囲
 	DrawSphere3D(
 		m_searchTrigger->GetRb()->GetPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<SphereCollider>(m_searchTrigger->GetColl())->GetRadius(),
 		16,
 		0xff00ff,
 		0xff00ff,
+		false
+	);
+	//左腕
+	DrawCapsule3D(
+		m_leftArm->GetRb()->GetPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_leftArm->GetColl())->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_leftArm->GetColl())->GetRadius(),
+		16,
+		0xffff00,
+		0xffff00,
 		false
 	);
 #endif
@@ -324,15 +344,6 @@ void Common1::InitState()
 	m_lastUpdate = m_update;
 }
 
-void Common1::UpdateHurtPoint()
-{
-	//移動量を取得
-	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
-	//座標更新
-	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
-	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
-}
-
 void Common1::SpeedDown()
 {
 	//減速
@@ -342,8 +353,46 @@ void Common1::SpeedDown()
 	m_collidable->GetRb()->SetVec(vec);
 }
 
+void Common1::BattleUpdate()
+{
+	//やられ判定の位置更新
+	UpdateHurtPoint();
+	//左腕の位置の更新
+	UpdateLeftArm();
+}
+
+void Common1::UpdateHurtPoint()
+{
+	//移動量を取得
+	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
+	//座標更新
+	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
+	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
+}
+
+void Common1::CreateLeftArm()
+{
+	//腕と手の座標
+	VECTOR leftArm = MV1GetFramePosition(m_model->GetModelHandle(), kLeftArmIndex);//左腕
+	VECTOR leftHand = MV1GetFramePosition(m_model->GetModelHandle(), kLeftHandIndex);//手の指先
+	m_leftArm = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(leftArm.x, leftArm.y, leftArm.z), kLeftArmRadius), 
+		std::make_shared<Rigidbody>(Vector3(leftHand.x, leftHand.y, leftHand.z)));
+}
+
+void Common1::UpdateLeftArm()
+{
+	//腕と手の座標
+	VECTOR leftArm = MV1GetFramePosition(m_model->GetModelHandle(), kLeftArmIndex);//左腕
+	VECTOR leftHand = MV1GetFramePosition(m_model->GetModelHandle(), kLeftHandIndex);//手の指先
+	//左腕を形成するカプセルの座標をセット
+	m_leftArm->GetRb()->SetPos(Position3(leftArm.x, leftArm.y, leftArm.z));
+	std::dynamic_pointer_cast<CapsuleCollider>(m_leftArm->GetColl())->SetEndPos(Position3(leftHand.x, leftHand.y, leftHand.z));
+}
+
 void Common1::CreateAttack()
 {
-	//攻撃の準備
-	//m_punch = std::make_shared<MeleeAttack>(m_rightSword, kAttackDamage, kAttackKeepFrame, *this);
+	//左腕の判定を作る
+	CreateLeftArm();
+	//攻撃の判定と左腕の判定を同じにする
+	m_punch = std::make_shared<MeleeAttack>(m_leftArm, kAttackDamage, kAttackKeepFrame, *this);
 }

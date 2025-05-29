@@ -41,5 +41,11 @@ private:
     int m_polygonHandle;
     int m_wallHandle;
     int m_common1Handle;
+private:
+#if _DEBUG
+    //デバッグモード用
+    bool m_isUpdateStop = false;
+
+#endif
 };
 
