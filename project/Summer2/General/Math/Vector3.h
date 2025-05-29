@@ -5,6 +5,7 @@ class Vector3
 public:
 	Vector3();
 	Vector3(float initX, float initY, float initZ);
+	Vector3(VECTOR vec);
 	~Vector3() {};
 	float x, y, z;
 
@@ -74,6 +75,7 @@ public:
 	static Vector3 Forward() { return Vector3(0.0f, 0.0f, 1.0f); };
 	static Vector3 Back() { return Vector3(0.0f, 0.0f, -1.0f); };
 	
+
 };
 //ç¿ïWÇ≈ï\Ç∑Ç∆Ç´Ç…égÇ§
 typedef Vector3 Position3;

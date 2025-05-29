@@ -17,6 +17,13 @@ Vector3::Vector3(float initX, float initY, float initZ) :
 {
 }
 
+Vector3::Vector3(VECTOR vec):
+    x(vec.x),
+    y(vec.y),
+    z(vec.z)
+{
+}
+
 float Vector3::Magnitude() const
 {
     //ŽO•½•û‚Ì’è—‚ÅŒvŽZ
@@ -165,3 +172,4 @@ bool Vector3::operator!=(const Vector3& right) const
     bool isFlag = (this->x != right.x || this->y != right.y || this->z != right.z);
     return isFlag;
 }
+
