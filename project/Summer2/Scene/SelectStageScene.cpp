@@ -24,26 +24,26 @@ void SelectStageScene::Update(Input& input)
 {
 #if _DEBUG
 	//デバッグシーン
-	if (CheckHitKey(KEY_INPUT_D))
+	if (input.IsTrigger("SceneChange"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<DebugScene>(m_controller));
 		return;
 	}
 #endif
-	if (input.IsTriggered("A"))
+	if (input.IsTrigger("A"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<Stage1Scene>(m_controller));
 		return;
 	}
-	if (input.IsTriggered("B"))
+	if (input.IsTrigger("B"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<Stage2Scene>(m_controller));
 		return;
 	}
-	if (input.IsTriggered("X"))
+	if (input.IsTrigger("X"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<Stage3Scene>(m_controller));

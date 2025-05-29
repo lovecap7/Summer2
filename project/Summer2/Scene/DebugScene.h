@@ -12,5 +12,7 @@ public:
     virtual void Update(Input& input) override;
     virtual void Draw() override;
 private:
+    //カーソル移動のためのインデックス
+    int m_selectSceneIndex;
 };
 

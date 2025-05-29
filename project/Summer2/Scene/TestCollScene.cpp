@@ -84,74 +84,85 @@ TestCollScene::~TestCollScene()
 void TestCollScene::Update(Input& input)
 {
 #if _DEBUG
-	if (CheckHitKey(KEY_INPUT_P))
+	if (input.IsTrigger("StopUpdate"))
 	{
-
+		m_isUpdateStop = true;
 	}
+	if (input.IsTrigger("Enter"))
+	{
+		m_isUpdateStop = false;
+	}
+	
 
 	//デバッグシーン
-	if (CheckHitKey(KEY_INPUT_D))
+	if (input.IsTrigger("SceneChange"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<DebugScene>(m_controller));
 		return;
 	}
 #endif
-	if (input.IsTriggered("Pause"))
+	if (input.IsTrigger("Pause"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<ResultScene>(m_controller));
 		return;
 	}
-	if (input.IsTriggered("Start"))
+	if (input.IsTrigger("Start"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<TestCollScene>(m_controller));
 		return;
 	}
 
-	//敵の前処理
-	m_enemyManager->Update(m_actors);
-
-	//アクターの更新
-	for (auto& actor : m_actors)
-	{
-		actor->Update(input, m_camera, m_attackManger);
-		actor->Gravity(kGravity);
-	}
-	//攻撃の処理
-	m_attackManger->Update(m_actors);
-
-	//消滅フラグチェック
-	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [](std::shared_ptr<Actor> actor) {return actor->IsDead();});
-	m_actors.erase(remIt, m_actors.end());//削除
-
-	//アクターの衝突処理
-	m_collManager->Update(m_actors);
-	//更新確定
-	for (auto& actor : m_actors)
-	{
-		actor->Complete();
-	}
-
-	//カメラの更新
-	m_camera->Update();
+	//デバッグで一時停止されてないなら
 #if _DEBUG
-	m_camera->RotaCamera(input);
-	//入力テスト
-	if (input.IsLowPowerLeftStick())
-	{
-		printfDx("少しだけ倒してます\n");
-	}
-	if (input.IsMediumPowerLeftStick())
-	{
-		printfDx("そこそこ倒してます\n");
-	}
-	if (input.IsHighPowerLeftStick())
-	{
-		printfDx("最大まで倒してます\n");
-	}
+	if (!m_isUpdateStop || (input.IsTrigger("StopUpdate") && m_isUpdateStop))
 #endif
+	{
+		//敵の前処理
+		m_enemyManager->Update(m_actors);
+
+		//アクターの更新
+		for (auto& actor : m_actors)
+		{
+			actor->Update(input, m_camera, m_attackManger);
+			actor->Gravity(kGravity);
+		}
+		//攻撃の処理
+		m_attackManger->Update(m_actors);
+
+		//消滅フラグチェック
+		auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [](std::shared_ptr<Actor> actor) {return actor->IsDead();});
+		m_actors.erase(remIt, m_actors.end());//削除
+
+		//アクターの衝突処理
+		m_collManager->Update(m_actors);
+		//更新確定
+		for (auto& actor : m_actors)
+		{
+			actor->Complete();
+		}
+
+		//カメラの更新
+		m_camera->Update();
+#if _DEBUG
+		m_camera->RotaCamera(input);
+		//入力テスト
+		if (input.IsLowPowerLeftStick())
+		{
+			printfDx("少しだけ倒してます\n");
+		}
+		if (input.IsMediumPowerLeftStick())
+		{
+			printfDx("そこそこ倒してます\n");
+		}
+		if (input.IsHighPowerLeftStick())
+		{
+			printfDx("最大まで倒してます\n");
+		}
+#endif
+	}
 }
 
 void TestCollScene::Draw()

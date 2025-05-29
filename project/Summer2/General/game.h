@@ -10,4 +10,13 @@ namespace Game//‘®«
 	constexpr int kColorBitNum = 32;
 
 	constexpr bool kDefaultWindowMode = true;
+
+	enum class PlayerIndex
+	{
+		None,
+		Player1,
+		Player2,
+		Player3,
+		Player4,
+	};
 }

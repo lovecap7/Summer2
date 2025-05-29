@@ -95,6 +95,14 @@ void AttackManager::Draw() const
 
 void AttackManager::SetAttack(std::shared_ptr<AttackBase> attack)
 {
+	//‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çŒÃ‚¢UŒ‚‚ğÁ‚·
+	auto it = std::find(m_attacks.begin(), m_attacks.end(), attack);
+	if (it != m_attacks.end())
+	{
+		//íœ
+		m_attacks.erase(it);
+	}
+	
 	//UŒ‚‚ğƒZƒbƒg
 	m_attacks.emplace_back(attack);
 }

@@ -54,16 +54,16 @@ namespace
 	constexpr float kLeftLegRadius = 20.0f;
 
 	//通常攻撃1のダメージと持続フレームと発生フレーム
-	constexpr int kAttackN1Damege = 10.0f;
-	constexpr int kAttackN1KeepFrame = 4;
-	constexpr int kAttackN1StartFrame = 20;
+	constexpr int kAttackN1Damege = 100.0f;
+	constexpr int kAttackN1KeepFrame = 6;
+	constexpr int kAttackN1StartFrame = 15;
 	//通常攻撃2のダメージと持続フレーム
-	constexpr int kAttackN2Damege = 20.0f;
-	constexpr int kAttackN2KeepFrame = 5;
-	constexpr int kAttackN2StartFrame = 10;
+	constexpr int kAttackN2Damege = 200.0f;
+	constexpr int kAttackN2KeepFrame = 10;
+	constexpr int kAttackN2StartFrame = 15;
 	//通常攻撃3のダメージと持続フレーム
-	constexpr int kAttackN3Damege = 30.0f;
-	constexpr int kAttackN3KeepFrame = 5;
+	constexpr int kAttackN3Damege = 300.0f;
+	constexpr int kAttackN3KeepFrame = 13;
 	constexpr int kAttackN3StartFrame = 15;
 	//弱攻撃の段階別アニメーションの速度
 	constexpr float kAN1AnimSpeed = 1.3f;
@@ -246,21 +246,21 @@ void Player::UpdateIdle(const Input& input, const std::unique_ptr<Camera>& camer
 		return;
 	}
 	//回避ボタンを押したら
-	if (input.IsTriggered("RB"))
+	if (input.IsTrigger("RB"))
 	{
 		//回避
 		m_update = &Player::UpdateRolling;
 		return;
 	}
 	//ジャンプボタンを押してるならジャンプ
-	if (input.IsTriggered("A") && m_isGround)
+	if (input.IsTrigger("A") && m_isGround)
 	{
 		//ジャンプ
 		m_update = &Player::UpdateJump;
 		return;
 	}
 	//弱攻撃ボタンを押したら
-	if (input.IsTriggered("X"))
+	if (input.IsTrigger("X"))
 	{
 		//攻撃を入れる(テスト)
 		attackManager->SetAttack(m_attackN1);
@@ -271,7 +271,7 @@ void Player::UpdateIdle(const Input& input, const std::unique_ptr<Camera>& camer
 		return;
 	}
 	//強攻撃ボタンを押したら
-	if (input.IsTriggered("Y"))
+	if (input.IsTrigger("Y"))
 	{
 		//強攻撃
 		m_update = &Player::UpdateAttackCharge1;
@@ -298,28 +298,28 @@ void Player::UpdateMove(const Input& input, const std::unique_ptr<Camera>& camer
 		return;
 	}
 	//回避ボタンを押したら
-	if (input.IsTriggered("RB"))
+	if (input.IsTrigger("RB"))
 	{
 		//回避
 		m_update = &Player::UpdateRolling;
 		return;
 	}
 	//ジャンプ
-	if (input.IsTriggered("A") && m_isGround)
+	if (input.IsTrigger("A") && m_isGround)
 	{
 		//ジャンプ
 		m_update = &Player::UpdateJump;
 		return;
 	}
 	//弱攻撃ボタンを押したら
-	if (input.IsTriggered("X"))
+	if (input.IsTrigger("X"))
 	{
 		//弱攻撃
 		m_update = &Player::UpdateAttackNormal1;
 		return;
 	}
 	//強攻撃ボタンを押したら
-	if (input.IsTriggered("Y"))
+	if (input.IsTrigger("Y"))
 	{
 		//強攻撃
 		m_update = &Player::UpdateAttackCharge1;
@@ -352,7 +352,7 @@ void Player::UpdateJump(const Input& input, const std::unique_ptr<Camera>& camer
 	}
 	//次のジャンプのクールタイム
 	--m_nextJumpFrame;
-	if (m_nextJumpFrame <= 0 && input.IsTriggered("A"))//上昇中にジャンプを押した場合
+	if (m_nextJumpFrame <= 0 && input.IsTrigger("A"))//上昇中にジャンプを押した場合
 	{
 		m_nextJumpFrame = 0;
 		//落下状態に遷移して遷移先でジャンプ
@@ -378,7 +378,7 @@ void Player::UpdateJump(const Input& input, const std::unique_ptr<Camera>& camer
 void Player::UpdateFall(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//ジャンプできるなら
-	if (input.IsTriggered("A") && (m_jumpNum < kMaxJumpNum))
+	if (input.IsTrigger("A") && (m_jumpNum < kMaxJumpNum))
 	{
 		//ジャンプ
 		m_update = &Player::UpdateJump;
@@ -429,7 +429,7 @@ void Player::UpdateAttackNormal1(const Input& input, const std::unique_ptr<Camer
 	if (m_model->GetTotalAnimFrame() - kAttackCancelFrame <= m_model->GetNowAnimFrame())
 	{
 		//回避ボタンを押したら
-		if (input.IsTriggered("RB"))
+		if (input.IsTrigger("RB"))
 		{
 			//攻撃判定を消す
 			m_attackN1->Delete();
@@ -438,7 +438,7 @@ void Player::UpdateAttackNormal1(const Input& input, const std::unique_ptr<Camer
 			return;
 		}
 		//2段目
-		if (input.IsTriggered("X"))
+		if (input.IsTrigger("X"))
 		{
 			//攻撃判定を消す
 			m_attackN1->Delete();
@@ -447,7 +447,7 @@ void Player::UpdateAttackNormal1(const Input& input, const std::unique_ptr<Camer
 			return;
 		}
 		//タメ攻撃
-		if (input.IsPressed("Y"))
+		if (input.IsPress("Y"))
 		{
 			//攻撃判定を消す
 			m_attackN1->Delete();
@@ -484,7 +484,7 @@ void Player::UpdateAttackNormal2(const Input& input, const std::unique_ptr<Camer
 	if (m_model->GetTotalAnimFrame() - kAttackCancelFrame <= m_model->GetNowAnimFrame())
 	{
 		//回避ボタンを押したら
-		if (input.IsTriggered("RB"))
+		if (input.IsTrigger("RB"))
 		{
 			//攻撃判定を消す
 			m_attackN2->Delete();
@@ -493,7 +493,7 @@ void Player::UpdateAttackNormal2(const Input& input, const std::unique_ptr<Camer
 			return;
 		}
 		//3段目
-		if (input.IsTriggered("X"))
+		if (input.IsTrigger("X"))
 		{
 			//攻撃判定を消す
 			m_attackN2->Delete();
@@ -502,7 +502,7 @@ void Player::UpdateAttackNormal2(const Input& input, const std::unique_ptr<Camer
 			return;
 		}
 		//タメ攻撃
-		if (input.IsPressed("Y"))
+		if (input.IsPress("Y"))
 		{
 			//攻撃判定を消す
 			m_attackN2->Delete();
@@ -536,7 +536,7 @@ void Player::UpdateAttackNormal3(const Input& input, const std::unique_ptr<Camer
 	//アニメーションのラスト数フレーム以内で強攻撃の入力があるなら
 	if (m_model->GetTotalAnimFrame() - kAttackCancelFrame <= m_model->GetNowAnimFrame())
 	{
-		if (input.IsTriggered("RB"))
+		if (input.IsTrigger("RB"))
 		{
 			//攻撃判定を消す
 			m_attackN3->Delete();
@@ -544,7 +544,7 @@ void Player::UpdateAttackNormal3(const Input& input, const std::unique_ptr<Camer
 			m_update = &Player::UpdateRolling;
 			return;
 		}
-		if (input.IsPressed("Y"))
+		if (input.IsPress("Y"))
 		{
 			//攻撃判定を消す
 			m_attackN3->Delete();
@@ -560,7 +560,7 @@ void Player::UpdateAttackNormal3(const Input& input, const std::unique_ptr<Camer
 void Player::UpdateAttackCharge1(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//回避ボタンを押したら
-	if (input.IsTriggered("RB"))
+	if (input.IsTrigger("RB"))
 	{
 		//回避
 		m_update = &Player::UpdateRolling;
@@ -571,7 +571,7 @@ void Player::UpdateAttackCharge1(const Input& input, const std::unique_ptr<Camer
 	//向きの更新
 	m_model->SetDir(VGet(m_stickVec.x, 0.0f, m_stickVec.y));
 	//溜めてる時
-	if (input.IsPressed("Y"))
+	if (input.IsPress("Y"))
 	{
 		//タメ攻撃チャージ
 		++m_chargeFrame;
@@ -879,8 +879,8 @@ void Player::CreateAttack()
 void Player::AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//攻撃を入れる
-	attackManager->SetAttack(attack);
 	attack->Init();
+	attackManager->SetAttack(attack);
 }
 
 void Player::UpdateHurtPoint()

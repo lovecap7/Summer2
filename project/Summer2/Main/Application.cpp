@@ -52,8 +52,8 @@ void Application::Run()
 	//アプリケーション以外はここで宣言と初期化
 	SceneController* sceneController = new SceneController();
 	//コントローラー
-	Input* input = new Input(DX_INPUT_PAD1);
-	Input* input2 = new Input(DX_INPUT_PAD2);
+	Input* input = new Input();
+	input->Init();
 
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
@@ -66,7 +66,6 @@ void Application::Run()
 
 		//ここにゲームの処理を書く
 		input->Update();
-		input2->Update();
 		sceneController->Update(*input);
 		sceneController->Draw();
 
@@ -85,9 +84,6 @@ void Application::Run()
 			//消す
 			delete input;
 			input = nullptr;
-			delete input2;
-			input2 = nullptr;
-			delete sceneController;
 			sceneController = nullptr;
 			break;
 		}
@@ -95,8 +91,6 @@ void Application::Run()
 	//消す
 	delete input;
 	input = nullptr;
-	delete input2;
-	input2 = nullptr;
 	delete sceneController;
 	sceneController = nullptr;
 }

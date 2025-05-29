@@ -22,14 +22,14 @@ void Stage2Scene::Update(Input& input)
 {
 #if _DEBUG
 	//デバッグシーン
-	if (CheckHitKey(KEY_INPUT_D))
+	if (input.IsTrigger("SceneChange"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<DebugScene>(m_controller));
 		return;
 	}
 #endif
-	if (input.IsTriggered("Pause"))
+	if (input.IsTrigger("Pause"))
 	{
 		//次のシーンへ
 		m_controller.ChangeScene(std::make_shared<ResultScene>(m_controller));

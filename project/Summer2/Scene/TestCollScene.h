@@ -45,7 +45,6 @@ private:
 #if _DEBUG
     //デバッグモード用
     bool m_isUpdateStop = false;
-
 #endif
 };
 
