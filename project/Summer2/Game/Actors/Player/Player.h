@@ -10,9 +10,12 @@ class Model;
 class AttackBase;
 class MeleeAttack;
 class AttackManager;
+class PlayerStateBase;
 class Player :
 	public Actor
 {
+	//ƒvƒŒƒCƒ„[‚ğ‚¢‚¶‚ê‚é‚æ‚¤‚É‚·‚é
+	friend class PlayerStateBase;
 public:
 	Player(int modelHandle, Position3 firstPos);
 	virtual ~Player();

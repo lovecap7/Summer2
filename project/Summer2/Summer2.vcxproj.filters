@@ -225,6 +225,12 @@
     <ClCompile Include="General\Math\Quaternion.cpp">
       <Filter>ソース ファイル\General\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateIdle.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -370,6 +376,12 @@
     </ClInclude>
     <ClInclude Include="General\Math\Quaternion.h">
       <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateBase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateIdle.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
