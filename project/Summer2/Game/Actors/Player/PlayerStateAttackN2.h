@@ -7,7 +7,7 @@ class AttackManager;
 class Collidable;
 class MeleeAttack;
 class PlayerStateAttackN2 :
-    public PlayerStateBase
+    public PlayerStateBase, public std::enable_shared_from_this<PlayerStateAttackN2>
 {
 public:
     PlayerStateAttackN2(std::shared_ptr<Player>  player);

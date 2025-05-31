@@ -22,8 +22,13 @@ void PlayerStateBase::ChangeState(std::shared_ptr<PlayerStateBase> nextState)
 
 Vector3 PlayerStateBase::GetForwardVec(const Input& input, const std::unique_ptr<Camera>& camera)
 {
+	Vector3 rV = { 0.0f,0.0f,0.0f, };
 	//“ü—Í
 	Vector2 stickVec = m_player->GetStickVec();
+	if (stickVec.Magnitude() < 0.0f)
+	{
+		return rV;
+	}
 	//ƒJƒƒ‰‚ÌŒü‚«‚É‚ ‚í‚¹‚é
 	//ƒJƒƒ‰‚ÌŒü‚«
 	Vector2 cameraDir{ camera->GetDir().x,camera->GetDir().z };
@@ -40,7 +45,8 @@ Vector3 PlayerStateBase::GetForwardVec(const Input& input, const std::unique_ptr
 	Vector3 moveVec = Vector3{ 0.0f, 0.0f, -1.0f };
 	moveVec = rotaQ * moveVec;
 	moveVec.y = 0.0f; //YŽ²‚Í–³Ž‹
-	return moveVec.Normalize();
+	rV = moveVec.Normalize();
+	return rV;
 }
 void PlayerStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::unique_ptr<AttackManager>& attackManager)
 {

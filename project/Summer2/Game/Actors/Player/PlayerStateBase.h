@@ -21,6 +21,7 @@ private:
 public:
 	PlayerStateBase(std::shared_ptr<Player> player);
 	virtual ~PlayerStateBase();
+	
 	//ó‘Ô‚É‰‚¶‚½XVˆ—
 	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) abstract;
 	//Ÿ‚Ìó‘Ô‚ğæ“¾

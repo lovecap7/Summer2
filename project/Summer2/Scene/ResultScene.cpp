@@ -24,6 +24,11 @@ ResultScene::~ResultScene()
 {
 }
 
+void ResultScene::Init()
+{
+	//‚È‚µ
+}
+
 void ResultScene::Update(Input& input)
 {
 #if _DEBUG

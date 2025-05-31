@@ -45,6 +45,11 @@ Stage1Scene::~Stage1Scene()
 	MV1DeleteModel(m_playerHandle);
 }
 
+void Stage1Scene::Init()
+{
+	//‚È‚µ
+}
+
 void Stage1Scene::Update(Input& input)
 {
 #if _DEBUG

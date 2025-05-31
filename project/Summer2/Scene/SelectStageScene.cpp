@@ -14,10 +14,16 @@
 SelectStageScene::SelectStageScene(SceneController& controller):
 	SceneBase(controller)
 {
+	//‚È‚µ
 }
 
 SelectStageScene::~SelectStageScene()
 {
+}
+
+void SelectStageScene::Init()
+{
+	//‚È‚µ
 }
 
 void SelectStageScene::Update(Input& input)

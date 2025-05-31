@@ -5,7 +5,7 @@ class Input;
 class Camera;
 class AttackManager;
 class PlayerStateRolling :
-    public PlayerStateBase
+    public PlayerStateBase, public std::enable_shared_from_this<PlayerStateRolling>
 {
 public:
     PlayerStateRolling(std::shared_ptr<Player> player);

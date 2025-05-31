@@ -5,7 +5,7 @@ class Camera;
 class EnemyManager;
 class MeleeAttack;
 class Common1 :
-	public EnemyBase,std::enable_shared_from_this<Common1>
+	public EnemyBase, public std::enable_shared_from_this<Common1>
 {
 public:
     Common1(std::unique_ptr<EnemyManager>& enemyManager,int modelHandle,Vector3 pos);

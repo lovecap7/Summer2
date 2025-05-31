@@ -13,6 +13,7 @@ public:
     /// virtual はこれを継承するかもしれないから
     /// overrideは明示的にオーバーライドをエディタに示すため
     /// </summary>
+    virtual void Init()override;
     virtual void Update(Input& input) override;
     virtual void Draw() override;
 };

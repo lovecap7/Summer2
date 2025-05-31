@@ -18,6 +18,11 @@ Stage2Scene::~Stage2Scene()
 {
 }
 
+void Stage2Scene::Init()
+{
+	//‚È‚µ
+}
+
 void Stage2Scene::Update(Input& input)
 {
 #if _DEBUG

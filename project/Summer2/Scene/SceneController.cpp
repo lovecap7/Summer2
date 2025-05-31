@@ -48,6 +48,8 @@ void SceneController::ChangeScene(std::shared_ptr<SceneBase> scene)
 		//æ“ª‚ÌƒV[ƒ“‚ªØ‚è‘Ö‚í‚é
 		m_scenes.back() = scene;
 	}
+	//‰Šú‰»ˆ—
+	m_scenes.back()->Init();
 }
 
 void SceneController::ChangeBaseScene(std::shared_ptr<SceneBase> scene)

@@ -22,6 +22,11 @@ TitleScene::~TitleScene()
 {
 }
 
+void TitleScene::Init()
+{
+	//‚È‚µ
+}
+
 void TitleScene::Update(Input& input)
 {
 #if _DEBUG

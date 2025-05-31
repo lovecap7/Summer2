@@ -63,14 +63,16 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 	m_stickVec.x = -static_cast<float>(input.GetStickInfo().leftStickX);
 	m_stickVec.y = static_cast<float>(input.GetStickInfo().leftStickY);
 
+	//状態に合わせた更新
+	m_state->Update(input, camera, attackManager);
 	//状態が変わったかをチェック
 	if (m_state != m_state->GetNextState())
 	{
 		//状態を変化する
 		m_state = m_state->GetNextState();
+		m_state->ChangeState(m_state);//次の状態を今の状態として保存
+		return;
 	}
-	//状態に合わせた更新
-	m_state->Update(input, camera, attackManager);
 	//アニメーションの更新
 	m_model->Update();
 	//やられ判定の位置更新

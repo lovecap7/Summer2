@@ -52,12 +52,13 @@ void PlayerStateFall::Update(const Input& input, const std::unique_ptr<Camera>& 
 	if (speed > 0.0f)
 	{
 		speed = ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
-		collidable->GetRb()->SetMoveVec(collidable->GetRb()->GetMoveVec().Normalize() * speed);
+		collidable->GetRb()->SetMoveVec(collidable->GetRb()->GetMoveVec() * speed);
 	}
 	//­‚µ‚¸‚ÂŒ¸‘¬‚·‚é
 	SpeedDown();
 	//Œü‚«‚ÌXV
-	m_player->GetModel()->SetDir(collidable->GetRb()->GetVec().ToDxLibVector());
+	Vector2 dir = m_player->GetStickVec();
+	m_player->GetModel()->SetDir(VGet(dir.x, 0.0f, dir.y));
 }
 
 void PlayerStateFall::SpeedDown()

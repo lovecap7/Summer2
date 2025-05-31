@@ -32,7 +32,7 @@ float Vector3::Magnitude() const
 
 Vector3 Vector3::Normalize() const
 {
-    assert(this->Magnitude() != -1);
+    assert(this->Magnitude() > 0.0f && "³‹K‰»‚É¸”s‚µ‚Ü‚µ‚½");
     //³‹K‰»
     Vector3 ans;
     ans = (*this) / Magnitude();

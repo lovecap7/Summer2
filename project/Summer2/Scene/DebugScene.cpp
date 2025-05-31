@@ -26,6 +26,11 @@ DebugScene::~DebugScene()
 {
 }
 
+void DebugScene::Init()
+{
+	//‚È‚µ
+}
+
 void DebugScene::Update(Input& input)
 {
 #if _DEBUG

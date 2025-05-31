@@ -5,7 +5,7 @@ class Input;
 class Camera;
 class AttackManager;
 class PlayerStateIdle :
-    public PlayerStateBase
+    public PlayerStateBase, public std::enable_shared_from_this<PlayerStateIdle>
 {
 public:
     PlayerStateIdle(std::shared_ptr<Player>  player);

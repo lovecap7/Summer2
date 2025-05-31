@@ -13,6 +13,10 @@ protected:
 public:
 	SceneBase(SceneController& controller);
 	/// <summary>
+	/// ‰Šú‰»ˆ—
+	/// </summary>
+	virtual void Init() abstract;
+	/// <summary>
 	/// “à•”•Ï”‚ÌXV
 	/// </summary>
 	/// <param name="input"></param>

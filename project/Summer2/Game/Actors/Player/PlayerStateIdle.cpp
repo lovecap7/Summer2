@@ -39,8 +39,9 @@ PlayerStateIdle::~PlayerStateIdle()
 void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	auto collidable = m_player->GetCollidable();
+	Vector3 vec = collidable->GetRb()->GetVec();
 	//落下しているかチェック
-	if (collidable->GetRb()->GetVec().y <= Gravity::kChangeStateFall)
+	if (vec.y <= Gravity::kChangeStateFall)
 	{
 		//落下
 		ChangeState(std::make_shared<PlayerStateFall>(m_player));

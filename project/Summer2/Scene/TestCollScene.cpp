@@ -70,12 +70,6 @@ TestCollScene::TestCollScene(SceneController& controller) :
 
 	//攻撃の処理
 	m_attackManger = std::make_unique<AttackManager>();
-
-	//アクターの初期化処理
-	for (auto& actor : m_actors)
-	{
-		actor->Init();
-	}
 }
 
 TestCollScene::~TestCollScene()
@@ -84,6 +78,15 @@ TestCollScene::~TestCollScene()
 	MV1DeleteModel(m_wallHandle);
 	MV1DeleteModel(m_common1Handle);
 	MV1DeleteModel(m_polygonHandle);
+}
+
+void TestCollScene::Init()
+{
+	//アクターの初期化処理
+	for (auto& actor : m_actors)
+	{
+		actor->Init();
+	}
 }
 
 void TestCollScene::Update(Input& input)

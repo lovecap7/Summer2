@@ -12,7 +12,7 @@ class MeleeAttack;
 class AttackManager;
 class PlayerStateBase;
 class Player :
-	public Actor, std::enable_shared_from_this<Player>
+	public Actor, public std::enable_shared_from_this<Player>
 {
 public:
 	Player(int modelHandle, Position3 firstPos);
