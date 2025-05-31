@@ -49,11 +49,12 @@ void Player::Init()
 	//対策としてInitを使う
 
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
-	m_state = std::make_shared<PlayerStateIdle>(shared_from_this());
+	auto thisPointer = shared_from_this();
+	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
 	//次の状態を待機状態に
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, std::dynamic_pointer_cast<Player>(shared_from_this()));
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, std::dynamic_pointer_cast<Player>(thisPointer));
 }
 
 void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
