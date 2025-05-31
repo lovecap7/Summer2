@@ -1,5 +1,5 @@
-#include "PlayerStateIdle.h"
 #include "PlayerStateWalk.h"
+#include "PlayerStateIdle.h"
 #include "PlayerStateJump.h"
 #include "PlayerStateFall.h"
 #include "PlayerStateAttackN1.h"
@@ -15,28 +15,29 @@
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
 
-
 namespace
 {
-	//減速率
-	constexpr float kMoveDeceRate = 0.8f;
+	//移動速度
+	constexpr float kLowMoveSpeed = 2.0f;//地上の小移動速度
+	constexpr float kMediumMoveSpeed = 5.0f;//地上の中移動速度
+	constexpr float kHighMoveSpeed = 10.0f;//地上の大移動速度
 	//アニメーション
-	const char* kAnim = "Player|Idle";//待機
+	const char* kAnim = "Player|Run";
 }
 
-PlayerStateIdle::PlayerStateIdle(std::shared_ptr<Player> player):
+PlayerStateWalk::PlayerStateWalk(std::shared_ptr<Player> player):
 	PlayerStateBase(player)
 {
-	//待機状態
+	//歩き状態
 	m_player->GetModel()->SetAnim(kAnim, true);
 	m_player->GetCollidable()->SetState(State::None);
 }
 
-PlayerStateIdle::~PlayerStateIdle()
+PlayerStateWalk::~PlayerStateWalk()
 {
 }
 
-void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	auto collidable = m_player->GetCollidable();
 	//落下しているかチェック
@@ -74,23 +75,27 @@ void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& 
 		ChangeState(std::make_shared<PlayerStateCharge>(m_player));
 		return;
 	}
-	//入力があるなら移動
-	if (input.GetStickInfo().IsLeftStickInput())
+	//入力がないなら待機
+	if (!input.GetStickInfo().IsLeftStickInput())
 	{
-		//移動
-		ChangeState(std::make_shared<PlayerStateWalk>(m_player));
+		//待機
+		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
 	}
-	//少しずつ減速する
-	SpeedDown();
+	//移動
+	collidable->GetRb()->SetMoveVec(GetForwardVec(input,camera) * InputValueSpeed(input));
+	//向きの更新
+	Vector2 dir = m_player->GetStickVec();
+	m_player->GetModel()->SetDir(VGet(dir.x, 0.0f, dir.y));
 }
 
-void PlayerStateIdle::SpeedDown()
+
+float PlayerStateWalk::InputValueSpeed(const Input& input)
 {
-	auto collidable = m_player->GetCollidable();
-	//減速
-	Vector3 vec = collidable->GetRb()->GetVec();
-	vec.x *= kMoveDeceRate;
-	vec.z *= kMoveDeceRate;
-	collidable->GetRb()->SetVec(vec);
+	float moveSpeed = 0.0f;
+	//速度をスティック入力の深度に合わせる
+	if (input.IsLowPowerLeftStick())moveSpeed = kLowMoveSpeed;
+	if (input.IsMediumPowerLeftStick())moveSpeed = kMediumMoveSpeed;
+	if (input.IsHighPowerLeftStick())moveSpeed = kHighMoveSpeed;
+	return moveSpeed;
 }

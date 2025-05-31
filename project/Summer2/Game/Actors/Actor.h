@@ -67,12 +67,12 @@ public:
 	/// “–‚½‚è”»’è‚ÆÕ“Ëˆ—‚Ég‚¤
 	/// </summary>
 	/// <returns></returns>
-	const std::shared_ptr<Collidable>& GetCollidable() const { return m_collidable; }
+	const std::shared_ptr<Collidable> GetCollidable() const { return m_collidable; }
 	/// <summary>
 	/// ‚â‚ç‚ê”»’è
 	/// </summary>
 	/// <returns></returns>
-	const std::shared_ptr<HurtPoint>& GetHurtPoint() const { return m_hurtPoint; }
+	const std::shared_ptr<HurtPoint> GetHurtPoint() const { return m_hurtPoint; }
 	/// <summary>
 	/// Á–Åƒtƒ‰ƒO
 	/// </summary>

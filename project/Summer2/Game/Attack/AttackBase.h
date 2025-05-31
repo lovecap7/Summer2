@@ -6,7 +6,7 @@ class Actor;
 class AttackBase abstract
 {
 public:
-	AttackBase(std::shared_ptr<Collidable> coll, int damege, int keepFrame, Actor& owner);
+	AttackBase(std::shared_ptr<Collidable> coll, int damege, int keepFrame, std::shared_ptr<Actor> owner);
 	virtual ~AttackBase() {};
 	//初期化
 	virtual void Init() abstract;
@@ -17,7 +17,7 @@ public:
 	//当たった時
 	virtual void OnHit(std::shared_ptr<Actor> actor) abstract;
 	//コライダー
-	std::shared_ptr<Collidable>& GetCollidable() { return m_collidable; };
+	std::shared_ptr<Collidable> GetCollidable()const { return m_collidable; };
 	//消滅
 	bool IsDead() { return m_isDead; };
 	//攻撃判定を消す
@@ -39,7 +39,7 @@ protected:
 	//当てたことのあるCollidableを覚えておく
 	std::vector<int> m_hitEnemyId;
 	//持ち主
-	Actor* m_owner;
+	std::shared_ptr<Actor> m_owner;
 	//初期化用
 	int m_initDamage;//初期化用
 	int m_initKeepFrame;//初期化用

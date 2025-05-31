@@ -14,5 +14,5 @@ void EnemyBase::AppearAttack(const std::shared_ptr<AttackBase>& attack, const st
 {
 	//UŒ‚‚ð“ü‚ê‚é
 	attack->Init();
-	attackManager->SetAttack(attack);
+	attackManager->Entry(attack);
 }

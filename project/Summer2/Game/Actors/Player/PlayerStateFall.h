@@ -4,12 +4,12 @@ class Player;
 class Input;
 class Camera;
 class AttackManager;
-class PlayerStateIdle :
+class PlayerStateFall :
     public PlayerStateBase
 {
 public:
-    PlayerStateIdle(std::shared_ptr<Player>  player);
-    ~PlayerStateIdle();
+    PlayerStateFall(std::shared_ptr<Player>  player);
+    ~PlayerStateFall();
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 private:
     //Œ¸‘¬‚µ‚Ä‚¢‚­

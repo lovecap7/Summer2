@@ -231,6 +231,39 @@
     <ClCompile Include="Game\Actors\Player\PlayerStateIdle.cpp">
       <Filter>ソース ファイル\Game\Actors\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateWalk.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateJump.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateFall.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateAttackN1.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateAttackN2.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateAttackN3.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateRolling.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateCharge.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateCA3.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateCA1.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateCA2.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -359,16 +392,10 @@
     <ClInclude Include="Game\Attack\AttackBase.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Attack\Slash.h">
-      <Filter>ヘッダー ファイル\Game\Attack</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Attack\AttackManager.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Game\Attack\HurtPoint.h">
-      <Filter>ヘッダー ファイル\Game\Attack</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Attack\Strike.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Game\Attack\MeleeAttack.h">
@@ -381,6 +408,39 @@
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\PlayerStateIdle.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateWalk.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateJump.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateFall.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateAttackN1.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateAttackN2.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateAttackN3.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateRolling.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateCharge.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateCA3.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateCA1.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateCA2.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
   </ItemGroup>

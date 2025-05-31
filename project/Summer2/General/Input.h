@@ -39,6 +39,9 @@ public:
 			rightStickX = 0;
 			rightStickY = 0;
 		}
+		//“ü—Í‚ª“ü‚Á‚½‚©‚Ç‚¤‚©‚ğæ“¾(ˆÚ“®ó‘Ô‚ÉØ‚è‘Ö‚¦‚é‚Æ‚«‚Ég‚¤)
+		bool IsLeftStickInput() { return leftStickX != 0 || leftStickY != 0; };
+		bool IsRightStickInput() { return rightStickX != 0 || rightStickY != 0; };
 	};
 
 	struct TriggerInfo

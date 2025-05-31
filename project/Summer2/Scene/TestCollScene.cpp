@@ -7,6 +7,7 @@
 #include "../General/Rigidbody.h"
 #include "../General/Collision/CollisionManager.h"
 #include "../Game/Attack/AttackManager.h"
+#include "../General/game.h"
 
 //アクター
 #include "../Game/Actors/Actor.h"
@@ -32,8 +33,6 @@ namespace
 {
 	const Vector3 kPlayerPos = { 0.0f, 0.0f, 0.0f };
 	const Vector3 kCameraPos = { 0.0f, 400.0f, 500.0f };
-	//重力
-	const Vector3 kGravity = { 0.0f, -0.5f, 0.0f };
 }
 
 TestCollScene::TestCollScene(SceneController& controller) :
@@ -127,7 +126,7 @@ void TestCollScene::Update(Input& input)
 		for (auto& actor : m_actors)
 		{
 			actor->Update(input, m_camera, m_attackManger);
-			actor->Gravity(kGravity);
+			actor->Gravity(Gravity::kGravity);
 		}
 		//攻撃の処理
 		m_attackManger->Update(m_actors);

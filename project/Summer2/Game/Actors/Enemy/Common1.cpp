@@ -69,7 +69,7 @@ Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, V
 	endPos += kCapsuleHeight; //ƒJƒvƒZƒ‹‚Ìã’[
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
 	//‚â‚ç‚ê”»’è(Õ“Ë”»’è‚Æ“¯‚¶‚É‚·‚é)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, *this);
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, std::dynamic_pointer_cast<Common1>(shared_from_this()));
 	//õ“G”ÍˆÍ
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
 	//UŒ‚‚Ì”»’è
@@ -394,5 +394,5 @@ void Common1::CreateAttack()
 	//¶˜r‚Ì”»’è‚ğì‚é
 	CreateLeftArm();
 	//UŒ‚‚Ì”»’è‚Æ¶˜r‚Ì”»’è‚ğ“¯‚¶‚É‚·‚é
-	m_punch = std::make_shared<MeleeAttack>(m_leftArm, kAttackDamage, kAttackKeepFrame, *this);
+	m_punch = std::make_shared<MeleeAttack>(m_leftArm, kAttackDamage, kAttackKeepFrame, std::dynamic_pointer_cast<Common1>(shared_from_this()));
 }

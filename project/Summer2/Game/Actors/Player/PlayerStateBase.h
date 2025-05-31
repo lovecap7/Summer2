@@ -1,18 +1,31 @@
 #pragma once
 #include <memory>
-
+#include "../../General/Math/MyMath.h"
 class Player;
 class Input;
 class Camera;
 class AttackManager;
-class PlayerStateBase
+class AttackBase;
+class PlayerStateBase abstract
 {
 protected:
-	Player* m_player;
+	//プレイヤーのポインタ
+	std::shared_ptr<Player> m_player;
+	//進行方向を返す関数
+	virtual Vector3 GetForwardVec(const Input& input, const std::unique_ptr<Camera>& camera);
+	//攻撃を攻撃マネージャーに登録
+	virtual void AppearAttack(std::shared_ptr<AttackBase> attack, const std::unique_ptr<AttackManager>& attackManager);
+private:
+	//次の状態
+	std::shared_ptr<PlayerStateBase> m_nextState;
 public:
-	PlayerStateBase(Player* player);
-	~PlayerStateBase();
+	PlayerStateBase(std::shared_ptr<Player> player);
+	virtual ~PlayerStateBase();
 	//状態に応じた更新処理
 	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) abstract;
+	//次の状態を取得
+	std::shared_ptr<PlayerStateBase> GetNextState() { return m_nextState; };
+	//状態変化
+	virtual void ChangeState(std::shared_ptr<PlayerStateBase> nextState);
 };
 

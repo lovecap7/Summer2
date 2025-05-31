@@ -4,15 +4,15 @@ class Player;
 class Input;
 class Camera;
 class AttackManager;
-class PlayerStateIdle :
+class PlayerStateWalk :
     public PlayerStateBase
 {
 public:
-    PlayerStateIdle(std::shared_ptr<Player>  player);
-    ~PlayerStateIdle();
+    PlayerStateWalk(std::shared_ptr<Player>  player);
+    ~PlayerStateWalk();
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 private:
-    //Œ¸‘¬‚µ‚Ä‚¢‚­
-    void SpeedDown();
+    //“ü—Í‚Ì‘å‚«‚³‚É‡‚í‚¹‚Ä‘¬“x‚ğ•Ô‚·
+    float InputValueSpeed(const Input& input);
 };
 

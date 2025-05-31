@@ -10,7 +10,7 @@
 #include "../../General/Rigidbody.h"
 #endif
 
-MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, Actor& owner) :
+MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner) :
 	AttackBase(coll, damage, keepFrame, owner)
 {
 }

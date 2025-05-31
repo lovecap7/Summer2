@@ -12,10 +12,10 @@ public:
 	/// </summary>
 	/// <param name="coll">‚â‚ç‚ê”»’è</param>
 	/// <param name="hp">‘Ì—Í</param>
-	HurtPoint(std::shared_ptr<Collidable> coll,int hp, Actor& owner);
+	HurtPoint(std::shared_ptr<Collidable> coll,int hp, std::shared_ptr<Actor> owner);
 	~HurtPoint();
 	//UŒ‚‚ğ‹ò‚ç‚Á‚½‚©‚Ç‚¤‚©‚ğƒ`ƒFƒbƒN‚·‚éÛ‚Ég‚¤
-	const std::shared_ptr<Collidable>& GetCollidable() const { return m_collidable; }
+	std::shared_ptr<Collidable> GetCollidable() const { return m_collidable; }
 
 	//–³“G
 	bool IsNoDamege() { return m_isNoDamage; };
@@ -38,6 +38,6 @@ private:
 	//€–S
 	bool m_isDead;
 	//‚¿å
-	Actor* m_owner;
+	std::shared_ptr<Actor> m_owner;
 };
 

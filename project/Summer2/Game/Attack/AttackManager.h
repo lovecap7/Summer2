@@ -11,7 +11,8 @@ public:
 	~AttackManager();
 	void Update(std::vector<std::shared_ptr<Actor>> actors);
 	void Draw()const;
-	void SetAttack(std::shared_ptr<AttackBase> attack);
+	//UŒ‚‚ğ“o˜^
+	void Entry(std::shared_ptr<AttackBase> attack);
 private:
 	//UŒ‚
 	std::vector<std::shared_ptr<AttackBase>> m_attacks;

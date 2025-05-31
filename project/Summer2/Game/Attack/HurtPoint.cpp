@@ -3,12 +3,12 @@
 #include "../../General/Collidable.h"
 #include "../../General/Rigidbody.h"
 
-HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, Actor& owner):
+HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<Actor> owner):
 	m_collidable(coll),
 	m_isNoDamage(false),
 	m_hp(hp),
 	m_isDead(false),
-	m_owner(&owner)
+	m_owner(owner)
 {
 }
 

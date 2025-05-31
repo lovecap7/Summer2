@@ -12,89 +12,41 @@ class MeleeAttack;
 class AttackManager;
 class PlayerStateBase;
 class Player :
-	public Actor
+	public Actor, std::enable_shared_from_this<Player>
 {
-	//プレイヤーをいじれるようにする
-	friend class PlayerStateBase;
 public:
 	Player(int modelHandle, Position3 firstPos);
 	virtual ~Player();
+	//更新処理
 	void Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
+	//重力
 	void Gravity(const Vector3& gravity)override;
+	//衝突イベント関数
 	void OnHitColl(const std::shared_ptr<Collidable>& other)override;
+	//描画
 	void Draw()const override;
+	//更新処理による結果の確定
 	void Complete() override;
+	//ヒットリアクション
 	void HitReaction() override;
+	//地面に付いているか
+	bool IsGround() { return m_isGround; };
+	void NoIsGround() { m_isGround = false; };//地面に付いていないと判断したときに呼ぶ
+	//入力中の方向キー
+	Vector2 GetStickVec() { return m_stickVec; };
+	//モデルクラス
+	std::shared_ptr<Model> GetModel() const{ return m_model; };
 private:
+	//プレイヤーの状態
+	std::shared_ptr<PlayerStateBase> m_state;
 	//モデル
-	std::unique_ptr<Model> m_model;
+	std::shared_ptr<Model> m_model;
 	//スティックの向きを持つベクトル
 	Vector2 m_stickVec;
 	//地面に付いているかどうか
 	bool m_isGround;
-	//ジャンプの回数
-	unsigned int m_jumpNum;
-	int m_nextJumpFrame;//2回目のジャンプが行えるまでの時間
-	//武器
-	std::shared_ptr<Collidable> m_rightSword;
-	//左足
-	std::shared_ptr<Collidable> m_leftLeg;
-	//攻撃のフレームを数える
-	int m_attackCountFrame;
-	//タメ時間
-	int m_chargeFrame;
 private:
-	//状態遷移
-	using UpdateFunc_t = void(Player::*)(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	UpdateFunc_t m_update;
-	UpdateFunc_t m_lastUpdate;//直前の状態を覚えておく
-	//待機状態
-	void UpdateIdle(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//移動
-	void UpdateMove(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//ジャンプ
-	void UpdateJump(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//落下中
-	void UpdateFall(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//弱攻撃
-	void UpdateAttackNormal1(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	void UpdateAttackNormal2(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	void UpdateAttackNormal3(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//強攻撃
-	void UpdateAttackCharge1(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	void UpdateAttackCharge2(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-	//回避
-	void UpdateRolling(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager);
-private:
-	//状態に合わせて初期化すべきものを初期化する
-	void InitState();
-	//進行方向を返すベクトル
-	Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
-	//減速していく
-	void SpeedDown();
-	//入力の大きさに合わせて速度を返す
-	float InputValueSpeed(const Input& input);
-	//戦闘に関する更新処理
-	void BattleUpdate();
-	//剣の当たり判定作成
-	void CreateRightSword();
-	//剣の位置更新
-	void UpdateRightSword();
-	//左足の当たり判定作成
-	void CreateLeftLeg();
-	//左足の位置更新
-	void UpdateLeftLeg();
-	//攻撃の当たり判定作成
-	void CreateAttack();
-	//攻撃判定を出す
-	void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
 	//やられ判定の更新
 	void UpdateHurtPoint();
-private:
-	//攻撃
-	std::shared_ptr<MeleeAttack> m_attackN1;//通常1
-	std::shared_ptr<MeleeAttack> m_attackN2;//通常2
-	std::shared_ptr<MeleeAttack> m_attackN3;//通常3
-	std::shared_ptr<MeleeAttack> m_attackC;//ため攻撃
 };
 
