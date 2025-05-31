@@ -70,6 +70,12 @@ TestCollScene::TestCollScene(SceneController& controller) :
 
 	//攻撃の処理
 	m_attackManger = std::make_unique<AttackManager>();
+
+	//アクターの初期化処理
+	for (auto& actor : m_actors)
+	{
+		actor->Init();
+	}
 }
 
 TestCollScene::~TestCollScene()

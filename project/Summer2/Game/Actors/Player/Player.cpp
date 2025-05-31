@@ -29,22 +29,31 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
 	m_stickVec(0.0f,0.0f)
 {
-	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
-	m_state = std::make_shared<PlayerStateIdle>(shared_from_this());
-	//次の状態を待機状態に
-	m_state->ChangeState(m_state);
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
 	//衝突判定
 	Vector3 endPos = firstPos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
-	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, std::dynamic_pointer_cast<Player>(shared_from_this()));
 }
 
 Player::~Player()
 {
+}
+
+void Player::Init()
+{
+	//コンストラクタで全部初期化したかったけど
+	//shared_from_this()を使う場合コンストラクタ時点では
+	//メモリが確定していないので使うことができない
+	//対策としてInitを使う
+
+	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	m_state = std::make_shared<PlayerStateIdle>(shared_from_this());
+	//次の状態を待機状態に
+	m_state->ChangeState(m_state);
+	//やられ判定(衝突判定と同じにする)
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, std::dynamic_pointer_cast<Player>(shared_from_this()));
 }
 
 void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)

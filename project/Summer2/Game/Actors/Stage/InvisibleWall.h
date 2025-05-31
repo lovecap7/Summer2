@@ -10,6 +10,7 @@ class InvisibleWall :
 public:
     InvisibleWall(int modelHandle, Vector3 pos, VECTOR scale, VECTOR angle);
     ~InvisibleWall();
+    void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
     void Gravity(const Vector3& gravity)override;
     void OnHitColl(const std::shared_ptr<Collidable>& other)override;

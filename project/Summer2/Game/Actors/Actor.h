@@ -36,6 +36,10 @@ public:
 	virtual ~Actor() {};
 	//(純粋仮想関数)
 	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	virtual void Init()abstract;
+	/// <summary>
 	/// 位置などの更新を行う
 	/// </summary>
 	/// <param name="">入力オブジェクト</param>

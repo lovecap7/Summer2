@@ -17,6 +17,8 @@ class Player :
 public:
 	Player(int modelHandle, Position3 firstPos);
 	virtual ~Player();
+	//‰Šú‰»ˆ—
+	void Init()override;
 	//XVˆ—
 	void Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 	//d—Í

@@ -68,16 +68,20 @@ Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, V
 	Vector3 endPos = pos;
 	endPos += kCapsuleHeight; //ƒJƒvƒZƒ‹‚Ìã’[
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
-	//‚â‚ç‚ê”»’è(Õ“Ë”»’è‚Æ“¯‚¶‚É‚·‚é)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, std::dynamic_pointer_cast<Common1>(shared_from_this()));
 	//õ“G”ÍˆÍ
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
-	//UŒ‚‚Ì”»’è
-	CreateAttack();
 }
 
 Common1::~Common1()
 {
+}
+
+void Common1::Init()
+{
+	//‚â‚ç‚ê”»’è(Õ“Ë”»’è‚Æ“¯‚¶‚É‚·‚é)
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, std::dynamic_pointer_cast<Common1>(shared_from_this()));
+	//UŒ‚‚Ì”»’è
+	CreateAttack();
 }
 
 void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)

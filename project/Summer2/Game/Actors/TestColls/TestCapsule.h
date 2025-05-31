@@ -11,6 +11,7 @@ class TestCapsule :
 public:
     TestCapsule(Position3 startPos, Position3 endPos, float radius, bool isStatic);
     ~TestCapsule();
+    void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
     void Gravity(const Vector3& gravity)override;
     void OnHitColl(const std::shared_ptr<Collidable>& other)override;

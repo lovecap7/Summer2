@@ -19,6 +19,10 @@ TestPolygon::~TestPolygon()
 {
 }
 
+void TestPolygon::Init()
+{
+}
+
 void TestPolygon::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	DxLib::MV1SetPosition(m_modelHandle, m_collidable->GetRb()->GetPos().ToDxLibVector());
