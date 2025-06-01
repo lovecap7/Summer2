@@ -9,8 +9,9 @@ class PlayerStateCA3 :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateCA3>
 {
 public:
-    PlayerStateCA3(std::shared_ptr<Player> player);
+    PlayerStateCA3(std::shared_ptr<Player> player, const std::unique_ptr<AttackManager>& attackManager);
     ~PlayerStateCA3();
+    void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 private:
     //¶‘«

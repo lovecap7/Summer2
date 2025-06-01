@@ -36,7 +36,11 @@ PlayerStateWalk::PlayerStateWalk(std::shared_ptr<Player> player):
 PlayerStateWalk::~PlayerStateWalk()
 {
 }
-
+void PlayerStateWalk::Init()
+{
+	//次の状態を自分の状態を入れる
+	ChangeState(shared_from_this());
+}
 void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	auto collidable = m_player->GetCollidable();
@@ -94,8 +98,17 @@ float PlayerStateWalk::InputValueSpeed(const Input& input)
 {
 	float moveSpeed = 0.0f;
 	//速度をスティック入力の深度に合わせる
-	if (input.IsLowPowerLeftStick())moveSpeed = kLowMoveSpeed;
-	if (input.IsMediumPowerLeftStick())moveSpeed = kMediumMoveSpeed;
-	if (input.IsHighPowerLeftStick())moveSpeed = kHighMoveSpeed;
+	if (input.IsLowPowerLeftStick())
+	{
+		moveSpeed = kLowMoveSpeed;
+	}
+	else if (input.IsMediumPowerLeftStick())
+	{
+		moveSpeed = kMediumMoveSpeed;
+	}
+	else if (input.IsHighPowerLeftStick())
+	{
+		moveSpeed = kHighMoveSpeed;
+	}
 	return moveSpeed;
 }

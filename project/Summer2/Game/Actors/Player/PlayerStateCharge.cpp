@@ -37,6 +37,11 @@ PlayerStateCharge::PlayerStateCharge(std::shared_ptr<Player> player) :
 PlayerStateCharge::~PlayerStateCharge()
 {
 }
+void PlayerStateCharge::Init()
+{
+	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
+	ChangeState(shared_from_this());
+}
 
 void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
@@ -70,19 +75,19 @@ void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>
 		if (m_chargeFrame <= kChargeLevel1)
 		{
 			//CA1
-			ChangeState(std::make_shared<PlayerStateCA1>(m_player));
+			ChangeState(std::make_shared<PlayerStateCA1>(m_player,attackManager));
 			return;
 		}
 		else if (m_chargeFrame <= kChargeLevel2)
 		{
 			//CA2
-			ChangeState(std::make_shared<PlayerStateCA2>(m_player));
+			ChangeState(std::make_shared<PlayerStateCA2>(m_player, attackManager));
 			return;
 		}
 		else if (m_chargeFrame <= kChargeLevel3)
 		{
 			//CA3
-			ChangeState(std::make_shared<PlayerStateCA3>(m_player));
+			ChangeState(std::make_shared<PlayerStateCA3>(m_player, attackManager));
 			return;
 		}
 	}

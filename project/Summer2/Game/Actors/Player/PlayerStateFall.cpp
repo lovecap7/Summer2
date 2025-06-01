@@ -15,7 +15,7 @@ namespace
 	//空中移動速度
 	constexpr float kAirMoveSpeed = 1.5f;
 	//空中移動最高速度
-	constexpr float kMaxAirMoveSpeed = 20.0f;
+	constexpr float kMaxAirMoveSpeed = 10.0f;
 	//アニメーション
 	const char* kAnim = "Player|Fall";
 	//減速
@@ -34,6 +34,11 @@ PlayerStateFall::PlayerStateFall(std::shared_ptr<Player> player):
 PlayerStateFall::~PlayerStateFall()
 {
 }
+void PlayerStateFall::Init()
+{
+	//次の状態を自分の状態を入れる
+	ChangeState(shared_from_this());
+}
 
 void PlayerStateFall::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
@@ -45,17 +50,29 @@ void PlayerStateFall::Update(const Input& input, const std::unique_ptr<Camera>& 
 		return;
 	}
 	auto collidable = m_player->GetCollidable();
-	//空中移動
-	collidable->GetRb()->AddVec(GetForwardVec(input,camera) * kAirMoveSpeed);
-	//横移動速度に上限をつける
-	float speed = collidable->GetRb()->GetMoveVec().Magnitude();
-	if (speed > 0.0f)
+	//移動の入力があるなら
+	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		speed = ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
-		collidable->GetRb()->SetMoveVec(collidable->GetRb()->GetMoveVec() * speed);
+		//空中移動
+		collidable->GetRb()->AddVec(GetForwardVec(input, camera) * kAirMoveSpeed);
+		//横移動速度に上限をつける
+		float speed = collidable->GetRb()->GetMoveVec().Magnitude();
+		if (speed > 0.0f)
+		{
+			speed = MathSub::ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
+			Vector3 moveVec = collidable->GetRb()->GetMoveVec();
+			if (moveVec.Magnitude() > 0.0f)
+			{
+				moveVec = moveVec.Normalize();
+			}
+			collidable->GetRb()->SetMoveVec(moveVec * speed);
+		}
 	}
-	//少しずつ減速する
-	SpeedDown();
+	else
+	{
+		//少しずつ減速する
+		SpeedDown();
+	}
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(VGet(dir.x, 0.0f, dir.y));

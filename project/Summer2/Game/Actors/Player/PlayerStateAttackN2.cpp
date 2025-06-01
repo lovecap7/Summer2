@@ -56,7 +56,11 @@ PlayerStateAttackN2::~PlayerStateAttackN2()
 	//UŒ‚”»’è‚ğÁ‚·
 	m_attackN2->Delete();
 }
-
+void PlayerStateAttackN2::Init()
+{
+	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
+	ChangeState(shared_from_this());
+}
 void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//ƒJƒEƒ“ƒg

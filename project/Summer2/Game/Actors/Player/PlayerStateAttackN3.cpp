@@ -26,7 +26,7 @@ namespace
 	//弱攻撃の段階別アニメーションの速度
 	constexpr float kAN3AnimSpeed = 1.3f;
 	//攻撃終了前にキャンセル可能フレーム
-	constexpr float kAttackCancelFrame = 20.0f;
+	constexpr float kAttackCancelFrame = 30.0f;
 	//武器の座標と当たり判定の情報
 	//右手の薬指のインデックス
 	constexpr int kRightRingFingerIndex = 55;
@@ -55,7 +55,11 @@ PlayerStateAttackN3::~PlayerStateAttackN3()
 	//攻撃判定を消す
 	m_attackN3->Delete();
 }
-
+void PlayerStateAttackN3::Init()
+{
+	//次の状態を自分の状態を入れる
+	ChangeState(shared_from_this());
+}
 void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	//カウント

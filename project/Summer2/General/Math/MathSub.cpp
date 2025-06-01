@@ -1,7 +1,6 @@
-#include "Clamp.h"
+#include "MathSub.h"
 
-//ƒNƒ‰ƒ“ƒvŠÖ”
-int ClampInt(int value, int min, int max)
+int MathSub::ClampInt(int value, int min, int max)
 {
     //”ÍˆÍ“à‚Éû‚Ü‚Á‚Ä‚¢‚é‚È‚ç‚»‚Ì‚Ü‚Ü•Ô‚·
     int clampValue = value;
@@ -18,7 +17,7 @@ int ClampInt(int value, int min, int max)
     return clampValue;
 }
 
-float ClampFloat(float value, float min, float max)
+float MathSub::ClampFloat(float value, float min, float max)
 {
     //”ÍˆÍ“à‚Éû‚Ü‚Á‚Ä‚¢‚é‚È‚ç‚»‚Ì‚Ü‚Ü•Ô‚·
     float clampValue = value;
@@ -33,4 +32,10 @@ float ClampFloat(float value, float min, float max)
         clampValue = max;
     }
     return clampValue;
+}
+
+float MathSub::Lerp(float start, float end, float t)
+{
+    float result = start * (1.0f - t) + end * t;
+    return result;
 }

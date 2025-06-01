@@ -70,7 +70,7 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 	{
 		//状態を変化する
 		m_state = m_state->GetNextState();
-		m_state->ChangeState(m_state);//次の状態を今の状態として保存
+		m_state->Init();
 		return;
 	}
 	//アニメーションの更新
@@ -140,9 +140,18 @@ void Player::Complete()
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
 
+//攻撃されたときに呼び出す
 void Player::HitReaction()
 {
-	//やられリアクション
+	////やられリアクション
+	//m_collidable->SetState(State::None);
+	////アニメーションを削除
+	//m_model->DeleteAnim();
+	////やられ
+	//m_model->SetAnim(kHitAnim, false);
+	////やられリアクション
+	//m_update = &Common1::UpdateHit;
+	//return;
 }
 
 void Player::UpdateHurtPoint()

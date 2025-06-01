@@ -32,18 +32,22 @@ Vector3 PlayerStateBase::GetForwardVec(const Input& input, const std::unique_ptr
 	//カメラの向きにあわせる
 	//カメラの向き
 	Vector2 cameraDir{ camera->GetDir().x,camera->GetDir().z };
-	cameraDir = cameraDir.Normalize();
+	if (cameraDir.Magnitude() > 0.0f)
+	{
+		cameraDir = cameraDir.Normalize();
+	}
 	//ワールド座標のZ方向を基準にカメラがどのくらい向いているのかを計算
 	Vector2 z = Vector2{ 0.0f, -1.0f };
 	//カメラの向き(角度)
 	float cameraTheata = Theata(z, cameraDir);
 	//基準に対してスティックがどのくらい向いているのかを計算
 	float stickTheata = Theata(z, stickVec.Normalize());
-	//プレイヤーを中心に次の座標を回転
-	Quaternion rotaQ = Quaternion::AngleAxis(cameraTheata + stickTheata, Vector3::Up());
+	//回転クォータニオンを作成
+	Quaternion cameraQ = Quaternion::AngleAxis(cameraTheata, Vector3::Up());
+	Quaternion stickQ = Quaternion::AngleAxis(stickTheata, Vector3::Up());
 	//ベクトルにかける(回転)
 	Vector3 moveVec = Vector3{ 0.0f, 0.0f, -1.0f };
-	moveVec = rotaQ * moveVec;
+	moveVec = stickQ * cameraQ * moveVec;
 	moveVec.y = 0.0f; //Y軸は無視
 	rV = moveVec.Normalize();
 	return rV;

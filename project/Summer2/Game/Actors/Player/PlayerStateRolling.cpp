@@ -35,6 +35,11 @@ PlayerStateRolling::PlayerStateRolling(std::shared_ptr<Player> player) :
 PlayerStateRolling::~PlayerStateRolling()
 {
 }
+void PlayerStateRolling::Init()
+{
+	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
+	ChangeState(shared_from_this());
+}
 
 void PlayerStateRolling::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {

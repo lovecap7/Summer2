@@ -16,7 +16,7 @@
 namespace
 {
 	//チャージ攻撃の段階別ダメージ
-	constexpr int kCA1AnimDamage = 10.0f;
+	constexpr int kCA1AnimDamage = 100.0f;
 	//チャージ攻撃の持続
 	constexpr float kCA1KeepFrame = 30.0f;
 	//アニメーション
@@ -34,7 +34,7 @@ namespace
 	constexpr float kMoveDeceRate = 0.8f;
 }
 
-PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player) :
+PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::unique_ptr<AttackManager>& attackManager) :
 	PlayerStateBase(player)
 {
 	m_player->GetCollidable()->SetState(State::None);
@@ -44,12 +44,18 @@ PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player) :
 	model->SetFixedLoopFrame(kCA1KeepFrame);//指定ループ
 	//攻撃判定の準備
 	CreateAttack();
+	attackManager->Entry(m_attackC);
 }
 
 PlayerStateCA1::~PlayerStateCA1()
 {
 	//攻撃判定を消す
 	m_attackC->Delete();
+}
+void PlayerStateCA1::Init()
+{
+	//次の状態を自分の状態を入れる
+	ChangeState(shared_from_this());
 }
 
 void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)

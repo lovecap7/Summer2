@@ -10,6 +10,7 @@ class PlayerStateWalk :
 public:
     PlayerStateWalk(std::shared_ptr<Player>  player);
     ~PlayerStateWalk();
+    void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 private:
     //“ü—Í‚Ì‘å‚«‚³‚É‡‚í‚¹‚Ä‘¬“x‚ğ•Ô‚·

@@ -37,7 +37,7 @@ void CollisionProcess::ProcessSS(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius();
 	//どのくらい重ねっているか
 	float overlap = shortDis - aToB.Magnitude();
-	overlap = ClampFloat(overlap, 0, shortDis);
+	overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
 	//動かす物体とそうじゃない物体とで処理を分ける
@@ -127,7 +127,7 @@ void CollisionProcess::ProcessCC(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherB->GetColl())->GetRadius();
 	//どのくらい重ねっているか
 	float overlap = shortDis - aToB.Magnitude();
-	overlap = ClampFloat(overlap, 0, shortDis);
+	overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
 	//横方向にだけ動かしたいので
@@ -161,7 +161,7 @@ void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, cons
 	float shortDis = std::dynamic_pointer_cast<SphereCollider> (otherB->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider> (otherA->GetColl())->GetRadius();
 	//どのくらい重ねっているか
 	float overlap = shortDis - aToB.Magnitude();
-	overlap = ClampFloat(overlap, 0, shortDis);
+	overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
 	//動かす物体とそうじゃない物体とで処理を分ける
@@ -324,7 +324,7 @@ Vector3 CollisionProcess::OverlapVecSphereAndPoly(int hitNum ,const Vector3& nex
 	//押し戻し
 	//どれくらい押し戻すか
 	float overlap = shortDis - hitShortDis;
-	overlap = ClampFloat(overlap, 0, shortDis);
+	overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
 	return nom.Normalize() * overlap;
@@ -354,7 +354,7 @@ Vector3 CollisionProcess::HitWallCP(const Vector3& headPos, const Vector3& legPo
 	//押し戻し
 	//どれくらい押し戻すか
 	float overlap = shortDis - hitShortDis;
-	overlap = ClampFloat(overlap, 0, shortDis);
+	overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 	//正規化
 	if (nom.Magnitude() != 0.0f)
@@ -439,7 +439,7 @@ void CollisionProcess::HitRoofCP(const std::shared_ptr<Collidable>& other, const
 		//押し戻し
 		//どれくらい押し戻すか
 		float overlap = shortDis - hitShortDis;
-		overlap = ClampFloat(overlap, 0, shortDis);
+		overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 		overlap += kOverlapGap;
 		//法線
 		Vector3 nom = { 0.0f,-1.0f,0.0f };

@@ -35,7 +35,11 @@ PlayerStateIdle::PlayerStateIdle(std::shared_ptr<Player> player):
 PlayerStateIdle::~PlayerStateIdle()
 {
 }
-
+void PlayerStateIdle::Init()
+{
+	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
+	ChangeState(shared_from_this());
+}
 void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
 	auto collidable = m_player->GetCollidable();

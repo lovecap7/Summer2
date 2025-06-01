@@ -12,6 +12,7 @@ class PlayerStateAttackN2 :
 public:
     PlayerStateAttackN2(std::shared_ptr<Player>  player);
     ~PlayerStateAttackN2();
+    void Init() override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 private:
     //UŒ‚‚ÌƒtƒŒ[ƒ€‚ğ”‚¦‚é

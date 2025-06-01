@@ -23,7 +23,7 @@ Vector3 Rigidbody::GetMoveVec()
 		moveVec = Vector3{ 0.0f,0.0f,0.0f };
 	}
 	
-	return moveVec.Normalize();
+	return moveVec;
 }
 
 void Rigidbody::SetMoveVec(Vector3 vec)

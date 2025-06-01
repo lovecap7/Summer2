@@ -1,5 +1,6 @@
 #include <Dxlib.h>
 #include "Input.h"
+#include "Math/Vector2.h"
 
 namespace
 {
@@ -13,10 +14,9 @@ namespace
 	constexpr float kLowPowerStickMax = 400.0f;
 	//‚»‚±‚»‚±“|‚µ‚Ä‚¢‚é‚Æ”»’è‚·‚é”ÍˆÍ
 	constexpr float kMediumPowerStickMin = kLowPowerStickMax;
-	constexpr float kMediumPowerStickMax = 800.0f;
+	constexpr float kMediumPowerStickMax = 700.0f;
 	//Å‘å‚Ü‚Å“|‚µ‚Ä‚¢‚é‚Æ”»’è‚·‚é”ÍˆÍ
 	constexpr float kHighPowerStickMin = kMediumPowerStickMax;
-	constexpr float kHighPowerStickMax = 1000.0f;
 }
 
 Input::~Input()
@@ -194,10 +194,11 @@ bool Input::IsRelease(const std::string& action)const
 bool Input::IsLowPowerLeftStick()const
 {
 	//­‚µ‚¾‚¯“|‚µ‚Ä‚¢‚é‚È‚çtrue
-	if ((m_stickInfo.leftStickX > kLowPowerStickMin && m_stickInfo.leftStickX <= kLowPowerStickMax) ||
-		(m_stickInfo.leftStickX < -kLowPowerStickMin && m_stickInfo.leftStickX >= -kLowPowerStickMax) ||
-		(m_stickInfo.leftStickY > kLowPowerStickMin && m_stickInfo.leftStickY <= kLowPowerStickMax) ||
-		(m_stickInfo.leftStickY < -kLowPowerStickMin && m_stickInfo.leftStickY >= -kLowPowerStickMax))
+	Vector2 stickVec;
+	stickVec.x = m_stickInfo.leftStickX;
+	stickVec.y = m_stickInfo.leftStickY;
+	float length = stickVec.Magnitude();
+	if (length >= kLowPowerStickMin && length < kLowPowerStickMax)
 	{
 		return true;
 	}
@@ -207,10 +208,11 @@ bool Input::IsLowPowerLeftStick()const
 bool Input::IsMediumPowerLeftStick()const
 {
 	//‚»‚±‚»‚±“|‚µ‚Ä‚¢‚é‚È‚çtrue
-	if ((m_stickInfo.leftStickX > kMediumPowerStickMin && m_stickInfo.leftStickX <= kMediumPowerStickMax) ||
-		(m_stickInfo.leftStickX < -kMediumPowerStickMin && m_stickInfo.leftStickX >= -kMediumPowerStickMax) ||
-		(m_stickInfo.leftStickY > kMediumPowerStickMin && m_stickInfo.leftStickY <= kMediumPowerStickMax) ||
-		(m_stickInfo.leftStickY < -kMediumPowerStickMin && m_stickInfo.leftStickY >= -kMediumPowerStickMax))
+	Vector2 stickVec;
+	stickVec.x = m_stickInfo.leftStickX;
+	stickVec.y = m_stickInfo.leftStickY;
+	float length = stickVec.Magnitude();
+	if (length >= kMediumPowerStickMin && length < kMediumPowerStickMax)
 	{
 		return true;
 	}
@@ -220,10 +222,11 @@ bool Input::IsMediumPowerLeftStick()const
 bool Input::IsHighPowerLeftStick() const
 {
 	//“|‚µØ‚Á‚Ä‚é‚È‚çtrue
-	if ((m_stickInfo.leftStickX > kHighPowerStickMin && m_stickInfo.leftStickX <= kHighPowerStickMax) ||
-		(m_stickInfo.leftStickX < -kHighPowerStickMin && m_stickInfo.leftStickX >= -kHighPowerStickMax) ||
-		(m_stickInfo.leftStickY > kHighPowerStickMin && m_stickInfo.leftStickY <= kHighPowerStickMax) ||
-		(m_stickInfo.leftStickY < -kHighPowerStickMin && m_stickInfo.leftStickY >= -kHighPowerStickMax))
+	Vector2 stickVec;
+	stickVec.x = m_stickInfo.leftStickX;
+	stickVec.y = m_stickInfo.leftStickY;
+	float length = stickVec.Magnitude();
+	if (length >= kHighPowerStickMin)
 	{
 		return true;
 	}

@@ -10,6 +10,7 @@ class PlayerStateRolling :
 public:
     PlayerStateRolling(std::shared_ptr<Player> player);
     ~PlayerStateRolling();
+    void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
 private:
     

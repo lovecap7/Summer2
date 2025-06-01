@@ -126,9 +126,6 @@
     <ClCompile Include="Scene\DebugScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="General\Math\Clamp.cpp">
-      <Filter>ソース ファイル\General\Math</Filter>
-    </ClCompile>
     <ClCompile Include="General\Math\Matrix3x3.cpp">
       <Filter>ソース ファイル\General\Math</Filter>
     </ClCompile>
@@ -264,6 +261,12 @@
     <ClCompile Include="Game\Actors\Player\PlayerStateCA2.cpp">
       <Filter>ソース ファイル\Game\Actors\Player</Filter>
     </ClCompile>
+    <ClCompile Include="General\Math\MathSub.cpp">
+      <Filter>ソース ファイル\General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateHit.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -301,9 +304,6 @@
     </ClInclude>
     <ClInclude Include="Scene\DebugScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="General\Math\Clamp.h">
-      <Filter>ヘッダー ファイル\General\Math</Filter>
     </ClInclude>
     <ClInclude Include="General\Math\Matrix3x3.h">
       <Filter>ヘッダー ファイル\General\Math</Filter>
@@ -441,6 +441,12 @@
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\PlayerStateCA2.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\MathSub.h">
+      <Filter>ヘッダー ファイル\General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateHit.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
   </ItemGroup>
