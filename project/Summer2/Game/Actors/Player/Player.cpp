@@ -27,7 +27,9 @@ namespace
 
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
-	m_stickVec(0.0f,0.0f)
+	m_stickVec(0.0f,0.0f),
+	m_isGround(false),
+	m_isHit(false)
 {
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
@@ -143,15 +145,8 @@ void Player::Complete()
 //攻撃されたときに呼び出す
 void Player::HitReaction()
 {
-	////やられリアクション
-	//m_collidable->SetState(State::None);
-	////アニメーションを削除
-	//m_model->DeleteAnim();
-	////やられ
-	//m_model->SetAnim(kHitAnim, false);
-	////やられリアクション
-	//m_update = &Common1::UpdateHit;
-	//return;
+	//ヒット状態にする
+	m_isHit = true;
 }
 
 void Player::UpdateHurtPoint()

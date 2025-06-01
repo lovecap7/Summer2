@@ -8,16 +8,23 @@ class Common1 :
 	public EnemyBase, public std::enable_shared_from_this<Common1>
 {
 public:
-    Common1(std::unique_ptr<EnemyManager>& enemyManager,int modelHandle,Vector3 pos);
+    Common1(int modelHandle,Vector3 pos);
     ~Common1();
 	//初期化処理
 	void Init()override;
+	//更新処理
 	void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
+	//重力
 	void Gravity(const Vector3& gravity)override;
+	//衝突イベント
 	void OnHitColl(const std::shared_ptr<Collidable>& other)override;
+	//描画
 	void Draw()const override;
+	//更新処理の確定
 	void Complete() override;
+	//プレイヤーとの距離を索敵
 	void OnHitSearch(const Vector3& playerPos)override;
+	//ヒットリアクション
 	void HitReaction() override;
 private:
 	//状態遷移

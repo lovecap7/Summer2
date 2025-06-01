@@ -2,6 +2,7 @@
 #include "../Actor.h"
 #include "../../../General/Math/MyMath.h"
 #include <memory>
+class ActorManager;
 class Camera;
 class Collidable;
 class AttackManager;
@@ -11,6 +12,10 @@ class TestSphere :
 public:
     TestSphere(Position3 pos,float radius,bool isStatic);
     ~TestSphere();
+    //“o˜^ˆ—
+    void Entry(std::shared_ptr<ActorManager> actorManager)override;
+    //“o˜^‰ğœ
+    void Exit(std::shared_ptr<ActorManager> actorManager)override;
     void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
     void Gravity(const Vector3& gravity)override;

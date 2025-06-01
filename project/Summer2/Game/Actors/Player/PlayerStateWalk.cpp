@@ -5,6 +5,7 @@
 #include "PlayerStateAttackN1.h"
 #include "PlayerStateCharge.h"
 #include "PlayerStateRolling.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -22,7 +23,7 @@ namespace
 	constexpr float kMediumMoveSpeed = 5.0f;//地上の中移動速度
 	constexpr float kHighMoveSpeed = 10.0f;//地上の大移動速度
 	//アニメーション
-	const char* kAnim = "Player|Run";
+	const char* kAnim = "Player|Walk";
 }
 
 PlayerStateWalk::PlayerStateWalk(std::shared_ptr<Player> player):
@@ -43,6 +44,13 @@ void PlayerStateWalk::Init()
 }
 void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//攻撃を受けた時
+	if (m_player->IsHit())
+	{
+		//やられ状態
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	auto collidable = m_player->GetCollidable();
 	//落下しているかチェック
 	if (collidable->GetRb()->GetVec().y <= Gravity::kChangeStateFall)

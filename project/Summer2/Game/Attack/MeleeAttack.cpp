@@ -61,6 +61,9 @@ void MeleeAttack::Draw()
 
 void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 {
+	//自分と同じ種類のアクターなら無視
+	if (m_owner->GetActorKind() == actor->GetActorKind())return;
+
 	//敵に当たった場合IDを記録する
 	if (actor->GetActorKind() == ActorKind::Enemy)
 	{
@@ -85,11 +88,6 @@ void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 			knockBackVec.y = 0.0f;//Y成分はなし
 			knockBackVec = knockBackVec.Normalize() * 2.0f;//ノックバック
 			actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
-
-#if _DEBUG
-			//攻撃を当てたことを報告
-			printfDx("斬撃が当たった ID = %d\n", std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
-#endif
 		}
 	}
 }

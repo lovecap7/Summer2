@@ -201,9 +201,6 @@
     <ClCompile Include="Game\Actors\Enemy\Common1.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Game\EnemyManager.cpp">
-      <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Attack\AttackBase.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
@@ -266,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="Game\Actors\Player\PlayerStateHit.cpp">
       <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\ActorManager.cpp">
+      <Filter>ソース ファイル\Game\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\EnemyManager.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,9 +389,6 @@
     <ClInclude Include="Game\Actors\Enemy\Common1.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EnemyManager.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Attack\AttackBase.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
@@ -448,6 +448,12 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\PlayerStateHit.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\ActorManager.h">
+      <Filter>ヘッダー ファイル\Game\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\EnemyManager.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

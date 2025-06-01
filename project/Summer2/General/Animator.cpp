@@ -1,10 +1,9 @@
 #include "Animator.h"
-#include "Math/MathSub.h"
 #include <DxLib.h>
 namespace
 {
 	constexpr float kMaxBlend = 1.0f;//ブレンド率の最大
-	constexpr float kBlendRate = 0.5f;//ブレンド率
+	constexpr float kBlendRate = 0.1f;//ブレンド率
 	constexpr float kDefAnimSpeed = 0.5f;//デフォルトの再生速度
 }
 
@@ -180,7 +179,7 @@ void Animator::UpdateBlend(const int& modelHandle)
 	MV1SetAttachAnimBlendRate(modelHandle, m_animNow.m_attachAnimIndex, kMaxBlend - m_blendRate);
 	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnimIndex, m_blendRate);
 	//だんだん変化していく
-	m_blendRate = MathSub::Lerp(m_blendRate, kMaxBlend, kBlendRate);
+	m_blendRate += kBlendRate;
 	//ブレンド率が最大なら
 	if (m_blendRate >= kMaxBlend)
 	{

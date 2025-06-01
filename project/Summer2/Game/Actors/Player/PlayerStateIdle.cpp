@@ -5,6 +5,7 @@
 #include "PlayerStateAttackN1.h"
 #include "PlayerStateCharge.h"
 #include "PlayerStateRolling.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -42,6 +43,13 @@ void PlayerStateIdle::Init()
 }
 void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//攻撃を受けた時
+	if (m_player->IsHit())
+	{
+		//やられ状態
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	auto collidable = m_player->GetCollidable();
 	Vector3 vec = collidable->GetRb()->GetVec();
 	//落下しているかチェック

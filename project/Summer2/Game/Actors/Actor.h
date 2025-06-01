@@ -12,6 +12,7 @@ enum class ActorKind
 	Field,		//フィールド
 };
 
+class ActorManager;
 class Input;
 class Camera;
 class Collidable;
@@ -20,7 +21,8 @@ class AttackManager;
 /// <summary>
 /// ゲーム中に配置可能な物体の基底クラス
 /// </summary>
-class Actor abstract//newできなくなる
+/// //newできなくなる
+class Actor abstract:public std::enable_shared_from_this<Actor>
 {
 protected:
 	//このアクターの種類
@@ -31,10 +33,21 @@ protected:
 	std::shared_ptr<HurtPoint> m_hurtPoint;
 	//消滅
 	bool m_isDead;
+	//アクターの識別番号
+	int m_id;
 public:
 	Actor(ActorKind kind);
 	virtual ~Actor() {};
 	//(純粋仮想関数)
+	/// <summary>
+	/// 登録処理
+	/// </summary>
+	virtual void Entry(std::shared_ptr<ActorManager> actorManager);
+	/// <summary>
+	/// 登録解除
+	/// </summary>
+	/// <param name="actorManager"></param>
+	virtual void Exit(std::shared_ptr<ActorManager> actorManager);
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -82,6 +95,11 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead() { return m_isDead; };
+	/// <summary>
+	/// IDを取得
+	/// </summary>
+	/// <returns></returns>
+	int GetID() const { return m_id; };
 	/// <summary>
 	/// 攻撃を受けたときのリアクション
 	/// </summary>

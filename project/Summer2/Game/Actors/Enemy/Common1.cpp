@@ -1,5 +1,5 @@
 #include "Common1.h"
-#include "../../EnemyManager.h"
+#include "EnemyManager.h"
 #include <memory>
 #include "../../../General/Model.h"
 #include "../../../General/Input.h"
@@ -52,8 +52,8 @@ namespace
 	const char* kDeadAnim = "CharacterArmature|Death";//‘å‹ò‚ç‚¢
 }
 
-Common1::Common1(std::unique_ptr<EnemyManager>& enemyManager, int modelHandle, Vector3 pos):
-	EnemyBase(enemyManager),
+Common1::Common1(int modelHandle, Vector3 pos):
+	EnemyBase(),
 	m_update(&Common1::UpdateIdle),
 	m_lastUpdate(&Common1::UpdateAttack),
 	m_isBattleMode(false),
@@ -79,7 +79,7 @@ Common1::~Common1()
 void Common1::Init()
 {
 	//‚â‚ç‚ê”»’è(Õ“Ë”»’è‚Æ“¯‚¶‚É‚·‚é)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, std::dynamic_pointer_cast<Common1>(shared_from_this()));
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, shared_from_this());
 	//UŒ‚‚Ì”»’è
 	CreateAttack();
 }

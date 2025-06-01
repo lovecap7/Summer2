@@ -31,6 +31,8 @@ public:
 	void Complete() override;
 	//ヒットリアクション
 	void HitReaction() override;
+	bool IsHit() { return m_isHit; };
+	void SetIsHit(bool isHit) { m_isHit = isHit; };
 	//地面に付いているか
 	bool IsGround() { return m_isGround; };
 	void NoIsGround() { m_isGround = false; };//地面に付いていないと判断したときに呼ぶ
@@ -47,6 +49,8 @@ private:
 	Vector2 m_stickVec;
 	//地面に付いているかどうか
 	bool m_isGround;
+	//ダメージを食らった時true
+	bool m_isHit;
 private:
 	//やられ判定の更新
 	void UpdateHurtPoint();

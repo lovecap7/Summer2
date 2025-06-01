@@ -3,6 +3,7 @@
 #include "PlayerStateAttackN2.h"
 #include "PlayerStateCharge.h"
 #include "PlayerStateRolling.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -23,7 +24,7 @@ namespace
 	constexpr int kAN1KeepFrame = 6;
 	constexpr int kAN1StartFrame = 15;
 	//アニメーション
-	const char* kAnim = "Player|Attack_N1";
+	const char* kAnim = "Player|NA1";
 	//弱攻撃の段階別アニメーションの速度
 	constexpr float kAN1AnimSpeed = 1.3f;
 	//攻撃終了前にキャンセル可能フレーム
@@ -65,6 +66,13 @@ void PlayerStateAttackN1::Init()
 
 void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//攻撃を受けた時
+	if (m_player->IsHit())
+	{
+		//やられ状態
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	//カウント
 	++m_attackCountFrame;
 	//攻撃発生フレーム

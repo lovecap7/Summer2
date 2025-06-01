@@ -1,5 +1,6 @@
 #include "PlayerStateJump.h"
 #include "PlayerStateFall.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -49,6 +50,13 @@ void PlayerStateJump::Init()
 
 void PlayerStateJump::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//çUåÇÇéÛÇØÇΩéû
+	if (m_player->IsHit())
+	{
+		//Ç‚ÇÁÇÍèÛë‘
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	auto collidable = m_player->GetCollidable();
 	//óéâ∫ÇµÇƒÇ¢ÇÈÇ»ÇÁ
 	if (collidable->GetRb()->GetVec().y < 0.0f)

@@ -1,5 +1,6 @@
 #include "PlayerStateCA1.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -20,7 +21,7 @@ namespace
 	//チャージ攻撃の持続
 	constexpr float kCA1KeepFrame = 30.0f;
 	//アニメーション
-	const char* kAnim = "Player|Attack_C2";//チャージ攻撃
+	const char* kAnim = "Player|CA";//チャージ攻撃
 	//チャージ攻撃の段階別アニメーションの速度
 	constexpr float kCA1AnimSpeed = 2.0f;
 	//左足の根本と足先のインデックス
@@ -60,6 +61,13 @@ void PlayerStateCA1::Init()
 
 void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//攻撃を受けた時
+	if (m_player->IsHit())
+	{
+		//やられ状態
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	auto model = m_player->GetModel();
 	//アニメーションが終了したら
 	if (model->IsFinishFixedLoop())

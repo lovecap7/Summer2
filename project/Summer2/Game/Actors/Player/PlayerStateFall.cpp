@@ -1,5 +1,6 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -42,6 +43,13 @@ void PlayerStateFall::Init()
 
 void PlayerStateFall::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//çUåÇÇéÛÇØÇΩéû
+	if (m_player->IsHit())
+	{
+		//Ç‚ÇÁÇÍèÛë‘
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	//ínñ Ç…ïtÇ¢ÇƒÇ¢ÇÈÇ»ÇÁ
 	if (m_player->IsGround())
 	{

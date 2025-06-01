@@ -2,14 +2,11 @@
 #include "SceneBase.h"
 #include <vector>
 #include <memory>
-class Actor;
+class ActorManager;
 class Player;
 class Camera;
 class SceneController;
 class Input;
-class CollisionManager;
-class EnemyManager;
-class AttackManager;
 class TestCollScene :
     public SceneBase
 {
@@ -25,17 +22,12 @@ public:
     virtual void Update(Input& input) override;
     virtual void Draw() override;
 private:
-    std::vector<std::shared_ptr<Actor>> m_actors;
+    //アクターマネージャー
+    std::unique_ptr<ActorManager> m_actorManager;
     //プレイヤー
     std::shared_ptr<Player> m_player;
     //カメラ
     std::unique_ptr<Camera> m_camera;
-    //当たり判定と衝突処理
-    std::unique_ptr<CollisionManager> m_collManager;
-    //敵の補助的な処理をする
-    std::unique_ptr<EnemyManager> m_enemyManager;
-    //攻撃の処理
-    std::unique_ptr<AttackManager> m_attackManger;
 private:
     //ハンドル
     int m_playerHandle;

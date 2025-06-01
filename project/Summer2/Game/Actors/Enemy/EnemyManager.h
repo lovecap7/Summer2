@@ -4,20 +4,24 @@
 class Actor;
 class Player;
 class CollisionChecker;
+class EnemyBase;
 class EnemyManager
 {
 public:
 	EnemyManager(std::shared_ptr<Player> player);
 	virtual ~EnemyManager() {};
-	void Update(std::vector<std::shared_ptr<Actor>> actors);
-	//IDを与える
-	int GetEnemyID();
+	//登録
+	void Entry(std::shared_ptr<EnemyBase> enemy);
+	//登録解除
+	void Exit(std::shared_ptr<EnemyBase> enemy);
+	//プレイヤーの索敵
+	void Search();
 private:
 	//トリガーの当たり判定のチェックをするクラス
 	std::shared_ptr<CollisionChecker> m_collChecker;
 	//プレイヤーのポインタ
 	std::shared_ptr<Player> m_player;
-	//敵に割り振るID(IDはインスタンス化された際に数がIDになる)
-	int m_enemyId;
+	//敵のポインタ
+	std::vector<std::shared_ptr<EnemyBase>> m_enemies;
 };
 

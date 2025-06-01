@@ -3,6 +3,7 @@
 #include "PlayerStateCA1.h"
 #include "PlayerStateCA2.h"
 #include "PlayerStateCA3.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -19,7 +20,7 @@ namespace
 	constexpr float kChargeLevel2 = 60.0f;
 	constexpr float kChargeLevel3 = 100.0f;
 	//アニメーション
-	const char* kAnim = "Player|Attack_C1";//チャージ
+	const char* kAnim = "Player|Charge";//チャージ
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 }
@@ -45,6 +46,13 @@ void PlayerStateCharge::Init()
 
 void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
 {
+	//攻撃を受けた時
+	if (m_player->IsHit())
+	{
+		//やられ状態
+		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
 	auto collidable = m_player->GetCollidable();
 	//回避ボタンを押したら
 	if (input.IsTrigger("RB"))
