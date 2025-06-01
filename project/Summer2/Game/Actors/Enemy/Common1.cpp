@@ -10,6 +10,7 @@
 #include "../../../General/Collision/SphereCollider.h"
 #include "../../Attack/HurtPoint.h"
 #include "../../Attack/MeleeAttack.h"
+#include "../ActorManager.h"
 
 namespace
 {
@@ -76,6 +77,18 @@ Common1::~Common1()
 {
 }
 
+void Common1::Entry(std::shared_ptr<ActorManager> actorManager)
+{
+	//“o˜^
+	actorManager->GetEnemyManager()->Entry(shared_from_this());
+}
+
+void Common1::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+	//“o˜^‰ğœ
+	actorManager->GetEnemyManager()->Exit(shared_from_this());
+}
+
 void Common1::Init()
 {
 	//‚â‚ç‚ê”»’è(Õ“Ë”»’è‚Æ“¯‚¶‚É‚·‚é)
@@ -84,7 +97,7 @@ void Common1::Init()
 	CreateAttack();
 }
 
-void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//ó‘Ô‚É‡‚í‚¹‚Ä‰Šú‰»
 	InitState();

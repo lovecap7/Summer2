@@ -14,7 +14,7 @@ protected:
 	//進行方向を返す関数
 	virtual Vector3 GetForwardVec(const Input& input, const std::unique_ptr<Camera>& camera);
 	//攻撃を攻撃マネージャーに登録
-	virtual void AppearAttack(std::shared_ptr<AttackBase> attack, const std::unique_ptr<AttackManager>& attackManager);
+	virtual void AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager>& attackManager);
 private:
 	//次の状態
 	std::shared_ptr<PlayerStateBase> m_nextState;
@@ -24,7 +24,7 @@ public:
 	//初期化処理
 	virtual void Init()abstract;
 	//状態に応じた更新処理
-	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) abstract;
+	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) abstract;
 	//次の状態を取得
 	std::shared_ptr<PlayerStateBase> GetNextState() { return m_nextState; };
 	//状態変化

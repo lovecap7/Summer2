@@ -35,7 +35,7 @@ namespace
 	constexpr float kMoveDeceRate = 0.8f;
 }
 
-PlayerStateCA2::PlayerStateCA2(std::shared_ptr<Player> player, const std::unique_ptr<AttackManager>& attackManager) :
+PlayerStateCA2::PlayerStateCA2(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager) :
 	PlayerStateBase(player)
 {
 	m_player->GetCollidable()->SetState(State::None);
@@ -59,7 +59,7 @@ void PlayerStateCA2::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateCA2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateCA2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//UŒ‚‚ðŽó‚¯‚½Žž
 	if (m_player->IsHit())

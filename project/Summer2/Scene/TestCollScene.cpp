@@ -47,11 +47,14 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	actors.push_back(enemy);
 	actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));
 	actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle,Vector3{ -100.0f,-50.0f,0.0f },VGet(1.0f,1.0f,1.0f), VGet(0.0f, 0.0f, 0.0f)));//“§–¾•Ç
-	m_actorManager = std::make_unique<ActorManager>(actors);
+	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
 }
 
 TestCollScene::~TestCollScene()
 {
+	//“o˜^‰ðœ
+	m_actorManager->Exit();
+
 	MV1DeleteModel(m_playerHandle);
 	MV1DeleteModel(m_wallHandle);
 	MV1DeleteModel(m_common1Handle);

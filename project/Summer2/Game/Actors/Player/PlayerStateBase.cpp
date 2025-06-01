@@ -52,7 +52,7 @@ Vector3 PlayerStateBase::GetForwardVec(const Input& input, const std::unique_ptr
 	rV = moveVec.Normalize();
 	return rV;
 }
-void PlayerStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//UŒ‚‚ğ“ü‚ê‚é
 	attack->Init();//ó‘Ô‚ğƒŠƒZƒbƒg

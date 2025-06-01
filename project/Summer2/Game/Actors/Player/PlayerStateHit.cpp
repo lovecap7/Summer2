@@ -40,7 +40,7 @@ void PlayerStateHit::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//やられリアクション中に攻撃を食らったらアニメーションを初めから
 	if (m_player->IsHit())

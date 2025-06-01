@@ -22,7 +22,7 @@ class AttackManager;
 /// ゲーム中に配置可能な物体の基底クラス
 /// </summary>
 /// //newできなくなる
-class Actor abstract:public std::enable_shared_from_this<Actor>
+class Actor abstract
 {
 protected:
 	//このアクターの種類
@@ -35,6 +35,8 @@ protected:
 	bool m_isDead;
 	//アクターの識別番号
 	int m_id;
+	//IDがセットされたことを記録するフラグ
+	bool m_isSetId;
 public:
 	Actor(ActorKind kind);
 	virtual ~Actor() {};
@@ -42,12 +44,12 @@ public:
 	/// <summary>
 	/// 登録処理
 	/// </summary>
-	virtual void Entry(std::shared_ptr<ActorManager> actorManager);
+	virtual void Entry(std::shared_ptr<ActorManager> actorManager)abstract;
 	/// <summary>
 	/// 登録解除
 	/// </summary>
 	/// <param name="actorManager"></param>
-	virtual void Exit(std::shared_ptr<ActorManager> actorManager);
+	virtual void Exit(std::shared_ptr<ActorManager> actorManager)abstract;
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -56,7 +58,7 @@ public:
 	/// 位置などの更新を行う
 	/// </summary>
 	/// <param name="">入力オブジェクト</param>
-	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) abstract;
+	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) abstract;
 	/// <summary>
 	/// 重力を受ける
 	/// </summary>
@@ -100,6 +102,11 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	int GetID() const { return m_id; };
+	/// <summary>
+	/// IDをセット
+	/// </summary>
+	/// <returns></returns>
+	void SetID(int id);
 	/// <summary>
 	/// 攻撃を受けたときのリアクション
 	/// </summary>

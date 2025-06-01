@@ -37,7 +37,7 @@ protected:
 	//消滅フラグ
 	bool m_isDead;
 	//当てたことのあるCollidableを覚えておく
-	std::vector<int> m_hitEnemyId;
+	std::vector<int> m_hitId;
 	//持ち主
 	std::shared_ptr<Actor> m_owner;
 	//初期化用

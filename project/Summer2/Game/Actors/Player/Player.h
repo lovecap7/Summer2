@@ -3,6 +3,7 @@
 #include "../../../General/Math/MyMath.h"
 #include <memory>
 
+class ActorManager;
 class Input;
 class CameraBase;
 class Camera;
@@ -17,10 +18,14 @@ class Player :
 public:
 	Player(int modelHandle, Position3 firstPos);
 	virtual ~Player();
+	//“o˜^ˆ—
+	void Entry(std::shared_ptr<ActorManager> actorManager)override;
+	//“o˜^‰ğœ
+	void Exit(std::shared_ptr<ActorManager> actorManager)override;
 	//‰Šú‰»ˆ—
 	void Init()override;
 	//XVˆ—
-	void Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
+	void Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 	//d—Í
 	void Gravity(const Vector3& gravity)override;
 	//Õ“ËƒCƒxƒ“ƒgŠÖ”

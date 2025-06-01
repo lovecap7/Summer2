@@ -29,15 +29,15 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	SceneBase(controller),
 	m_playerHandle(MV1LoadModel("Data/Model/Player.mv1"))
 {
-	//プレイヤーの初期化
-	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
-	m_actors.push_back(m_player);
-	//カメラの初期化
-	m_camera = std::make_unique<Camera>(kCameraPos,m_player);
-	//コリジョンマネージャー
-	m_collManager = std::make_unique<CollisionManager>();
-	//攻撃の処理
-	m_attackManger = std::make_unique<AttackManager>();
+	////プレイヤーの初期化
+	//m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
+	//m_actors.push_back(m_player);
+	////カメラの初期化
+	//m_camera = std::make_unique<Camera>(kCameraPos,m_player);
+	////コリジョンマネージャー
+	//m_collManager = std::make_unique<CollisionManager>();
+	////攻撃の処理
+	//m_attackManger = std::make_unique<AttackManager>();
 }
 
 Stage1Scene::~Stage1Scene()
@@ -68,17 +68,17 @@ void Stage1Scene::Update(Input& input)
 		return;
 	}
 	//アクターの更新
-	for (auto& actor : m_actors)
-	{
-		actor->Update(input,m_camera, m_attackManger);
-	}
-	//アクターの衝突処理
-	m_collManager->Update(m_actors);
-	//更新確定
-	for (auto& actor : m_actors)
-	{
-		actor->Complete();
-	}
+	//for (auto& actor : m_actors)
+	//{
+	//	actor->Update(input,m_camera, m_attackManger);
+	//}
+	////アクターの衝突処理
+	//m_collManager->Update(m_actors);
+	////更新確定
+	//for (auto& actor : m_actors)
+	//{
+	//	actor->Complete();
+	//}
 
 	//カメラの更新
 	m_camera->Update();
@@ -93,9 +93,9 @@ void Stage1Scene::Draw()
 	DrawLine3D(VGet(500,0,0), VGet(-500, 0, 00), 0x00ffff);
 	DrawLine3D(VGet(0,500,0), VGet(0, -500, 0), 0xff0000);
 #endif
-	//アクターの描画
-	for (auto& actor : m_actors)
-	{
-		actor->Draw();
-	}
+	////アクターの描画
+	//for (auto& actor : m_actors)
+	//{
+	//	actor->Draw();
+	//}
 }

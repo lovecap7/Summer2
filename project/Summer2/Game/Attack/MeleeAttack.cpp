@@ -2,7 +2,6 @@
 #include "../Actors/Actor.h"
 #include "HurtPoint.h"
 #include "../../General/Collidable.h"
-#include "../Actors/Enemy/EnemyBase.h"
 #include <DxLib.h>
 
 #if _DEBUG
@@ -27,9 +26,9 @@ void MeleeAttack::Init()
 	m_keepFrame = m_initKeepFrame;
 	m_isDead = false;
 	//IDの初期化
-	if (m_hitEnemyId.size() != 0)
+	if (m_hitId.size() != 0)
 	{
-		m_hitEnemyId.clear();
+		m_hitId.clear();
 	}
 }
 
@@ -64,30 +63,26 @@ void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 	//自分と同じ種類のアクターなら無視
 	if (m_owner->GetActorKind() == actor->GetActorKind())return;
 
-	//敵に当たった場合IDを記録する
-	if (actor->GetActorKind() == ActorKind::Enemy)
+	bool isFind = false;
+	//IDがすでに記録されているか確認
+	for (auto id : m_hitId)
 	{
-		bool isFind = false;
-		//敵のIDがすでに記録されているか確認
-		for (auto id : m_hitEnemyId)
+		if (id == actor->GetID())
 		{
-			if (id == std::dynamic_pointer_cast<EnemyBase>(actor)->GetID())
-			{
-				isFind = true;
-				break;
-			}
+			isFind = true;
+			break;
 		}
-		if (!isFind)
-		{
-			//記録されていなければ記録する
-			m_hitEnemyId.emplace_back(std::dynamic_pointer_cast<EnemyBase>(actor)->GetID());
-			//ダメージを与える
-			actor->GetHurtPoint()->OnHitDamage(m_damage);
-			//ノックバック
-			Vector3 knockBackVec = actor->GetCollidable()->GetRb()->GetNextPos() - m_owner->GetCollidable()->GetRb()->GetNextPos();//離れるベクトル
-			knockBackVec.y = 0.0f;//Y成分はなし
-			knockBackVec = knockBackVec.Normalize() * 2.0f;//ノックバック
-			actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
-		}
+	}
+	if (!isFind)
+	{
+		//記録されていなければ記録する
+		m_hitId.emplace_back(actor->GetID());
+		//ダメージを与える
+		actor->GetHurtPoint()->OnHitDamage(m_damage);
+		//ノックバック
+		Vector3 knockBackVec = actor->GetCollidable()->GetRb()->GetNextPos() - m_owner->GetCollidable()->GetRb()->GetNextPos();//離れるベクトル
+		knockBackVec.y = 0.0f;//Y成分はなし
+		knockBackVec = knockBackVec.Normalize() * 2.0f;//ノックバック
+		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
 	}
 }

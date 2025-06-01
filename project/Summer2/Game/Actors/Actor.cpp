@@ -6,25 +6,16 @@
 
 Actor::Actor(ActorKind kind):
 	m_actorKind(kind),
-	m_isDead(false)
+	m_isDead(false),
+	m_id(0),
+	m_isSetId(false)
 {
 }
 
-void Actor::Entry(std::shared_ptr<ActorManager> actorManager)
+void Actor::SetID(int id)
 {
-	//“G‚Ìê‡“o˜^
-	if (m_actorKind == ActorKind::Enemy)
-	{
-		actorManager->GetEnemyManager()->Entry(std::dynamic_pointer_cast<EnemyBase>(shared_from_this()));
-	}
-
-}
-
-void Actor::Exit(std::shared_ptr<ActorManager> actorManager)
-{
-	//“G‚Ìê‡“o˜^‰ðœ
-	if (m_actorKind == ActorKind::Enemy)
-	{
-		actorManager->GetEnemyManager()->Exit(std::dynamic_pointer_cast<EnemyBase>(shared_from_this()));
-	}
+	//‚·‚Å‚É“o˜^‚µ‚Ä‚é‚È‚ç
+	if (m_isSetId)return;
+	m_id = id;
+	m_isSetId = true;
 }

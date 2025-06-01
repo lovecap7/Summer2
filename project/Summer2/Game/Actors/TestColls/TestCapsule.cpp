@@ -21,7 +21,7 @@ void TestCapsule::Init()
 {
 }
 
-void TestCapsule::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void TestCapsule::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	m_collidable->GetRb()->ResetVec();
 }

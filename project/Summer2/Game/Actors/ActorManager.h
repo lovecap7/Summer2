@@ -24,19 +24,22 @@ public:
 	//描画
 	void Draw()const;
 	//コリジョンマネージャー
-	std::unique_ptr<CollisionManager>& GetCollisionManager() const{ return m_collManager; };
+	std::shared_ptr<CollisionManager> GetCollisionManager() const{ return m_collManager; };
 	//エネミーマネージャー
-	std::unique_ptr<EnemyManager>& GetEnemyManager() const{ return m_enemyManager; };
+	std::shared_ptr<EnemyManager> GetEnemyManager() const{ return m_enemyManager; };
 private:
 	//アクター
 	std::vector<std::shared_ptr<Actor>> m_actors;
 	//プレイヤー
 	std::shared_ptr<Player> m_player;
 	//当たり判定と衝突処理
-	std::unique_ptr<CollisionManager> m_collManager;
+	std::shared_ptr<CollisionManager> m_collManager;
 	//敵の補助的な処理をする
-	std::unique_ptr<EnemyManager> m_enemyManager;
+	std::shared_ptr<EnemyManager> m_enemyManager;
 	//攻撃の処理
-	std::unique_ptr<AttackManager> m_attackManger;
+	std::shared_ptr<AttackManager> m_attackManager;
+private:
+	int m_id;//割り振る番号
+	void SetUpId();
 };
 

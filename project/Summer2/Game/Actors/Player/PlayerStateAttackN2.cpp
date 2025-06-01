@@ -62,7 +62,7 @@ void PlayerStateAttackN2::Init()
 	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
 	ChangeState(shared_from_this());
 }
-void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//UŒ‚‚ğó‚¯‚½
 	if (m_player->IsHit())

@@ -12,14 +12,15 @@
 
 ActorManager::ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shared_ptr<Player> player):
 	m_actors(actors),
-	m_player(player)
+	m_player(player),
+	m_id(0)
 {
 	//コリジョンマネージャー
-	m_collManager = std::make_unique<CollisionManager>();
+	m_collManager = std::make_shared<CollisionManager>();
 	//エネミーマネージャー
-	m_enemyManager = std::make_unique<EnemyManager>(m_player);
+	m_enemyManager = std::make_shared<EnemyManager>(m_player);
 	//攻撃の処理
-	m_attackManger = std::make_unique<AttackManager>();
+	m_attackManager = std::make_shared<AttackManager>();
 }
 
 void ActorManager::Entry()
@@ -47,6 +48,8 @@ void ActorManager::Init()
 	{
 		actor->Init();
 	}
+	//登録
+	Entry();
 }
 
 void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& camera)
@@ -56,14 +59,23 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input, camera, m_attackManger);
+		actor->Update(input, camera, m_attackManager);
 		actor->Gravity(Gravity::kGravity);
 	}
 	//攻撃の処理
-	m_attackManger->Update(m_actors);
+	m_attackManager->Update(m_actors);
 
 	//消滅フラグチェック
-	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [](std::shared_ptr<Actor> actor) {return actor->IsDead();});
+	auto thisPointer = shared_from_this();
+	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [thisPointer](std::shared_ptr<Actor> actor) {
+		bool isDead = actor->IsDead();
+		if (isDead)//死んでるなら
+		{
+			//Exit関数を呼ぶ
+			actor->Exit(thisPointer);
+		}
+		return isDead;
+		});
 	m_actors.erase(remIt, m_actors.end());//削除
 
 	//アクターの衝突処理
@@ -83,5 +95,15 @@ void ActorManager::Draw() const
 		actor->Draw();
 	}
 	//攻撃の描画
-	m_attackManger->Draw();
+	m_attackManager->Draw();
+}
+
+void ActorManager::SetUpId()
+{
+	//IDを登録
+	for (auto& actor : m_actors)
+	{
+		actor->SetID(m_id);
+		++m_id;
+	}
 }

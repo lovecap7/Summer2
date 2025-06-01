@@ -10,7 +10,7 @@ public:
     PlayerStateCharge(std::shared_ptr<Player> player);
     ~PlayerStateCharge();
     void Init()override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 private:
     //ƒ^ƒŠÔ
     int m_chargeFrame;

@@ -64,7 +64,7 @@ void PlayerStateAttackN1::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//UŒ‚‚ðŽó‚¯‚½Žž
 	if (m_player->IsHit())

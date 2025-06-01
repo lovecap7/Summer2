@@ -23,7 +23,7 @@ public:
     virtual void Draw() override;
 private:
     //アクターマネージャー
-    std::unique_ptr<ActorManager> m_actorManager;
+    std::shared_ptr<ActorManager> m_actorManager;
     //プレイヤー
     std::shared_ptr<Player> m_player;
     //カメラ

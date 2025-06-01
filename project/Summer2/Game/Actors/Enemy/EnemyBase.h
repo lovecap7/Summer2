@@ -4,6 +4,7 @@
 #include "../../../General/Model.h"
 class Trigger;
 class AttackBase;
+class AttackManager;
 class EnemyBase abstract:
     public Actor
 {

@@ -25,7 +25,7 @@ void TestSphere::Init()
 {
 }
 
-void TestSphere::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void TestSphere::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	m_collidable->GetRb()->ResetVec();
 	//スティックの向きを入れる

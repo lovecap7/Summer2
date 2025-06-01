@@ -9,10 +9,10 @@ class PlayerStateCA1 :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateCA1>
 {
 public:
-    PlayerStateCA1(std::shared_ptr<Player> player, const std::unique_ptr<AttackManager>& attackManager);
+    PlayerStateCA1(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager);
     ~PlayerStateCA1();
     void Init()override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 private:
     //¶‘«
     std::shared_ptr<Collidable> m_leftLeg;

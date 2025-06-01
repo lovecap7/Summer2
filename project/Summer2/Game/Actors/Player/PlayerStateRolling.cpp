@@ -41,7 +41,7 @@ void PlayerStateRolling::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateRolling::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void PlayerStateRolling::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	auto collidable = m_player->GetCollidable();
 	//モデルのアニメーションが終わったら

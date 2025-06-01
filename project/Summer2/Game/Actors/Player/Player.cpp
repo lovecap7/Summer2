@@ -15,6 +15,7 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/AttackManager.h"
+#include "../ActorManager.h"
 #include <DxLib.h>
 #include <cmath>
 
@@ -43,6 +44,14 @@ Player::~Player()
 {
 }
 
+void Player::Entry(std::shared_ptr<ActorManager> actorManager)
+{
+}
+
+void Player::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+}
+
 void Player::Init()
 {
 	//コンストラクタで全部初期化したかったけど
@@ -59,7 +68,7 @@ void Player::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, std::dynamic_pointer_cast<Player>(thisPointer));
 }
 
-void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::unique_ptr<AttackManager>& attackManager)
+void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//スティックの向きを入れる
 	m_stickVec.x = -static_cast<float>(input.GetStickInfo().leftStickX);
