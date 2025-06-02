@@ -25,8 +25,8 @@ namespace
 	//チャージ攻撃の段階別アニメーションの速度
 	constexpr float kCA1AnimSpeed = 2.0f;
 	//左足の根本と足先のインデックス
-	constexpr int kRootIndex = 60;
-	constexpr int kToeIndex = 64;
+	constexpr int kRootIndex = 64;
+	constexpr int kToeIndex = 68;
 	//左足の半径
 	constexpr float kLeftLegRadius = 20.0f;
 	//移動速度

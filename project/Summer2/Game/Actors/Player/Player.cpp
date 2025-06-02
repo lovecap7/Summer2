@@ -82,7 +82,6 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 		//状態を変化する
 		m_state = m_state->GetNextState();
 		m_state->Init();
-		return;
 	}
 	//アニメーションの更新
 	m_model->Update();
