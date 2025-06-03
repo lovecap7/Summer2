@@ -25,7 +25,7 @@ public:
 	//‚Ì‚¯‚¼‚é
 	void OnHitKnockBack(const Vector3& knockBackVec);
 	//Ž€–S
-	bool IsDead() { return m_isDead; };
+	bool IsDead() { return m_hp <= 0; };
 	//‘Ì—Í
 	int GetHp() { return m_hp; };
 private:
@@ -35,8 +35,6 @@ private:
 	bool m_isNoDamage;
 	//‘Ì—Í
 	int m_hp;
-	//Ž€–S
-	bool m_isDead;
 	//Ž‚¿Žå
 	std::shared_ptr<Actor> m_owner;
 };

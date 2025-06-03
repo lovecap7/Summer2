@@ -6,7 +6,7 @@
 
 Actor::Actor(ActorKind kind):
 	m_actorKind(kind),
-	m_isDead(false),
+	m_isDelete(false),
 	m_id(0),
 	m_isSetId(false)
 {

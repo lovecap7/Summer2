@@ -1,5 +1,6 @@
 #include "PurpleDinosaurStateAttack.h"
 #include "PurpleDinosaurStateIdle.h"
+#include "PurpleDinosaurStateDeath.h"
 #include "PurpleDinosaur.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
@@ -16,6 +17,8 @@
 #include "../../../Attack/MeleeAttack.h"
 namespace
 {
+	//減速率
+	constexpr float kMoveDeceRate = 0.8f;
 	//左腕と左手のインデックス
 	constexpr int kLeftArmIndex = 13;
 	constexpr int kLeftHandIndex = 17;
@@ -24,11 +27,13 @@ namespace
 	//攻撃のダメージ
 	constexpr int kAttackDamage = 100;
 	//攻撃の持続フレーム
-	constexpr int kAttackKeepFrame = 20;
+	constexpr int kAttackKeepFrame = 5;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 10;
+	constexpr int kAttackStartFrame = 30;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Weapon";
+	//次の攻撃フレーム
+	constexpr int kAttackCoolTime = 60;
 }
 
 PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinosaur> owner):
@@ -36,17 +41,21 @@ PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinos
 	m_attackCountFrame(0)
 {
 	//通常攻撃1
-	owner->GetCollidable()->SetState(State::None);
+	m_owner->GetCollidable()->SetState(State::None);
 	//攻撃1
-	owner->GetModel()->SetAnim(kAnim, false);
+	m_owner->GetModel()->SetAnim(kAnim, false);
 	//攻撃判定の準備
 	CreateAttack();
+	//モデルの向きをプレイヤーに向ける
+	m_owner->GetModel()->SetDir(m_owner->GetPlayerVec().ToDxLibVector());
 }
 
 PurpleDinosaurStateAttack::~PurpleDinosaurStateAttack()
 {
 	//攻撃判定を消す
 	m_attack->Delete();
+	//攻撃のクールタイム
+	m_owner->SetAttackCoolTime(kAttackCoolTime);
 }
 
 void PurpleDinosaurStateAttack::Init()
@@ -61,7 +70,11 @@ void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
 		//死亡状態
+		ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
+		return;
 	}
+	//攻撃の位置更新
+	UpdateAttack();
 	//カウント
 	++m_attackCountFrame;
 	//攻撃発生フレーム
@@ -106,4 +119,10 @@ void PurpleDinosaurStateAttack::UpdateAttack()
 
 void PurpleDinosaurStateAttack::SpeedDown()
 {
+	auto collidable = m_owner->GetCollidable();
+	//減速
+	Vector3 vec = collidable->GetRb()->GetVec();
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
+	collidable->GetRb()->SetVec(vec);
 }

@@ -325,7 +325,7 @@ void Common1::UpdateDead(const Input& input, const std::unique_ptr<Camera>& came
 	//アニメーション終了後
 	if (m_model->IsFinishAnim())
 	{
-		m_isDead = true;//死亡
+		m_isDelete = true;//死亡
 	}
 	//減速
 	SpeedDown();

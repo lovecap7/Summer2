@@ -1,5 +1,6 @@
 #include "PurpleDinosaurStateIdle.h"
 #include "PurpleDinosaurStateAttack.h"
+#include "PurpleDinosaurStateDeath.h"
 #include "PurpleDinosaur.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
@@ -45,7 +46,8 @@ void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<C
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
-		//m_update = &Common1::UpdateDead;
+		//死亡
+		ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
 		return;
 	}
 	//減速
@@ -53,6 +55,8 @@ void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<C
 	//プレイヤーを発見したとき
 	if (m_owner->IsHitSearch())
 	{
+		//モデルの向きをプレイヤーに向ける
+		m_owner->GetModel()->SetDir(m_owner->GetPlayerVec().ToDxLibVector());
 		//距離をチェック
 		float dist = m_owner->GetPlayerVec().Magnitude();
 		//戦闘状態距離なら

@@ -32,7 +32,7 @@ protected:
 	//やられ判定
 	std::shared_ptr<HurtPoint> m_hurtPoint;
 	//消滅
-	bool m_isDead;
+	bool m_isDelete;
 	//アクターの識別番号
 	int m_id;
 	//IDがセットされたことを記録するフラグ
@@ -93,10 +93,15 @@ public:
 	/// <returns></returns>
 	const std::shared_ptr<HurtPoint> GetHurtPoint() const { return m_hurtPoint; }
 	/// <summary>
-	/// 消滅フラグ
+	/// 削除フラグ
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead() { return m_isDead; };
+	bool IsDelete() { return m_isDelete; };
+	/// <summary>
+	/// 削除予約
+	/// </summary>
+	/// <returns></returns>
+	void Delete() { m_isDelete = true; };
 	/// <summary>
 	/// IDを取得
 	/// </summary>

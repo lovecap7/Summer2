@@ -79,6 +79,8 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 			{
 				//当たった時の処理
 				attack->OnHit(actor);
+				//ヒットリアクション
+				actor->HitReaction();
 			}
 		}
 	}

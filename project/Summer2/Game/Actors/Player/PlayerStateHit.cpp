@@ -58,6 +58,8 @@ void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& c
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
 	}
+	//‚¾‚ñ‚¾‚ñŒ¸‘¬
+	SpeedDown();
 }
 
 void PlayerStateHit::SpeedDown()

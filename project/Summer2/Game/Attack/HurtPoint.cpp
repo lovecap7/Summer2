@@ -7,7 +7,6 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_collidable(coll),
 	m_isNoDamage(false),
 	m_hp(hp),
-	m_isDead(false),
 	m_owner(owner)
 {
 }
@@ -25,7 +24,6 @@ void HurtPoint::OnHitDamage(int damage)
 	if (m_hp <= 0)
 	{
 		m_hp = 0;
-		m_isDead = true;//Ž€–S
 	}
 	else
 	{

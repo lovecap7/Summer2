@@ -68,7 +68,7 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	//消滅フラグチェック
 	auto thisPointer = shared_from_this();
 	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [thisPointer](std::shared_ptr<Actor> actor) {
-		bool isDead = actor->IsDead();
+		bool isDead = actor->IsDelete();
 		if (isDead)//死んでるなら
 		{
 			//Exit関数を呼ぶ
