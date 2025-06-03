@@ -1,0 +1,85 @@
+#include "PurpleDinosaurStateIdle.h"
+#include "PurpleDinosaur.h"
+#include "../EnemyBase.h"
+#include "../../../../General/game.h"
+#include "../../../../General/Collision/ColliderBase.h"
+#include "../../../Attack/HurtPoint.h"
+#include "../../../../General/Rigidbody.h"
+#include "../../../../General/Collidable.h"
+#include "../../../../General/Input.h"
+#include "../../../../General/Model.h"
+#include "../../../../General/Animator.h"
+#include "../../../../Game/Camera/Camera.h"
+
+namespace
+{
+	//プレイヤー戦闘状態になる距離
+	constexpr float kBattleDistance = 150.0f;
+	//減速率
+	constexpr float kMoveDeceRate = 0.8f;
+	//攻撃のクールタイム
+	constexpr int kAttackCoolTime = 180;
+	//アニメーションの名前
+	const char* kAnim = "CharacterArmature|Idle";//待機
+}
+
+PurpleDinosaurStateIdle::PurpleDinosaurStateIdle(std::shared_ptr<PurpleDinosaur> owner):
+	PurpleDinosaurStateBase(owner),
+	m_attackCoolTime(kAttackCoolTime)
+{
+	//待機状態
+	m_owner->GetModel()->SetAnim(kAnim, true);
+	m_owner->GetCollidable()->SetState(State::None);
+}
+
+PurpleDinosaurStateIdle::~PurpleDinosaurStateIdle()
+{
+}
+
+void PurpleDinosaurStateIdle::Init()
+{
+	//次の状態は待機状態
+	ChangeState(shared_from_this());
+}
+
+void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+{
+	//死んでるなら
+	if (m_owner->GetHurtPoint()->IsDead())
+	{
+		//m_update = &Common1::UpdateDead;
+		return;
+	}
+	//減速
+	SpeedDown();
+	//プレイヤーを発見したとき
+	if (m_owner->IsHitSearch())
+	{
+		//距離をチェック
+		float dist = m_owner->GetPlayerVec().Magnitude();
+		//戦闘状態距離なら
+		if (dist <= kBattleDistance)
+		{
+			//攻撃のクールタイムが0なら
+			if (m_owner->GetAttackCoolTime() <= 0)
+			{
+				//攻撃状態にする
+			}
+		}
+		//射程範囲外なので
+		else
+		{
+			//プレイヤーをに近づく
+		}
+	}
+}
+
+void PurpleDinosaurStateIdle::SpeedDown()
+{
+	auto collidable = m_owner->GetCollidable();
+	//減速
+	Vector3 vec = collidable->GetRb()->GetVec();
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
+	collidable->GetRb()->SetVec(vec);
+}

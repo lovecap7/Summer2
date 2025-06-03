@@ -58,11 +58,10 @@ Common1::Common1(int modelHandle, Vector3 pos):
 	m_update(&Common1::UpdateIdle),
 	m_lastUpdate(&Common1::UpdateAttack),
 	m_isBattleMode(false),
-	m_isHitSearch(false),
 	m_attackCoolTime(kAttackCoolTime)
 {
 	//モデルの初期化
-	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
+	m_model = std::make_shared<Model>(modelHandle, pos.ToDxLibVector());
 	//モデルの大きさ調整
 	m_model->SetScale(VGet(0.5f, 0.5f, 0.5f));
 	//衝突判定
@@ -99,6 +98,7 @@ void Common1::Init()
 
 void Common1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
+	OnHitSearch();//プレイヤーとの距離をチェックして状態を変化させる
 	//状態に合わせて初期化
 	InitState();
 	//更新
@@ -186,14 +186,15 @@ void Common1::Complete()
 	m_isHitSearch = false;
 }
 
-void Common1::OnHitSearch(const Vector3& playerPos)
+void Common1::OnHitSearch()
 {
 	if (m_update == &Common1::UpdateDead)return;//死亡中は無視
 	if (m_update == &Common1::UpdateHit)return;//やられ中は無視
-	//探知したのでtrue
-	m_isHitSearch = true;
+	//発見できなかった場合待機状態
+	if(!m_isHitSearch)m_update = &Common1::UpdateIdle;
+	
 	//距離をチェック
-	Vector3 dist = playerPos - m_searchTrigger->GetRb()->GetPos();
+	Vector3 dist = m_playerPos - m_searchTrigger->GetRb()->GetPos();
 	//遠いなら
 	if (dist.Magnitude() > kRunDistance)
 	{

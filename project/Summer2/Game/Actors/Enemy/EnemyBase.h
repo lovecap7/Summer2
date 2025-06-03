@@ -5,19 +5,30 @@
 class Trigger;
 class AttackBase;
 class AttackManager;
-class EnemyBase abstract:
+class EnemyBase abstract :
     public Actor
 {
 public:
     EnemyBase();
     virtual ~EnemyBase() {};
-    virtual void OnHitSearch(const Vector3& playerPos) abstract;
+    //範囲内にプレイヤーがいた場合位置を取得
+    void OnHitSearch(const Vector3& playerPos);
+    //索敵に成功したか
+    bool IsHitSearch() const { return m_isHitSearch; };
+    //プレイヤーへのベクトルを返す関数
+    Vector3 GetPlayerVec() const;
     std::shared_ptr<Collidable>& GetSearchTrigger() { return m_searchTrigger; };
+    //モデルクラス
+    std::shared_ptr<Model> GetModel() const { return m_model; };
 protected:
     //モデル
-    std::unique_ptr<Model> m_model;
+    std::shared_ptr<Model> m_model;
     //プレイヤーが近くにいるかをチェックするトリガー
     std::shared_ptr<Collidable> m_searchTrigger;
+    //サーチに成功したか
+    bool m_isHitSearch;
+    //プレイヤーの座標
+    Vector3 m_playerPos;
     //攻撃のコンポーネント
     virtual void CreateAttack() abstract;
     //状態に合わせて初期化すべきものを初期化する

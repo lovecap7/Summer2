@@ -34,8 +34,9 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	m_playerHandle(MV1LoadModel("Data/Model/Player/Player.mv1")),
 	m_polygonHandle(MV1LoadModel("Data/Model/Stage/Stage1.mv1")),
 	m_wallHandle(MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1")),
-	m_common1Handle(MV1LoadModel("Data/Model/Enemy/Common1.mv1"))
+	m_common1Handle(MV1LoadModel("Data/Model/Enemy/PurpleDinosaur.mv1"))
 {
+	//登場するオブジェクトをセットしていく
 	std::vector<std::shared_ptr<Actor>> actors;
 
 	//プレイヤーの初期化

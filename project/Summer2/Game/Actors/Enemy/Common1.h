@@ -28,10 +28,11 @@ public:
 	void Draw()const override;
 	//更新処理の確定
 	void Complete() override;
-	//プレイヤーとの距離を索敵
-	void OnHitSearch(const Vector3& playerPos)override;
 	//ヒットリアクション
 	void HitReaction() override;
+	//状態をプレイヤーとの距離で変化させる
+	void OnHitSearch();
+
 private:
 	//状態遷移
 	using UpdateFunc_t = void(Common1::*)(const Input& input, const std::unique_ptr<Camera>& camera);
@@ -65,8 +66,6 @@ private:
 private:
 	//戦闘状態
 	bool m_isBattleMode;
-	//サーチ
-	bool m_isHitSearch;
 	//攻撃のクールタイム
 	int m_attackCoolTime;
 	//攻撃
