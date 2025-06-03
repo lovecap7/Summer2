@@ -65,7 +65,7 @@ void Player::Init()
 	//Ÿ‚Ìó‘Ô‚ğ‘Ò‹@ó‘Ô‚É
 	m_state->ChangeState(m_state);
 	//‚â‚ç‚ê”»’è(Õ“Ë”»’è‚Æ“¯‚¶‚É‚·‚é)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, std::dynamic_pointer_cast<Player>(thisPointer));
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, thisPointer);
 }
 
 void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)

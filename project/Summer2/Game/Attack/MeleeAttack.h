@@ -4,6 +4,13 @@ class MeleeAttack :
     public AttackBase
 {
 public:
+	/// <summary>
+	/// 近接攻撃
+	/// </summary>
+	/// <param name="coll">衝突確認のための情報</param>
+	/// <param name="damage">ダメージ</param>
+	/// <param name="keepFrame">持続</param>
+	/// <param name="owner">持ち主</param>
 	MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner);
 	~MeleeAttack() override;
 	//初期化

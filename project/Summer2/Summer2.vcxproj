@@ -25,6 +25,7 @@
     <ClCompile Include="Game\Actors\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actors\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaur.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateAttack.cpp" />
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateBase.cpp" />
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateIdle.cpp" />
     <ClCompile Include="Game\Actors\Player\Player.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Game\Actors\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actors\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaur.h" />
+    <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateAttack.h" />
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateBase.h" />
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateIdle.h" />
     <ClInclude Include="Game\Actors\Player\Player.h" />

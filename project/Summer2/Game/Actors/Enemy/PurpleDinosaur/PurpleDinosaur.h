@@ -6,6 +6,7 @@ class Camera;
 class EnemyManager;
 class AttackManager;
 class MeleeAttack;
+class PurpleDinosaurStateBase;
 class PurpleDinosaur :
     public EnemyBase, public std::enable_shared_from_this<PurpleDinosaur>
 {
@@ -37,6 +38,8 @@ public:
 	//攻撃のクールタイムをセット
 	void SetAttackCoolTime(int coolTime) { m_attackCoolTime = coolTime; }
 private:
+	//自分の状態
+	std::shared_ptr<PurpleDinosaurStateBase> m_state;
 	//攻撃を受けたか
 	bool m_isHit;
 	//攻撃できるまでのクールタイム

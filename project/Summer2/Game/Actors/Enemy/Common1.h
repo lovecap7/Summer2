@@ -50,7 +50,7 @@ private:
 	void UpdateDead(const Input& input, const std::unique_ptr<Camera>& camera);
 private:
 	//状態に合わせて初期化すべきものを初期化する
-	void InitState()override;
+	void InitState();
 	//減速
 	void SpeedDown();
 	//戦闘に関する更新処理
@@ -60,7 +60,7 @@ private:
 	//左腕の位置更新
 	void UpdateLeftArm();
 	//攻撃のコンポーネント
-	void CreateAttack() override;
+	void CreateAttack() ;
 	//やられ判定の更新
 	void UpdateHurtPoint()override;
 private:

@@ -1,4 +1,5 @@
 #include "PurpleDinosaurStateIdle.h"
+#include "PurpleDinosaurStateAttack.h"
 #include "PurpleDinosaur.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
@@ -17,15 +18,12 @@ namespace
 	constexpr float kBattleDistance = 150.0f;
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
-	//攻撃のクールタイム
-	constexpr int kAttackCoolTime = 180;
 	//アニメーションの名前
 	const char* kAnim = "CharacterArmature|Idle";//待機
 }
 
 PurpleDinosaurStateIdle::PurpleDinosaurStateIdle(std::shared_ptr<PurpleDinosaur> owner):
-	PurpleDinosaurStateBase(owner),
-	m_attackCoolTime(kAttackCoolTime)
+	PurpleDinosaurStateBase(owner)
 {
 	//待機状態
 	m_owner->GetModel()->SetAnim(kAnim, true);
@@ -38,7 +36,7 @@ PurpleDinosaurStateIdle::~PurpleDinosaurStateIdle()
 
 void PurpleDinosaurStateIdle::Init()
 {
-	//次の状態は待機状態
+	//次の状態を今の状態に更新
 	ChangeState(shared_from_this());
 }
 
@@ -64,6 +62,7 @@ void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<C
 			if (m_owner->GetAttackCoolTime() <= 0)
 			{
 				//攻撃状態にする
+				ChangeState(std::make_shared<PurpleDinosaurStateAttack>(m_owner));
 			}
 		}
 		//射程範囲外なので

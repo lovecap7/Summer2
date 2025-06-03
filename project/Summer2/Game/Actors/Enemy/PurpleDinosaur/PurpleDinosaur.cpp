@@ -1,4 +1,6 @@
 #include "PurpleDinosaur.h"
+#include "PurpleDinosaurStateBase.h"
+#include "PurpleDinosaurStateIdle.h"
 #include "../EnemyManager.h"
 #include <memory>
 #include "../../../../General/Model.h"
@@ -27,7 +29,8 @@ namespace
 }
 PurpleDinosaur::PurpleDinosaur(int modelHandle, Vector3 pos) :
 	EnemyBase(),
-	m_attackCoolTime(0)
+	m_attackCoolTime(0),
+	m_isHit(false)
 {
 	//モデルの初期化
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
@@ -59,16 +62,28 @@ void PurpleDinosaur::Exit(std::shared_ptr<ActorManager> actorManager)
 
 void PurpleDinosaur::Init()
 {
+	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	auto thisPointer = shared_from_this();
+	m_state = std::make_shared<PurpleDinosaurStateIdle>(thisPointer);
+	//次の状態を待機状態に
+	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, shared_from_this());
-	//攻撃の判定
-	CreateAttack();
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, thisPointer);
 }
 
 void PurpleDinosaur::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//攻撃のクールタイムを減らす
 	UpdateAttackCoolTime();
+	//状態に合わせた更新
+	m_state->Update(input, camera, attackManager);
+	//状態が変わったかをチェック
+	if (m_state != m_state->GetNextState())
+	{
+		//状態を変化する
+		m_state = m_state->GetNextState();
+		m_state->Init();
+	}
 	//アニメーションの更新
 	m_model->Update();
 	//やられ判定の更新

@@ -29,10 +29,6 @@ protected:
     bool m_isHitSearch;
     //プレイヤーの座標
     Vector3 m_playerPos;
-    //攻撃のコンポーネント
-    virtual void CreateAttack() abstract;
-    //状態に合わせて初期化すべきものを初期化する
-    virtual void InitState() abstract;
     //やられ判定の更新
     virtual void UpdateHurtPoint()abstract;
     //攻撃判定を出す

@@ -13,6 +13,7 @@
 //敵
 #include "../Game/Actors/Enemy/EnemyManager.h"
 #include "../Game/Actors/Enemy/Common1.h"
+#include "../Game/Actors/Enemy/PurpleDinosaur/PurpleDinosaur.h"
 #include "../Game/Actors/Enemy/EnemyBase.h"
 //ステージ
 #include "../Game/Actors/Stage/InvisibleWall.h"
@@ -44,8 +45,10 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	actors.push_back(m_player);
 	//カメラの初期化
 	m_camera = std::make_unique<Camera>(kCameraPos, m_player);
-	std::shared_ptr<EnemyBase> enemy = std::make_shared<Common1>(m_common1Handle, Vector3{ -200.0f,-50.0f,0.0f });
+	std::shared_ptr<EnemyBase> enemy = std::make_shared<Common1>(MV1DuplicateModel(m_common1Handle), Vector3{ -200.0f,-50.0f,0.0f });
 	actors.push_back(enemy);
+	std::shared_ptr<EnemyBase> enemy2 = std::make_shared<PurpleDinosaur>(MV1DuplicateModel(m_common1Handle), Vector3{ -300.0f,-50.0f,0.0f });
+	actors.push_back(enemy2);
 	actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));
 	actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle,Vector3{ -100.0f,-50.0f,0.0f },VGet(1.0f,1.0f,1.0f), VGet(0.0f, 0.0f, 0.0f)));//透明壁
 	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
