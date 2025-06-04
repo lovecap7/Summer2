@@ -22,7 +22,6 @@ public:
     void OnHitColl(const std::shared_ptr<Collidable>& other)override;
     void Draw()const override;
     void Complete() override;
-    void HitReaction() override;
 private:
     Vector3 GetForwardVec(const std::unique_ptr<Camera>& camera);
     float InputValueSpeed(const Input& input);

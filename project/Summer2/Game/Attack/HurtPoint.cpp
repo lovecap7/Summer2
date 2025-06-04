@@ -7,13 +7,19 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_collidable(coll),
 	m_isNoDamage(false),
 	m_hp(hp),
-	m_owner(owner)
+	m_owner(owner),
+	m_isHit(false)
 {
 }
 
 HurtPoint::~HurtPoint()
 {
 
+}
+
+void HurtPoint::Init()
+{
+	m_isHit = false; //UŒ‚‚ğó‚¯‚Ä‚¢‚È‚¢ó‘Ô‚É‚·‚é
 }
 
 void HurtPoint::OnHitDamage(int damage)
@@ -27,7 +33,7 @@ void HurtPoint::OnHitDamage(int damage)
 	}
 	else
 	{
-		m_owner->HitReaction();//‚â‚ç‚êƒŠƒAƒNƒVƒ‡ƒ“
+		m_isHit = true; //UŒ‚‚ğó‚¯‚½
 	}
 }
 

@@ -204,9 +204,6 @@
     <ClCompile Include="Game\Actors\Stage\InvisibleWall.cpp">
       <Filter>ソース ファイル\Game\Actors\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actors\Enemy\Common1.cpp">
-      <Filter>ソース ファイル\Game\Actors\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Attack\AttackBase.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
@@ -289,6 +286,12 @@
       <Filter>ソース ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
     </ClCompile>
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateDeath.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateChase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateHit.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
     </ClCompile>
   </ItemGroup>
@@ -407,9 +410,6 @@
     <ClInclude Include="Game\Actors\Enemy\EnemyBase.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actors\Enemy\Common1.h">
-      <Filter>ヘッダー ファイル\Game\Actors\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Attack\AttackBase.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
     </ClInclude>
@@ -489,6 +489,12 @@
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateDeath.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateChase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateHit.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
     </ClInclude>
   </ItemGroup>

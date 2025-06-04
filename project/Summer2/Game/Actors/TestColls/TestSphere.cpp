@@ -74,9 +74,6 @@ void TestSphere::Complete()
 	m_collidable->GetRb()->SetNextPos();
 }
 
-void TestSphere::HitReaction()
-{
-}
 
 Vector3 TestSphere::GetForwardVec(const std::unique_ptr<Camera>& camera)
 {

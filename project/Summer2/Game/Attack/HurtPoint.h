@@ -16,7 +16,8 @@ public:
 	~HurtPoint();
 	//攻撃を喰らったかどうかをチェックする際に使う
 	std::shared_ptr<Collidable> GetCollidable() const { return m_collidable; }
-
+	//初期化処理
+	void Init();
 	//無敵
 	bool IsNoDamege() { return m_isNoDamage; };
 	void SetIsNoDamege(bool isNoDamage) { m_isNoDamage = isNoDamage; };
@@ -28,6 +29,8 @@ public:
 	bool IsDead() { return m_hp <= 0; };
 	//体力
 	int GetHp() { return m_hp; };
+	//攻撃を受けたかどうか
+	bool IsHit() const { return m_isHit; }
 private:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -37,5 +40,7 @@ private:
 	int m_hp;
 	//持ち主
 	std::shared_ptr<Actor> m_owner;
+	//攻撃を受けたかどうか
+	bool m_isHit;
 };
 

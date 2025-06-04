@@ -15,6 +15,7 @@
 #include "../../../General/Model.h"
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
+#include "../../Attack/HurtPoint.h"
 
 
 namespace
@@ -44,7 +45,7 @@ void PlayerStateIdle::Init()
 void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//çUåÇÇéÛÇØÇΩéû
-	if (m_player->IsHit())
+	if (m_player->GetHurtPoint()->IsHit())
 	{
 		//Ç‚ÇÁÇÍèÛë‘
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));

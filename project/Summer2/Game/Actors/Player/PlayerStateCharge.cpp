@@ -13,6 +13,7 @@
 #include "../../../General/Model.h"
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
+#include "../../Attack/HurtPoint.h"
 namespace
 {
 	//チャージレベル
@@ -47,7 +48,7 @@ void PlayerStateCharge::Init()
 void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//攻撃を受けた時
-	if (m_player->IsHit())
+	if (m_player->GetHurtPoint()->IsHit())
 	{
 		//やられ状態
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));

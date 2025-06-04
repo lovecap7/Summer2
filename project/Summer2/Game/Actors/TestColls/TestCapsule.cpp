@@ -54,6 +54,3 @@ void TestCapsule::Complete()
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetNextEndPos(m_collidable->GetRb()->GetVec());
 }
 
-void TestCapsule::HitReaction()
-{
-}

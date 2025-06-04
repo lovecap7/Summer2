@@ -17,6 +17,8 @@ public:
     bool IsHitSearch() const { return m_isHitSearch; };
     //プレイヤーへのベクトルを返す関数
     Vector3 GetPlayerVec() const;
+	//プレイヤーの位置をXZ平面上のベクトルにして返す関数
+    Vector3 GetPlayerNomVecXZ() const;
     std::shared_ptr<Collidable>& GetSearchTrigger() { return m_searchTrigger; };
     //モデルクラス
     std::shared_ptr<Model> GetModel() const { return m_model; };

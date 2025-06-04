@@ -29,8 +29,7 @@ namespace
 }
 PurpleDinosaur::PurpleDinosaur(int modelHandle, Vector3 pos) :
 	EnemyBase(),
-	m_attackCoolTime(0),
-	m_isHit(false)
+	m_attackCoolTime(0)
 {
 	//モデルの初期化
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
@@ -68,7 +67,7 @@ void PurpleDinosaur::Init()
 	//次の状態を待機状態に
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, thisPointer);
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
 void PurpleDinosaur::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
@@ -152,12 +151,6 @@ void PurpleDinosaur::Complete()
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 	//索敵状態をリセット
 	m_isHitSearch = false;
-}
-
-void PurpleDinosaur::HitReaction()
-{
-	printfDx("ID:%dの敵のHP = %d\n", m_id, m_hurtPoint->GetHp());
-
 }
 
 void PurpleDinosaur::UpdateHurtPoint()

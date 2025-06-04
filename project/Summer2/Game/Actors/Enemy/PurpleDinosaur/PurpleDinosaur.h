@@ -29,10 +29,6 @@ public:
 	void Draw()const override;
 	//更新処理の確定
 	void Complete() override;
-	//ヒットリアクション
-	void HitReaction() override;
-	bool IsHit() { return m_isHit; };
-	void SetIsHit(bool isHit) { m_isHit = isHit; };
 	//攻撃のクールタイムを取得
 	int GetAttackCoolTime() const { return m_attackCoolTime; }
 	//攻撃のクールタイムをセット
@@ -40,8 +36,6 @@ public:
 private:
 	//自分の状態
 	std::shared_ptr<PurpleDinosaurStateBase> m_state;
-	//攻撃を受けたか
-	bool m_isHit;
 	//攻撃できるまでのクールタイム
 	int m_attackCoolTime;
 	//やられ判定の更新

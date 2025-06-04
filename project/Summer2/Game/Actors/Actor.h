@@ -112,9 +112,5 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	void SetID(int id);
-	/// <summary>
-	/// UŒ‚‚ğó‚¯‚½‚Æ‚«‚ÌƒŠƒAƒNƒVƒ‡ƒ“
-	/// </summary>
-	virtual void HitReaction() abstract;
 };
 

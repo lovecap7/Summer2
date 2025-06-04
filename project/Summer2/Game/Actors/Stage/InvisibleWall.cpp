@@ -48,8 +48,3 @@ void InvisibleWall::Draw() const
 void InvisibleWall::Complete()
 {
 }
-
-void InvisibleWall::HitReaction()
-{
-
-}

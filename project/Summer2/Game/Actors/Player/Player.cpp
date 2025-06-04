@@ -29,8 +29,7 @@ namespace
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
 	m_stickVec(0.0f,0.0f),
-	m_isGround(false),
-	m_isHit(false)
+	m_isGround(false)
 {
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
@@ -148,13 +147,6 @@ void Player::Complete()
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);//カプセルの移動
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
-}
-
-//攻撃されたときに呼び出す
-void Player::HitReaction()
-{
-	//ヒット状態にする
-	m_isHit = true;
 }
 
 void Player::UpdateHurtPoint()

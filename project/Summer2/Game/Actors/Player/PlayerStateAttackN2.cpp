@@ -17,6 +17,7 @@
 #include "../../Attack/AttackManager.h"
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
+#include "../../Attack/HurtPoint.h"
 namespace
 {
 	//通常攻撃2のダメージと持続フレーム
@@ -65,7 +66,7 @@ void PlayerStateAttackN2::Init()
 void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//攻撃を受けた時
-	if (m_player->IsHit())
+	if (m_player->GetHurtPoint()->IsHit())
 	{
 		//やられ状態
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));

@@ -11,6 +11,7 @@
 #include "../../Attack/AttackManager.h"
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
+#include "../../Attack/HurtPoint.h"
 namespace
 {
 	//アニメーション
@@ -26,8 +27,6 @@ PlayerStateHit::PlayerStateHit(std::shared_ptr<Player> player):
 	//ヒットリアクション
 	m_player->GetModel()->SetAnim(kAnim, false);
 	m_player->GetCollidable()->SetState(State::None);
-	//フラグリセット
-	m_player->SetIsHit(false);
 }
 
 PlayerStateHit::~PlayerStateHit()
@@ -43,12 +42,10 @@ void PlayerStateHit::Init()
 void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//やられリアクション中に攻撃を食らったらアニメーションを初めから
-	if (m_player->IsHit())
+	if (m_player->GetHurtPoint()->IsHit())
 	{
 		//リプレイ
 		m_player->GetModel()->ReplayAnim();
-		//フラグリセット
-		m_player->SetIsHit(false);
 	}
 
 	//モデルのアニメーションが終わったら

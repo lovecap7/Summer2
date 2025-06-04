@@ -1,6 +1,7 @@
 #include "PurpleDinosaurStateAttack.h"
 #include "PurpleDinosaurStateIdle.h"
 #include "PurpleDinosaurStateDeath.h"
+#include "PurpleDinosaurStateHit.h"
 #include "PurpleDinosaur.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
@@ -23,17 +24,17 @@ namespace
 	constexpr int kLeftArmIndex = 13;
 	constexpr int kLeftHandIndex = 17;
 	//左腕の当たり判定の大きさ(攻撃の大きさ)
-	constexpr float kLeftArmRadius = 10.0f;
+	constexpr float kLeftArmRadius = 20.0f;
 	//攻撃のダメージ
 	constexpr int kAttackDamage = 100;
 	//攻撃の持続フレーム
 	constexpr int kAttackKeepFrame = 5;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 30;
+	constexpr int kAttackStartFrame = 27;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Weapon";
 	//次の攻撃フレーム
-	constexpr int kAttackCoolTime = 60;
+	constexpr int kAttackCoolTime = 150;//2.5秒くらいの感覚で攻撃
 }
 
 PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinosaur> owner):
@@ -47,7 +48,7 @@ PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinos
 	//攻撃判定の準備
 	CreateAttack();
 	//モデルの向きをプレイヤーに向ける
-	m_owner->GetModel()->SetDir(m_owner->GetPlayerVec().ToDxLibVector());
+	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
 }
 
 PurpleDinosaurStateAttack::~PurpleDinosaurStateAttack()
@@ -71,6 +72,12 @@ void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr
 	{
 		//死亡状態
 		ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
+		return;
+	}
+	if (m_owner->GetHurtPoint()->IsHit())
+	{
+		//やられ状態
+		ChangeState(std::make_shared<PurpleDinosaurStateHit>(m_owner));
 		return;
 	}
 	//攻撃の位置更新
