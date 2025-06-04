@@ -39,6 +39,7 @@
     <ClCompile Include="Game\Actors\Player\PlayerStateCA2.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateCA3.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateCharge.cpp" />
+    <ClCompile Include="Game\Actors\Player\PlayerStateDeath.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateFall.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateHit.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateIdle.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Game\Actors\Player\PlayerStateCA2.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateCA3.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateCharge.h" />
+    <ClInclude Include="Game\Actors\Player\PlayerStateDeath.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateFall.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateHit.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateIdle.h" />

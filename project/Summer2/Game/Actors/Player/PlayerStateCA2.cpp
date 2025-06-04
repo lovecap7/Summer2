@@ -1,6 +1,7 @@
 #include "PlayerStateCA2.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateHit.h"
+#include "PlayerStateDeath.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -62,6 +63,12 @@ void PlayerStateCA2::Init()
 
 void PlayerStateCA2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
+	//Ž€–S
+	if (m_player->GetHurtPoint()->IsDead())
+	{
+		ChangeState(std::make_shared<PlayerStateDeath>(m_player));
+		return;
+	}
 	//UŒ‚‚ðŽó‚¯‚½Žž
 	if (m_player->GetHurtPoint()->IsHit())
 	{

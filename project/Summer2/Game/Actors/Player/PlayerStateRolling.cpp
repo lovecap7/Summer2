@@ -9,7 +9,7 @@
 #include "../../../General/Model.h"
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
-
+#include "../../Attack/HurtPoint.h"
 
 namespace
 {
@@ -30,10 +30,14 @@ PlayerStateRolling::PlayerStateRolling(std::shared_ptr<Player> player) :
 	//Œü‚«‚ÌXV
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(VGet(dir.x, 0.0f, dir.y));
+	//–³“G‚É
+	m_player->GetHurtPoint()->SetIsNoDamege(true);
 }
 
 PlayerStateRolling::~PlayerStateRolling()
 {
+	//–³“G‰ðœ
+	m_player->GetHurtPoint()->SetIsNoDamege(false);
 }
 void PlayerStateRolling::Init()
 {

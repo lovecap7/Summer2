@@ -1,5 +1,6 @@
 #include "PlayerStateHit.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateDeath.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Rigidbody.h"
@@ -46,6 +47,12 @@ void PlayerStateHit::Init()
 
 void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
+	//死亡
+	if (m_player->GetHurtPoint()->IsDead())
+	{
+		ChangeState(std::make_shared<PlayerStateDeath>(m_player));
+		return;
+	}
 	//やられリアクション中に攻撃を食らったらアニメーションを初めから
 	if (m_player->GetHurtPoint()->IsHit())
 	{

@@ -294,6 +294,9 @@
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateHit.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Player\PlayerStateDeath.cpp">
+      <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -496,6 +499,9 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateHit.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\PurpleDinosaur</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Player\PlayerStateDeath.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

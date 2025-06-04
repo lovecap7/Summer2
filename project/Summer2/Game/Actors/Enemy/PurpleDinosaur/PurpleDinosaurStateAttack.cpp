@@ -28,11 +28,13 @@ namespace
 	//攻撃のダメージ
 	constexpr int kAttackDamage = 100;
 	//攻撃の持続フレーム
-	constexpr int kAttackKeepFrame = 5;
+	constexpr int kAttackKeepFrame = 2;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 27;
+	constexpr int kAttackStartFrame = 30;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Weapon";
+	//アニメーションの速度
+	constexpr float kAnimSpeed = 0.4f;
 	//次の攻撃フレーム
 	constexpr int kAttackCoolTime = 150;//2.5秒くらいの感覚で攻撃
 }
@@ -41,10 +43,10 @@ PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinos
 	PurpleDinosaurStateBase(owner),
 	m_attackCountFrame(0)
 {
-	//通常攻撃1
+	//通常攻撃
 	m_owner->GetCollidable()->SetState(State::None);
-	//攻撃1
-	m_owner->GetModel()->SetAnim(kAnim, false);
+	//攻撃
+	m_owner->GetModel()->SetAnim(kAnim, false, kAnimSpeed);
 	//攻撃判定の準備
 	CreateAttack();
 	//モデルの向きをプレイヤーに向ける

@@ -24,6 +24,7 @@ namespace
 	//当たり判定
 	const Vector3 kCapsuleHeight = { 0.0f,150.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
+	constexpr int kHp = 1000; //体力
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
@@ -64,7 +65,7 @@ void Player::Init()
 	//次の状態を待機状態に
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
-	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, 100, thisPointer);
+	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
 void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
