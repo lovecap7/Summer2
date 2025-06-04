@@ -26,14 +26,11 @@ void HurtPoint::OnHitDamage(int damage)
 {
 	//–³“G‚È‚ç
 	if (m_isNoDamage)return;
+	m_isHit = true; //UŒ‚‚ğó‚¯‚½
 	m_hp -= damage;
 	if (m_hp <= 0)
 	{
 		m_hp = 0;
-	}
-	else
-	{
-		m_isHit = true; //UŒ‚‚ğó‚¯‚½
 	}
 }
 

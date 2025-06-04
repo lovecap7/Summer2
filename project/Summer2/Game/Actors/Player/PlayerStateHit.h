@@ -14,5 +14,7 @@ public:
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 private:
     void SpeedDown();
+	//ランダムでヒットアニメーションを選ぶ
+	void RandHitAnim();
 };
 

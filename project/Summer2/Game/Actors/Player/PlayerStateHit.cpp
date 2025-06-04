@@ -12,10 +12,15 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
+#include <DxLib.h>
 namespace
 {
 	//アニメーション
-	const char* kAnim = "Player|Hit1";
+	const char* kHit1Anim = "Player|Hit1";
+	const char* kHit2Anim = "Player|Hit2";
+	//アニメーション速度
+	constexpr float kHit1AnimSpeed = 1.2f;
+	constexpr float kHit2AnimSpeed = 1.4f;
 	//減速率
 	constexpr float kDeceRate = 0.95f;
 }
@@ -24,8 +29,8 @@ namespace
 PlayerStateHit::PlayerStateHit(std::shared_ptr<Player> player):
 	PlayerStateBase(player)
 {
-	//ヒットリアクション
-	m_player->GetModel()->SetAnim(kAnim, false);
+	//ランダムにヒットアニメーションを選ぶ
+	RandHitAnim();
 	m_player->GetCollidable()->SetState(State::None);
 }
 
@@ -44,6 +49,8 @@ void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& c
 	//やられリアクション中に攻撃を食らったらアニメーションを初めから
 	if (m_player->GetHurtPoint()->IsHit())
 	{
+		//ランダムでヒットアニメーションを選ぶ
+		RandHitAnim();
 		//リプレイ
 		m_player->GetModel()->ReplayAnim();
 	}
@@ -67,4 +74,17 @@ void PlayerStateHit::SpeedDown()
 	vec.x *= kDeceRate;
 	vec.z *= kDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+
+void PlayerStateHit::RandHitAnim()
+{
+	//ランダムでヒットアニメーションを選ぶ
+	if (GetRand(1))//0か1でランダム
+	{
+		m_player->GetModel()->SetAnim(kHit1Anim, false, kHit1AnimSpeed);
+	}
+	else
+	{
+		m_player->GetModel()->SetAnim(kHit2Anim, false, kHit2AnimSpeed);
+	}
 }

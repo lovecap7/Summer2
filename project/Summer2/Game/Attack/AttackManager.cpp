@@ -45,63 +45,67 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 
 	for (auto& actor : actors)
 	{
-		actor->GetHurtPoint()->Init();//やられ判定の初期化
+		//プレイヤーと敵のみ
+		if (actor->GetActorKind() == ActorKind::Player ||
+			actor->GetActorKind() == ActorKind::Enemy)
+		{
+			actor->GetHurtPoint()->Init();//やられ判定の初期化
+		}
 	}
 
 	//攻撃が当たっているかをチェックする　
 	for (auto& actor : actors)
 	{
-		//攻撃を受けないアクターは当たり判定をしない
-		if (actor->GetActorKind() == ActorKind::None)continue;
-		if (actor->GetActorKind() == ActorKind::Field)continue;
-		if (actor->GetActorKind() == ActorKind::Obstacle)continue;
-		if (actor->GetActorKind() == ActorKind::Item)continue;
-		if (actor->GetHurtPoint()->IsNoDamege())continue;//無敵の時は当たらない
-
-		//攻撃が当たっているかチェック
-		for (auto& attack : m_attacks)
+		//プレイヤーと敵のみ
+		if (actor->GetActorKind() == ActorKind::Player ||
+			actor->GetActorKind() == ActorKind::Enemy)
 		{
-			//当たってるかをチェック
-			bool isHit = false;
-			//攻撃のコライダブル
-			auto attackCollidable = attack->GetCollidable();
-			//やられ判定
-			auto actorHurtPointCollidable = actor->GetHurtPoint()->GetCollidable();
+			if (actor->GetHurtPoint()->IsNoDamege())continue;//無敵の時は当たらない
+			//攻撃が当たっているかチェック
+			for (auto& attack : m_attacks)
+			{
+				//当たってるかをチェック
+				bool isHit = false;
+				//攻撃のコライダブル
+				auto attackCollidable = attack->GetCollidable();
+				//やられ判定
+				auto actorHurtPointCollidable = actor->GetHurtPoint()->GetCollidable();
 
-			//球と
-			if (attackCollidable->GetColl()->GetShape() == Shape::Sphere)
-			{
-				//球
-				if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Sphere)
+				//球と
+				if (attackCollidable->GetColl()->GetShape() == Shape::Sphere)
 				{
-					isHit = m_collChecker->CheckCollSS(attackCollidable, actorHurtPointCollidable);
+					//球
+					if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Sphere)
+					{
+						isHit = m_collChecker->CheckCollSS(attackCollidable, actorHurtPointCollidable);
+					}
+					//カプセル
+					else if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Capsule)
+					{
+						isHit = m_collChecker->CheckCollCS(actorHurtPointCollidable, attackCollidable);
+					}
 				}
-				//カプセル
-				else if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Capsule)
+				//カプセルと
+				else if (attackCollidable->GetColl()->GetShape() == Shape::Capsule)
 				{
-					isHit = m_collChecker->CheckCollCS(actorHurtPointCollidable, attackCollidable);
+					//球
+					if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Sphere)
+					{
+						isHit = m_collChecker->CheckCollCS(attackCollidable, actorHurtPointCollidable);
+					}
+					//カプセル
+					else if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Capsule)
+					{
+						isHit = m_collChecker->CheckCollCC(attackCollidable, actorHurtPointCollidable);
+					}
 				}
-			}
-			//カプセルと
-			else if (attackCollidable->GetColl()->GetShape() == Shape::Capsule)
-			{
-				//球
-				if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Sphere)
-				{
-					isHit = m_collChecker->CheckCollCS(attackCollidable, actorHurtPointCollidable);
-				}
-				//カプセル
-				else if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Capsule)
-				{
-					isHit = m_collChecker->CheckCollCC(attackCollidable, actorHurtPointCollidable);
-				}
-			}
 
-			//当たってるなら
-			if (isHit)
-			{
-				//当たった時の処理
-				attack->OnHit(actor);
+				//当たってるなら
+				if (isHit)
+				{
+					//当たった時の処理
+					attack->OnHit(actor);
+				}
 			}
 		}
 	}
