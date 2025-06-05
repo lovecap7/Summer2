@@ -5,13 +5,13 @@ class Input;
 class Camera;
 class EnemyManager;
 class AttackManager;
-class PurpleDinosaurStateBase;
-class PurpleDinosaur :
-    public EnemyBase, public std::enable_shared_from_this<PurpleDinosaur>
+class SmallDragonStateBase;
+class SmallDragon :
+	public EnemyBase, public std::enable_shared_from_this<SmallDragon>
 {
 public:
-	PurpleDinosaur(int modelHandle, Vector3 pos);
-	~PurpleDinosaur();
+	SmallDragon(int modelHandle, Vector3 pos);
+	~SmallDragon();
 	//“o˜^ˆ—
 	void Entry(std::shared_ptr<ActorManager> actorManager)override;
 	//“o˜^‰ğœ
@@ -34,7 +34,7 @@ public:
 	void SetAttackCoolTime(int coolTime) { m_attackCoolTime = coolTime; }
 private:
 	//©•ª‚Ìó‘Ô
-	std::shared_ptr<PurpleDinosaurStateBase> m_state;
+	std::shared_ptr<SmallDragonStateBase> m_state;
 	//UŒ‚‚Å‚«‚é‚Ü‚Å‚ÌƒN[ƒ‹ƒ^ƒCƒ€
 	int m_attackCoolTime;
 	//‚â‚ç‚ê”»’è‚ÌXV

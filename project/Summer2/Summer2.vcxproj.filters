@@ -97,6 +97,12 @@
     <Filter Include="ヘッダー ファイル\Game\Actors\Enemy\PurpleDinosaur">
       <UniqueIdentifier>{b84e6d14-bc38-4dc6-968f-e48257cb8815}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Actors\Enemy\SmallDragon">
+      <UniqueIdentifier>{d599e69d-c1f1-4d97-b040-e028ca94bdf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors\Enemy\SmallDragon">
+      <UniqueIdentifier>{f2599fc6-e81d-4810-a4b6-63fe15105cda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -299,6 +305,15 @@
     </ClCompile>
     <ClCompile Include="Game\Attack\BulletAttack.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragon.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateIdle.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -508,6 +523,15 @@
     </ClInclude>
     <ClInclude Include="Game\Attack\BulletAttack.h">
       <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragon.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateIdle.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,13 @@ void BulletAttack::Init()
 
 void BulletAttack::Update()
 {
+	//移動
+	if (m_dir.Magnitude() > 0.0f)
+	{
+		Vector3 moveVec = m_dir.Normalize() * m_speed;
+		m_collidable->GetRb()->SetPos(m_collidable->GetRb()->GetPos() + moveVec);
+	}
+
 	//持続フレームを減らす
 	m_keepFrame--;
 	//持続フレームが0になったら消滅

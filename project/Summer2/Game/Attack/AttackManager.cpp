@@ -52,18 +52,17 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 			actor->GetHurtPoint()->Init();//やられ判定の初期化
 		}
 	}
-
-	//攻撃が当たっているかをチェックする　
-	for (auto& actor : actors)
+	//攻撃が当たっているかチェック
+	for (auto& attack : m_attacks)
 	{
-		//プレイヤーと敵のみ
-		if (actor->GetActorKind() == ActorKind::Player ||
-			actor->GetActorKind() == ActorKind::Enemy)
+		//攻撃が当たっているかをチェックする　
+		for (auto& actor : actors)
 		{
-			if (actor->GetHurtPoint()->IsNoDamege())continue;//無敵の時は当たらない
-			//攻撃が当たっているかチェック
-			for (auto& attack : m_attacks)
+			//プレイヤーと敵のみ
+			if (actor->GetActorKind() == ActorKind::Player ||
+				actor->GetActorKind() == ActorKind::Enemy)
 			{
+				if (actor->GetHurtPoint()->IsNoDamege())continue;//無敵の時は当たらない
 				//当たってるかをチェック
 				bool isHit = false;
 				//攻撃のコライダブル
