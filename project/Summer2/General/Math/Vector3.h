@@ -35,11 +35,6 @@ public:
 	Vector3 Cross(const Vector3& right)const;
 
 	/// <summary>
-	/// 0ベクトルにする
-	/// </summary>
-	Vector3 Zero()const;
-
-	/// <summary>
 	/// DxLibのベクトルに変換します
 	/// </summary>
 	/// <returns></returns>
@@ -74,6 +69,10 @@ public:
 	static Vector3 Right() { return Vector3(1.0f, 0.0f, 0.0f); };
 	static Vector3 Forward() { return Vector3(0.0f, 0.0f, 1.0f); };
 	static Vector3 Back() { return Vector3(0.0f, 0.0f, -1.0f); };
+	/// <summary>
+	/// 0ベクトルにする
+	/// </summary>
+	static Vector3 Zero();
 	
 
 };

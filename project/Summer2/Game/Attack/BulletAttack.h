@@ -1,5 +1,6 @@
 #pragma once
 #include "AttackBase.h"
+#include "../../General/Math/Vector3.h"
 class BulletAttack :
     public AttackBase
 {
@@ -21,5 +22,18 @@ public:
 	void Draw() override;
 	//“–‚½‚Á‚½
 	void OnHit(std::shared_ptr<Actor> actor) override;
+
+	//•ûŒü‚Æ‘¬“x‚ğİ’è
+	void SetDirAndSpeed(const Vector3& dir, float speed)
+	{
+		m_dir = dir;
+		m_speed = speed;
+	}
+
+private:
+	//•ûŒü
+	Vector3 m_dir;
+	//ˆÚ“®‘¬“x
+	float m_speed = 0.0f;
 };
 

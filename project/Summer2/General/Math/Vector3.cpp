@@ -60,15 +60,6 @@ Vector3 Vector3::Cross(const Vector3& right) const
     //a‚Æb‚ªì‚é•½sŽl•ÓŒ`‚Ì–ÊÏ‚É“™‚µ‚¢
 }
 
-Vector3 Vector3::Zero()const
-{
-    Vector3 zero;
-    zero.x = 0.0f;
-    zero.y = 0.0f;
-    zero.z = 0.0f;
-    return zero;
-}
-
 DxLib::VECTOR Vector3::ToDxLibVector() const
 {
     return VGet(this->x,this->y,this->z);
@@ -171,5 +162,14 @@ bool Vector3::operator!=(const Vector3& right) const
 {
     bool isFlag = (this->x != right.x || this->y != right.y || this->z != right.z);
     return isFlag;
+}
+
+Vector3 Vector3::Zero()
+{
+    Vector3 zero;
+    zero.x = 0.0f;
+    zero.y = 0.0f;
+    zero.z = 0.0f;
+    return zero;
 }
 

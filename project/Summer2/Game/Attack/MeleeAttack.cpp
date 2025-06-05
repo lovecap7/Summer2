@@ -46,6 +46,7 @@ void MeleeAttack::Update()
 void MeleeAttack::Draw()
 {
 #if _DEBUG
+	if(m_collidable->GetColl()->GetShape() == Shape::Capsule)
 	DrawCapsule3D(
 		m_collidable->GetRb()->GetPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),

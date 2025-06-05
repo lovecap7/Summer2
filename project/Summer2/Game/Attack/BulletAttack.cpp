@@ -6,11 +6,14 @@
 #include <DxLib.h>
 
 #if _DEBUG
+#include "../../General/Collision/SphereCollider.h"
 #include "../../General/Rigidbody.h"
 #endif
 
 BulletAttack::BulletAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner):
-	AttackBase(coll, damage, keepFrame, owner)
+	AttackBase(coll, damage, keepFrame, owner),
+	m_dir(Vector3::Zero()),
+	m_speed(0.0f)
 {
 }
 
@@ -33,12 +36,57 @@ void BulletAttack::Init()
 
 void BulletAttack::Update()
 {
+	//持続フレームを減らす
+	m_keepFrame--;
+	//持続フレームが0になったら消滅
+	if (m_keepFrame <= 0)
+	{
+		m_isDead = true;
+	}
 }
 
 void BulletAttack::Draw()
 {
+#if _DEBUG
+	if (m_collidable->GetColl()->GetShape() == Shape::Sphere)
+		DrawSphere3D(
+			m_collidable->GetRb()->GetPos().ToDxLibVector(),
+			std::dynamic_pointer_cast<SphereCollider>(m_collidable->GetColl())->GetRadius(),
+			32,
+			0xff00ff,
+			0xff00ff,
+			true//無敵の時は塗りつぶされる
+		);
+#endif
 }
 
 void BulletAttack::OnHit(std::shared_ptr<Actor> actor)
 {
+	//自分と同じ種類のアクターなら無視
+	if (m_owner->GetActorKind() == actor->GetActorKind())return;
+
+	bool isFind = false;
+	//IDがすでに記録されているか確認
+	for (auto id : m_hitId)
+	{
+		if (id == actor->GetID())
+		{
+			isFind = true;
+			break;
+		}
+	}
+	if (!isFind)
+	{
+		//記録されていなければ記録する
+		m_hitId.emplace_back(actor->GetID());
+		//ダメージを与える
+		actor->GetHurtPoint()->OnHitDamage(m_damage);
+		//ノックバック
+		Vector3 knockBackVec = actor->GetCollidable()->GetRb()->GetNextPos() - m_owner->GetCollidable()->GetRb()->GetNextPos();//離れるベクトル
+		knockBackVec.y = 0.0f;//Y成分はなし
+		knockBackVec = knockBackVec.Normalize() * 2.0f;//ノックバック
+		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
+		//削除
+		m_isDead = true;
+	}
 }
