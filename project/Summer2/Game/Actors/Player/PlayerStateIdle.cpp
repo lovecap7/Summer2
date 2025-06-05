@@ -68,7 +68,7 @@ void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& 
 		return;
 	}
 	//‰ñ”ðƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚ç
-	if (input.IsTrigger("RB"))
+	if (input.IsTrigger("B"))
 	{
 		//‰ñ”ð
 		ChangeState(std::make_shared<PlayerStateRolling>(m_player));

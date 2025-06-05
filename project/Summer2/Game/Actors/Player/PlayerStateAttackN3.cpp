@@ -98,7 +98,7 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	if (model->GetTotalAnimFrame() - kAttackCancelFrame <= model->GetNowAnimFrame())
 	{
 		//‰ñ”ðƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚ç
-		if (input.IsTrigger("RB"))
+		if (input.IsTrigger("B"))
 		{
 			//‰ñ”ð
 			ChangeState(std::make_shared<PlayerStateRolling>(m_player));
