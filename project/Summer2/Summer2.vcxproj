@@ -52,6 +52,7 @@
     <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
     <ClCompile Include="Game\Attack\AttackManager.cpp" />
+    <ClCompile Include="Game\Attack\BulletAttack.cpp" />
     <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\MeleeAttack.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="Game\Actors\TestColls\TestSphere.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />
     <ClInclude Include="Game\Attack\AttackManager.h" />
+    <ClInclude Include="Game\Attack\BulletAttack.h" />
     <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\MeleeAttack.h" />
     <ClInclude Include="Game\Camera\Camera.h" />

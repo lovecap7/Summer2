@@ -297,6 +297,9 @@
     <ClCompile Include="Game\Actors\Player\PlayerStateDeath.cpp">
       <Filter>ソース ファイル\Game\Actors\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Attack\BulletAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -502,6 +505,9 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\PlayerStateDeath.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\BulletAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
