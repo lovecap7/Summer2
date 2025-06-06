@@ -1,18 +1,19 @@
 #pragma once
 #include "SmallDragonStateBase.h"
-class SmallDragon;
 class Input;
 class Camera;
 class AttackManager;
-class SmallDragonStateIdle :
-    public SmallDragonStateBase, public std::enable_shared_from_this<SmallDragonStateIdle>
+class SmallDragon;
+class SmallDragonStateDeath :
+    public SmallDragonStateBase
 {
 public:
-	SmallDragonStateIdle(std::shared_ptr<SmallDragon> owner);
-	~SmallDragonStateIdle();
-	void Init()override;
+	SmallDragonStateDeath(std::shared_ptr<SmallDragon> owner);
+	~SmallDragonStateDeath();
+	void Init() override;
 	void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 private:
 	//Œ¸‘¬‚µ‚Ä‚¢‚­
 	void SpeedDown();
 };
+

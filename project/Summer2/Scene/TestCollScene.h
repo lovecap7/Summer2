@@ -33,7 +33,8 @@ private:
     int m_playerHandle;
     int m_polygonHandle;
     int m_wallHandle;
-    int m_common1Handle;
+    int m_purpleDinosaurHandle;
+    int m_smallDragonHandle;
 private:
 #if _DEBUG
     //デバッグモード用

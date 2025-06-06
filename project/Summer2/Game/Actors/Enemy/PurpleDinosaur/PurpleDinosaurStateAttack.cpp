@@ -26,11 +26,11 @@ namespace
 	//左腕の当たり判定の大きさ(攻撃の大きさ)
 	constexpr float kLeftArmRadius = 20.0f;
 	//攻撃のダメージ
-	constexpr int kAttackDamage = 100;
+	constexpr int kBulletDamage = 100;
 	//攻撃の持続フレーム
-	constexpr int kAttackKeepFrame = 2;
+	constexpr int kBulletKeepFrame = 2;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 30;
+	constexpr int kBulletFireFrame = 30;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Weapon";
 	//アニメーションの速度
@@ -87,7 +87,7 @@ void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr
 	//カウント
 	++m_attackCountFrame;
 	//攻撃発生フレーム
-	if (m_attackCountFrame == kAttackStartFrame)
+	if (m_attackCountFrame == kBulletFireFrame)
 	{
 		//攻撃を入れる
 		AppearAttack(m_attack, attackManager);
@@ -112,7 +112,7 @@ void PurpleDinosaurStateAttack::CreateAttack()
 	m_leftArm = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(leftArm.x, leftArm.y, leftArm.z), kLeftArmRadius),
 		std::make_shared<Rigidbody>(Vector3(leftHand.x, leftHand.y, leftHand.z)));
 	//武器の座標と当たり判定を攻撃に紐図ける
-	m_attack = std::make_shared<MeleeAttack>(m_leftArm, kAttackDamage, kAttackKeepFrame, m_owner);
+	m_attack = std::make_shared<MeleeAttack>(m_leftArm, kBulletDamage, kBulletKeepFrame, m_owner);
 }
 
 void PurpleDinosaurStateAttack::UpdateAttack()

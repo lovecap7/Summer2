@@ -312,8 +312,17 @@
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBase.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateAttack.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateIdle.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateHit.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateDeath.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\SmallDragon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -530,8 +539,17 @@
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBase.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateAttack.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateIdle.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateHit.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateDeath.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\SmallDragon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

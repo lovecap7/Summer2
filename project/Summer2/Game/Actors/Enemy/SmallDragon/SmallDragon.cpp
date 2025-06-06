@@ -1,4 +1,6 @@
 #include "SmallDragon.h"
+#include "SmallDragonStateBase.h"
+#include "SmallDragonStateIdle.h"
 #include "../EnemyManager.h"
 #include <memory>
 #include "../../../../General/Model.h"
@@ -61,7 +63,7 @@ void SmallDragon::Init()
 {
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = shared_from_this();
-	m_state = std::make_shared<PurpleDinosaurStateIdle>(thisPointer);
+	m_state = std::make_shared<SmallDragonStateIdle>(thisPointer);
 	//次の状態を待機状態に
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
