@@ -32,6 +32,7 @@
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateIdle.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragon.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateAttack.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBack.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBase.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateDeath.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateHit.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaurStateIdle.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragon.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateAttack.h" />
+    <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBack.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateBase.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateDeath.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateHit.h" />

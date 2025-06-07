@@ -1,5 +1,6 @@
 #include "SmallDragonStateHit.h"
 #include "SmallDragonStateIdle.h"
+#include "SmallDragonStateDeath.h"
 #include "SmallDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/Collision/ColliderBase.h"
@@ -42,10 +43,9 @@ void SmallDragonStateHit::Update(const Input& input, const std::unique_ptr<Camer
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
 		//死亡
-		//ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
+		ChangeState(std::make_shared<SmallDragonStateDeath>(m_owner));
 		return;
 	}
-
 	//やられリアクション中に攻撃を食らったらアニメーションを初めから
 	if (m_owner->GetHurtPoint()->IsHit())
 	{

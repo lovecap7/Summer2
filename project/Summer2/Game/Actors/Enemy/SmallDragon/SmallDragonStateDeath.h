@@ -5,7 +5,7 @@ class Camera;
 class AttackManager;
 class SmallDragon;
 class SmallDragonStateDeath :
-    public SmallDragonStateBase
+    public SmallDragonStateBase, public std::enable_shared_from_this<SmallDragonStateDeath>
 {
 public:
 	SmallDragonStateDeath(std::shared_ptr<SmallDragon> owner);

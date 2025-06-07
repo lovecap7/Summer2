@@ -1,5 +1,7 @@
 #include "SmallDragonStateAttack.h"
 #include "SmallDragonStateIdle.h"
+#include "SmallDragonStateHit.h"
+#include "SmallDragonStateDeath.h"
 #include "SmallDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
@@ -52,8 +54,6 @@ SmallDragonStateAttack::SmallDragonStateAttack(std::shared_ptr<SmallDragon> owne
 
 SmallDragonStateAttack::~SmallDragonStateAttack()
 {
-	//UŒ‚”»’è‚ğÁ‚·
-	//m_attack->Delete();
 	//UŒ‚‚ÌƒN[ƒ‹ƒ^ƒCƒ€
 	m_owner->SetAttackCoolTime(kAttackCoolTime);
 }
@@ -68,14 +68,14 @@ void SmallDragonStateAttack::Update(const Input& input, const std::unique_ptr<Ca
 	//€‚ñ‚Å‚é‚È‚ç
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
-		//€–Só‘Ô
-		//ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
+		//€–S
+		ChangeState(std::make_shared<SmallDragonStateDeath>(m_owner));
 		return;
 	}
 	if (m_owner->GetHurtPoint()->IsHit())
 	{
 		//‚â‚ç‚êó‘Ô
-		//ChangeState(std::make_shared<PurpleDinosaurStateHit>(m_owner));
+		ChangeState(std::make_shared<SmallDragonStateHit>(m_owner));
 		return;
 	}
 	

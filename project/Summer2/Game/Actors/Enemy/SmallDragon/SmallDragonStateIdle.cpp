@@ -1,6 +1,8 @@
 #include "SmallDragonStateIdle.h"
 #include "SmallDragonStateAttack.h"
 #include "SmallDragonStateHit.h"
+#include "SmallDragonStateDeath.h"
+#include "SmallDragonStateBack.h"
 #include "SmallDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/Collision/ColliderBase.h"
@@ -15,7 +17,7 @@
 namespace
 {
 	//プレイヤー戦闘状態になる距離
-	constexpr float kBattleDistance = 500.0f;
+	constexpr float kBackDistance = 300.0f;
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	//アニメーションの名前
@@ -46,7 +48,7 @@ void SmallDragonStateIdle::Update(const Input& input, const std::unique_ptr<Came
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
 		//死亡
-		//ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
+		ChangeState(std::make_shared<SmallDragonStateDeath>(m_owner));
 		return;
 	}
 	if (m_owner->GetHurtPoint()->IsHit())
@@ -63,23 +65,19 @@ void SmallDragonStateIdle::Update(const Input& input, const std::unique_ptr<Came
 	{
 		//モデルの向きをプレイヤーに向ける
 		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+		//攻撃のクールタイムが0なら
+		if (m_owner->GetAttackCoolTime() <= 0)
+		{
+			//攻撃状態にする
+			ChangeState(std::make_shared<SmallDragonStateAttack>(m_owner));
+		}
 		//距離をチェック
 		float dist = m_owner->GetPlayerVec().Magnitude();
-		//戦闘状態距離なら
-		if (dist <= kBattleDistance)
-		{
-			//攻撃のクールタイムが0なら
-			if (m_owner->GetAttackCoolTime() <= 0)
-			{
-				//攻撃状態にする
-				ChangeState(std::make_shared<SmallDragonStateAttack>(m_owner));
-			}
-		}
-		//射程範囲外なので
-		else
+		//敵との距離が近いとき
+		if (dist <= kBackDistance)
 		{
 			//プレイヤーをに近づく
-			//ChangeState(std::make_shared<PurpleDinosaurStateChase>(m_owner));
+			ChangeState(std::make_shared<SmallDragonStateBack>(m_owner));
 		}
 	}
 }
