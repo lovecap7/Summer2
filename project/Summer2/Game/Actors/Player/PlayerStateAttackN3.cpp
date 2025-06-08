@@ -4,6 +4,7 @@
 #include "PlayerStateRolling.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateUltimate.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -78,6 +79,13 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));
 		return;
 	}
+	//ゲージがあるとき使える
+	if (input.IsTrigger("RB"))
+	{
+		//必殺技
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		return;
+	}
 	//カウント
 	++m_attackCountFrame;
 	//攻撃発生フレーム
@@ -98,7 +106,7 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	if (model->GetTotalAnimFrame() - kAttackCancelFrame <= model->GetNowAnimFrame())
 	{
 		//回避ボタンを押したら
-		if (input.IsTrigger("B"))
+		if (input.IsTrigger("A"))
 		{
 			//回避
 			ChangeState(std::make_shared<PlayerStateRolling>(m_player));

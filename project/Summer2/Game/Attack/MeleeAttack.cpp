@@ -6,6 +6,7 @@
 
 #if _DEBUG
 #include "../../General/Collision/CapsuleCollider.h"
+#include "../../General/Collision/SphereCollider.h"
 #include "../../General/Rigidbody.h"
 #endif
 
@@ -46,16 +47,30 @@ void MeleeAttack::Update()
 void MeleeAttack::Draw()
 {
 #if _DEBUG
-	if(m_collidable->GetColl()->GetShape() == Shape::Capsule)
-	DrawCapsule3D(
-		m_collidable->GetRb()->GetPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetRadius(),
-		32,
-		0xff00ff,
-		0xff00ff,
-		true//–³“G‚ÌŽž‚Í“h‚è‚Â‚Ô‚³‚ê‚é
-	);
+	if (m_collidable->GetColl()->GetShape() == Shape::Capsule)
+	{
+		DrawCapsule3D(
+			m_collidable->GetRb()->GetPos().ToDxLibVector(),
+			std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos().ToDxLibVector(),
+			std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetRadius(),
+			32,
+			0xff00ff,
+			0xff00ff,
+			false
+		);
+	}
+	else if(m_collidable->GetColl()->GetShape() == Shape::Sphere)
+	{
+		DrawSphere3D(
+			m_collidable->GetRb()->GetPos().ToDxLibVector(),
+			std::dynamic_pointer_cast<SphereCollider>(m_collidable->GetColl())->GetRadius(),
+			32,
+			0xff00ff,
+			0xff00ff,
+			false
+		);
+	}
+	
 #endif
 }
 

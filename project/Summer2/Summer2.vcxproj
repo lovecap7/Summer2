@@ -52,6 +52,8 @@
     <ClCompile Include="Game\Actors\Player\PlayerStateIdle.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateJump.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateRolling.cpp" />
+    <ClCompile Include="Game\Actors\Player\PlayerStateRun.cpp" />
+    <ClCompile Include="Game\Actors\Player\PlayerStateUltimate.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateWalk.cpp" />
     <ClCompile Include="Game\Actors\Stage\InvisibleWall.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestCapsule.cpp" />
@@ -128,6 +130,8 @@
     <ClInclude Include="Game\Actors\Player\PlayerStateIdle.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateJump.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateRolling.h" />
+    <ClInclude Include="Game\Actors\Player\PlayerStateRun.h" />
+    <ClInclude Include="Game\Actors\Player\PlayerStateUltimate.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateWalk.h" />
     <ClInclude Include="Game\Actors\Stage\InvisibleWall.h" />
     <ClInclude Include="Game\Actors\TestColls\TestCapsule.h" />

@@ -18,7 +18,8 @@ public:
 	Vector3 GetDir();
 	//アニメーション関係
 	void SetAnim(const char* animName,bool isLoop);//アニメーション変更
-	void SetAnim(const char* animName,bool isLoop,const float animSpeed);//アニメーション変更(再生速度も)
+	void SetAnim(const char* animName,bool isLoop,const float& animSpeed);//アニメーション変更(再生速度も)
+	void SetAnimSpeed(const float& animSpeed);//アニメーションの速度変更
 	bool IsFinishAnim();//アニメーションが終わったかどうか
 	float GetTotalAnimFrame();//全体フレーム
 	void SetTotalAnimFrame(float totalFrame);//全体フレームセット

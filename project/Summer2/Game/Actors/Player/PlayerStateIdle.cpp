@@ -7,6 +7,7 @@
 #include "PlayerStateRolling.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateUltimate.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -68,14 +69,22 @@ void PlayerStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& 
 		return;
 	}
 	//回避ボタンを押したら
-	if (input.IsTrigger("B"))
+	if (input.IsTrigger("A"))
 	{
 		//回避
 		ChangeState(std::make_shared<PlayerStateRolling>(m_player));
 		return;
 	}
+	//ゲージがあるとき使える
+	if (input.IsTrigger("RB"))
+	{
+		//必殺技
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		return;
+	}
+
 	//ジャンプボタンを押してるならジャンプ
-	if (input.IsTrigger("A") && m_player->IsGround())
+	if (input.IsTrigger("B") && m_player->IsGround())
 	{
 		//ジャンプ
 		ChangeState(std::make_shared<PlayerStateJump>(m_player));

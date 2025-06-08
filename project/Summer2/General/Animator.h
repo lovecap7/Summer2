@@ -72,12 +72,14 @@ public:
 
 	//アニメーションが終わるフレーム(全体フレーム / 再生速度)
 	float GetTotalAnimFrame() { return  m_animNext.m_animStopTime / m_animNext.m_animSpeed; };
-	//現在のアニメフレーム(現在のフレーム / 再生速度)
-	float GetNowAnimFrame() { return  m_animNext.m_animTimer / m_animNext.m_animSpeed; };
+	//アニメフレーム(フレーム / 再生速度)
+	float GetAnimFrame() { return  m_animNext.m_animTimer / m_animNext.m_animSpeed; };
 	//アニメーションの全体フレームをセットする
 	void SetTotalAnimFrame(float totalFrame) { m_animNext.m_animStopTime = totalFrame; };
 	//ループフレームをセットする
 	void SetFixedLoop(float loopFrame);
 	//ループ再生が終了したか
 	bool IsFinishFixedLoop();
+	//アニメーションの速度を変更
+	void SetAnimSpeed(const float& animSpeed);
 };

@@ -84,7 +84,8 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 void Animator::Replay()
 {
 	//今のモーションを最初から再生
-	m_animNow.m_animTimer = 0.0f;
+	m_animNext.m_animTimer = 0.0f;
+	m_animNow = m_animNext;
 }
 
 void Animator::RemoveAnim(const int& modelHandle, Anim& anim)
@@ -134,6 +135,11 @@ bool Animator::IsFinishFixedLoop()
 {
 	//指定ループ再生が終了したらtrue
 	return m_animNext.m_isFixedLoop && m_animNext.m_fixedLoopFrame <= 0.0f;
+}
+
+void Animator::SetAnimSpeed(const float& animSpeed)
+{
+	m_animNext.m_animSpeed = animSpeed;
 }
 
 void Animator::UpdateAnim(const int& modelHandle,Anim& anim)

@@ -5,6 +5,7 @@
 #include "PlayerStateCA3.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateUltimate.h"
 #include "Player.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -59,6 +60,13 @@ void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>
 	{
 		//‚â‚ç‚êó‘Ô
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));
+		return;
+	}
+	//ƒQ[ƒW‚ª‚ ‚é‚Æ‚«g‚¦‚é
+	if (input.IsTrigger("RB"))
+	{
+		//•KE‹Z
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
 		return;
 	}
 	auto collidable = m_player->GetCollidable();

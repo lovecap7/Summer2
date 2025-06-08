@@ -1,4 +1,4 @@
-#include "PlayerStateWalk.h"
+#include "PlayerStateRun.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateJump.h"
 #include "PlayerStateFall.h"
@@ -7,7 +7,6 @@
 #include "PlayerStateRolling.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
-#include "PlayerStateRun.h"
 #include "PlayerStateUltimate.h"
 #include "Player.h"
 #include "../../../General/game.h"
@@ -19,34 +18,35 @@
 #include "../../../General/Animator.h"
 #include "../../../Game/Camera/Camera.h"
 #include "../../Attack/HurtPoint.h"
-
 namespace
 {
 	//移動速度
-	constexpr float kLowMoveSpeed = 2.0f;//地上の小移動速度
-	constexpr float kMediumMoveSpeed = 5.0f;//地上の中移動速度
-	constexpr float kHighMoveSpeed = 10.0f;//地上の大移動速度
+	constexpr float kMoveSpeed = 15.0f;//地上の移動速度
 	//アニメーション
-	const char* kAnim = "Player|Walk";
+	const char* kAnim = "Player|Dash";
 }
 
-PlayerStateWalk::PlayerStateWalk(std::shared_ptr<Player> player):
+
+PlayerStateRun::PlayerStateRun(std::shared_ptr<Player> player):
 	PlayerStateBase(player)
 {
-	//歩き状態
+	//走り状態
 	m_player->GetModel()->SetAnim(kAnim, true);
 	m_player->GetCollidable()->SetState(State::None);
 }
 
-PlayerStateWalk::~PlayerStateWalk()
+
+PlayerStateRun::~PlayerStateRun()
 {
 }
-void PlayerStateWalk::Init()
+
+void PlayerStateRun::Init()
 {
 	//次の状態を自分の状態を入れる
 	ChangeState(shared_from_this());
 }
-void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+
+void PlayerStateRun::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())
@@ -111,36 +111,9 @@ void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& 
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
 	}
-	//ダッシュ
-	if (input.IsPress("LS"))
-	{
-		ChangeState(std::make_shared<PlayerStateRun>(m_player));
-		return;
-	}
-
 	//移動
-	collidable->GetRb()->SetMoveVec(GetForwardVec(input,camera) * InputValueSpeed(input));
+	collidable->GetRb()->SetMoveVec(GetForwardVec(input, camera) * kMoveSpeed);
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(VGet(dir.x, 0.0f, dir.y));
-}
-
-
-float PlayerStateWalk::InputValueSpeed(const Input& input)
-{
-	float moveSpeed = 0.0f;
-	//速度をスティック入力の深度に合わせる
-	if (input.IsLowPowerLeftStick())
-	{
-		moveSpeed = kLowMoveSpeed;
-	}
-	else if (input.IsMediumPowerLeftStick())
-	{
-		moveSpeed = kMediumMoveSpeed;
-	}
-	else if (input.IsHighPowerLeftStick())
-	{
-		moveSpeed = kHighMoveSpeed;
-	}
-	return moveSpeed;
 }

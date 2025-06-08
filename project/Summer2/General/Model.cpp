@@ -70,10 +70,16 @@ void Model::SetAnim(const char* animName, bool isLoop)
 	m_animator->SetAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, animName), isLoop);
 }
 
-void Model::SetAnim(const char* animName, bool isLoop, const float animSpeed)
+void Model::SetAnim(const char* animName, bool isLoop, const float& animSpeed)
 {
 	//アニメーションを変更
 	m_animator->SetAnim(m_modelHandle, MV1GetAnimIndex(m_modelHandle, animName), isLoop, animSpeed);
+}
+
+void Model::SetAnimSpeed(const float& animSpeed)
+{
+	//アニメーションの速度
+	m_animator->SetAnimSpeed(animSpeed);
 }
 
 bool Model::IsFinishAnim()
@@ -97,7 +103,7 @@ void Model::SetTotalAnimFrame(float totalFrame)
 float Model::GetNowAnimFrame()
 {
 	//現在のフレーム
-	return m_animator->GetNowAnimFrame();
+	return m_animator->GetAnimFrame();
 }
 
 void Model::ReplayAnim()
