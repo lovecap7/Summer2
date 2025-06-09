@@ -342,6 +342,12 @@
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragon.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateIdle.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -579,6 +585,12 @@
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragon.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateBase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateIdle.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClInclude>
   </ItemGroup>

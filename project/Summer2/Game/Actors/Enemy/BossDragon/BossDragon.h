@@ -5,7 +5,7 @@ class Input;
 class Camera;
 class EnemyManager;
 class AttackManager;
-//class BossDragonStateBase;
+class BossDragonStateBase;
 class BossDragon :
 	public EnemyBase, public std::enable_shared_from_this<BossDragon>
 {
@@ -34,7 +34,7 @@ public:
 	void SetAttackCoolTime(int coolTime) { m_attackCoolTime = coolTime; }
 private:
 	//自分の状態
-	//std::shared_ptr<BossDragonStateBase> m_state;
+	std::shared_ptr<BossDragonStateBase> m_state;
 	//攻撃できるまでのクールタイム
 	int m_attackCoolTime;
 	//やられ判定の更新
