@@ -103,6 +103,12 @@
     <Filter Include="ヘッダー ファイル\Game\Actors\Enemy\SmallDragon">
       <UniqueIdentifier>{f2599fc6-e81d-4810-a4b6-63fe15105cda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Actors\Enemy\BossDragon">
+      <UniqueIdentifier>{4f0813f8-dd89-4679-bf97-136d80cb602d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors\Enemy\BossDragon">
+      <UniqueIdentifier>{d9a41659-7c22-4c4a-ae03-7b53c4e3d398}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -332,6 +338,9 @@
     </ClCompile>
     <ClCompile Include="Game\Actors\Player\PlayerStateUltimate.cpp">
       <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragon.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +577,9 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\PlayerStateUltimate.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragon.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
