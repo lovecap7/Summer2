@@ -1,5 +1,9 @@
 #pragma once
 #include "PurpleDinosaurStateBase.h"
+class Input;
+class Camera;
+class AttackManager;
+class PurpleDinosaur;
 class PurpleDinosaurStateChase :
     public PurpleDinosaurStateBase, public std::enable_shared_from_this<PurpleDinosaurStateChase>
 {

@@ -1,5 +1,6 @@
 #include "BossDragon.h"
 #include "BossDragonStateBase.h"
+#include "BossDragonStateIdle.h"
 #include "../EnemyManager.h"
 #include <memory>
 #include "../../../../General/Model.h"

@@ -23,7 +23,11 @@
     <ClCompile Include="Game\Actors\ActorManager.cpp" />
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragon.cpp" />
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateBase.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateChase.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateDeath.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateHit.cpp" />
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateIdle.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStatePunchAttack.cpp" />
     <ClCompile Include="Game\Actors\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actors\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaur.cpp" />
@@ -104,7 +108,11 @@
     <ClInclude Include="Game\Actors\ActorManager.h" />
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragon.h" />
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateBase.h" />
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateChase.h" />
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateDeath.h" />
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateHit.h" />
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateIdle.h" />
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStatePunchAttack.h" />
     <ClInclude Include="Game\Actors\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actors\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actors\Enemy\PurpleDinosaur\PurpleDinosaur.h" />

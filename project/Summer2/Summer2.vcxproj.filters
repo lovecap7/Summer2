@@ -348,6 +348,18 @@
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateIdle.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateHit.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateDeath.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateChase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStatePunchAttack.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -591,6 +603,18 @@
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateIdle.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateHit.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateDeath.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStatePunchAttack.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateChase.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClInclude>
   </ItemGroup>

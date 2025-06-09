@@ -1,9 +1,10 @@
-#include "BossDragonStateIdle.h"
+#include "BossDragonStateChase.h"
 #include "BossDragonStateDeath.h"
 #include "BossDragonStateHit.h"
-#include "BossDragonStateChase.h"
+#include "BossDragonStatePunchAttack.h"
 #include "BossDragon.h"
 #include "../EnemyBase.h"
+#include "../../../../General/game.h"
 #include "../../../../General/Collision/ColliderBase.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../../General/Rigidbody.h"
@@ -12,41 +13,42 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/Animator.h"
 #include "../../../../Game/Camera/Camera.h"
-
 namespace
 {
 	//プレイヤー戦闘状態になる距離
-	constexpr float kBackDistance = 300.0f;
+	constexpr float kBattleDistance = 120.0f;
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
-	//アニメーションの名前
-	const char* kAnim = "CharacterArmature|Flying_Idle";//待機
+	//アニメーション
+	const char* kAnim = "CharacterArmature|Fast_Flying";
+	//プレイヤーを追いかける速度
+	constexpr float kChaseSpeed = 8.0f;
 }
 
-BossDragonStateIdle::BossDragonStateIdle(std::shared_ptr<BossDragon> owner):
+BossDragonStateChase::BossDragonStateChase(std::shared_ptr<BossDragon> owner) :
 	BossDragonStateBase(owner)
 {
-	//待機状態
-	m_owner->GetModel()->SetAnim(kAnim, true);
 	m_owner->GetCollidable()->SetState(State::None);
+	//アニメーション
+	m_owner->GetModel()->SetAnim(kAnim, true);
 }
 
-BossDragonStateIdle::~BossDragonStateIdle()
+BossDragonStateChase::~BossDragonStateChase()
 {
 }
 
-void BossDragonStateIdle::Init()
+void BossDragonStateChase::Init()
 {
 	//次の状態を今の状態に更新
 	ChangeState(shared_from_this());
 }
 
-void BossDragonStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStateChase::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
-		//死亡
+		//死亡状態
 		ChangeState(std::make_shared<BossDragonStateDeath>(m_owner));
 		return;
 	}
@@ -57,28 +59,25 @@ void BossDragonStateIdle::Update(const Input& input, const std::unique_ptr<Camer
 		return;
 	}
 
-	//減速
-	SpeedDown();
 	//プレイヤーを発見したとき
 	if (m_owner->IsHitSearch())
 	{
 		//モデルの向きをプレイヤーに向ける
 		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
-		//攻撃のクールタイムが0なら
-		if (m_owner->GetAttackCoolTime() <= 0)
+		//距離をチェック
+		float dist = m_owner->GetPlayerVec().Magnitude();
+		//戦闘状態距離なら
+		if (dist <= kBattleDistance)
+		{
+			//パンチ状態にする
+			ChangeState(std::make_shared<BossDragonStatePunchAttack>(m_owner));
+		}
+		//射程範囲外なので
+		else
 		{
 			//プレイヤーをに近づく
-			ChangeState(std::make_shared<BossDragonStateChase>(m_owner));
+			Vector3 chaseVec = m_owner->GetPlayerNomVecXZ();
+			m_owner->GetCollidable()->GetRb()->SetMoveVec(chaseVec * kChaseSpeed);
 		}
 	}
-}
-
-void BossDragonStateIdle::SpeedDown()
-{
-	auto collidable = m_owner->GetCollidable();
-	//減速
-	Vector3 vec = collidable->GetRb()->GetVec();
-	vec.x *= kMoveDeceRate;
-	vec.z *= kMoveDeceRate;
-	collidable->GetRb()->SetVec(vec);
 }

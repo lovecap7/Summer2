@@ -66,7 +66,7 @@ void SmallDragonStateBack::Update(const Input& input, const std::unique_ptr<Came
 		//近いなら距離なら
 		if (dist <= kBackDistance)
 		{
-			//プレイヤーをに近づく
+			//プレイヤーから離れる
 			Vector3 chaseVec = m_owner->GetPlayerNomVecXZ();
 			m_owner->GetCollidable()->GetRb()->SetMoveVec(chaseVec * -kBackSpeed);
 		}

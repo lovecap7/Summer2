@@ -35,6 +35,7 @@ private:
     int m_wallHandle;
     int m_purpleDinosaurHandle;
     int m_smallDragonHandle;
+    int m_bossDragonHandle;
 private:
 #if _DEBUG
     //デバッグモード用

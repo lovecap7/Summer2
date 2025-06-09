@@ -14,6 +14,7 @@
 #include "../Game/Actors/Enemy/EnemyManager.h"
 #include "../Game/Actors/Enemy/PurpleDinosaur/PurpleDinosaur.h"
 #include "../Game/Actors/Enemy/SmallDragon/SmallDragon.h"
+#include "../Game/Actors/Enemy/BossDragon/BossDragon.h"
 #include "../Game/Actors/Enemy/EnemyBase.h"
 //ステージ
 #include "../Game/Actors/Stage/InvisibleWall.h"
@@ -36,7 +37,8 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	m_polygonHandle(MV1LoadModel("Data/Model/Stage/Stage1.mv1")),
 	m_wallHandle(MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1")),
 	m_purpleDinosaurHandle(MV1LoadModel("Data/Model/Enemy/PurpleDinosaur.mv1")),
-	m_smallDragonHandle(MV1LoadModel("Data/Model/Enemy/SmallDragon.mv1"))
+	m_smallDragonHandle(MV1LoadModel("Data/Model/Enemy/SmallDragon.mv1")),
+	m_bossDragonHandle(MV1LoadModel("Data/Model/Enemy/BossDragon.mv1"))
 {
 	//登場するオブジェクトをセットしていく
 	std::vector<std::shared_ptr<Actor>> actors;
@@ -50,6 +52,8 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	actors.push_back(enemy1);
 	std::shared_ptr<EnemyBase> enemy2 = std::make_shared<SmallDragon>(MV1DuplicateModel(m_smallDragonHandle), Vector3{ -400.0f,-50.0f,0.0f });
 	actors.push_back(enemy2);
+	std::shared_ptr<EnemyBase> enemy3 = std::make_shared<BossDragon>(MV1DuplicateModel(m_bossDragonHandle), Vector3{ -600.0f,-50.0f,0.0f });
+	actors.push_back(enemy3);
 	actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));
 	actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle,Vector3{ -100.0f,-50.0f,0.0f },VGet(1.0f,1.0f,1.0f), VGet(0.0f, 0.0f, 0.0f)));//透明壁
 	m_actorManager = std::make_shared<ActorManager>(actors, m_player);

@@ -3,6 +3,7 @@
 class Input;
 class Camera;
 class AttackManager;
+class PurpleDinosaur;
 class PurpleDinosaurStateDeath :
 	public PurpleDinosaurStateBase, public std::enable_shared_from_this<PurpleDinosaurStateDeath>
 {
