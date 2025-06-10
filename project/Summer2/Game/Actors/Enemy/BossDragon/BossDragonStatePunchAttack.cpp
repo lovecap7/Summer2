@@ -30,7 +30,7 @@ namespace
 	//攻撃の持続フレーム
 	constexpr int kAttackKeepFrame = 3;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 35;
+	constexpr int kAttackStartFrame = 30;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Punch";
 	//アニメーションの速度

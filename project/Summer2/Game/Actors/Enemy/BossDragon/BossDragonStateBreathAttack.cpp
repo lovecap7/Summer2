@@ -1,8 +1,8 @@
-#include "SmallDragonStateAttack.h"
-#include "SmallDragonStateIdle.h"
-#include "SmallDragonStateHit.h"
-#include "SmallDragonStateDeath.h"
-#include "SmallDragon.h"
+#include "BossDragonStateBreathAttack.h"
+#include "BossDragonStateDeath.h"
+#include "BossDragonStateHit.h"
+#include "BossDragonStateIdle.h"
+#include "BossDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
 #include "../../../../General/Collision/ColliderBase.h"
@@ -16,6 +16,7 @@
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/BulletAttack.h"
+#include "../../../../General/Math/Quaternion.h"
 
 namespace
 {
@@ -30,7 +31,9 @@ namespace
 	//弾の発生フレーム
 	constexpr int kBulletFireFrame = 30;
 	//弾のスピード
-	constexpr float kBulletSpeed = 2.0f;
+	constexpr float kBulletSpeed = 4.0f;
+	//弾の発射角度
+	constexpr float kBulletAngle = 30.0f / 180.0f * DX_PI_F;
 
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Headbutt";
@@ -40,8 +43,8 @@ namespace
 	constexpr int kAttackCoolTime = 150;//2.5秒くらいの感覚で攻撃
 }
 
-SmallDragonStateAttack::SmallDragonStateAttack(std::shared_ptr<SmallDragon> owner) :
-	SmallDragonStateBase(owner),
+BossDragonStateBreathAttack::BossDragonStateBreathAttack(std::shared_ptr<BossDragon> owner) :
+	BossDragonStateBase(owner),
 	m_attackCountFrame(0)
 {
 	//通常攻撃
@@ -52,33 +55,33 @@ SmallDragonStateAttack::SmallDragonStateAttack(std::shared_ptr<SmallDragon> owne
 	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
 }
 
-SmallDragonStateAttack::~SmallDragonStateAttack()
+BossDragonStateBreathAttack::~BossDragonStateBreathAttack()
 {
 	//攻撃のクールタイム
 	m_owner->SetAttackCoolTime(kAttackCoolTime);
 }
-void SmallDragonStateAttack::Init()
+void BossDragonStateBreathAttack::Init()
 {
 	// 次の状態を今の状態に更新
 	ChangeState(shared_from_this());
 }
 
-void SmallDragonStateAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStateBreathAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
 		//死亡
-		ChangeState(std::make_shared<SmallDragonStateDeath>(m_owner));
+		ChangeState(std::make_shared<BossDragonStateDeath>(m_owner));
 		return;
 	}
 	if (m_owner->GetHurtPoint()->IsHit())
 	{
 		//やられ状態
-		ChangeState(std::make_shared<SmallDragonStateHit>(m_owner));
+		ChangeState(std::make_shared<BossDragonStateHit>(m_owner));
 		return;
 	}
-	
+
 	//カウント
 	++m_attackCountFrame;
 	//攻撃発生フレーム
@@ -87,35 +90,50 @@ void SmallDragonStateAttack::Update(const Input& input, const std::unique_ptr<Ca
 		//攻撃判定の準備
 		CreateAttack();
 		//攻撃を入れる
-		AppearAttack(m_attack, attackManager);
+		AppearAttack(m_bullet1, attackManager);
+		AppearAttack(m_bullet2, attackManager);
+		AppearAttack(m_bullet3, attackManager);
 	}
 	//アニメーション終了後
 	if (m_owner->GetModel()->IsFinishAnim())
 	{
 		//待機状態に戻す
-		ChangeState(std::make_shared<SmallDragonStateIdle>(m_owner));
+		ChangeState(std::make_shared<BossDragonStateIdle>(m_owner));
 	}
 
 	//減速
 	SpeedDown();
 }
 
-void SmallDragonStateAttack::CreateAttack()
+void BossDragonStateBreathAttack::CreateAttack()
 {
 	auto model = m_owner->GetModel();
 	//生成位置
 	Vector3 bulletPos = m_owner->GetCollidable()->GetRb()->GetPos();
 	bulletPos.y += 100.0f;
+	//弾の作成
+	CreateBullet(bulletPos, model,m_bullet1);
+	CreateBullet(bulletPos, model,m_bullet2);
+	CreateBullet(bulletPos, model,m_bullet3);
+	//弾の進行方向とスピード
+	Vector3 bulletDir = model->GetDir();
+	m_bullet1->SetDirAndSpeed(bulletDir, kBulletSpeed);//真っすぐ飛ぶ
+	bulletDir = Quaternion::AngleAxis(kBulletAngle,Vector3::Up()) *model->GetDir();
+	m_bullet2->SetDirAndSpeed(bulletDir, kBulletSpeed);//斜めに飛ぶ
+	bulletDir = Quaternion::AngleAxis(-kBulletAngle, Vector3::Up()) * model->GetDir();
+	m_bullet3->SetDirAndSpeed(bulletDir, kBulletSpeed);//斜めに飛ぶ
+}
+
+void BossDragonStateBreathAttack::CreateBullet(Vector3& bulletPos, std::shared_ptr<Model>& model, std::shared_ptr<BulletAttack>& bullet)
+{
 	//弾の当たり判定作成
 	auto coll = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kBulletRadius),
 		std::make_shared<Rigidbody>(bulletPos));
 	//弾の座標と当たり判定を攻撃に紐図ける
-	m_attack = std::make_shared<BulletAttack>(coll, kBulletDamage, kBulletKeepFrame, m_owner);
-	//弾の進行方向とスピード
-	m_attack->SetDirAndSpeed(model->GetDir(), kBulletSpeed);
+	bullet = std::make_shared<BulletAttack>(coll, kBulletDamage, kBulletKeepFrame, m_owner);
 }
 
-void SmallDragonStateAttack::SpeedDown()
+void BossDragonStateBreathAttack::SpeedDown()
 {
 	auto collidable = m_owner->GetCollidable();
 	//減速

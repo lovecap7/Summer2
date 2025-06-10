@@ -209,37 +209,37 @@ Quaternion Quaternion::Slerp(const Quaternion& sRota, const Quaternion& eRota, f
 	return rQ;
 }
 
-Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)
-{
-	//単位クォータニオン
-	Quaternion rQ = IdentityQ();
-	assert(targetDir.Magnitude() > 0.0f && "方向がありません");
-	Vector3 forwardDir = targetDir.Normalize();
-	//回転しないなら
-	if (forwardDir == Vector3::Forward())
-	{
-		//回転しないクォータニオンを返す
-		return rQ;
-	}
-
-	//内積から角度を求める
-	float dot = Vector3::Forward().Dot(targetDir);
-	//負の時符号反転
-	if (dot < 0.0f)
-	{
-		dot *= -1.0f;
-	}
-	float theta = acos(dot);
-
-	//回転の軸を求める
-	Vector3 axis = { 0.0f,1.0f,0.0f };
-	//真後ろを向くクォータニオン以外なら
-	if ((forwardDir * -1.0f) != Vector3::Forward())
-	{
-		//軸を外積で求める
-		axis = Vector3::Forward().Cross(targetDir);
-	}
-	//クォータニオン作成
-	rQ = AngleAxis(theta, axis);
-	return rQ;
-}
+//Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)
+//{
+//	//単位クォータニオン
+//	Quaternion rQ = IdentityQ();
+//	assert(targetDir.Magnitude() > 0.0f && "方向がありません");
+//	Vector3 forwardDir = targetDir.Normalize();
+//	//回転しないなら
+//	if (forwardDir == Vector3::Forward())
+//	{
+//		//回転しないクォータニオンを返す
+//		return rQ;
+//	}
+//
+//	//内積から角度を求める
+//	float dot = Vector3::Forward().Dot(targetDir);
+//	//負の時符号反転
+//	if (dot < 0.0f)
+//	{
+//		dot *= -1.0f;
+//	}
+//	float theta = acos(dot);
+//
+//	//回転の軸を求める
+//	Vector3 axis = { 0.0f,1.0f,0.0f };
+//	//真後ろを向くクォータニオン以外なら
+//	if ((forwardDir * -1.0f) != Vector3::Forward())
+//	{
+//		//軸を外積で求める
+//		axis = Vector3::Forward().Cross(targetDir);
+//	}
+//	//クォータニオン作成
+//	rQ = AngleAxis(theta, axis);
+//	return rQ;
+//}

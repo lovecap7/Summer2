@@ -28,7 +28,7 @@
 namespace
 {
 	const Vector3 kPlayerPos = { 0.0f, 0.0f, 0.0f };
-	const Vector3 kCameraPos = { 0.0f, 400.0f, 500.0f };
+	const Vector3 kCameraPos = { 0.0f, 500.0f, 800.0f };
 }
 
 TestCollScene::TestCollScene(SceneController& controller) :
@@ -119,22 +119,6 @@ void TestCollScene::Update(Input& input)
 		m_actorManager->Update(input,m_camera);
 		//カメラの更新
 		m_camera->Update();
-#if _DEBUG
-		m_camera->RotaCamera(input);
-		//入力テスト
-		if (input.IsLowPowerLeftStick())
-		{
-			printfDx("少しだけ倒してます\n");
-		}
-		if (input.IsMediumPowerLeftStick())
-		{
-			printfDx("そこそこ倒してます\n");
-		}
-		if (input.IsHighPowerLeftStick())
-		{
-			printfDx("最大まで倒してます\n");
-		}
-#endif
 	}
 }
 

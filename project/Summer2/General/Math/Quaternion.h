@@ -68,6 +68,6 @@ public:
 	/// <param name="targetDir">向きたい方向</param>
 	/// <param name="up">地面が傾いているならその法線を入れる</param>
 	/// <returns>回転クォータニオン</returns>
-	static Quaternion LookAt(const Vector3& targetDir, const Vector3& up = Vector3::Up());
+	//static Quaternion LookAt(const Vector3& targetDir, const Vector3& up = Vector3::Up());
 };
 

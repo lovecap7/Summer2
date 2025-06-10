@@ -3,9 +3,6 @@
 #include "../../General/Math/MyMath.h"
 class Actor;
 class Rigidbody;
-#if _DEBUG
-class Input;
-#endif
 class Camera
 {
 public:
@@ -16,16 +13,13 @@ public:
 	Position3 GetPos() { return m_pos; }
 	//カメラの向き
 	Vector3 GetDir();
-
-#if _DEBUG
-	//カメラ回転
-	void RotaCamera(const Input& input);
-#endif
 private:
 	//自分の座標
 	Position3 m_pos;
 	//カメラの向き
-	Position3 m_target;
+	Vector3 m_dir;
+	//カメラが見てる位置
+	Vector3 m_viewPos;
 	//プレイヤー
 	std::shared_ptr<Actor> m_player;
 };

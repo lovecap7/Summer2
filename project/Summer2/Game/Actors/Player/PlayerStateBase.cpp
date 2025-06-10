@@ -24,32 +24,30 @@ Vector3 PlayerStateBase::GetForwardVec(const Input& input, const std::unique_ptr
 {
 	Vector3 rV = { 0.0f,0.0f,0.0f, };
 	//入力
-	Vector2 stickVec = m_player->GetStickVec();
+	Vector3 stickVec = { m_player->GetStickVec().x,0.0f,-m_player->GetStickVec().y };
 	if (stickVec.Magnitude() < 0.0f)
 	{
 		return rV;
 	}
 	//カメラの向きにあわせる
 	//カメラの向き
-	Vector2 cameraDir{ camera->GetDir().x,camera->GetDir().z };
+	Vector3 cameraDir = camera->GetDir();
+	cameraDir.y = 0.0f;
 	if (cameraDir.Magnitude() > 0.0f)
 	{
 		cameraDir = cameraDir.Normalize();
 	}
-	//ワールド座標のZ方向を基準にカメラがどのくらい向いているのかを計算
-	Vector2 z = Vector2{ 0.0f, -1.0f };
-	//カメラの向き(角度)
-	float cameraTheata = Theata(z, cameraDir);
-	//基準に対してスティックがどのくらい向いているのかを計算
-	float stickTheata = Theata(z, stickVec.Normalize());
-	//回転クォータニオンを作成
-	Quaternion cameraQ = Quaternion::AngleAxis(cameraTheata, Vector3::Up());
-	Quaternion stickQ = Quaternion::AngleAxis(stickTheata, Vector3::Up());
+	//回転マトリクスを作成
+	Matrix4x4 cameraM = Matrix4x4::LookAt(cameraDir, Vector3::Up());
+	Matrix4x4 stickM = Matrix4x4::LookAt(stickVec, Vector3::Up());
 	//ベクトルにかける(回転)
-	Vector3 moveVec = Vector3{ 0.0f, 0.0f, -1.0f };
-	moveVec = stickQ * cameraQ * moveVec;
+	Vector3 moveVec = Vector3::Forward();
+	moveVec = stickM * cameraM * moveVec;
 	moveVec.y = 0.0f; //Y軸は無視
-	rV = moveVec.Normalize();
+	if (moveVec.Magnitude() > 0.0f)
+	{
+		rV = moveVec.Normalize();
+	}
 	return rV;
 }
 void PlayerStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager>& attackManager)

@@ -29,7 +29,7 @@ PlayerStateRolling::PlayerStateRolling(std::shared_ptr<Player> player) :
 	m_player->GetCollidable()->SetState(State::None);
 	//Œü‚«‚ÌXV
 	Vector2 dir = m_player->GetStickVec();
-	m_player->GetModel()->SetDir(VGet(dir.x, 0.0f, dir.y));
+	m_player->GetModel()->SetDir(VGet(-dir.x, 0.0f, dir.y));
 	//–³“G‚É
 	m_player->GetHurtPoint()->SetIsNoDamege(true);
 }

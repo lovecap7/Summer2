@@ -20,8 +20,6 @@ private:
     std::shared_ptr<BulletAttack> m_attack;
     //UŒ‚‚Ì“–‚½‚è”»’èì¬
     void CreateAttack();
-    //UŒ‚‚ÌˆÊ’uXV
-    void UpdateAttack();
     //Œ¸‘¬‚µ‚Ä‚¢‚­
     void SpeedDown();
 };

@@ -2,6 +2,7 @@
 #include "BossDragonStateDeath.h"
 #include "BossDragonStateHit.h"
 #include "BossDragonStateChase.h"
+#include "BossDragonStateBreathAttack.h"
 #include "BossDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/Collision/ColliderBase.h"
@@ -68,7 +69,7 @@ void BossDragonStateIdle::Update(const Input& input, const std::unique_ptr<Camer
 		if (m_owner->GetAttackCoolTime() <= 0)
 		{
 			//ƒvƒŒƒCƒ„[‚ð‚É‹ß‚Ã‚­
-			ChangeState(std::make_shared<BossDragonStateChase>(m_owner));
+			ChangeState(std::make_shared<BossDragonStateBreathAttack>(m_owner));
 		}
 	}
 }
