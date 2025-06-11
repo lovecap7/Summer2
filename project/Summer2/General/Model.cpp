@@ -6,14 +6,14 @@
 namespace
 {
 	constexpr float kAnimSpeed = 0.5f;//再生速度
+	//回転フレーム
+	constexpr int kRotaFrame = 10;
 }
 
 Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHandle(modelHandle),
-	m_dir{ 0.0f,0.0f,-1.0f },
-	m_nowAngleY(0.0f),
-	m_endAngleY(0.0f),
 	m_forward{0.0f,0.0f,1.0f},
+	m_nextForward{0.0f,0.0f,1.0f},
 	m_rotation(Quaternion::IdentityQ()),
 	m_rotaFrame(0)
 {
@@ -36,9 +36,12 @@ void Model::Update()
 	if (m_rotaFrame > 0)
 	{
 		m_rotaFrame--;
-//		m_rotation = m_rotaQ * m_rotation;
-//		m_forward = m_rotaQ * m_forward;
-//		MV1SetRotationMatrix(m_modelHandle, m_rotation.GetMatrix().ToDxLibMATRIX());
+		m_rotation = m_rotaQ * m_rotation;
+		m_forward = m_rotaQ * m_forward;
+		if (m_rotaQ.w < 1)
+		{
+			MV1SetRotationMatrix(m_modelHandle, m_rotation.GetMatrix().ToDxLibMATRIX());
+		}
 	}
 
 }
@@ -66,27 +69,21 @@ void Model::SetDir(Vector2 vec)
 	//向きが決められないのでリターン
 	if (vec.Magnitude() <= 0.0f)	return;
 	//向きを計算
-	Vector2 z = { 0.0f,-1.0f };
 	Vector2 dir = vec;
 	dir = dir.Normalize();
-	m_endAngleY = Vector2::Theata(m_forward.XZ(), dir);
-
+	if (m_nextForward.XZ() == dir)return;//向きが変わらないなら
+	float angle = Vector2::Theata(m_forward.XZ(), dir);
 	Vector3 axis = m_forward.Cross(dir.XZ());
 	//回転クォータニオン作成
-	m_rotaQ = Quaternion::AngleAxis(m_endAngleY, axis);
-
-	m_rotation = m_rotaQ * m_rotation;
-	m_forward = m_rotaQ * m_forward;
-	if (m_rotaQ.w < 1)
-	{
-		MV1SetRotationMatrix(m_modelHandle, m_rotation.GetMatrix().ToDxLibMATRIX());
-
-	}
+	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, axis);
+	m_rotaFrame = kRotaFrame;
+	//次の正面ベクトルを記録
+	m_nextForward = dir.XZ();
 }
 
 Vector3 Model::GetDir()
 {
-	Vector3 dir = m_dir;
+	Vector3 dir = m_forward;
 	if (dir.Magnitude() > 0.0f)
 	{
 		dir = dir.Normalize();

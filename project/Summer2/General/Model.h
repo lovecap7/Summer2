@@ -36,18 +36,14 @@ private:
 	int m_modelHandle;
 	//アニメーション
 	std::unique_ptr<Animator> m_animator;
-	//向き
-	Vector3 m_dir;
-	//現在の角度
-	float m_nowAngleY;
-	//最終的な角度
-	float m_endAngleY;
 	//回転の向き
 	Vector3 m_angleAxis;
 	//モデルの回転情報
 	Quaternion m_rotation;
 	//モデルの正面
 	Vector3 m_forward;
+	//次のモデルの正面
+	Vector3 m_nextForward;
 	//回転クォータニオン
 	Quaternion m_rotaQ;
 	//回転フレーム
