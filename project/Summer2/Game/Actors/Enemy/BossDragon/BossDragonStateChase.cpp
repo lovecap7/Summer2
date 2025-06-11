@@ -2,6 +2,7 @@
 #include "BossDragonStateDeath.h"
 #include "BossDragonStateHit.h"
 #include "BossDragonStatePunchAttack.h"
+#include "BossDragonStateIdle.h"
 #include "BossDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/game.h"
@@ -63,7 +64,7 @@ void BossDragonStateChase::Update(const Input& input, const std::unique_ptr<Came
 	if (m_owner->IsHitSearch())
 	{
 		//モデルの向きをプレイヤーに向ける
-		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 		//距離をチェック
 		float dist = m_owner->GetPlayerVec().Magnitude();
 		//戦闘状態距離なら
@@ -79,5 +80,11 @@ void BossDragonStateChase::Update(const Input& input, const std::unique_ptr<Came
 			Vector3 chaseVec = m_owner->GetPlayerNomVecXZ();
 			m_owner->GetCollidable()->GetRb()->SetMoveVec(chaseVec * kChaseSpeed);
 		}
+	}
+	//見失ったとき
+	else
+	{
+		//待機状態にする
+		ChangeState(std::make_shared<BossDragonStateIdle>(m_owner));
 	}
 }

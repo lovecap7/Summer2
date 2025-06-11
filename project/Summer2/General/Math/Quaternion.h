@@ -1,6 +1,5 @@
 #pragma once
-#include "Vector3.h"
-#include "Matrix4x4.h"
+#include "../Math/MyMath.h"
 class Quaternion
 {
 public:
@@ -9,6 +8,7 @@ public:
 	//コンストラクタ
 	Quaternion();
 	Quaternion(float w,float x, float y, float z);
+	Quaternion(const Quaternion& q);
 
 	//演算子オーバーロード
 	//クォータニオン同士
@@ -62,12 +62,6 @@ public:
 	/// <param name="t">補間係数(0~1)</param>
 	/// <returns>補間後クオータニオン</returns>
 	static Quaternion Slerp(const Quaternion& sRota, const Quaternion& eRota, float t);
-	/// <summary>
-	/// 向きたい方向を向く回転クォータニオン
-	/// </summary>
-	/// <param name="targetDir">向きたい方向</param>
-	/// <param name="up">地面が傾いているならその法線を入れる</param>
-	/// <returns>回転クォータニオン</returns>
-	//static Quaternion LookAt(const Vector3& targetDir, const Vector3& up = Vector3::Up());
+	
 };
 

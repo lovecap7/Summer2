@@ -52,7 +52,7 @@ BossDragonStateBreathAttack::BossDragonStateBreathAttack(std::shared_ptr<BossDra
 	//攻撃
 	m_owner->GetModel()->SetAnim(kAnim, false, kAnimSpeed);
 	//モデルの向きをプレイヤーに向ける
-	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 }
 
 BossDragonStateBreathAttack::~BossDragonStateBreathAttack()

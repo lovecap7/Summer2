@@ -16,6 +16,13 @@ Quaternion::Quaternion(float w,float x, float y, float z):
 	z(z)
 {
 }
+Quaternion::Quaternion(const Quaternion& q) :
+	w(q.w),
+	x(q.x),
+	y(q.y),
+	z(q.z)
+{
+}
 //クォータニオンの回転の合成
 Quaternion Quaternion::operator*(const Quaternion& q)const
 {
@@ -155,8 +162,12 @@ Matrix4x4 Quaternion::GetMatrix() const
 
 Quaternion Quaternion::AngleAxis(const float& rad, const Vector3& axis)
 {
-	assert(axis.Magnitude() > 0.0f && "軸がありません");
-	Quaternion rQ;
+	Quaternion rQ = Quaternion::IdentityQ();
+	if (axis.Magnitude() <= 0.0f)
+	{
+		return rQ;
+	}
+
 	//正規化
 	Vector3 nAxis = axis.Normalize();
 	rQ.w = cos(rad / 2.0f);//実部
@@ -200,14 +211,16 @@ Quaternion Quaternion::Slerp(const Quaternion& sRota, const Quaternion& eRota, f
 	{
 		dot *= -1.0f;
 	}
-	float theta = acos(dot);
+	float rad = acos(dot);
 	
 	//球面線形補間の公式より
-	float s1 = sin((1.0f - t) * theta) / sin(theta);
-	float s2 = sin(t * theta) / sin(theta);
+	float s1 = sin((1.0f - t) * rad) / sin(rad);
+	float s2 = sin(t * rad) / sin(rad);
 	rQ = (sRotaNom * s1) + (eRotaNom * s2);
 	return rQ;
 }
+
+
 
 //Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)
 //{

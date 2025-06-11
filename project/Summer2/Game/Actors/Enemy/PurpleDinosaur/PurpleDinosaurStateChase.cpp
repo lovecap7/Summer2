@@ -64,7 +64,7 @@ void PurpleDinosaurStateChase::Update(const Input& input, const std::unique_ptr<
 	if (m_owner->IsHitSearch())
 	{
 		//モデルの向きをプレイヤーに向ける
-		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 		//距離をチェック
 		float dist = m_owner->GetPlayerVec().Magnitude();
 		//戦闘状態距離なら
@@ -80,5 +80,11 @@ void PurpleDinosaurStateChase::Update(const Input& input, const std::unique_ptr<
 			Vector3 chaseVec = m_owner->GetPlayerNomVecXZ();
 			m_owner->GetCollidable()->GetRb()->SetMoveVec(chaseVec * kChaseSpeed);
 		}
+	}
+	//見失ったとき
+	else
+	{
+		//待機状態にする
+		ChangeState(std::make_shared<PurpleDinosaurStateIdle>(m_owner));
 	}
 }

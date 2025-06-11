@@ -15,5 +15,7 @@ public:
 private:
     //Œ¸‘¬‚µ‚Ä‚¢‚­
     void SpeedDown();
+    //“ü—Í‚É‘Î‰ž‚µ‚½ˆÚ“®—Ê
+    float InputValueSpeed(const Input& input);
 };
 

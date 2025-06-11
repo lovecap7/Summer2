@@ -64,7 +64,7 @@ void SmallDragonStateIdle::Update(const Input& input, const std::unique_ptr<Came
 	if (m_owner->IsHitSearch())
 	{
 		//モデルの向きをプレイヤーに向ける
-		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 		//攻撃のクールタイムが0なら
 		if (m_owner->GetAttackCoolTime() <= 0)
 		{

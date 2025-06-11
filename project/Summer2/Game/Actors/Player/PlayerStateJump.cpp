@@ -18,13 +18,15 @@ namespace
 	//ジャンプ力
 	const Vector3 kJumpVec = { 0.0f,13.0f,0.0f };
 	//空中移動速度
-	constexpr float kAirMoveSpeed = 1.5f;
-	//空中移動最高速度
-	constexpr float kMaxAirMoveSpeed = 10.0f;
+	constexpr float kAirMoveSpeed = 1.0f;
 	//アニメーション
 	const char* kAnim = "Player|Jump";
 	//減速
 	constexpr float kAirMoveDeceRate = 0.9f;
+	//移動速度
+	constexpr float kLowAirMoveSpeed = 2.0f;//空中の小移動速度
+	constexpr float kMediumAirMoveSpeed = 5.0f;//空中の中移動速度
+	constexpr float kHighAirMoveSpeed = 10.0f;//空中の大移動速度
 }
 
 PlayerStateJump::PlayerStateJump(std::shared_ptr<Player> player):
@@ -82,7 +84,7 @@ void PlayerStateJump::Update(const Input& input, const std::unique_ptr<Camera>& 
 		float speed = collidable->GetRb()->GetMoveVec().Magnitude();
 		if (speed > 0.0f)
 		{
-			speed = MathSub::ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
+			speed = MathSub::ClampFloat(speed, 0.0f, InputValueSpeed(input));
 			Vector3 moveVec = collidable->GetRb()->GetMoveVec();
 			if (moveVec.Magnitude() > 0.0f)
 			{
@@ -98,7 +100,8 @@ void PlayerStateJump::Update(const Input& input, const std::unique_ptr<Camera>& 
 	}
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
-	m_player->GetModel()->SetDir(VGet(-dir.x, 0.0f, dir.y));
+	dir.x *= -1.0f;
+	m_player->GetModel()->SetDir(dir);
 }
 void PlayerStateJump::SpeedDown()
 {
@@ -108,5 +111,25 @@ void PlayerStateJump::SpeedDown()
 	vec.x *= kAirMoveDeceRate;
 	vec.z *= kAirMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+
+
+float PlayerStateJump::InputValueSpeed(const Input& input)
+{
+	float moveSpeed = 0.0f;
+	//速度をスティック入力の深度に合わせる
+	if (input.IsLowPowerLeftStick())
+	{
+		moveSpeed = kLowAirMoveSpeed;
+	}
+	else if (input.IsMediumPowerLeftStick())
+	{
+		moveSpeed = kMediumAirMoveSpeed;
+	}
+	else if (input.IsHighPowerLeftStick())
+	{
+		moveSpeed = kHighAirMoveSpeed;
+	}
+	return moveSpeed;
 }
 

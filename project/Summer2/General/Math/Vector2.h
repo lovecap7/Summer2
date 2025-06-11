@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+class Vector3;
 class Vector2
 {
 public:
@@ -50,8 +51,12 @@ public:
 	Vector2 operator/=(const float& right);
 	bool operator==(const Vector2& right)const;
 	bool operator!=(const Vector2& right)const;
+
+	static float Theata(Vector2 vec1, Vector2 vec2);
+
+	Vector3 XZ();
 };
-float Theata(Vector2 vec1,Vector2 vec2);
+
 //ç¿ïWÇ≈ï\Ç∑Ç∆Ç´Ç…égÇ§
 typedef Vector2 Position2;
 

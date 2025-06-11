@@ -1,5 +1,7 @@
 #pragma once
 #include <DxLib.h>
+
+class Vector2;
 class Vector3
 {
 public:
@@ -48,6 +50,21 @@ public:
 	/// <param name="t">補間の値</param>
 	/// <returns>補間後のベクトル(座標)</returns>
 	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+
+	/// <summary>
+	/// XZの成分を持つべく２を返す
+	/// </summary>
+	/// <returns></returns>
+	Vector2 XZ();
+	
+	/// <summary>
+	/// Slerp(球面線形補間)を行います。
+	/// </summary>
+	/// <param name="start">開始位置(座標)</param>
+	/// <param name="end">終了位置(座標)</param>
+	/// <param name="t">補間の値</param>
+	/// <returns>補間後のベクトル(座標)</returns>
+	//static Vector3 Slerp(const Vector3& start, const Vector3& end, float t);
 
 	//演算子オーバーロード
 	Vector3 operator+(const Vector3& right)const;

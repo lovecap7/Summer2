@@ -50,7 +50,7 @@ BossDragonStatePunchAttack::BossDragonStatePunchAttack(std::shared_ptr<BossDrago
 	//攻撃判定の準備
 	CreateAttack();
 	//モデルの向きをプレイヤーに向ける
-	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 }
 
 BossDragonStatePunchAttack::~BossDragonStatePunchAttack()

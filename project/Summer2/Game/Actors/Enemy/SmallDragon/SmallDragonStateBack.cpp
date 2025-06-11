@@ -60,7 +60,7 @@ void SmallDragonStateBack::Update(const Input& input, const std::unique_ptr<Came
 	if (m_owner->IsHitSearch())
 	{
 		//モデルの向きをプレイヤーに向ける
-		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 		//距離をチェック
 		float dist = m_owner->GetPlayerVec().Magnitude();
 		//近いなら距離なら
@@ -75,5 +75,11 @@ void SmallDragonStateBack::Update(const Input& input, const std::unique_ptr<Came
 			//待機状態にする
 			ChangeState(std::make_shared<SmallDragonStateIdle>(m_owner));
 		}
+	}
+	//見失ったら
+	else
+	{
+		//待機状態にする
+		ChangeState(std::make_shared<SmallDragonStateIdle>(m_owner));
 	}
 }

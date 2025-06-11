@@ -50,7 +50,7 @@ PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinos
 	//攻撃判定の準備
 	CreateAttack();
 	//モデルの向きをプレイヤーに向ける
-	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+	m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 }
 
 PurpleDinosaurStateAttack::~PurpleDinosaurStateAttack()

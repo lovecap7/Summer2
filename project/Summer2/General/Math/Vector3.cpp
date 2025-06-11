@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Vector2.h"
 #include <cmath>
 #include <cassert>
 
@@ -32,7 +33,11 @@ float Vector3::Magnitude() const
 
 Vector3 Vector3::Normalize() const
 {
-    assert(this->Magnitude() > 0.0f && "³‹K‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½");
+    if (this->Magnitude() <= 0.0f)
+    {
+        return *this;
+    }
+//    assert(this->Magnitude() > 0.0f && "³‹K‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½");
     //³‹K‰»
     Vector3 ans;
     ans = (*this) / Magnitude();
@@ -72,6 +77,14 @@ Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t)
 	if (t > 1.0f)t = 1.0f;
 	Vector3 rV;
 	rV = start * (1.0f - t) + end * t;
+    return rV;
+}
+
+Vector2 Vector3::XZ()
+{
+    Vector2 rV;
+    rV.x = this->x;
+    rV.y = this->z;
     return rV;
 }
 

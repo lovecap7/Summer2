@@ -89,9 +89,9 @@ Vector3 TestSphere::GetForwardVec(const std::unique_ptr<Camera>& camera)
 	//ワールド座標のZ方向を基準にカメラがどのくらい向いているのかを計算
 	Vector2 z = Vector2{ 0.0f, -1.0f };
 	//カメラの向き(角度)
-	float cameraTheata = Theata(z, cameraDir);
+	float cameraTheata = Vector2::Theata(z, cameraDir);
 	//基準に対してスティックがどのくらい向いているのかを計算
-	float stickTheata = Theata(z, m_stickVec.Normalize());
+	float stickTheata = Vector2::Theata(z, m_stickVec.Normalize());
 	//プレイヤーを中心に次の座標を回転
 	Matrix4x4 rotaMat = Matrix4x4::RotateYMat4x4(cameraTheata + stickTheata);
 	//ベクトルにかける(回転)

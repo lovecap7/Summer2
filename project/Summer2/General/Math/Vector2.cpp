@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include "Vector3.h"
 #include <DxLib.h>
 #include <cassert>
 
@@ -116,22 +117,31 @@ bool Vector2::operator!=(const Vector2& right) const
     return isX || isY;
 }
 
-float Theata(Vector2 vec1, Vector2 vec2)
+float Vector2::Theata(Vector2 vec1, Vector2 vec2)
 {
-    //“àÏ‚©‚çŠÔ‚ÌŠp“x‚ðŽæ“¾
-    float dot = vec1.Dot(vec2);
-    //cosƒ¦‚ð‹‚ß‚é  “àÏ‚ÌŒöŽ®dot = |a||b|cosƒ¦
-    float cosTheta = dot / (vec1.Magnitude() * vec2.Magnitude());
-    //ƒ¦(Šp“x)‚ðŽæ“¾
-    float theta = acosf(cosTheta);
-
-    //ŠOÏ‚©‚ç‰ñ“]‚ÌŒü‚«‚ðŽæ“¾
-    float cross = vec1.Cross(vec2);
-    //¶‰ñ“]
-    if (cross > 0)
+    //ƒxƒNƒgƒ‹‚ª‚È‚¢
+    if (vec1.Magnitude() <= 0.0f || vec2.Magnitude() <= 0.0f)
     {
-        theta *= -1;
+        return 0.0f;
     }
 
+    //³‹K‰»
+    Vector2 v1 = vec1.Normalize();
+    Vector2 v2 = vec2.Normalize();
+
+    //“àÏ‚©‚çŠÔ‚ÌŠp“x‚ðŽæ“¾
+    float dot = v1.Dot(v2);
+    //ƒ¦(Šp“x)‚ðŽæ“¾
+    float theta = acosf(dot);
+
 	return theta;
+}
+
+Vector3 Vector2::XZ()
+{
+    Vector3 rV;
+    rV.x = this->x;
+    rV.y = 0.0f;
+    rV.z = this->y;
+    return rV;
 }

@@ -64,7 +64,7 @@ void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<C
 	if (m_owner->IsHitSearch())
 	{
 		//モデルの向きをプレイヤーに向ける
-		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().ToDxLibVector());
+		m_owner->GetModel()->SetDir(m_owner->GetPlayerNomVecXZ().XZ());
 		//距離をチェック
 		float dist = m_owner->GetPlayerVec().Magnitude();
 		//戦闘状態距離なら
