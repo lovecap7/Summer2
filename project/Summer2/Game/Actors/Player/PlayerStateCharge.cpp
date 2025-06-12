@@ -81,7 +81,6 @@ void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>
 	SpeedDown();
 	//Œü‚«‚ÌXV
 	Vector2 dir = m_player->GetStickVec();
-	dir.x *= -1.0f;
 	m_player->GetModel()->SetDir(dir);
 	//—­‚ß‚Ä‚éŽž
 	if (input.IsPress("Y"))

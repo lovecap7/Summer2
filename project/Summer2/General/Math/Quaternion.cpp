@@ -94,9 +94,13 @@ Quaternion Quaternion::NormQ()const
 {
 	//単位クォータニオン
 	Quaternion rQ = IdentityQ();
+	//軸があるかチェック
+	if (this->AxisMagnitude() <= 0.0f)
+	{
+		return rQ;//回転しない
+	}
 	//自分の大きさを出す(絶対値)
 	float length = this->Magnitude();
-	assert(length > 0.0f && "正規化に失敗しました");
 	//自分に自分のインバースをかけて正規化
 	//rQ = *this * this->InverseQ();
 	rQ.w = this->w / length;
@@ -120,6 +124,13 @@ Quaternion Quaternion::InverseQ()const
 float Quaternion::Magnitude() const
 {
 	float magnitude = sqrt((this->w * this->w) + (this->x * this->x) + (this->y * this->y) + (this->z * this->z));
+	return magnitude;
+}
+
+
+float Quaternion::AxisMagnitude() const
+{
+	float magnitude = sqrt((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
 	return magnitude;
 }
 

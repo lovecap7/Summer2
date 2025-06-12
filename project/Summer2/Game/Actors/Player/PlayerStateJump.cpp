@@ -100,7 +100,6 @@ void PlayerStateJump::Update(const Input& input, const std::unique_ptr<Camera>& 
 	}
 	//Œü‚«‚ÌXV
 	Vector2 dir = m_player->GetStickVec();
-	dir.x *= -1.0f;
 	m_player->GetModel()->SetDir(dir);
 }
 void PlayerStateJump::SpeedDown()

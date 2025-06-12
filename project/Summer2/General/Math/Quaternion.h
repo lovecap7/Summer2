@@ -32,6 +32,8 @@ public:
 	Quaternion InverseQ()const;
 	//大きさ
 	float Magnitude()const;
+	//軸の大きさ
+	float AxisMagnitude() const;
 
 	/// <summary>
 	/// オイラー角からクォータニオンを作成

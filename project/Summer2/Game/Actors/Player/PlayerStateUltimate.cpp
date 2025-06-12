@@ -52,7 +52,6 @@ PlayerStateUltimate::PlayerStateUltimate(std::shared_ptr<Player> player, const s
 	attackManager->Entry(m_attackUlt);
 	//Œü‚«‚ÌXV
 	Vector2 dir = m_player->GetStickVec();
-	dir.x *= -1.0f;
 	m_player->GetModel()->SetDir(dir);
 	//–³“G‚É
 	m_player->GetHurtPoint()->SetIsNoDamege(true);

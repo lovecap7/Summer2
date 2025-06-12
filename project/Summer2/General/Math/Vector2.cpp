@@ -1,5 +1,6 @@
 #include "Vector2.h"
 #include "Vector3.h"
+#include "MathSub.h"
 #include <DxLib.h>
 #include <cassert>
 
@@ -131,6 +132,8 @@ float Vector2::Theata(Vector2 vec1, Vector2 vec2)
 
     //内積から間の角度を取得
     float dot = v1.Dot(v2);
+    //クランプ
+    dot = MathSub::ClampFloat(dot, -1.0f, 1.0f);
     //Θ(角度)を取得
     float theta = acosf(dot);
 

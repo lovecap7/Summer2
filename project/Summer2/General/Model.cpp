@@ -12,9 +12,24 @@ namespace
 
 Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHandle(modelHandle),
-	m_forward{0.0f,0.0f,1.0f},
-	m_nextForward{0.0f,0.0f,1.0f},
+	m_forward{0.0f,0.0f,-1.0f},
+	m_nextForward{0.0f,0.0f,-1.0f},
 	m_rotation(Quaternion::IdentityQ()),
+	m_rotaQ(Quaternion::IdentityQ()),
+	m_rotaFrame(0)
+{
+	//座標
+	MV1SetPosition(m_modelHandle, pos);
+	//アニメーション
+	m_animator = std::make_unique<Animator>();
+}
+
+Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
+	m_modelHandle(modelHandle),
+	m_forward(forward),
+	m_nextForward(forward),
+	m_rotation(Quaternion::IdentityQ()),
+	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0)
 {
 	//座標
@@ -36,12 +51,18 @@ void Model::Update()
 	if (m_rotaFrame > 0)
 	{
 		m_rotaFrame--;
+		//回転
 		m_rotation = m_rotaQ * m_rotation;
-		m_forward = m_rotaQ * m_forward;
-		if (m_rotaQ.w < 1)
+		//正規化
+		if (m_rotation.Magnitude() > 0.0f && m_rotaQ.w < 1.0f)
 		{
+			m_rotation = m_rotation.NormQ();
 			MV1SetRotationMatrix(m_modelHandle, m_rotation.GetMatrix().ToDxLibMATRIX());
 		}
+		//前ベクトル
+		m_forward = m_rotaQ * m_forward;
+		//正規化
+		if (m_forward.Magnitude() > 0.0f)m_forward = m_forward.Normalize();
 	}
 
 }
@@ -50,6 +71,10 @@ void Model::Draw() const
 {
 	//描画
 	MV1DrawModel(m_modelHandle);
+	//見てる方向
+	auto forward = m_forward * 50.0f;
+	auto pos = VAdd(MV1GetPosition(m_modelHandle), forward.ToDxLibVector());
+	DrawSphere3D(pos, 20, 16, 0xffffff, 0xffffff, true);
 }
 
 void Model::SetPos(VECTOR pos)
@@ -76,6 +101,7 @@ void Model::SetDir(Vector2 vec)
 	Vector3 axis = m_forward.Cross(dir.XZ());
 	//回転クォータニオン作成
 	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, axis);
+	//フレームをセット
 	m_rotaFrame = kRotaFrame;
 	//次の正面ベクトルを記録
 	m_nextForward = dir.XZ();

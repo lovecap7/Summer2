@@ -9,6 +9,7 @@ class Model
 {
 public:
 	Model(int modelHandle, VECTOR pos);
+	Model(int modelHandle, VECTOR pos, Vector3 dir);
 	virtual ~Model();
 	int GetModelHandle() { return m_modelHandle; };
 	void Update();

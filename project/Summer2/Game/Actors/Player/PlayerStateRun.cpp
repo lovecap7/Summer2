@@ -115,6 +115,5 @@ void PlayerStateRun::Update(const Input& input, const std::unique_ptr<Camera>& c
 	collidable->GetRb()->SetMoveVec(GetForwardVec(input, camera) * kMoveSpeed);
 	//Œü‚«‚ÌXV
 	Vector2 dir = m_player->GetStickVec();
-	dir.x *= -1.0f;
 	m_player->GetModel()->SetDir(dir);
 }
