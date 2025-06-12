@@ -1,4 +1,5 @@
 #include "BossDragonStateBase.h"
+#include "BossDragon.h"
 #include "../../../../General/Input.h"
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackManager.h"
@@ -25,3 +26,11 @@ void BossDragonStateBase::ChangeState(std::shared_ptr<BossDragonStateBase> nextS
 	//状態変化
 	m_nextState = move(nextState);
 }
+
+void BossDragonStateBase::LookPlayer()
+{
+	//モデルの向きをプレイヤーに向ける
+	auto dir = m_owner->GetPlayerNomVecXZ().XZ();
+	m_owner->GetModel()->SetDir(dir);
+}
+

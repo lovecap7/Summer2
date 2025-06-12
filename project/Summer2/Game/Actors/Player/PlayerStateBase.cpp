@@ -24,7 +24,7 @@ Vector3 PlayerStateBase::GetForwardVec(const Input& input, const std::unique_ptr
 {
 	Vector3 rV = { 0.0f,0.0f,0.0f, };
 	//“ü—Í
-	Vector3 stickVec = { -m_player->GetStickVec().x,0.0f,-m_player->GetStickVec().y };
+	Vector3 stickVec = { m_player->GetStickVec().x,0.0f,-m_player->GetStickVec().y };
 	if (stickVec.Magnitude() < 0.0f)
 	{
 		return rV;

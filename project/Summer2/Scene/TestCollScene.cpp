@@ -28,7 +28,7 @@
 namespace
 {
 	const Vector3 kPlayerPos = { 0.0f, 0.0f, 0.0f };
-	const Vector3 kCameraPos = { 0.0f, 500.0f, 800.0f };
+	const Vector3 kCameraPos = { 0.0f, 500.0f, -800.0f };
 }
 
 TestCollScene::TestCollScene(SceneController& controller) :
@@ -55,7 +55,6 @@ TestCollScene::TestCollScene(SceneController& controller) :
 	std::shared_ptr<EnemyBase> enemy3 = std::make_shared<BossDragon>(MV1DuplicateModel(m_bossDragonHandle), Vector3{ -600.0f,-50.0f,0.0f });
 	actors.push_back(enemy3);
 	actors.push_back(std::make_shared<TestPolygon>(Vector3{ 0.0f,-100.0f,0.0f }, m_polygonHandle));
-	actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle,Vector3{ -100.0f,-50.0f,0.0f },VGet(1.0f,1.0f,1.0f), VGet(0.0f, 0.0f, 0.0f)));//透明壁
 	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
 }
 
@@ -127,9 +126,22 @@ void TestCollScene::Draw()
 	DrawString(0, 0, "Stage1 Scene", 0xffffff);
 	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
 	DrawString(0, 40, "Startボタンで リセット", 0xffffff);
-	DrawLine3D(VGet(0, 0, 500), VGet(0, 0, -500), 0x00ff00);
-	DrawLine3D(VGet(500, 0, 0), VGet(-500, 0, 00), 0x00ffff);
-	DrawLine3D(VGet(0, 500, 0), VGet(0, -500, 0), 0xff0000);
+	for (int z = -500; z <= 500; z += 100)
+	{
+		DrawLine3D(VGet(-500, 0, z), VGet(500, 0, z), 0xff0000);
+	}
+	for (int x = -500; x <= 500; x += 100)
+	{
+		DrawLine3D(VGet(x, 0, -500), VGet(x, 0, 500), 0x0000ff);
+	}
+	VECTOR screenPos = ConvWorldPosToScreenPos(VGet(500, 0, 0));
+	DrawString(screenPos.x, screenPos.y, "X+", 0xffffff);
+	screenPos = ConvWorldPosToScreenPos(VGet(-500, 0, 0));
+	DrawString(screenPos.x, screenPos.y, "X-", 0xffffff);
+	screenPos = ConvWorldPosToScreenPos(VGet(0, 0, 500));
+	DrawString(screenPos.x, screenPos.y, "Z+", 0xffffff);
+	screenPos = ConvWorldPosToScreenPos(VGet(0, 0, -500));
+	DrawString(screenPos.x, screenPos.y, "Z-", 0xffffff);
 	//アクターの描画
 	m_actorManager->Draw();
 }

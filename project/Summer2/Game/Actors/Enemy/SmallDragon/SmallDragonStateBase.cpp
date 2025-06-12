@@ -1,4 +1,5 @@
 #include "SmallDragonStateBase.h"
+#include "SmallDragon.h"
 #include "../../../../General/Input.h"
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackManager.h"
@@ -26,3 +27,12 @@ void SmallDragonStateBase::ChangeState(std::shared_ptr<SmallDragonStateBase> nex
 	//状態変化
 	m_nextState = move(nextState);
 }
+
+void SmallDragonStateBase::LookPlayer()
+{
+	//モデルの向きをプレイヤーに向ける
+	auto dir = m_owner->GetPlayerNomVecXZ().XZ();
+	dir.y *= -1;
+	m_owner->GetModel()->SetDir(dir);
+}
+

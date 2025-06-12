@@ -2,13 +2,12 @@
 #include "SceneBase.h"
 #include <vector>
 #include <memory>
-class Actor;
+
 class Player;
 class Camera;
 class SceneController;
 class Input;
-class CollisionManager;
-class AttackManager;
+class ActorManager;
 class Stage1Scene :
     public SceneBase
 {
@@ -24,17 +23,21 @@ public:
     virtual void Update(Input& input) override;
     virtual void Draw() override;
 private:
-	std::vector<std::shared_ptr<Actor>> m_actors;
+    //アクターマネージャー
+    std::shared_ptr<ActorManager> m_actorManager;
     //プレイヤー
-	std::shared_ptr<Player> m_player;
-	//カメラ
-	std::unique_ptr<Camera> m_camera;
-    //当たり判定と衝突処理
-	std::unique_ptr<CollisionManager> m_collManager;
-    //攻撃の処理
-    std::unique_ptr<AttackManager> m_attackManger;
+    std::shared_ptr<Player> m_player;
+    //カメラ
+    std::unique_ptr<Camera> m_camera;
 private:
     //ハンドル
-	int m_playerHandle;
+    int m_playerHandle;
+    int m_wallHandle;
+    int m_purpleDinosaurHandle;
+    int m_smallDragonHandle;
+    int m_bossDragonHandle;
+private:
+    //デバッグモード用
+    bool m_isUpdateStop = false;
 };
 

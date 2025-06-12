@@ -28,5 +28,7 @@ public:
 	std::shared_ptr<SmallDragonStateBase> GetNextState() { return m_nextState; };
 	//ó‘Ô•Ï‰»
 	virtual void ChangeState(std::shared_ptr<SmallDragonStateBase> nextState);
+	//ƒvƒŒƒCƒ„[‚ğŒ©‚é
+	void LookPlayer();
 };
 

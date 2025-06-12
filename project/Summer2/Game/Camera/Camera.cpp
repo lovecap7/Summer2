@@ -26,8 +26,7 @@ Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
 	//カメラの位置と角度の設定
 	m_pos.x = m_player->GetCollidable()->GetRb()->GetPos().x;//プレイヤーと横方向にを合わせる
 	//カメラの角度
-	m_dir = Matrix4x4::RotateXMat4x4(-40.0f / 180.0f * DX_PI_F) *
-		Matrix4x4::RotateYMat4x4(180.0f / 180.0f * DX_PI_F) *
+	m_dir = Matrix4x4::RotateXMat4x4(40.0f / 180.0f * DX_PI_F) *
 		Vector3::Forward();
 	if (m_dir.Magnitude() > 0.0f)
 	{
@@ -40,7 +39,7 @@ Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
 	//視野角
 	SetupCamera_Perspective(50.0f / 180.0f * DX_PI_F);
 	//ディレクショナルライト
-	ChangeLightTypeDir(VGet(0.0f, 0.5f, -1.0f));
+	ChangeLightTypeDir(VGet(0.0f, -0.5f, 0.0f));
 }
 
 Camera::~Camera()
@@ -67,8 +66,7 @@ void Camera::Update()
 	//次の座標
 	m_pos = Vector3::Lerp(m_pos, nextPos, kLerpRate);
 	//向きの更新
-	m_dir = Matrix4x4::RotateXMat4x4(-40.0f / 180.0f * DX_PI_F) *
-		Matrix4x4::RotateYMat4x4(180.0f / 180.0f * DX_PI_F) *
+	m_dir = Matrix4x4::RotateXMat4x4(40.0f / 180.0f * DX_PI_F) *
 		Vector3::Forward();
 	if (m_dir.Magnitude() > 0.0f)
 	{

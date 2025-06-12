@@ -4,12 +4,9 @@
 #include "HurtPoint.h"
 #include "../../General/Collidable.h"
 #include <DxLib.h>
-
-#if _DEBUG
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Rigidbody.h"
-#endif
 
 BulletAttack::BulletAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner):
 	AttackBase(coll, damage, keepFrame, owner),

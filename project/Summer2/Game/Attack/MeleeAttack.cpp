@@ -3,12 +3,9 @@
 #include "HurtPoint.h"
 #include "../../General/Collidable.h"
 #include <DxLib.h>
-
-#if _DEBUG
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Rigidbody.h"
-#endif
 
 MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner) :
 	AttackBase(coll, damage, keepFrame, owner)

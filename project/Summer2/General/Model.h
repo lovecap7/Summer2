@@ -49,5 +49,7 @@ private:
 	Quaternion m_rotaQ;
 	//‰ñ“]ƒtƒŒ[ƒ€
 	int m_rotaFrame;
+
+	
 };
 

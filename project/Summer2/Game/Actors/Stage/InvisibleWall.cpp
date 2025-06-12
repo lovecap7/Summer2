@@ -38,10 +38,10 @@ void InvisibleWall::OnHitColl(const std::shared_ptr<Collidable>& other)
 void InvisibleWall::Draw() const
 {
 #if _DEBUG
-	//デバッグの時だけ可視化する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-	DxLib::MV1DrawModel(m_modelHandle);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	////デバッグの時だけ可視化する
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	//DxLib::MV1DrawModel(m_modelHandle);
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 #endif
 }
 

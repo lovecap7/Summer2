@@ -12,9 +12,9 @@ namespace
 
 Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHandle(modelHandle),
-	m_forward{0.0f,0.0f,1.0f},
-	m_nextForward{0.0f,0.0f,1.0f},
-	m_rotation(Quaternion::IdentityQ()),
+	m_forward{0.0f,0.0f,-1.0f},
+	m_nextForward{0.0f,0.0f,-1.0f},
+	m_rotation(Quaternion::AngleAxis(180 * MyMath::DEG_2_RAD, Vector3::Up())),
 	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0)
 {
@@ -71,10 +71,12 @@ void Model::Draw() const
 {
 	//描画
 	MV1DrawModel(m_modelHandle);
+#if _DEBUG
 	//見てる方向
 	auto forward = m_forward * 50.0f;
 	auto pos = VAdd(MV1GetPosition(m_modelHandle), forward.ToDxLibVector());
 	DrawSphere3D(pos, 20, 16, 0xffffff, 0xffffff, true);
+#endif
 }
 
 void Model::SetPos(VECTOR pos)
@@ -99,8 +101,11 @@ void Model::SetDir(Vector2 vec)
 	if (m_nextForward.XZ() == dir)return;//向きが変わらないなら
 	float angle = Vector2::Theata(m_forward.XZ(), dir);
 	Vector3 axis = m_forward.Cross(dir.XZ());
+
+//	DrawLine3D(MV1GetPosition(m_modelHandle), VAdd(MV1GetPosition(m_modelHandle), VScale(axis.ToDxLibVector(), 500)), 0x00ffff);
+
 	//回転クォータニオン作成
-	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, axis);
+	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, Vector3::Up());
 	//フレームをセット
 	m_rotaFrame = kRotaFrame;
 	//次の正面ベクトルを記録

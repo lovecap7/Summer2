@@ -1,4 +1,5 @@
 #include "PurpleDinosaurStateBase.h"
+#include "PurpleDinosaur.h"
 #include "../../../../General/Input.h"
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackManager.h"
@@ -24,4 +25,11 @@ void PurpleDinosaurStateBase::ChangeState(std::shared_ptr<PurpleDinosaurStateBas
 {
 	//状態変化
 	m_nextState = move(nextState);
+}
+
+void PurpleDinosaurStateBase::LookPlayer()
+{
+	//モデルの向きをプレイヤーに向ける
+	auto dir = m_owner->GetPlayerNomVecXZ().XZ();
+	m_owner->GetModel()->SetDir(dir);
 }
