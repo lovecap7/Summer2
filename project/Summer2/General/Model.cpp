@@ -12,8 +12,8 @@ namespace
 
 Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHandle(modelHandle),
-	m_forward{0.0f,0.0f,-1.0f},
-	m_nextForward{0.0f,0.0f,-1.0f},
+	m_forward{0.0f,0.0f,1.0f},
+	m_nextForward{0.0f,0.0f,1.0f},
 	m_rotation(Quaternion::IdentityQ()),
 	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0)

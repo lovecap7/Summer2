@@ -1,5 +1,6 @@
 #include "Vector3.h"
 #include "Vector2.h"
+#include "MathSub.h"
 #include <cmath>
 #include <cassert>
 
@@ -49,6 +50,8 @@ float Vector3::Dot(const Vector3& right) const
     //“àÏ
     float ans;
     ans = this->x * right.x + this->y * right.y + this->z * right.z;
+    //ƒNƒ‰ƒ“ƒv
+    ans = MathSub::ClampFloat(ans, -1.0f, 1.0f);
     return ans;
 }
 
