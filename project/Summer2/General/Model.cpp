@@ -105,7 +105,7 @@ void Model::SetDir(Vector2 vec)
 //	DrawLine3D(MV1GetPosition(m_modelHandle), VAdd(MV1GetPosition(m_modelHandle), VScale(axis.ToDxLibVector(), 500)), 0x00ffff);
 
 	//回転クォータニオン作成
-	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, Vector3::Up());
+	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, Vector3::Down());
 	//フレームをセット
 	m_rotaFrame = kRotaFrame;
 	//次の正面ベクトルを記録
