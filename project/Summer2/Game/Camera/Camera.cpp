@@ -37,7 +37,7 @@ Camera::Camera(Position3 firstPos, std::shared_ptr<Actor> player):
 	//カメラの座標と注視点
 	SetCameraPositionAndTarget_UpVecY(m_pos.ToDxLibVector(), m_viewPos.ToDxLibVector());
 	//視野角
-	SetupCamera_Perspective(50.0f / 180.0f * DX_PI_F);
+	SetupCamera_Perspective(60.0f / 180.0f * DX_PI_F);
 	//ディレクショナルライト
 	ChangeLightTypeDir(VGet(0.0f, -0.5f, 0.0f));
 }
