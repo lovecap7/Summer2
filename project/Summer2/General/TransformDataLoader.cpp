@@ -7,6 +7,14 @@ namespace
 	constexpr int kElementNum = 10;
 }
 
+TransformDataLoader::TransformDataLoader()
+{
+}
+
+TransformDataLoader::~TransformDataLoader()
+{
+}
+
 std::vector<ObjectData> TransformDataLoader::LoadDataCSV(const char* fileName)
 {
 	//データを格納する配列

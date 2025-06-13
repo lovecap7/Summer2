@@ -363,6 +363,9 @@
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateBreathAttack.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\BossDragon</Filter>
     </ClCompile>
+    <ClCompile Include="General\TransformDataLoader.cpp">
+      <Filter>ソース ファイル\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -622,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateBreathAttack.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\BossDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="General\TransformDataLoader.h">
+      <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

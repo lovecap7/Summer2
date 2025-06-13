@@ -32,7 +32,6 @@ void SmallDragonStateBase::LookPlayer()
 {
 	//モデルの向きをプレイヤーに向ける
 	auto dir = m_owner->GetPlayerNomVecXZ().XZ();
-	dir.y *= -1;
 	m_owner->GetModel()->SetDir(dir);
 }
 

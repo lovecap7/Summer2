@@ -5,6 +5,8 @@
 #include <DxLib.h>
 #include <vector>
 #include "../General/game.h"
+//配置データ
+#include "../../General/TransformDataLoader.h"
 //アクター
 #include "../Game/Actors/Actor.h"
 #include "../Game/Actors/ActorManager.h"
@@ -21,7 +23,6 @@
 #include "../Game/Actors/TestColls/TestPolygon.h"
 //カメラ
 #include "../Game/Camera/Camera.h"
-
 //デバッグモード
 #include "DebugScene.h"
 
@@ -43,18 +44,39 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	//登場するオブジェクトをセットしていく
 	std::vector<std::shared_ptr<Actor>> actors;
 
-	//プレイヤーの初期化
-	m_player = std::make_shared<Player>(m_playerHandle, kPlayerPos);
-	actors.push_back(m_player);
+	//配置データを取得
+	auto characterData = TransformDataLoader::LoadDataCSV("Data/CSV/CharacterTransformData.csv");
+	//名前からオブジェクトを配置していく
+	for (auto& charaData : characterData)
+	{
+		if (charaData.name == "Player")
+		{
+			m_player = std::make_shared<Player>(m_playerHandle, charaData.pos);
+			m_player->GetModel()->SetScale(charaData.scale);
+			actors.emplace_back(m_player);
+		}
+		else if (charaData.name == "SmallDragon")
+		{
+			std::shared_ptr<EnemyBase> smallDragon = std::make_shared<SmallDragon>(MV1DuplicateModel(m_smallDragonHandle),
+						charaData.pos);
+			actors.emplace_back(smallDragon);
+		}
+		else if (charaData.name == "BossDragon")
+		{
+			std::shared_ptr<EnemyBase> bossDragon = std::make_shared<BossDragon>(MV1DuplicateModel(m_bossDragonHandle), 
+					charaData.pos);
+			actors.emplace_back(bossDragon);
+		}
+		else if (charaData.name == "PurpleDinosaur")
+		{
+			std::shared_ptr<EnemyBase> purpleDinosaur = std::make_shared<PurpleDinosaur>(MV1DuplicateModel(m_purpleDinosaurHandle), 
+						charaData.pos);
+			actors.emplace_back(purpleDinosaur);
+		}
+	}
 	//カメラの初期化
 	m_camera = std::make_unique<Camera>(kCameraPos, m_player);
-	std::shared_ptr<EnemyBase> enemy1 = std::make_shared<PurpleDinosaur>(MV1DuplicateModel(m_purpleDinosaurHandle), Vector3{ -300.0f,-50.0f,0.0f });
-	actors.push_back(enemy1);
-	std::shared_ptr<EnemyBase> enemy2 = std::make_shared<SmallDragon>(MV1DuplicateModel(m_smallDragonHandle), Vector3{ -400.0f,-50.0f,0.0f });
-	actors.push_back(enemy2);
-	std::shared_ptr<EnemyBase> enemy3 = std::make_shared<BossDragon>(MV1DuplicateModel(m_bossDragonHandle), Vector3{ -600.0f,-50.0f,0.0f });
-	actors.push_back(enemy3);
-	actors.push_back(std::make_shared<InvisibleWall>(m_wallHandle, Vector3{ 0.0f,-200.0f,0.0f }, VGet(1000.0f, 1.0f, 1000.0f), VGet(0.0f, 0.0f, 0.0f)));//透明床
+	actors.emplace_back(std::make_shared<InvisibleWall>(m_wallHandle, Vector3{ 0.0f,-200.0f,0.0f }, VGet(1000.0f, 1.0f, 1000.0f), VGet(0.0f, 0.0f, 0.0f)));//透明床
 	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
 }
 
