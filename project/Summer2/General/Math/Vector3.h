@@ -18,6 +18,12 @@ public:
 	float Magnitude()const;
 
 	/// <summary>
+	/// ƒxƒNƒgƒ‹‚Ì‘å‚«‚³‚Ì2æ‚ğ•Ô‚µ‚Ü‚·
+	/// </summary>
+	/// <returns></returns>
+	float SqMagnitude() const;
+
+	/// <summary>
 	/// ³‹K‰»(‘å‚«‚³‚ğ1‚É‚·‚é)
 	/// </summary>
 	Vector3 Normalize() const;

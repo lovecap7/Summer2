@@ -22,9 +22,9 @@ Matrix4x4 Matrix4x4::TranslateMat4x4(float x, float y, float z)
 {
     Matrix4x4 translate = {};
     translate = IdentityMat4x4();//íPà çsóÒÇ…Ç∑ÇÈ
-    translate.mat[0][3] = x;
-    translate.mat[1][3] = y;
-    translate.mat[2][3] = z;
+    translate.mat[3][0] = x;
+    translate.mat[3][1] = y;
+    translate.mat[3][2] = z;
     return translate;
 }
 
@@ -157,6 +157,16 @@ Matrix4x4 Matrix4x4::RotateXYPositionMatrix4x4(const Position3& center, float hA
         RotateXMat4x4(vAngle) *//âÒì]
         TranslateMat4x4(center.x, center.y, center.z);//å¥ì_Ç…ñﬂÇ∑
     return rotaMat;
+}
+
+Matrix4x4 Matrix4x4::ScaleMatrix4x4(const Vector3& scale)
+{
+    Matrix4x4 rM = IdentityMat4x4();
+    rM.mat[0][0] = scale.x;
+    rM.mat[1][1] = scale.y;
+    rM.mat[2][2] = scale.z;
+
+    return rM;
 }
 
 MATRIX Matrix4x4::ToDxLibMATRIX()

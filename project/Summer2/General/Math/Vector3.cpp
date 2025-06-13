@@ -32,6 +32,11 @@ float Vector3::Magnitude() const
     return sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
+float Vector3::SqMagnitude() const
+{
+    return this->x * this->x + this->y * this->y + this->z * this->z;
+}
+
 Vector3 Vector3::Normalize() const
 {
     if (this->Magnitude() <= 0.0f)

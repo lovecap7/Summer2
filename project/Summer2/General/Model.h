@@ -50,6 +50,8 @@ private:
 	//‰ñ“]ƒtƒŒ[ƒ€
 	int m_rotaFrame;
 
-	
+
+	Vector3 m_pos;
+	Vector3 m_scale;
 };
 

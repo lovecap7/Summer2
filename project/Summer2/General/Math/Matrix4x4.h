@@ -97,6 +97,13 @@ public:
 	static Matrix4x4 RotateXYPositionMatrix4x4(const Position3& center, float hAngle, float vAngle);
 
 	/// <summary>
+	/// 大きさの行列
+	/// </summary>
+	/// <param name="scele"></param>
+	/// <returns></returns>
+	static Matrix4x4 ScaleMatrix4x4(const Vector3& scele);
+
+	/// <summary>
 	/// DXライブラリの行列に変換
 	/// </summary>
 	/// <returns></returns>

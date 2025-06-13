@@ -2,6 +2,7 @@
 #include "Math/MyMath.h"
 #include "Animator.h"
 #include <array>
+#include <cassert>
 
 namespace
 {
@@ -12,11 +13,13 @@ namespace
 
 Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHandle(modelHandle),
-	m_forward{0.0f,0.0f,-1.0f},
-	m_nextForward{0.0f,0.0f,-1.0f},
+	m_forward{0.0f,0.0f,1.0f},
+	m_nextForward{0.0f,0.0f,1.0f},
 	m_rotation(Quaternion::AngleAxis(180 * MyMath::DEG_2_RAD, Vector3::Up())),
 	m_rotaQ(Quaternion::IdentityQ()),
-	m_rotaFrame(0)
+	m_rotaFrame(0),
+	m_pos(),
+	m_scale{ 1.0f,1.0f,1.0f }
 {
 	//座標
 	MV1SetPosition(m_modelHandle, pos);
@@ -30,10 +33,13 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_nextForward(forward),
 	m_rotation(Quaternion::IdentityQ()),
 	m_rotaQ(Quaternion::IdentityQ()),
-	m_rotaFrame(0)
+	m_rotaFrame(0),
+	m_pos(),
+	m_scale{ 1.0f,1.0f,1.0f }
 {
 	//座標
-	MV1SetPosition(m_modelHandle, pos);
+	m_pos = pos;
+	MV1SetPosition(m_modelHandle, m_pos.ToDxLibVector());
 	//アニメーション
 	m_animator = std::make_unique<Animator>();
 }
@@ -69,26 +75,32 @@ void Model::Update()
 
 void Model::Draw() const
 {
+	Matrix4x4 mat;
+	auto pMat = Matrix4x4::TranslateMat4x4(m_pos.x, m_pos.y, m_pos.z);
+	auto rMat = m_rotation.GetMatrix();
+	auto sMat = Matrix4x4::ScaleMatrix4x4(m_scale);
+	mat = sMat * rMat * pMat;
+	MV1SetMatrix(m_modelHandle, mat.ToDxLibMATRIX());
 	//描画
-	MV1DrawModel(m_modelHandle);
+	auto err = MV1DrawModel(m_modelHandle);
+	assert(err != -1 && L"モデルが描画できません");
+	
 #if _DEBUG
 	//見てる方向
 	auto forward = m_forward * 50.0f;
-	auto pos = VAdd(MV1GetPosition(m_modelHandle), forward.ToDxLibVector());
-	DrawSphere3D(pos, 20, 16, 0xffffff, 0xffffff, true);
+	auto pos = m_pos + forward;
+	DrawSphere3D(pos.ToDxLibVector(), 20, 16, 0xffffff, 0xffffff, true);
 #endif
 }
 
 void Model::SetPos(VECTOR pos)
 {
-	//座標
-	MV1SetPosition(m_modelHandle, pos);
+	m_pos = pos;
 }
 
-void Model::SetScale(VECTOR pos)
+void Model::SetScale(VECTOR scale)
 {
-	//大きさ
-	MV1SetScale(m_modelHandle, pos);
+	m_scale = scale;
 }
 
 void Model::SetDir(Vector2 vec)
@@ -98,14 +110,15 @@ void Model::SetDir(Vector2 vec)
 	//向きを計算
 	Vector2 dir = vec;
 	dir = dir.Normalize();
-	if (m_nextForward.XZ() == dir)return;//向きが変わらないなら
+	//if (m_nextForward.XZ() == dir)return;//向きが変わらないなら
 	float angle = Vector2::Theata(m_forward.XZ(), dir);
 	Vector3 axis = m_forward.Cross(dir.XZ());
-
-//	DrawLine3D(MV1GetPosition(m_modelHandle), VAdd(MV1GetPosition(m_modelHandle), VScale(axis.ToDxLibVector(), 500)), 0x00ffff);
-
+	if (axis.SqMagnitude() == 0.0f)
+	{
+		axis = Vector3::Up();
+	}
 	//回転クォータニオン作成
-	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, Vector3::Down());
+	m_rotaQ = Quaternion::AngleAxis(angle/ kRotaFrame, axis);
 	//フレームをセット
 	m_rotaFrame = kRotaFrame;
 	//次の正面ベクトルを記録

@@ -160,16 +160,38 @@ Matrix4x4 Quaternion::GetMatrix() const
 	{
 		q = q.NormQ();
 	}
-	//クォータニオンを行列に変換
-	rM.mat[0][0] = (q.x * q.x) - (q.y * q.y) - (q.z * q.z) + (q.w * q.w);
-	rM.mat[0][1] = 2.0f * ((q.x * q.y) - (q.z * q.w));
-	rM.mat[0][2] = 2.0f * ((q.x * q.z) + (q.y * q.w));
-	rM.mat[1][0] = 2.0f * ((q.x * q.y) + (q.z * q.w));
-	rM.mat[1][1] = -(q.x * q.x) + (q.y * q.y) - (q.z * q.z) + (q.w * q.w);
-	rM.mat[1][2] = 2.0f * ((q.y * q.z) - (q.x * q.w));
-	rM.mat[2][0] = 2.0f * ((q.x * q.z) - (q.y * q.w));
-	rM.mat[2][1] = 2.0f * ((q.y * q.z) + (q.x * q.w));
-	rM.mat[2][2] = -(q.x * q.x) - (q.y * q.y) + (q.z * q.z) + (q.w * q.w);
+	// クオータニオンの各成分を使って行列の要素を計算
+	auto xy2 = q.x * q.y * 2;
+	auto xz2 = q.x * q.z * 2;
+	auto xw2 = q.x * q.w * 2;
+	auto yz2 = q.y * q.z * 2;
+	auto yw2 = q.y * q.w * 2;
+	auto zw2 = q.z * q.w * 2;
+	auto ww2 = q.w * q.w * 2;
+
+	// 行列の各要素を計算
+	auto r00 = ww2 + 2 * q.x * q.x - 1;
+	auto r01 = xy2 + zw2;
+	auto r02 = xz2 - yw2;
+
+	auto r10 = xy2 - zw2;
+	auto r11 = ww2 + 2 * q.y * q.y - 1;
+	auto r12 = yz2 + xw2;
+
+	auto r20 = xz2 + yw2;
+	auto r21 = yz2 - xw2;
+	auto r22 = ww2 + 2 * q.z * q.z - 1;
+
+	// 計算した要素を行列に設定
+	rM.mat[0][0] = r00;
+	rM.mat[0][1] = r01;
+	rM.mat[0][2] = r02;
+	rM.mat[1][0] = r10;
+	rM.mat[1][1] = r11;
+	rM.mat[1][2] = r12;
+	rM.mat[2][0] = r20;
+	rM.mat[2][1] = r21;
+	rM.mat[2][2] = r22;
 	return rM;
 }
 

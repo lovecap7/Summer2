@@ -72,7 +72,7 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 {
 	//スティックの向きを入れる
 	m_stickVec.x = static_cast<float>(input.GetStickInfo().leftStickX);
-	m_stickVec.y = static_cast<float>(input.GetStickInfo().leftStickY);
+	m_stickVec.y = -static_cast<float>(input.GetStickInfo().leftStickY);
 
 	//状態に合わせた更新
 	m_state->Update(input, camera, attackManager);
