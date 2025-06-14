@@ -366,6 +366,12 @@
     <ClCompile Include="General\TransformDataLoader.cpp">
       <Filter>ソース ファイル\General</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Stage\StageObjectDraw.cpp">
+      <Filter>ソース ファイル\Game\Actors\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Stage\StageObjectCollision.cpp">
+      <Filter>ソース ファイル\Game\Actors\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -628,6 +634,12 @@
     </ClInclude>
     <ClInclude Include="General\TransformDataLoader.h">
       <Filter>ヘッダー ファイル\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Stage\StageObjectDraw.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Stage\StageObjectCollision.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

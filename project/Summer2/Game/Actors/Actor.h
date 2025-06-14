@@ -8,7 +8,7 @@ enum class ActorKind
 	Player,		//プレイヤー
 	Enemy,		//敵
 	Item,		//アイテム
-	Obstacle,	//障害物
+	Object,	//障害物
 	Field,		//フィールド
 };
 

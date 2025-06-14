@@ -4,7 +4,7 @@
 #include "../../../General/Collidable.h"
 
 InvisibleWall::InvisibleWall(int modelHandle, Vector3 pos, VECTOR scale, VECTOR angle):
-	Actor(ActorKind::Obstacle),
+	Actor(ActorKind::Object),
 	m_modelHandle(modelHandle)
 {
 	//èâä˙à íu

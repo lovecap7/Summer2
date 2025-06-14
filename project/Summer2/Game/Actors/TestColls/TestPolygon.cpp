@@ -5,7 +5,7 @@
 #include <DxLib.h>
 
 TestPolygon::TestPolygon(Position3 pos, int modelHandle):
-	Actor(ActorKind::Obstacle),
+	Actor(ActorKind::Object),
 	m_modelHandle(modelHandle)
 {
 	//‰ŠúˆÊ’u

@@ -16,6 +16,7 @@ public:
 	void Draw()const;
 	void SetPos(VECTOR pos);
 	void SetScale(VECTOR pos);
+	void SetRot(VECTOR rot);
 	void SetDir(Vector2 vec);
 	Vector3 GetDir();
 	//アニメーション関係

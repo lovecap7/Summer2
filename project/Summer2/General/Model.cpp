@@ -103,6 +103,24 @@ void Model::SetScale(VECTOR scale)
 	m_scale = scale;
 }
 
+void Model::SetRot(VECTOR rot)
+{
+	//オイラー角から回転
+	m_rotaQ = Quaternion::Euler(rot.x, rot.y, rot.z);
+	//回転
+	m_rotation = m_rotaQ * m_rotation;
+	//正規化
+	if (m_rotation.Magnitude() > 0.0f && m_rotaQ.w < 1.0f)
+	{
+		m_rotation = m_rotation.NormQ();
+		MV1SetRotationMatrix(m_modelHandle, m_rotation.GetMatrix().ToDxLibMATRIX());
+	}
+	//前ベクトル
+	m_forward = m_rotaQ * m_forward;
+	//正規化
+	if (m_forward.Magnitude() > 0.0f)m_forward = m_forward.Normalize();
+}
+
 void Model::SetDir(Vector2 vec)
 {
 	//向きが決められないのでリターン

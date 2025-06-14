@@ -7,6 +7,7 @@ class Player;
 class Camera;
 class SceneController;
 class Input;
+class Actor;
 class ActorManager;
 class Stage1Scene :
     public SceneBase
@@ -31,11 +32,22 @@ private:
     std::unique_ptr<Camera> m_camera;
 private:
     //ハンドル
+    //キャラクター
     int m_playerHandle;
-    int m_wallHandle;
     int m_purpleDinosaurHandle;
     int m_smallDragonHandle;
     int m_bossDragonHandle;
+    //ステージのオブジェクト
+    int m_wallHandle;
+    int m_pathHandle;
+    //ステージの当たり判定
+    int m_cubeHandle;
+    int m_cylinderHandle;
+private:
+    //キャラクターの作成と配置
+    void CreateCharacter(std::vector<std::shared_ptr<Actor>>& actors);
+    //ステージの作成と配置
+    void CreateStage(std::vector<std::shared_ptr<Actor>>& actors);
 private:
     //デバッグモード用
     bool m_isUpdateStop = false;

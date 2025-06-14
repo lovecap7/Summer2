@@ -5,8 +5,8 @@
 namespace Game//‘®«
 {
 	//‰æ–Ê‚Ì‘å‚«‚³‚ğ’è”’è‹`	16:9
-	constexpr int kScreenWidth = 1600;
-	constexpr int kScreenHeight = 900;
+	constexpr int kScreenWidth = 1280;
+	constexpr int kScreenHeight = 720;
 	constexpr int kColorBitNum = 32;
 
 	constexpr bool kDefaultWindowMode = true;

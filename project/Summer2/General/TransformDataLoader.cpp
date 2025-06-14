@@ -4,7 +4,10 @@
 
 namespace
 {
+	//名前、座標XYZ、回転XYZ、大きさXYZ　で合計10
 	constexpr int kElementNum = 10;
+	//Unityの座標に掛けることでDXライブラリでもUnityと同じ大きさになる
+	constexpr float kUnityToDXPosition = 100.0f;
 }
 
 TransformDataLoader::TransformDataLoader()
@@ -62,9 +65,9 @@ std::vector<ObjectData> TransformDataLoader::LoadDataCSV(const char* fileName)
 		//名前
 		objData.name = values[0];
 		//座標
-		objData.pos.x = std::stof(values[1]);	//std::stofは文字列をfloatに変換する
-		objData.pos.y = std::stof(values[2]);	
-		objData.pos.z = std::stof(values[3]);	
+		objData.pos.x = std::stof(values[1]) * kUnityToDXPosition;	//std::stofは文字列をfloatに変換する
+		objData.pos.y = std::stof(values[2]) * kUnityToDXPosition;
+		objData.pos.z = std::stof(values[3]) * kUnityToDXPosition;
 		//回転
 		objData.rot.x = std::stof(values[4]);	
 		objData.rot.y = std::stof(values[5]);

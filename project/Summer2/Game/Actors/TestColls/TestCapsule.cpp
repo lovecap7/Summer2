@@ -6,7 +6,7 @@
 #include <DxLib.h>
 
 TestCapsule::TestCapsule(Position3 startPos, Position3 endPos, float radius, bool isStatic):
-	Actor(ActorKind::Obstacle)
+	Actor(ActorKind::Object)
 {
 	//‰ŠúˆÊ’u
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, radius), std::make_shared<Rigidbody>(startPos));

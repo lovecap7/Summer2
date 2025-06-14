@@ -9,7 +9,7 @@
 #include <DxLib.h>
 
 TestSphere::TestSphere(Position3 pos, float radius, bool isStatic) :
-	Actor(ActorKind::Obstacle),
+	Actor(ActorKind::Object),
 	m_stickVec{ 0.0f,0.0f}
 {
 	//‰ŠúˆÊ’u

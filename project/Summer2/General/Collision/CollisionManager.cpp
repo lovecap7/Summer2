@@ -31,11 +31,13 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 		for (auto& actorA : actors)
 		{
 			//“–‚½‚è”»’è‚ðs‚í‚È‚¢‚È‚ç”ò‚Î‚·
+			if (actorA->GetActorKind() == ActorKind::None)continue;
 			if (!actorA->GetCollidable()->IsCollide())continue;
 
 			for (auto& actorB : actors)
 			{
 				//“–‚½‚è”»’è‚ðs‚í‚È‚¢‚È‚ç”ò‚Î‚·
+				if (actorB->GetActorKind() == ActorKind::None)continue;
 				if (!actorB->GetCollidable()->IsCollide())continue;
 
 				//Ž©•ª‚Æ‚Í“–‚½‚è”»’è‚ð‚µ‚È‚¢

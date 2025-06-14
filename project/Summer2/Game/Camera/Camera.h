@@ -22,5 +22,7 @@ private:
 	Vector3 m_viewPos;
 	//プレイヤー
 	std::shared_ptr<Actor> m_player;
+	//カメラの最初のＺ座標(カメラのZ方向の移動上限に使う)
+	float m_cameraFirstPosZ;
 };
 

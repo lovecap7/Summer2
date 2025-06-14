@@ -38,11 +38,11 @@ public:
 	/// <summary>
 	/// オイラー角からクォータニオンを作成
 	/// </summary>
-	/// <param name="x">ロール</param>
-	/// <param name="y">ヨー</param>
-	/// <param name="z">ピッチ</param>
+	/// <param name="x">ロール(度数法)</param>
+	/// <param name="y">ヨー(度数法)</param>
+	/// <param name="z">ピッチ(度数法)</param>
 	/// <returns>回転クオータニオン</returns>
-	static Quaternion Euler(float x, float y, float z);
+	static Quaternion Euler(float xDeg, float yDeg, float zDeg);
 	/// <summary>
 	/// マトリクスに変換
 	/// </summary>

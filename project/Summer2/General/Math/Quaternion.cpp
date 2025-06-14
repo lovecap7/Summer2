@@ -136,8 +136,13 @@ float Quaternion::AxisMagnitude() const
 	return magnitude;
 }
 
-Quaternion Quaternion::Euler(float xRad, float yRad, float zRad)
+Quaternion Quaternion::Euler(float xDeg, float yDeg, float zDeg)
 {
+	//ラジアンに変換
+	float xRad = xDeg * MyMath::DEG_2_RAD;
+	float yRad = yDeg * MyMath::DEG_2_RAD;
+	float zRad = zDeg * MyMath::DEG_2_RAD;
+
 	//単位クォータニオン
 	Quaternion rQ = IdentityQ();
 	//各要素の回転クォータニオンを作成
@@ -148,7 +153,7 @@ Quaternion Quaternion::Euler(float xRad, float yRad, float zRad)
 	Vector3 forward = { 0.0f,0.0f,-1.0f };
 	Quaternion zQ = AngleAxis(zRad, forward);//ピッチ
 	//計算
-	rQ = zQ * yQ * xQ;
+	rQ = yQ * xQ * zQ;//Unityの回転順序に合わせる
 	return rQ.NormQ();
 }
 
