@@ -117,11 +117,21 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 	//カプセルB
 	Vector3 cPosC = actorB->GetRb()->GetNextPos();
 	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetNextEndPos(actorB->GetRb()->GetVec());
-	//平行なら
-	if (Vector3(cPosA - cPosB).Normalize() == Vector3(cPosC - cPosD).Normalize())
+	//平行かどうか確認する
+	auto ab = cPosA - cPosB;
+	auto cd = cPosC - cPosD;
+	if (ab.Magnitude() > 0.0f && cd.Magnitude() > 0.0f)
 	{
-		return ParallelCC(actorA, actorB);
+		//正規化して内席から平行かチェック
+		ab = ab.Normalize();
+		cd = cd.Normalize();
+		float dot = ab.Dot(cd);
+		if (dot >= 1.0f || dot <= -1.0f)
+		{
+			return ParallelCC(actorA, actorB);
+		}
 	}
+
 	//最短距離
 	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetRadius();
 	//今の最短距離
