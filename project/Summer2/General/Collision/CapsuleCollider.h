@@ -19,6 +19,9 @@ public:
     //当たった物体と近い座標
     Vector3 GetNearPos() const { return m_hitNearPos; };
     void SetNearPos(Position3 hitNearPos) { m_hitNearPos = hitNearPos; };
+    //最短距離
+    float GetShortDis() { return m_shortDis; }
+    void SetShortDis(float shortDis) { m_shortDis = shortDis; };
 private:
     //自分の座標とm_endPosの2点で構成されたカプセル
     Position3 m_endPos;
@@ -26,5 +29,7 @@ private:
     float m_radius;
     //当たった物体と近い座標
     Vector3 m_hitNearPos;
+    //最短距離
+    float m_shortDis;
 };
 

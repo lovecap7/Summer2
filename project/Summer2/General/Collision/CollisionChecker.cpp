@@ -12,14 +12,14 @@ CollisionChecker::CollisionChecker()
 }
 
 
-bool CollisionChecker::CheckCollSS(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+bool CollisionChecker::CheckCollSS(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	//Aのコライダーの情報
-	Vector3 posA = actorA->GetRb()->GetNextPos();
-	float radiusA = std::dynamic_pointer_cast<SphereCollider>(actorA->GetColl())->GetRadius();
+	Vector3 posA = collA->GetRb()->GetNextPos();
+	float radiusA = std::dynamic_pointer_cast<SphereCollider>(collA->GetColl())->GetRadius();
 	//Bのコライダーの情報
-	Vector3 posB = actorB->GetRb()->GetNextPos();
-	float radiusB = std::dynamic_pointer_cast<SphereCollider>(actorB->GetColl())->GetRadius();
+	Vector3 posB = collB->GetRb()->GetNextPos();
+	float radiusB = std::dynamic_pointer_cast<SphereCollider>(collB->GetColl())->GetRadius();
 
 	Vector3 aToB = posB - posA;
 
@@ -33,17 +33,17 @@ bool CollisionChecker::CheckCollSS(const std::shared_ptr<Collidable>& actorA, co
 	return true;
 }
 
-bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	//球からカプセルに垂線を引いて球とカプセルの最短距離を求める
 
 	//カプセルのそれぞれの座標
-	Vector3 cPosA = actorA->GetRb()->GetNextPos();
-	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetEndPos() + actorA->GetRb()->GetVec();
+	Vector3 cPosA = collA->GetRb()->GetNextPos();
+	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetEndPos() + collA->GetRb()->GetVec();
 	//球の座標
-	Vector3 sPos = actorB->GetRb()->GetNextPos();
+	Vector3 sPos = collB->GetRb()->GetNextPos();
 	//最短距離
-	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider>(actorB->GetColl())->GetRadius();
+	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius() + std::dynamic_pointer_cast<SphereCollider>(collB->GetColl())->GetRadius();
 
 	//カプセルの座標Aから球へのベクトル
 	Vector3 AtoS = sPos - cPosA;
@@ -63,7 +63,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 	if (rate >= 1.0f)
 	{
 		//衝突判定で使うので一番近い座標を覚えておく
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosB);
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosB);
 
 		//posBと球の間距離から当たっているかをチェック
 		Vector3 BtoS = sPos - cPosB;
@@ -77,7 +77,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 	else if (rate <= 0.0f)
 	{
 		//衝突判定で使うので一番近い座標を覚えておく
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosA);
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosA);
 
 		//posAと球の間の距離から当たっているかチェック
 		//最短距離より大きいなら当たっていない
@@ -90,7 +90,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 	else
 	{
 		//衝突判定で使うので一番近い座標を覚えておく
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(verPos);
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(verPos);
 
 		//垂線を下した座標と球の間の距離から当たっているかチェック
 		Vector3 VtoS = sPos - verPos;
@@ -105,37 +105,38 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& actorA, co
 	return true;
 }
 
-bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	// どちらかのカプセルの一つの座標から片方のカプセルに垂線を引いて
 	//　お互いのカプセルに最も近い座標をそれぞれ出す
 
 	//カプセルのそれぞれの座標
 	//カプセルA
-	Vector3 cPosA = actorA->GetRb()->GetNextPos();
-	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetNextEndPos(actorA->GetRb()->GetVec());
+	Vector3 cPosA = collA->GetRb()->GetNextPos();
+	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetNextEndPos(collA->GetRb()->GetVec());
 	//カプセルB
-	Vector3 cPosC = actorB->GetRb()->GetNextPos();
-	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetNextEndPos(actorB->GetRb()->GetVec());
+	Vector3 cPosC = collB->GetRb()->GetNextPos();
+	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetNextEndPos(collB->GetRb()->GetVec());
 	//平行かどうか確認する
-	auto ab = cPosA - cPosB;
-	auto cd = cPosC - cPosD;
+	auto ab = cPosB - cPosA;//線分1
+	auto cd = cPosC - cPosD;//線分2
 	if (ab.Magnitude() > 0.0f && cd.Magnitude() > 0.0f)
 	{
 		//正規化して内席から平行かチェック
 		ab = ab.Normalize();
 		cd = cd.Normalize();
 		float dot = ab.Dot(cd);
+
+		//平行なら
 		if (dot >= 1.0f || dot <= -1.0f)
 		{
-			return ParallelCC(actorA, actorB);
+			return ParallelCC(collA, collB);
 		}
 	}
-
 	//最短距離
-	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetRadius();
+	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetRadius();
 	//今の最短距離
-	Vector3 nowShortDis = {};
+	float nowShortDis = 10000.0f;//始点同士を最短にしておく
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -162,25 +163,13 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 			//確認する座標
 			Vector3 checkPoint;
 			//Aから線分に下ろす
-			if (i <= 0 && j <= 0)
-			{
-				checkPoint = cPosA;
-			}
+			if (i == 0 && j == 0)checkPoint = cPosA;
 			//Bから線分に下ろす
-			else if (i <= 0 && j >= 1)
-			{
-				checkPoint = cPosB;
-			}
+			if (i == 0 && j == 1)checkPoint = cPosB;
 			//Cから線分に下ろす
-			else if (i >= 1 && j <= 0)
-			{
-				checkPoint = cPosC;
-			}
+			if (i == 1 && j == 0)checkPoint = cPosC;
 			//Dから線分に下ろす
-			else
-			{
-				checkPoint = cPosD;
-			}
+			if (i == 1 && j == 1)checkPoint = cPosD;
 
 			//あとは球とカプセルの時と同じ
 			//Aから確認する座標へのベクトル
@@ -194,34 +183,33 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 			Vector3 verPos = lineStart + (nomLineAB * dotVer);//垂線を下した座標
 
 			//垂線を下した座標が線分AB間の間にあるか外にあるかをチェックする
-			float dotAB = nomLineAB.Dot(lineAB);//全体
-			float rate = dotVer / dotAB;//割合
+			float rate = dotVer / lineAB.Magnitude();//割合
 
 			//最短距離候補を入れていく
-			Vector3 shortCandidate;
+			float shortCandidate;
 			//衝突判定に使うので最短座標を入れる
 			Vector3 shortPos;
 			if (rate >= 1.0f)
 			{
 				//座標Bに近い
-				shortCandidate = lineEnd - checkPoint;
+				shortCandidate = (lineEnd - checkPoint).Magnitude();
 				shortPos = lineEnd;
 			}
 			else if (rate <= 0.0f)
 			{
 				//座標Aに近い
-				shortCandidate = lineStart - checkPoint;
+				shortCandidate = (lineStart - checkPoint).Magnitude();
 				shortPos = lineStart;
 			}
 			else
 			{
 				//垂線を下した座標に近い
-				shortCandidate = verPos - checkPoint;
+				shortCandidate = (verPos - checkPoint).Magnitude();
 				shortPos = verPos;
 			}
 
 			//初回または前回の最短距離より小さいなら現在の最短距離とする
-			if (nowShortDis.Magnitude() <= 0 || nowShortDis.Magnitude() > shortCandidate.Magnitude())
+			if (nowShortDis > shortCandidate)
 			{
 				nowShortDis = shortCandidate;
 
@@ -229,35 +217,36 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& actorA, co
 				if (i == 0)
 				{
 					//衝突判定で使うので一番近い座標を覚えておく
-					std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->SetNearPos(shortPos);
+					std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(shortPos);
 				}
 				else
 				{
 					//衝突判定で使うので一番近い座標を覚えておく
-					std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(shortPos);
+					std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(shortPos);
 				}
 			}
 		}
 	}
 
 	//現在の最短距離が変形の合計より大きいなら当たっていない
-	if (nowShortDis.Magnitude() > shortDis)
+	if (nowShortDis > shortDis)
 	{
 		return false;
 	}
+
 
 	//ここまでくれば当たっている
 	return true;
 }
 
-bool CollisionChecker::CheckCollSP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+bool CollisionChecker::CheckCollSP(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	//当たってるポリゴンの数
 	auto hitDim = MV1CollCheck_Sphere(
-		std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->GetModelHandle(),
+		std::dynamic_pointer_cast<PolygonCollider>(collB->GetColl())->GetModelHandle(),
 		-1,
-		actorA->GetRb()->GetNextPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<SphereCollider>(actorA->GetColl())->GetRadius());
+		collA->GetRb()->GetNextPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<SphereCollider>(collA->GetColl())->GetRadius());
 	//一つも当たっていないならfalse
 	if (hitDim.HitNum <= 0)
 	{
@@ -267,20 +256,20 @@ bool CollisionChecker::CheckCollSP(const std::shared_ptr<Collidable>& actorA, co
 	}
 
 	//当たり判定に使うので保存
-	std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->SetHitDim(hitDim);
+	std::dynamic_pointer_cast<PolygonCollider>(collB->GetColl())->SetHitDim(hitDim);
 
 	return true;
 }
 
-bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	//当たってるポリゴンの数
 	auto hitDim = MV1CollCheck_Capsule(
-		std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->GetModelHandle(),
+		std::dynamic_pointer_cast<PolygonCollider>(collB->GetColl())->GetModelHandle(),
 		-1,
-		actorA->GetRb()->GetNextPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetNextEndPos(actorA->GetRb()->GetVec()).ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius(),
+		collA->GetRb()->GetNextPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetNextEndPos(collA->GetRb()->GetVec()).ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius(),
 		-1);
 
 	//当たっていないならfalse
@@ -292,21 +281,21 @@ bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable>& actorA, co
 	}
 
 	//当たり判定に使うので保存
-	std::dynamic_pointer_cast<PolygonCollider>(actorB->GetColl())->SetHitDim(hitDim);
+	std::dynamic_pointer_cast<PolygonCollider>(collB->GetColl())->SetHitDim(hitDim);
 
 	return true;
 }
 
-bool CollisionChecker::ParallelCC(const std::shared_ptr<Collidable>& actorA, const std::shared_ptr<Collidable>& actorB)
+bool CollisionChecker::ParallelCC(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	//カプセルA
-	Vector3 cPosA = actorA->GetRb()->GetNextPos();
-	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetNextEndPos(actorA->GetRb()->GetVec());
+	Vector3 cPosA = collA->GetRb()->GetNextPos();
+	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetNextEndPos(collA->GetRb()->GetVec());
 	//カプセルB
-	Vector3 cPosC = actorB->GetRb()->GetNextPos();
-	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetNextEndPos(actorB->GetRb()->GetVec());
+	Vector3 cPosC = collB->GetRb()->GetNextPos();
+	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetNextEndPos(collB->GetRb()->GetVec());
 	//最短距離
-	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->GetRadius();
+	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetRadius();
 	
 	//各距離をチェック
 	Vector3 ac = cPosC - cPosA;
@@ -316,26 +305,26 @@ bool CollisionChecker::ParallelCC(const std::shared_ptr<Collidable>& actorA, con
 	//最短距離を出す
 	float dis = ac.Magnitude();
 	//一度入れておく
-	std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosA);
-	std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->SetNearPos(cPosC);
+	std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosA);
+	std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(cPosC);
 	//短いなら
 	if (dis > ad.Magnitude())
 	{
 		dis = ad.Magnitude();
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosA);
-		std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->SetNearPos(cPosD);
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosA);
+		std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(cPosD);
 	}
 	if (dis > bc.Magnitude())
 	{
 		dis = bc.Magnitude();
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosB);
-		std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->SetNearPos(cPosC);
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosB);
+		std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(cPosC);
 	}
 	if (dis > bd.Magnitude())
 	{
 		dis = bd.Magnitude();
-		std::dynamic_pointer_cast<CapsuleCollider>(actorA->GetColl())->SetNearPos(cPosB);
-		std::dynamic_pointer_cast<CapsuleCollider>(actorB->GetColl())->SetNearPos(cPosD);
+		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosB);
+		std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(cPosD);
 	}
 
 	//最短距離より大きいなら当たっていない
