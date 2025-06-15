@@ -64,6 +64,7 @@
     <ClCompile Include="Game\Actors\Player\PlayerStateUltimate.cpp" />
     <ClCompile Include="Game\Actors\Player\PlayerStateWalk.cpp" />
     <ClCompile Include="Game\Actors\Stage\InvisibleWall.cpp" />
+    <ClCompile Include="Game\Actors\Stage\Sky.cpp" />
     <ClCompile Include="Game\Actors\Stage\StageObjectCollision.cpp" />
     <ClCompile Include="Game\Actors\Stage\StageObjectDraw.cpp" />
     <ClCompile Include="Game\Actors\TestColls\TestCapsule.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Game\Actors\Player\PlayerStateUltimate.h" />
     <ClInclude Include="Game\Actors\Player\PlayerStateWalk.h" />
     <ClInclude Include="Game\Actors\Stage\InvisibleWall.h" />
+    <ClInclude Include="Game\Actors\Stage\Sky.h" />
     <ClInclude Include="Game\Actors\Stage\StageObjectCollision.h" />
     <ClInclude Include="Game\Actors\Stage\StageObjectDraw.h" />
     <ClInclude Include="Game\Actors\TestColls\TestCapsule.h" />

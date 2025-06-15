@@ -9,6 +9,7 @@ class SceneController;
 class Input;
 class Actor;
 class ActorManager;
+class Sky;
 class Stage1Scene :
     public SceneBase
 {
@@ -40,6 +41,7 @@ private:
     //ステージのオブジェクト
     int m_wallHandle;
     int m_pathHandle;
+    int m_skyHandle;
     //ステージの当たり判定
     int m_cubeHandle;
     int m_cylinderHandle;

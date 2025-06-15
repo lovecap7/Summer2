@@ -18,7 +18,7 @@ Model::Model(int modelHandle, VECTOR pos) :
 	m_rotation(Quaternion::AngleAxis(180 * MyMath::DEG_2_RAD, Vector3::Up())),
 	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0),
-	m_pos(),
+	m_pos(pos),
 	m_scale{ 1.0f,1.0f,1.0f }
 {
 	//ç¿ïW

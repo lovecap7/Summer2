@@ -23,15 +23,17 @@
 #include "../Game/Actors/TestColls/TestPolygon.h"
 #include "../Game/Actors/Stage/StageObjectCollision.h"
 #include "../Game/Actors/Stage/StageObjectDraw.h"
+#include "../Game/Actors/Stage/Sky.h"
 //カメラ
 #include "../Game/Camera/Camera.h"
 //デバッグモード
 #include "DebugScene.h"
+#include <cassert>
 
 namespace
 {
 	const Vector3 kPlayerPos = { 0.0f, 0.0f, 0.0f };
-	const Vector3 kCameraPos = { 0.0f, 400.0f, -500.0f };
+	const Vector3 kCameraPos = { 0.0f, 600.0f, -600.0f };
 }
 
 
@@ -44,16 +46,30 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	m_bossDragonHandle(MV1LoadModel("Data/Model/Enemy/BossDragon.mv1")),
 	m_pathHandle(MV1LoadModel("Data/Model/Stage/1/Path.mv1")),
 	m_cubeHandle(MV1LoadModel("Data/Model/Collision/Cube.mv1")),
-	m_cylinderHandle(MV1LoadModel("Data/Model/Collision/Cylinder.mv1"))
+	m_cylinderHandle(MV1LoadModel("Data/Model/Collision/Cylinder.mv1")),
+	m_skyHandle(MV1LoadModel("Data/Model/Stage/Sky/Sky_Daylight02.pmx"))
 {
+	assert(m_playerHandle >= 0);
+	assert(m_wallHandle >= 0);
+	assert(m_purpleDinosaurHandle >= 0);
+	assert(m_smallDragonHandle >= 0);
+	assert(m_bossDragonHandle >= 0);
+	assert(m_pathHandle >= 0);
+	assert(m_cubeHandle >= 0);
+	assert(m_cylinderHandle >= 0);
+	assert(m_skyHandle >= 0);
+
 	//登場するオブジェクトをセットしていく
 	std::vector<std::shared_ptr<Actor>> actors;
+	//キャラクターの作成
 	CreateCharacter(actors);
+	//ステージのオブジェクト配置
 	CreateStage(actors);
+	actors.emplace_back(std::make_shared<InvisibleWall>(m_wallHandle, Vector3{ 0.0f,-10.0f,0.0f }, VGet(1000.0f, 1.0f, 1000.0f), VGet(0.0f, 0.0f, 0.0f)));
+	//アクターマネージャーに登録
+	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
 	//カメラの初期化
 	m_camera = std::make_unique<Camera>(kCameraPos, m_player);
-	actors.emplace_back(std::make_shared<InvisibleWall>(m_wallHandle, Vector3{ 0.0f,-200.0f,0.0f }, VGet(1000.0f, 1.0f, 1000.0f), VGet(0.0f, 0.0f, 0.0f)));
-	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
 }
 
 Stage1Scene::~Stage1Scene()
@@ -68,6 +84,7 @@ Stage1Scene::~Stage1Scene()
 	MV1DeleteModel(m_pathHandle);
 	MV1DeleteModel(m_cubeHandle);
 	MV1DeleteModel(m_cylinderHandle);
+	MV1DeleteModel(m_skyHandle);
 }
 
 void Stage1Scene::Init()
@@ -186,6 +203,9 @@ void Stage1Scene::CreateCharacter(std::vector<std::shared_ptr<Actor>>& actors)
 
 void Stage1Scene::CreateStage(std::vector<std::shared_ptr<Actor>>& actors)
 {
+	//空を作成
+	actors.emplace_back(std::make_shared<Sky>(m_skyHandle));
+
 	//描画用
 	//配置データを取得
 	auto stageDrawData = TransformDataLoader::LoadDataCSV("Data/CSV/StageTransformData.csv");

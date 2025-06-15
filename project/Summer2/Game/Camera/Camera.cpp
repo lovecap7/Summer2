@@ -12,7 +12,7 @@ namespace
 {
 	//nearとfar
 	constexpr float kNear = 50.0f;
-	constexpr float kFar = 3000.0f;
+	constexpr float kFar = 5000.0f;
 	//カメラ角度
 	constexpr float kCameraAngleX = 40.0f * MyMath::DEG_2_RAD;
 	//画面中央からある一定距離プレイヤーが離れた場合追従する範囲

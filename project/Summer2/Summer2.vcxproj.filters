@@ -372,6 +372,9 @@
     <ClCompile Include="Game\Actors\Stage\StageObjectCollision.cpp">
       <Filter>ソース ファイル\Game\Actors\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Stage\Sky.cpp">
+      <Filter>ソース ファイル\Game\Actors\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -639,6 +642,9 @@
       <Filter>ヘッダー ファイル\Game\Actors\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Stage\StageObjectCollision.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Stage\Sky.h">
       <Filter>ヘッダー ファイル\Game\Actors\Stage</Filter>
     </ClInclude>
   </ItemGroup>
