@@ -95,7 +95,8 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 					//ƒJƒvƒZƒ‹
 					else if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Capsule)
 					{
-						isHit = m_collChecker->CheckCollCC(attackCollidable, actorHurtPointCollidable);
+						//‚¿‚å‚Á‚ÆŒy‚¢
+						isHit = m_collChecker->CheckCollCCVerDxLib(attackCollidable, actorHurtPointCollidable);
 					}
 				}
 

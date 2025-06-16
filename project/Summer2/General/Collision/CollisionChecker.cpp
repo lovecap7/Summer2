@@ -105,6 +105,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 	return true;
 }
 
+//衝突判定のために最近接点の計算もしてる
 bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
 {
 	// どちらかのカプセルの一つの座標から片方のカプセルに垂線を引いて
@@ -112,29 +113,27 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, con
 
 	//カプセルのそれぞれの座標
 	//カプセルA
-	Vector3 cPosA = collA->GetRb()->GetNextPos();
-	Vector3 cPosB = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetNextEndPos(collA->GetRb()->GetVec());
+	Vector3 capAStartPos = collA->GetRb()->GetNextPos();
+	Vector3 capAEndPos = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetNextEndPos(collA->GetRb()->GetVec());
+	float capARadius = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius();
 	//カプセルB
-	Vector3 cPosC = collB->GetRb()->GetNextPos();
-	Vector3 cPosD = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetNextEndPos(collB->GetRb()->GetVec());
+	Vector3 capBStartPos = collB->GetRb()->GetNextPos();
+	Vector3 capBEndPos = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetNextEndPos(collB->GetRb()->GetVec());
+	float capBRadius = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetRadius();
+	
 	//平行かどうか確認する
-	auto ab = cPosB - cPosA;//線分1
-	auto cd = cPosC - cPosD;//線分2
-	if (ab.Magnitude() > 0.0f && cd.Magnitude() > 0.0f)
+	auto capADir = capAEndPos - capAStartPos;//線分1
+	auto capBDir = capBStartPos - capBEndPos;//線分2
+	//正規化して内席から平行かチェック
+	auto cross = capADir.Cross(capBDir);
+	//平行なら
+	if (cross.SqMagnitude() <= 0.0f)
 	{
-		//正規化して内席から平行かチェック
-		ab = ab.Normalize();
-		cd = cd.Normalize();
-		float dot = ab.Dot(cd);
-
-		//平行なら
-		if (dot >= 1.0f || dot <= -1.0f)
-		{
-			return ParallelCC(collA, collB);
-		}
+		return ParallelCC(collA, collB);
 	}
+
 	//最短距離
-	float shortDis = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius() + std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetRadius();
+	float shortDis = capARadius + capBRadius;
 	//今の最短距離
 	float nowShortDis = 10000.0f;//始点同士を最短にしておく
 
@@ -147,15 +146,15 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, con
 		if (i <= 0)
 		{
 			//線分CD
-			lineStart = cPosC;
-			lineEnd = cPosD;
+			lineStart = capBStartPos;
+			lineEnd = capBEndPos;
 		}
 		//次ににカプセルAに対してカプセルBのそれぞれの点から最短の座標を出す
 		else
 		{
 			//線分AB
-			lineStart = cPosA;
-			lineEnd = cPosB;
+			lineStart = capAStartPos;
+			lineEnd = capAEndPos;
 		}
 
 		for (int j = 0; j < 2; ++j)
@@ -163,13 +162,13 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, con
 			//確認する座標
 			Vector3 checkPoint;
 			//Aから線分に下ろす
-			if (i == 0 && j == 0)checkPoint = cPosA;
+			if (i == 0 && j == 0)checkPoint = capAStartPos;
 			//Bから線分に下ろす
-			if (i == 0 && j == 1)checkPoint = cPosB;
+			if (i == 0 && j == 1)checkPoint = capAEndPos;
 			//Cから線分に下ろす
-			if (i == 1 && j == 0)checkPoint = cPosC;
+			if (i == 1 && j == 0)checkPoint = capBStartPos;
 			//Dから線分に下ろす
-			if (i == 1 && j == 1)checkPoint = cPosD;
+			if (i == 1 && j == 1)checkPoint = capBEndPos;
 
 			//あとは球とカプセルの時と同じ
 			//Aから確認する座標へのベクトル
@@ -237,6 +236,22 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, con
 
 	//ここまでくれば当たっている
 	return true;
+}
+
+bool CollisionChecker::CheckCollCCVerDxLib(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)
+{
+	//カプセルのそれぞれの座標
+	//カプセルA
+	Vector3 capAStartPos = collA->GetRb()->GetNextPos();
+	Vector3 capAEndPos = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetNextEndPos(collA->GetRb()->GetVec());
+	float capARadius = std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->GetRadius();
+	//カプセルB
+	Vector3 capBStartPos = collB->GetRb()->GetNextPos();
+	Vector3 capBEndPos = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetNextEndPos(collB->GetRb()->GetVec());
+	float capBRadius = std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->GetRadius();
+
+	return HitCheck_Capsule_Capsule(capAStartPos.ToDxLibVector(), capAEndPos.ToDxLibVector(), capARadius,
+		capBStartPos.ToDxLibVector(), capBEndPos.ToDxLibVector(), capBRadius);
 }
 
 bool CollisionChecker::CheckCollSP(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB)

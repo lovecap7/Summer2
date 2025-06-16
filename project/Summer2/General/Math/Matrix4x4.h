@@ -116,10 +116,10 @@ public:
 	static Matrix4x4 ToMatrix4x4(MATRIX dxMat);
 
 	/// <summary>
-	/// 向きたい方向を向く回転クォータニオンを返す
+	/// 向きたい方向を向く回転行列を返す
 	/// </summary>
 	/// <param name="target">向きたい方向</param>
 	/// <param name="up">床が傾いている時に値を渡す</param>
-	/// <returns>回転クォータニオン</returns>
+	/// <returns>回転行列</returns>
 	static Matrix4x4 LookAt(const Vector3& target,const Vector3 up = Vector3::Up());
 };

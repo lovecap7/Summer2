@@ -32,6 +32,15 @@ public:
     bool CheckCollCC(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB);
 
     /// <summary>
+    /// カプセルとカプセルの当たり判定
+    /// </summary>
+      /// </summary>
+    /// <param name="actorA">カプセル</param>
+    /// <param name="actorB">カプセル</param>
+    /// <returns>当たってる true : 当たってない false</returns>
+    bool CheckCollCCVerDxLib(const std::shared_ptr<Collidable>& collA, const std::shared_ptr<Collidable>& collB);
+
+    /// <summary>
     /// 球とポリゴンの当たり判定
     /// </summary>
     /// <param name="actorA">球</param>
