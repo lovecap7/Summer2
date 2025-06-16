@@ -72,6 +72,7 @@ void BossDragonStateChase::Update(const Input& input, const std::unique_ptr<Came
 		{
 			//パンチ状態にする
 			ChangeState(std::make_shared<BossDragonStatePunchAttack>(m_owner));
+			return;
 		}
 		//射程範囲外なので
 		else
@@ -86,5 +87,6 @@ void BossDragonStateChase::Update(const Input& input, const std::unique_ptr<Came
 	{
 		//待機状態にする
 		ChangeState(std::make_shared<BossDragonStateIdle>(m_owner));
+		return;
 	}
 }

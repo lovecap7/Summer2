@@ -23,17 +23,21 @@ namespace
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	//弾の半径の大きさ
-	constexpr float kBulletRadius = 20.0f;
+	constexpr float kBulletRadius = 40.0f;
 	//弾のダメージ
 	constexpr int kBulletDamage = 100;
 	//弾の持続フレーム
 	constexpr int kBulletKeepFrame = 180;
 	//弾の発生フレーム
-	constexpr int kBulletFireFrame = 30;
+	constexpr int kBulletFireFrame = 25;
 	//弾のスピード
-	constexpr float kBulletSpeed = 4.0f;
+	constexpr float kBulletSpeed = 7.0f;
 	//弾の発射角度
 	constexpr float kBulletAngle = 30.0f / 180.0f * DX_PI_F;
+	//弾の生成位置のY座標
+	constexpr float kBulletCreatePosY = 150.0f;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 4.0f;
 
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Headbutt";
@@ -110,7 +114,7 @@ void BossDragonStateBreathAttack::CreateAttack()
 	auto model = m_owner->GetModel();
 	//生成位置
 	Vector3 bulletPos = m_owner->GetCollidable()->GetRb()->GetPos();
-	bulletPos.y += 100.0f;
+	bulletPos.y += kBulletCreatePosY;
 	//弾の作成
 	CreateBullet(bulletPos, model,m_bullet1);
 	CreateBullet(bulletPos, model,m_bullet2);
@@ -130,7 +134,7 @@ void BossDragonStateBreathAttack::CreateBullet(Vector3& bulletPos, std::shared_p
 	auto coll = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kBulletRadius),
 		std::make_shared<Rigidbody>(bulletPos));
 	//弾の座標と当たり判定を攻撃に紐図ける
-	bullet = std::make_shared<BulletAttack>(coll, kBulletDamage, kBulletKeepFrame, m_owner);
+	bullet = std::make_shared<BulletAttack>(coll, kBulletDamage, kBulletKeepFrame, kKnockBackPower, m_owner);
 }
 
 void BossDragonStateBreathAttack::SpeedDown()

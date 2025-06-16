@@ -31,6 +31,8 @@ namespace
 	constexpr int kBulletKeepFrame = 2;
 	//攻撃の発生フレーム
 	constexpr int kBulletFireFrame = 30;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 3.0f;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Weapon";
 	//アニメーションの速度
@@ -112,7 +114,7 @@ void PurpleDinosaurStateAttack::CreateAttack()
 	m_leftArm = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(Vector3(leftArm.x, leftArm.y, leftArm.z), kLeftArmRadius),
 		std::make_shared<Rigidbody>(Vector3(leftHand.x, leftHand.y, leftHand.z)));
 	//武器の座標と当たり判定を攻撃に紐図ける
-	m_attack = std::make_shared<MeleeAttack>(m_leftArm, kBulletDamage, kBulletKeepFrame, m_owner);
+	m_attack = std::make_shared<MeleeAttack>(m_leftArm, kBulletDamage, kBulletKeepFrame, kKnockBackPower,m_owner);
 }
 
 void PurpleDinosaurStateAttack::UpdateAttack()

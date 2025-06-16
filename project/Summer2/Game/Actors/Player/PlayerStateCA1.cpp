@@ -23,6 +23,8 @@ namespace
 	constexpr int kCA1AnimDamage = 100.0f;
 	//チャージ攻撃の持続
 	constexpr float kCA1KeepFrame = 30.0f;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 2.0f;
 	//アニメーション
 	const char* kAnim = "Player|CA";//チャージ攻撃
 	//チャージ攻撃の段階別アニメーションの速度
@@ -124,7 +126,7 @@ void PlayerStateCA1::CreateAttack()
 		std::make_shared<Rigidbody>(root));
 
 	//武器の座標と当たり判定を攻撃に紐図ける
-	m_attackC = std::make_shared<MeleeAttack>(m_leftLeg, kCA1AnimDamage, kCA1KeepFrame, m_player);
+	m_attackC = std::make_shared<MeleeAttack>(m_leftLeg, kCA1AnimDamage, kCA1KeepFrame, kKnockBackPower, m_player);
 }
 
 void PlayerStateCA1::UpdateAttack()

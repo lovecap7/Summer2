@@ -25,6 +25,8 @@ namespace
 	constexpr int kAN3Damege = 300.0f;
 	constexpr int kAN3KeepFrame = 13;
 	constexpr int kAN3StartFrame = 15;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 4.0f;
 	//アニメーション
 	const char* kAnim = "Player|NA3";//通常攻撃3
 	//弱攻撃の段階別アニメーションの速度
@@ -141,7 +143,7 @@ void PlayerStateAttackN3::CreateAttack()
 		std::make_shared<Rigidbody>(ringFinger));
 
 	//武器の座標と当たり判定を攻撃に紐図ける
-	m_attackN3 = std::make_shared<MeleeAttack>(m_rightSword, kAN3Damege, kAN3KeepFrame, m_player);
+	m_attackN3 = std::make_shared<MeleeAttack>(m_rightSword, kAN3Damege, kAN3KeepFrame, kKnockBackPower, m_player);
 }
 
 void PlayerStateAttackN3::UpdateAttack()

@@ -7,14 +7,13 @@
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Rigidbody.h"
 
-MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner) :
-	AttackBase(coll, damage, keepFrame, owner)
+MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, float knockBackPower, std::shared_ptr<Actor> owner) :
+	AttackBase(coll, damage, keepFrame, knockBackPower, owner)
 {
 }
 
 MeleeAttack::~MeleeAttack()
 {
-
 }
 
 void MeleeAttack::Init()
@@ -95,7 +94,7 @@ void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 		//ノックバック
 		Vector3 knockBackVec = actor->GetCollidable()->GetRb()->GetNextPos() - m_owner->GetCollidable()->GetRb()->GetNextPos();//離れるベクトル
 		knockBackVec.y = 0.0f;//Y成分はなし
-		knockBackVec = knockBackVec.Normalize() * 2.0f;//ノックバック
+		knockBackVec = knockBackVec.Normalize() * m_knockBackPower;//ノックバック
 		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
 	}
 }

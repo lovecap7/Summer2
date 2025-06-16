@@ -112,6 +112,8 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 
 void AttackManager::Draw() const
 {
+	if (m_attacks.empty())return;//‹ó‚È‚ç‰½‚à‚µ‚È‚¢
+
 	//UŒ‚‚Ì•`‰æ
 	for (auto& attack : m_attacks)
 	{

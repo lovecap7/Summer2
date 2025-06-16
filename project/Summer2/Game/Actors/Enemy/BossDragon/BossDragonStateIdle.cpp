@@ -68,8 +68,9 @@ void BossDragonStateIdle::Update(const Input& input, const std::unique_ptr<Camer
 		//攻撃のクールタイムが0なら
 		if (m_owner->GetAttackCoolTime() <= 0)
 		{
-			//プレイヤーをに近づく
-			ChangeState(std::make_shared<BossDragonStateBreathAttack>(m_owner));
+			//どの攻撃をするか考える
+			ThinkAttack();
+			return;
 		}
 	}
 }
@@ -82,4 +83,25 @@ void BossDragonStateIdle::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+
+void BossDragonStateIdle::ThinkAttack()
+{
+	//ランダムに決定
+	auto rand = GetRand(1);
+
+	//遠距離攻撃
+	if (rand)
+	{
+		//ブレス
+		ChangeState(std::make_shared<BossDragonStateBreathAttack>(m_owner));
+		return;
+	}
+	//近接攻撃
+	else
+	{
+		//プレイヤーをに近づく
+		ChangeState(std::make_shared<BossDragonStateChase>(m_owner));
+		return;
+	}
 }

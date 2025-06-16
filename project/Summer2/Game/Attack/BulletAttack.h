@@ -11,8 +11,9 @@ public:
 	/// <param name="coll">衝突確認のための情報</param>
 	/// <param name="damage">ダメージ</param>
 	/// <param name="keepFrame">持続</param>
+	/// <param name="knockBack">ノックバックの大きさ</param>
 	/// <param name="owner">持ち主</param>
-	BulletAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner);
+	BulletAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, float knockBackPower, std::shared_ptr<Actor> owner);
 	~BulletAttack() override;
 	//初期化
 	void Init() override;

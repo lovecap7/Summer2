@@ -16,4 +16,6 @@ public:
 private:
 	//Œ¸‘¬‚µ‚Ä‚¢‚­
 	void SpeedDown();
+	//‚Ç‚ÌUŒ‚‚ğ‚·‚é‚©l‚¦‚é
+	void ThinkAttack();
 };

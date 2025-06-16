@@ -33,8 +33,6 @@ SmallDragon::SmallDragon(int modelHandle, Vector3 pos) :
 {
 	//モデルの初期化
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
-	//モデルの大きさ調整
-	m_model->SetScale(VGet(0.5f, 0.5f, 0.5f));
 	//衝突判定
 	Vector3 endPos = pos;
 	endPos += kCapsuleHeight; //カプセルの上端

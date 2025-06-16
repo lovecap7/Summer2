@@ -28,9 +28,11 @@ namespace
 	//弾の持続フレーム
 	constexpr int kBulletKeepFrame = 180;
 	//弾の発生フレーム
-	constexpr int kBulletFireFrame = 30;
+	constexpr int kBulletFireFrame = 20;
 	//弾のスピード
-	constexpr float kBulletSpeed = 2.0f;
+	constexpr float kBulletSpeed = 3.0f;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 4.0f;
 
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Headbutt";
@@ -110,7 +112,7 @@ void SmallDragonStateAttack::CreateAttack()
 	auto coll = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kBulletRadius),
 		std::make_shared<Rigidbody>(bulletPos));
 	//弾の座標と当たり判定を攻撃に紐図ける
-	m_attack = std::make_shared<BulletAttack>(coll, kBulletDamage, kBulletKeepFrame, m_owner);
+	m_attack = std::make_shared<BulletAttack>(coll, kBulletDamage, kBulletKeepFrame, kKnockBackPower, m_owner);
 	//弾の進行方向とスピード
 	m_attack->SetDirAndSpeed(model->GetDir(), kBulletSpeed);
 }

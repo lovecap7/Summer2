@@ -6,7 +6,7 @@ class Actor;
 class AttackBase abstract
 {
 public:
-	AttackBase(std::shared_ptr<Collidable> coll, int damege, int keepFrame, std::shared_ptr<Actor> owner);
+	AttackBase(std::shared_ptr<Collidable> coll, int damege, int keepFrame,float knockBackPower, std::shared_ptr<Actor> owner);
 	virtual ~AttackBase() {};
 	//初期化
 	virtual void Init() abstract;
@@ -27,6 +27,8 @@ public:
 	void SetDamage(int damage);
 	//持続フレーム
 	void SetKeepFrame(int keepFrame);
+	//ノックバック
+	float GetKnockBackPower() { return m_knockBackPower; };
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -34,6 +36,8 @@ protected:
 	int m_damage;
 	//持続フレーム
 	int m_keepFrame;
+	//ノックバックの大きさ
+	float m_knockBackPower;
 	//消滅フラグ
 	bool m_isDead;
 	//当てたことのあるCollidableを覚えておく

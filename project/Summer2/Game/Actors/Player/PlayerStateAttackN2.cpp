@@ -26,6 +26,8 @@ namespace
 	constexpr int kAN2Damege = 200.0f;
 	constexpr int kAN2KeepFrame = 10;
 	constexpr int kAN2StartFrame = 15;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 3.0f;
 	//アニメーション
 	const char* kAnim = "Player|NA2";
 	//弱攻撃の段階別アニメーションの速度
@@ -148,7 +150,7 @@ void PlayerStateAttackN2::CreateAttack()
 		std::make_shared<Rigidbody>(Vector3(ringFinger.x, ringFinger.y, ringFinger.z)));
 
 	//武器の座標と当たり判定を攻撃に紐図ける
-	m_attackN2 = std::make_shared<MeleeAttack>(m_rightSword, kAN2Damege, kAN2KeepFrame, m_player);
+	m_attackN2 = std::make_shared<MeleeAttack>(m_rightSword, kAN2Damege, kAN2KeepFrame, kKnockBackPower, m_player);
 }
 
 void PlayerStateAttackN2::UpdateAttack()

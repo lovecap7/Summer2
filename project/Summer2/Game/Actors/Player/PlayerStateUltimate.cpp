@@ -19,6 +19,8 @@ namespace
 	//Ultのダメージと持続フレーム
 	constexpr int kUltDamege = 30.0f;
 	constexpr int kUltKeepFrame = 180;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 2.0f;
 	//攻撃判定をリセットする頻度
 	constexpr int kUltInitFrame = 10;
 	//アニメーション
@@ -114,7 +116,7 @@ void PlayerStateUltimate::CreateAttack()
 	auto attackColl = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kAttackRadius),
 		std::make_shared<Rigidbody>(attackPos));
 	//攻撃の座標と当たり判定を攻撃に紐図ける
-	m_attackUlt = std::make_shared<MeleeAttack>(attackColl, kUltDamege, kUltKeepFrame, m_player);
+	m_attackUlt = std::make_shared<MeleeAttack>(attackColl, kUltDamege, kUltKeepFrame, kKnockBackPower,m_player);
 }
 
 void PlayerStateUltimate::UpdateAttack()

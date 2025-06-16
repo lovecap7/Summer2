@@ -24,13 +24,15 @@ namespace
 	//右手のインデックス
 	constexpr int kRightHandIndex = 36;
 	//パンチの当たり判定の大きさ(攻撃の大きさ)
-	constexpr float kPunchRadius = 30.0f;
+	constexpr float kPunchRadius = 80.0f;
 	//攻撃のダメージ
 	constexpr int kAttackDamage = 100;
 	//攻撃の持続フレーム
 	constexpr int kAttackKeepFrame = 3;
 	//攻撃の発生フレーム
 	constexpr int kAttackStartFrame = 30;
+	//ノックバックの大きさ
+	constexpr float kKnockBackPower = 3.0f;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Punch";
 	//アニメーションの速度
@@ -110,7 +112,7 @@ void BossDragonStatePunchAttack::CreateAttack()
 	auto punch = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kPunchRadius),
 		std::make_shared<Rigidbody>(rightHandPos));
 	//武器の座標と当たり判定を攻撃に紐図ける
-	m_attack = std::make_shared<MeleeAttack>(punch, kAttackDamage, kAttackKeepFrame, m_owner);
+	m_attack = std::make_shared<MeleeAttack>(punch, kAttackDamage, kAttackKeepFrame, kKnockBackPower,m_owner);
 }
 
 void BossDragonStatePunchAttack::UpdateAttack()

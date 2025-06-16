@@ -1,9 +1,10 @@
 #include "AttackBase.h"
 
-AttackBase::AttackBase(std::shared_ptr<Collidable> coll, int damage, int keepFrame, std::shared_ptr<Actor> owner):
+AttackBase::AttackBase(std::shared_ptr<Collidable> coll, int damage, int keepFrame, float knockBackPower, std::shared_ptr<Actor> owner):
 	m_collidable(coll),
 	m_damage(damage),
 	m_keepFrame(keepFrame),
+	m_knockBackPower(knockBackPower),
 	m_isDead(false),
 	m_owner(owner),
 	m_initDamage(damage),

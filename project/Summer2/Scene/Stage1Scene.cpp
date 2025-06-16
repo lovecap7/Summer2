@@ -6,7 +6,7 @@
 #include <vector>
 #include "../General/game.h"
 //配置データ
-#include "../../General/TransformDataLoader.h"
+#include "../General/TransformDataLoader.h"
 //アクター
 #include "../Game/Actors/Actor.h"
 #include "../Game/Actors/ActorManager.h"
