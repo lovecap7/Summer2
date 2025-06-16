@@ -13,7 +13,7 @@ public:
     void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 private:
-    //減速していく
-    void SpeedDown();
+    //入力でスピードを返す
+    float InputValueSpeed(const Input& input);
 };
 

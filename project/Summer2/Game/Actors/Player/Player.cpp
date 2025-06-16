@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "PlayerStateBase.h"
+#include "PlayerStateWalk.h"
+#include "PlayerStateDeath.h"
 #include "PlayerStateIdle.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/CapsuleCollider.h"

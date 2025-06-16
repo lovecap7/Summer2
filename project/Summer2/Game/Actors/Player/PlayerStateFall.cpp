@@ -15,14 +15,14 @@
 
 namespace
 {
-	//空中移動速度
-	constexpr float kAirMoveSpeed = 1.5f;
-	//空中移動最高速度
-	constexpr float kMaxAirMoveSpeed = 10.0f;
 	//アニメーション
 	const char* kAnim = "Player|Fall";
-	//減速
-	constexpr float kAirMoveDeceRate = 0.9f;
+	//空中移動速度
+	constexpr float kMaxAirMoveSpeed = 10.00f;
+	//移動速度
+	constexpr float kLowAirMoveSpeed = 0.1f;//空中の小移動速度
+	constexpr float kMediumAirMoveSpeed = 0.2f;//空中の中移動速度
+	constexpr float kHighAirMoveSpeed = 0.5f;//空中の大移動速度
 }
 
 PlayerStateFall::PlayerStateFall(std::shared_ptr<Player> player):
@@ -32,7 +32,9 @@ PlayerStateFall::PlayerStateFall(std::shared_ptr<Player> player):
 	m_player->GetModel()->SetAnim(kAnim, true);
 	//落下してるので
 	m_player->NoIsGround();
-	m_player->GetCollidable()->SetState(State::Fall);
+	
+	auto coll = m_player->GetCollidable();
+	coll->SetState(State::Fall);
 }
 PlayerStateFall::~PlayerStateFall()
 {
@@ -65,41 +67,46 @@ void PlayerStateFall::Update(const Input& input, const std::unique_ptr<Camera>& 
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
 	}
-	auto collidable = m_player->GetCollidable();
+	auto rb = m_player->GetCollidable()->GetRb();
 	//移動の入力があるなら
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
 		//空中移動
-		collidable->GetRb()->AddVec(GetForwardVec(input, camera) * kAirMoveSpeed);
+		rb->AddVec(GetForwardVec(input, camera) * InputValueSpeed(input));
 		//横移動速度に上限をつける
-		float speed = collidable->GetRb()->GetMoveVec().Magnitude();
+		float speed = rb->GetMoveVec().Magnitude();
 		if (speed > 0.0f)
 		{
 			speed = MathSub::ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
-			Vector3 moveVec = collidable->GetRb()->GetMoveVec();
+			Vector3 moveVec = rb->GetMoveVec();
 			if (moveVec.Magnitude() > 0.0f)
 			{
 				moveVec = moveVec.Normalize();
 			}
-			collidable->GetRb()->SetMoveVec(moveVec * speed);
+			rb->SetMoveVec(moveVec * speed);
 		}
-	}
-	else
-	{
-		//少しずつ減速する
-		SpeedDown();
 	}
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(dir);
 }
 
-void PlayerStateFall::SpeedDown()
+
+float PlayerStateFall::InputValueSpeed(const Input& input)
 {
-	auto collidable = m_player->GetCollidable();
-	//減速
-	Vector3 vec = collidable->GetRb()->GetVec();
-	vec.x *= kAirMoveDeceRate;
-	vec.z *= kAirMoveDeceRate;
-	collidable->GetRb()->SetVec(vec);
+	float moveSpeed = 0.0f;
+	//速度をスティック入力の深度に合わせる
+	if (input.IsLowPowerLeftStick())
+	{
+		moveSpeed = kLowAirMoveSpeed;
+	}
+	else if (input.IsMediumPowerLeftStick())
+	{
+		moveSpeed = kMediumAirMoveSpeed;
+	}
+	else if (input.IsHighPowerLeftStick())
+	{
+		moveSpeed = kHighAirMoveSpeed;
+	}
+	return moveSpeed;
 }

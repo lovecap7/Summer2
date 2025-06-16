@@ -13,8 +13,6 @@ public:
     void Init()override;
     void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
 private:
-    //Œ¸‘¬‚µ‚Ä‚¢‚­
-    void SpeedDown();
     //“ü—Í‚É‘Î‰ž‚µ‚½ˆÚ“®—Ê
     float InputValueSpeed(const Input& input);
 };

@@ -16,17 +16,15 @@
 namespace
 {
 	//ジャンプ力
-	const Vector3 kJumpVec = { 0.0f,13.0f,0.0f };
+	constexpr float kJumpVec = 13.0f;
 	//空中移動速度
-	constexpr float kAirMoveSpeed = 1.0f;
+	constexpr float kMaxAirMoveSpeed = 10.00f;
 	//アニメーション
 	const char* kAnim = "Player|Jump";
-	//減速
-	constexpr float kAirMoveDeceRate = 0.9f;
 	//移動速度
-	constexpr float kLowAirMoveSpeed = 2.0f;//空中の小移動速度
-	constexpr float kMediumAirMoveSpeed = 5.0f;//空中の中移動速度
-	constexpr float kHighAirMoveSpeed = 10.0f;//空中の大移動速度
+	constexpr float kLowAirMoveSpeed = 0.1f;//空中の小移動速度
+	constexpr float kMediumAirMoveSpeed = 0.2f;//空中の中移動速度
+	constexpr float kHighAirMoveSpeed = 0.5f;//空中の大移動速度
 }
 
 PlayerStateJump::PlayerStateJump(std::shared_ptr<Player> player):
@@ -39,8 +37,7 @@ PlayerStateJump::PlayerStateJump(std::shared_ptr<Player> player):
 	//地面から離れるのでfalseにしておく
 	m_player->NoIsGround();
 	//力を与える
-	collidable->GetRb()->ResetVec();
-	collidable->GetRb()->SetVec(kJumpVec);
+	collidable->GetRb()->SetVecY(kJumpVec);
 }
 
 PlayerStateJump::~PlayerStateJump()
@@ -67,9 +64,9 @@ void PlayerStateJump::Update(const Input& input, const std::unique_ptr<Camera>& 
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));
 		return;
 	}
-	auto collidable = m_player->GetCollidable();
+	auto rb = m_player->GetCollidable()->GetRb();
 	//落下しているなら
-	if (collidable->GetRb()->GetVec().y < 0.0f)
+	if (rb->GetVec().y < 0.0f)
 	{
 		//落下
 		ChangeState(std::make_shared<PlayerStateFall>(m_player));
@@ -79,39 +76,25 @@ void PlayerStateJump::Update(const Input& input, const std::unique_ptr<Camera>& 
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
 		//空中移動
-		collidable->GetRb()->AddVec(GetForwardVec(input, camera) * kAirMoveSpeed);
+		rb->AddVec(GetForwardVec(input, camera) * InputValueSpeed(input));
 		//横移動速度に上限をつける
-		float speed = collidable->GetRb()->GetMoveVec().Magnitude();
+		float speed = rb->GetMoveVec().Magnitude();
 		if (speed > 0.0f)
 		{
-			speed = MathSub::ClampFloat(speed, 0.0f, InputValueSpeed(input));
-			Vector3 moveVec = collidable->GetRb()->GetMoveVec();
+			speed = MathSub::ClampFloat(speed, 0.0f, kMaxAirMoveSpeed);
+			Vector3 moveVec = rb->GetMoveVec();
 			if (moveVec.Magnitude() > 0.0f)
 			{
 				moveVec = moveVec.Normalize();
 			}
-			collidable->GetRb()->SetMoveVec(moveVec * speed);
+			rb->SetMoveVec(moveVec * speed);
 		}
 	}
-	else
-	{
-		//少しずつ減速する
-		SpeedDown();
-	}
+	
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(dir);
 }
-void PlayerStateJump::SpeedDown()
-{
-	auto collidable = m_player->GetCollidable();
-	//減速
-	Vector3 vec = collidable->GetRb()->GetVec();
-	vec.x *= kAirMoveDeceRate;
-	vec.z *= kAirMoveDeceRate;
-	collidable->GetRb()->SetVec(vec);
-}
-
 
 float PlayerStateJump::InputValueSpeed(const Input& input)
 {

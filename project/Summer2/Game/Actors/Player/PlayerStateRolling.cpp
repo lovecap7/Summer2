@@ -19,6 +19,8 @@ namespace
 	const char* kAnim = "Player|Rolling";
 	//回避モーションの速度
 	constexpr float kAnimSpeed = 1.2f;
+	//重力を重めにする(坂道対策)
+	const Vector3 kBigGravity = { 0.0f,-5.0f,0.0f };
 }
 
 PlayerStateRolling::PlayerStateRolling(std::shared_ptr<Player> player) :
@@ -55,6 +57,9 @@ void PlayerStateRolling::Update(const Input& input, const std::unique_ptr<Camera
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
 	}
+	auto rb = collidable->GetRb();
+	//重力
+	rb->AddVec(kBigGravity);
 	//向いてる方向に移動
-	collidable->GetRb()->SetMoveVec(m_player->GetModel()->GetDir() * kRollingMoveSpeed);
+	rb->SetMoveVec(m_player->GetModel()->GetDir() * kRollingMoveSpeed);
 }

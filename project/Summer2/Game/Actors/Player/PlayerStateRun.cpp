@@ -24,6 +24,8 @@ namespace
 	constexpr float kMoveSpeed = 15.0f;//地上の移動速度
 	//アニメーション
 	const char* kAnim = "Player|Dash";
+	//重力を重めにする(坂道対策)
+	const Vector3 kBigGravity = { 0.0f,-5.0f,0.0f };
 }
 
 
@@ -111,8 +113,11 @@ void PlayerStateRun::Update(const Input& input, const std::unique_ptr<Camera>& c
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
 	}
+	auto rb = collidable->GetRb();
+	//重力
+	rb->AddVec(kBigGravity);
 	//移動
-	collidable->GetRb()->SetMoveVec(GetForwardVec(input, camera) * kMoveSpeed);
+	rb->SetMoveVec(GetForwardVec(input, camera) * kMoveSpeed);
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(dir);

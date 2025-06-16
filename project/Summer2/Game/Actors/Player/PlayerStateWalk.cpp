@@ -28,6 +28,8 @@ namespace
 	constexpr float kHighMoveSpeed = 10.0f;//地上の大移動速度
 	//アニメーション
 	const char* kAnim = "Player|Walk";
+	//重力を重めにする(坂道対策)
+	const Vector3 kBigGravity = { 0.0f,-5.0f,0.0f };
 }
 
 PlayerStateWalk::PlayerStateWalk(std::shared_ptr<Player> player):
@@ -118,8 +120,11 @@ void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& 
 		return;
 	}
 
+	auto rb = collidable->GetRb();
+	//重力
+	rb->AddVec(kBigGravity);
 	//移動
-	collidable->GetRb()->SetMoveVec(GetForwardVec(input,camera) * InputValueSpeed(input));
+	rb->SetMoveVec(GetForwardVec(input,camera) * InputValueSpeed(input));
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
 	m_player->GetModel()->SetDir(dir);
