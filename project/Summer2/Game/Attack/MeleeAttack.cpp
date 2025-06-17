@@ -21,7 +21,7 @@ void MeleeAttack::Init()
 	//‰Šú‰»ˆ—
 	m_damage = m_initDamage;
 	m_keepFrame = m_initKeepFrame;
-	m_isDead = false;
+	m_isDelete = false;
 	//ID‚Ì‰Šú‰»
 	if (m_hitId.size() != 0)
 	{
@@ -36,7 +36,7 @@ void MeleeAttack::Update()
 	//‘±ƒtƒŒ[ƒ€‚ª0‚É‚È‚Á‚½‚çÁ–Å
 	if (m_keepFrame <= 0)
 	{
-		m_isDead = true;
+		m_isDelete = true;
 	}
 }
 

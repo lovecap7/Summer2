@@ -77,6 +77,10 @@
     <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\MeleeAttack.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
+    <ClCompile Include="Game\UI\UIBase.cpp" />
+    <ClCompile Include="Game\UI\UIHPBase.cpp" />
+    <ClCompile Include="Game\UI\UIManager.cpp" />
+    <ClCompile Include="Game\UI\UIPlayerHP.cpp" />
     <ClCompile Include="General\Animator.cpp" />
     <ClCompile Include="General\Collidable.cpp" />
     <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
@@ -168,6 +172,10 @@
     <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\MeleeAttack.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
+    <ClInclude Include="Game\UI\UIBase.h" />
+    <ClInclude Include="Game\UI\UIHPBase.h" />
+    <ClInclude Include="Game\UI\UIManager.h" />
+    <ClInclude Include="Game\UI\UIPlayerHP.h" />
     <ClInclude Include="General\Animator.h" />
     <ClInclude Include="General\Collidable.h" />
     <ClInclude Include="General\Collision\CapsuleCollider.h" />

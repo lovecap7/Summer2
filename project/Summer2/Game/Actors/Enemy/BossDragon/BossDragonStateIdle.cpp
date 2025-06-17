@@ -3,6 +3,7 @@
 #include "BossDragonStateHit.h"
 #include "BossDragonStateChase.h"
 #include "BossDragonStateBreathAttack.h"
+#include "BossDragonStateSweepAttack.h"
 #include "BossDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/Collision/ColliderBase.h"
@@ -88,20 +89,26 @@ void BossDragonStateIdle::SpeedDown()
 void BossDragonStateIdle::ThinkAttack()
 {
 	//ランダムに決定
-	auto rand = GetRand(1);
+	auto rand = GetRand(2);
 
-	//遠距離攻撃
-	if (rand)
+	switch (rand)
 	{
-		//ブレス
-		ChangeState(std::make_shared<BossDragonStateBreathAttack>(m_owner));
-		return;
-	}
-	//近接攻撃
-	else
-	{
+	case 0:
 		//プレイヤーをに近づく
 		ChangeState(std::make_shared<BossDragonStateChase>(m_owner));
-		return;
+		break;
+	case 1:
+		//薙ぎ払い
+		ChangeState(std::make_shared<BossDragonStateSweepAttack>(m_owner));
+		break;
+	case 2:
+		//ブレス
+		ChangeState(std::make_shared<BossDragonStateBreathAttack>(m_owner));
+		break;
+	default:
+		//ブレス
+		ChangeState(std::make_shared<BossDragonStateBreathAttack>(m_owner));
+		break;
 	}
+	return;
 }

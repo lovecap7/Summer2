@@ -37,7 +37,7 @@ namespace
 	//弾の生成位置のY座標
 	constexpr float kBulletCreatePosY = 150.0f;
 	//ノックバックの大きさ
-	constexpr float kKnockBackPower = 4.0f;
+	constexpr float kKnockBackPower = 12.0f;
 
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Headbutt";

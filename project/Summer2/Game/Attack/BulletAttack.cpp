@@ -24,7 +24,7 @@ void BulletAttack::Init()
 	//初期化処理
 	m_damage = m_initDamage;
 	m_keepFrame = m_initKeepFrame;
-	m_isDead = false;
+	m_isDelete = false;
 	//IDの初期化
 	if (m_hitId.size() != 0)
 	{
@@ -46,7 +46,7 @@ void BulletAttack::Update()
 	//持続フレームが0になったら消滅
 	if (m_keepFrame <= 0)
 	{
-		m_isDead = true;
+		m_isDelete = true;
 	}
 }
 
@@ -107,6 +107,6 @@ void BulletAttack::OnHit(std::shared_ptr<Actor> actor)
 		knockBackVec = knockBackVec.Normalize() * m_knockBackPower;//ノックバック
 		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
 		//削除
-		m_isDead = true;
+		m_isDelete = true;
 	}
 }

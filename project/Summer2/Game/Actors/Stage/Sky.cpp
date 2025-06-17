@@ -6,6 +6,7 @@
 namespace
 {
 	constexpr float kScale = 2.0f;
+	constexpr float kRotaAngle = 0.01f;
 }
 
 Sky::Sky(int handle):
@@ -23,7 +24,7 @@ Sky::~Sky()
 void Sky::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
 {
 	m_model->SetPos(camera->GetPos().ToDxLibVector());
-	m_model->SetRot(VGet(0.0f, 1.0f, 0.0f));
+	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));
 }
 
 void Sky::Draw() const

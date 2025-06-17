@@ -23,6 +23,11 @@ ActorManager::ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shar
 	m_attackManager = std::make_shared<AttackManager>();
 }
 
+ActorManager::~ActorManager()
+{
+	Exit();
+}
+
 void ActorManager::Entry()
 {
 	//アクターの登録処理

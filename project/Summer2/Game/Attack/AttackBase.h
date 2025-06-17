@@ -19,9 +19,9 @@ public:
 	//コライダー
 	std::shared_ptr<Collidable> GetCollidable()const { return m_collidable; };
 	//消滅
-	bool IsDead() { return m_isDead; };
+	bool IsDelete() { return m_isDelete; };
 	//攻撃判定を消す
-	void Delete() { m_isDead = true; };
+	void Delete() { m_isDelete = true; };
 	//ダメージ
 	int GetDamage() { return m_damage; };
 	void SetDamage(int damage);
@@ -39,7 +39,7 @@ protected:
 	//ノックバックの大きさ
 	float m_knockBackPower;
 	//消滅フラグ
-	bool m_isDead;
+	bool m_isDelete;
 	//当てたことのあるCollidableを覚えておく
 	std::vector<int> m_hitId;
 	//持ち主

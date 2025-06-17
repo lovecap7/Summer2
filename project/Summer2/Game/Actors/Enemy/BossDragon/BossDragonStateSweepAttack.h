@@ -17,6 +17,8 @@ public:
 private:
     //UŒ‚‚ÌƒtƒŒ[ƒ€‚ğ”‚¦‚é
     int m_attackCountFrame;
+    //¶˜r
+    std::shared_ptr<Collidable> m_leftArm;
     //UŒ‚
     std::shared_ptr<MeleeAttack> m_attack;
     //UŒ‚‚Ì“–‚½‚è”»’èì¬

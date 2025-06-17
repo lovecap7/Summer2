@@ -30,9 +30,9 @@ namespace
 	//攻撃の持続フレーム
 	constexpr int kAttackKeepFrame = 3;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 30;
+	constexpr int kAttackStartFrame = 26;
 	//ノックバックの大きさ
-	constexpr float kKnockBackPower = 3.0f;
+	constexpr float kKnockBackPower = 20.0f;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Punch";
 	//アニメーションの速度

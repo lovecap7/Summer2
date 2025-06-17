@@ -38,7 +38,7 @@ void InvisibleWall::OnHitColl(const std::shared_ptr<Collidable>& other)
 void InvisibleWall::Draw() const
 {
 #if _DEBUG
-	DxLib::MV1DrawModel(m_modelHandle);
+	//DxLib::MV1DrawModel(m_modelHandle);
 #endif
 }
 

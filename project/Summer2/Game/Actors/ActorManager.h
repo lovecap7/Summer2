@@ -12,7 +12,7 @@ class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
 public:
 	ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shared_ptr<Player> player);
-	virtual~ActorManager() {};
+	virtual~ActorManager();
 	//“o˜^ˆ—
 	void Entry();
 	//“o˜^‰ğœ
