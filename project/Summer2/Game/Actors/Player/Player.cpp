@@ -34,7 +34,8 @@ namespace
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
 	m_stickVec(0.0f,0.0f),
-	m_isGround(false)
+	m_isGround(false),
+	m_ultGage(0)
 {
 	//ƒ‚ƒfƒ‹
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());

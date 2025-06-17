@@ -51,6 +51,8 @@ private:
 	Vector2 m_stickVec;
 	//地面に付いているかどうか
 	bool m_isGround;
+	//必殺技ゲージ
+	int m_ultGage;
 private:
 	//やられ判定の更新
 	void UpdateHurtPoint();
