@@ -55,8 +55,6 @@ PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::shared
 
 PlayerStateCA1::~PlayerStateCA1()
 {
-	//UŒ‚”»’è‚ğÁ‚·
-	m_attackC->Delete();
 }
 void PlayerStateCA1::Init()
 {
@@ -69,12 +67,16 @@ void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& c
 	//€–S
 	if (m_player->GetHurtPoint()->IsDead())
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		ChangeState(std::make_shared<PlayerStateDeath>(m_player));
 		return;
 	}
 	//UŒ‚‚ğó‚¯‚½
 	if (m_player->GetHurtPoint()->IsHit())
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		//‚â‚ç‚êó‘Ô
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));
 		return;
@@ -82,6 +84,8 @@ void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& c
 	//ƒQ[ƒW‚ª‚ ‚é‚Æ‚«g‚¦‚é
 	if (input.IsTrigger("RB"))
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		//•KE‹Z
 		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
 		return;
@@ -90,6 +94,8 @@ void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& c
 	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚½‚ç
 	if (model->IsFinishFixedLoop())
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		//‘Ò‹@
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
@@ -150,4 +156,11 @@ void PlayerStateCA1::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+
+void PlayerStateCA1::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+{
+	//UŒ‚”»’è‚ğÁ‚·
+	m_attackC->Delete();
+	attackManager->Exit(m_attackC);
 }

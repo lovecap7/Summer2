@@ -9,6 +9,7 @@
 #include "../../../../General/Collision/ColliderBase.h"
 #include "../../../../General/Collision/CapsuleCollider.h"
 #include "../../../Attack/HurtPoint.h"
+#include "../../../Attack/AttackManager.h"
 #include "../../../../General/Rigidbody.h"
 #include "../../../../General/Collidable.h"
 #include "../../../../General/Input.h"
@@ -68,8 +69,7 @@ BossDragonStateSweepAttack::BossDragonStateSweepAttack(std::shared_ptr<BossDrago
 
 BossDragonStateSweepAttack::~BossDragonStateSweepAttack()
 {
-	//UŒ‚”»’è‚ğÁ‚·
-	m_attack->Delete();
+
 	//UŒ‚‚ÌƒN[ƒ‹ƒ^ƒCƒ€
 	m_owner->SetAttackCoolTime(kAttackCoolTime);
 }
@@ -84,12 +84,16 @@ void BossDragonStateSweepAttack::Update(const Input& input, const std::unique_pt
 	//€‚ñ‚Å‚é‚È‚ç
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		//€–Só‘Ô
 		ChangeState(std::make_shared<BossDragonStateDeath>(m_owner));
 		return;
 	}
 	if (m_owner->GetHurtPoint()->IsHit())
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		//‚â‚ç‚êó‘Ô
 		ChangeState(std::make_shared<BossDragonStateHit>(m_owner));
 		return;
@@ -125,8 +129,11 @@ void BossDragonStateSweepAttack::Update(const Input& input, const std::unique_pt
 	//UŒ‚I—¹
 	if (m_attackCountFrame >= kAllAttackFrame)
 	{
+		//íœ
+		DeleteAttack(attackManager);
 		//‘Ò‹@ó‘Ô‚É–ß‚·
 		ChangeState(std::make_shared<BossDragonStateIdle>(m_owner));
+		return;
 	}
 	//Œ¸‘¬
 	SpeedDown();
@@ -163,4 +170,10 @@ void BossDragonStateSweepAttack::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+void BossDragonStateSweepAttack::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+{
+	//UŒ‚”»’è‚ğÁ‚·
+	m_attack->Delete();
+	attackManager->Exit(m_attack);
 }

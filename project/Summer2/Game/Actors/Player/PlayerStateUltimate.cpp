@@ -64,8 +64,6 @@ PlayerStateUltimate::~PlayerStateUltimate()
 {
 	//無敵解除
 	m_player->GetHurtPoint()->SetIsNoDamege(false);
-	//攻撃判定を消す
-	m_attackUlt->Delete();
 }
 
 void PlayerStateUltimate::Init()
@@ -81,6 +79,8 @@ void PlayerStateUltimate::Update(const Input& input, const std::unique_ptr<Camer
 	//アニメーションが終了したら
 	if (model->IsFinishFixedLoop())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//待機
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
@@ -137,3 +137,9 @@ void PlayerStateUltimate::SpeedDown()
 	collidable->GetRb()->SetVec(vec);
 }
 
+void PlayerStateUltimate::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+{
+	//攻撃判定を消す
+	m_attackUlt->Delete();
+	attackManager->Exit(m_attackUlt);
+}

@@ -17,6 +17,19 @@ AttackManager::~AttackManager()
 
 void AttackManager::Entry(std::shared_ptr<AttackBase> attack)
 {
+	//‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚é‚È‚ç‚µ‚È‚¢
+	auto it = std::find(m_attacks.begin(), m_attacks.end(), attack);
+	if (it != m_attacks.end())
+	{
+		return;
+	}
+
+	//UŒ‚‚ğƒZƒbƒg
+	m_attacks.emplace_back(attack);
+}
+
+void AttackManager::Exit(std::shared_ptr<AttackBase> attack)
+{
 	//‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çŒÃ‚¢UŒ‚‚ğÁ‚·
 	auto it = std::find(m_attacks.begin(), m_attacks.end(), attack);
 	if (it != m_attacks.end())
@@ -24,11 +37,7 @@ void AttackManager::Entry(std::shared_ptr<AttackBase> attack)
 		//íœ
 		m_attacks.erase(it);
 	}
-
-	//UŒ‚‚ğƒZƒbƒg
-	m_attacks.emplace_back(attack);
 }
-
 
 void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 {

@@ -12,6 +12,7 @@
 #include "../../../../General/Collision/SphereCollider.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../Attack/MeleeAttack.h"
+#include "../../../UI/UIManager.h"
 #include "../../ActorManager.h"
 #include "../../../../General/game.h"
 
@@ -45,13 +46,13 @@ PurpleDinosaur::~PurpleDinosaur()
 {
 }
 
-void PurpleDinosaur::Entry(std::shared_ptr<ActorManager> actorManager)
+void PurpleDinosaur::Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
 {
 	//“o˜^
 	actorManager->GetEnemyManager()->Entry(shared_from_this());
 }
 
-void PurpleDinosaur::Exit(std::shared_ptr<ActorManager> actorManager)
+void PurpleDinosaur::Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
 {
 	//“o˜^‰ğœ
 	actorManager->GetEnemyManager()->Exit(shared_from_this());
@@ -68,7 +69,7 @@ void PurpleDinosaur::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void PurpleDinosaur::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PurpleDinosaur::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
 {
 	//UŒ‚‚ÌƒN[ƒ‹ƒ^ƒCƒ€‚ğŒ¸‚ç‚·
 	UpdateAttackCoolTime();

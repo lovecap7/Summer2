@@ -7,6 +7,7 @@ class Input;
 class Camera;
 class AttackManager;
 class CollisionManager;
+class UIManager;
 class EnemyManager;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
@@ -14,13 +15,13 @@ public:
 	ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shared_ptr<Player> player);
 	virtual~ActorManager();
 	//“o˜^ˆ—
-	void Entry();
+	void Entry(std::shared_ptr<UIManager> uiManager);
 	//“o˜^‰ğœ
-	void Exit();
+	void Exit(std::shared_ptr<UIManager> uiManager);
 	//‰Šú‰»ˆ—
 	void Init();
 	//XVˆ—
-	void Update(const Input& input, const std::unique_ptr<Camera>& camera);
+	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<UIManager> uiManager);
 	//•`‰æ
 	void Draw()const;
 	//ƒRƒŠƒWƒ‡ƒ“ƒ}ƒl[ƒWƒƒ[

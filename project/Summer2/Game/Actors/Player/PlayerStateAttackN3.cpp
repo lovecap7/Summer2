@@ -58,8 +58,6 @@ PlayerStateAttackN3::PlayerStateAttackN3(std::shared_ptr<Player> player) :
 
 PlayerStateAttackN3::~PlayerStateAttackN3()
 {
-	//攻撃判定を消す
-	m_attackN3->Delete();
 }
 void PlayerStateAttackN3::Init()
 {
@@ -71,12 +69,16 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		ChangeState(std::make_shared<PlayerStateDeath>(m_player));
 		return;
 	}
 	//攻撃を受けた時
 	if (m_player->GetHurtPoint()->IsHit())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//やられ状態
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));
 		return;
@@ -84,6 +86,8 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	//ゲージがあるとき使える
 	if (input.IsTrigger("RB"))
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//必殺技
 		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
 		return;
@@ -93,6 +97,8 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	//攻撃発生フレーム
 	if (m_attackCountFrame == kAN3StartFrame)
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//攻撃を入れる
 		AppearAttack(m_attackN3, attackManager);
 	}
@@ -100,6 +106,8 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	//モデルのアニメーションが終わったら
 	if (model->IsFinishAnim())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//待機
 		ChangeState(std::make_shared<PlayerStateIdle>(m_player));
 		return;
@@ -110,6 +118,8 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 		//回避ボタンを押したら
 		if (input.IsTrigger("A"))
 		{
+			//削除
+			DeleteAttack(attackManager);
 			//回避
 			ChangeState(std::make_shared<PlayerStateRolling>(m_player));
 			return;
@@ -117,6 +127,8 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 		//チャージボタンを押したら
 		if (input.IsTrigger("Y"))
 		{
+			//削除
+			DeleteAttack(attackManager);
 			//チャージ
 			ChangeState(std::make_shared<PlayerStateCharge>(m_player));
 			return;
@@ -173,4 +185,11 @@ void PlayerStateAttackN3::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+
+void PlayerStateAttackN3::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+{
+	//攻撃判定を消す
+	m_attackN3->Delete();
+	attackManager->Exit(m_attackN3);
 }

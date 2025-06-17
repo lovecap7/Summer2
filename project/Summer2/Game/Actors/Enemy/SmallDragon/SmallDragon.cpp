@@ -12,6 +12,7 @@
 #include "../../../../General/Collision/SphereCollider.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../Attack/MeleeAttack.h"
+#include "../../../UI/UIManager.h"
 #include "../../ActorManager.h"
 #include "../../../../General/game.h"
 
@@ -45,13 +46,13 @@ SmallDragon::~SmallDragon()
 {
 }
 
-void SmallDragon::Entry(std::shared_ptr<ActorManager> actorManager)
+void SmallDragon::Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
 {
 	//ìoò^
 	actorManager->GetEnemyManager()->Entry(shared_from_this());
 }
 
-void SmallDragon::Exit(std::shared_ptr<ActorManager> actorManager)
+void SmallDragon::Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
 {
 	//ìoò^âèú
 	actorManager->GetEnemyManager()->Exit(shared_from_this());
@@ -68,7 +69,7 @@ void SmallDragon::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
 {
 	//çUåÇÇÃÉNÅ[ÉãÉ^ÉCÉÄÇå∏ÇÁÇ∑
 	UpdateAttackCoolTime();

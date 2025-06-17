@@ -22,6 +22,6 @@ void UIPlayerHP::Update()
 
 void UIPlayerHP::Draw() const
 {
-	DrawBox(50, 50, (m_maxHp / m_maxHp) * 50, 150, 0x00ff55, true);
-	DrawBox(50, 50, (m_nowHp / m_maxHp) * 50, 150, 0x00ff55, true);
+	DrawBox(50, 50, 50 + (m_maxHp / m_maxHp) * 400, 100, 0xff5555, true);
+	DrawBox(50, 50, 50 + (m_nowHp / m_maxHp) * 400, 100, 0x55ff55, true);
 }

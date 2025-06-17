@@ -9,6 +9,7 @@
 #include "../../../../General/Collision/ColliderBase.h"
 #include "../../../../General/Collision/SphereCollider.h"
 #include "../../../Attack/HurtPoint.h"
+#include "../../../Attack/AttackManager.h"
 #include "../../../../General/Rigidbody.h"
 #include "../../../../General/Collidable.h"
 #include "../../../../General/Input.h"
@@ -57,8 +58,6 @@ BossDragonStatePunchAttack::BossDragonStatePunchAttack(std::shared_ptr<BossDrago
 
 BossDragonStatePunchAttack::~BossDragonStatePunchAttack()
 {
-	//攻撃判定を消す
-	m_attack->Delete();
 	//攻撃のクールタイム
 	m_owner->SetAttackCoolTime(kAttackCoolTime);
 }
@@ -74,12 +73,16 @@ void BossDragonStatePunchAttack::Update(const Input& input, const std::unique_pt
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//死亡状態
 		ChangeState(std::make_shared<BossDragonStateDeath>(m_owner));
 		return;
 	}
 	if (m_owner->GetHurtPoint()->IsHit())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//やられ状態
 		ChangeState(std::make_shared<BossDragonStateHit>(m_owner));
 		return;
@@ -97,8 +100,11 @@ void BossDragonStatePunchAttack::Update(const Input& input, const std::unique_pt
 	//アニメーション終了後
 	if (m_owner->GetModel()->IsFinishAnim())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//待機状態に戻す
 		ChangeState(std::make_shared<BossDragonStateIdle>(m_owner));
+		return;
 	}
 	//減速
 	SpeedDown();
@@ -132,4 +138,10 @@ void BossDragonStatePunchAttack::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+void BossDragonStatePunchAttack::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+{
+	//攻撃判定を消す
+	m_attack->Delete();
+	attackManager->Exit(m_attack);
 }

@@ -5,6 +5,7 @@
 #include <DxLib.h>
 #include <vector>
 #include "../General/game.h"
+#include "../Game/UI/UIManager.h"
 //配置データ
 #include "../General/TransformDataLoader.h"
 //アクター
@@ -20,7 +21,6 @@
 #include "../Game/Actors/Enemy/EnemyBase.h"
 //ステージ
 #include "../Game/Actors/Stage/InvisibleWall.h"
-#include "../Game/Actors/TestColls/TestPolygon.h"
 #include "../Game/Actors/Stage/StageObjectCollision.h"
 #include "../Game/Actors/Stage/StageObjectDraw.h"
 #include "../Game/Actors/Stage/Sky.h"
@@ -70,12 +70,14 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
 	//カメラの初期化
 	m_camera = std::make_unique<Camera>(kCameraPos, m_player);
+	//UIの準備
+	m_uiManager = std::make_shared<UIManager>();
 }
 
 Stage1Scene::~Stage1Scene()
 {
 	//登録解除
-	m_actorManager->Exit();
+	m_actorManager->Exit(m_uiManager);
 	MV1DeleteModel(m_playerHandle);
 	MV1DeleteModel(m_wallHandle);
 	MV1DeleteModel(m_purpleDinosaurHandle);
@@ -90,6 +92,7 @@ Stage1Scene::~Stage1Scene()
 void Stage1Scene::Init()
 {
 	m_actorManager->Init();
+	m_actorManager->Entry(m_uiManager);
 }
 
 void Stage1Scene::Update(Input& input)
@@ -127,9 +130,11 @@ void Stage1Scene::Update(Input& input)
 #endif
 	{
 		//アクターの更新処理
-		m_actorManager->Update(input, m_camera);
+		m_actorManager->Update(input, m_camera,m_uiManager);
 		//カメラの更新
 		m_camera->Update();
+		//UIの更新
+		m_uiManager->Update();
 	}
 }
 
@@ -158,6 +163,8 @@ void Stage1Scene::Draw()
 #endif
 	//アクターの描画
 	m_actorManager->Draw();
+	//UIの描画
+	m_uiManager->Draw();
 }
 
 void Stage1Scene::CreateCharacter(std::vector<std::shared_ptr<Actor>>& actors)

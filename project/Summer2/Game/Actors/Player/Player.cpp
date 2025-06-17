@@ -17,6 +17,8 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/AttackManager.h"
+#include "../../UI/UIManager.h"
+#include "../../UI/UIPlayerHP.h"
 #include "../ActorManager.h"
 #include <DxLib.h>
 #include <cmath>
@@ -46,11 +48,15 @@ Player::~Player()
 {
 }
 
-void Player::Entry(std::shared_ptr<ActorManager> actorManager)
+void Player::Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
 {
+	//HPのUIを用意する
+	auto uiHp = std::make_shared<UIPlayerHP>(m_hurtPoint);
+	uiManager->Entry(uiHp);
+
 }
 
-void Player::Exit(std::shared_ptr<ActorManager> actorManager)
+void Player::Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
 {
 }
 
@@ -70,7 +76,7 @@ void Player::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
 {
 	//スティックの向きを入れる
 	m_stickVec.x = static_cast<float>(input.GetStickInfo().leftStickX);

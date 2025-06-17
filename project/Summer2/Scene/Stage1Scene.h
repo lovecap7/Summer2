@@ -10,6 +10,7 @@ class Input;
 class Actor;
 class ActorManager;
 class Sky;
+class UIManager;
 class Stage1Scene :
     public SceneBase
 {
@@ -31,6 +32,8 @@ private:
     std::shared_ptr<Player> m_player;
     //カメラ
     std::unique_ptr<Camera> m_camera;
+    //UI
+    std::shared_ptr<UIManager> m_uiManager;
 private:
     //ハンドル
     //キャラクター

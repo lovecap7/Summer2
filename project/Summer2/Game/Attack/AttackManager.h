@@ -13,6 +13,8 @@ public:
 	void Draw()const;
 	//UŒ‚‚ğ“o˜^
 	void Entry(std::shared_ptr<AttackBase> attack);
+	//“o˜^‰ğœ
+	void Exit(std::shared_ptr<AttackBase> attack);
 private:
 	//UŒ‚
 	std::vector<std::shared_ptr<AttackBase>> m_attacks;

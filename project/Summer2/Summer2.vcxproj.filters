@@ -70,12 +70,6 @@
     <Filter Include="ソース ファイル\Game\Actors\Stage">
       <UniqueIdentifier>{0f8c55d9-2f21-4740-a76d-b8178e5a8f18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Game\Actors\Test">
-      <UniqueIdentifier>{9526487d-38ae-4b1d-bd7b-748c16b79fa2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Game\Actors\Test">
-      <UniqueIdentifier>{48e9f999-7d78-42a7-8574-81a164307f78}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Game\Actors\Stage">
       <UniqueIdentifier>{9813c07d-f942-4030-887a-e96a70f83d81}</UniqueIdentifier>
     </Filter>
@@ -201,17 +195,8 @@
     <ClCompile Include="General\Collision\CollisionProcess.cpp">
       <Filter>ソース ファイル\General\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actors\TestColls\TestSphere.cpp">
-      <Filter>ソース ファイル\Game\Actors\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Actors\TestColls\TestCapsule.cpp">
-      <Filter>ソース ファイル\Game\Actors\Test</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\TestCollScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Actors\TestColls\TestPolygon.cpp">
-      <Filter>ソース ファイル\Game\Actors\Test</Filter>
     </ClCompile>
     <ClCompile Include="General\Model.cpp">
       <Filter>ソース ファイル\General</Filter>
@@ -488,17 +473,8 @@
     <ClInclude Include="General\Collision\CollisionProcess.h">
       <Filter>ヘッダー ファイル\General\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actors\TestColls\TestSphere.h">
-      <Filter>ヘッダー ファイル\Game\Actors\Test</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Actors\TestColls\TestCapsule.h">
-      <Filter>ヘッダー ファイル\Game\Actors\Test</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\TestCollScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Actors\TestColls\TestPolygon.h">
-      <Filter>ヘッダー ファイル\Game\Actors\Test</Filter>
     </ClInclude>
     <ClInclude Include="General\Model.h">
       <Filter>ヘッダー ファイル\General</Filter>

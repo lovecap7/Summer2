@@ -34,8 +34,22 @@ void UIManager::Exit(std::shared_ptr<UIBase> ui)
 
 void UIManager::Update()
 {
+	if (m_uis.empty())return;//‹ó‚È‚ç‰½‚à‚µ‚È‚¢
+
+	//UI‚ÌXVˆ—
+	for (auto& ui : m_uis)
+	{
+		ui->Update();
+	}
 }
 
 void UIManager::Draw() const
 {
+	if (m_uis.empty())return;//‹ó‚È‚ç‰½‚à‚µ‚È‚¢
+
+	//UI‚Ì•`‰æˆ—
+	for (auto& ui : m_uis)
+	{
+		ui->Draw();
+	}
 }

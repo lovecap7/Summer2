@@ -9,9 +9,5 @@ public:
 	~UIBase();
 	virtual void Update() abstract;
 	virtual void Draw()const abstract;
-	//è¡ñ≈
-	bool IsDelete() { return m_isDelete; };
-protected:
-	bool m_isDelete;
 };
 

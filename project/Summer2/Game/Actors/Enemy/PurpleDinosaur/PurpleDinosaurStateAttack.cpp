@@ -8,6 +8,7 @@
 #include "../../../../General/Collision/ColliderBase.h"
 #include "../../../../General/Collision/CapsuleCollider.h"
 #include "../../../Attack/HurtPoint.h"
+#include "../../../Attack/AttackManager.h"
 #include "../../../../General/Rigidbody.h"
 #include "../../../../General/Collidable.h"
 #include "../../../../General/Input.h"
@@ -57,8 +58,6 @@ PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinos
 
 PurpleDinosaurStateAttack::~PurpleDinosaurStateAttack()
 {
-	//攻撃判定を消す
-	m_attack->Delete();
 	//攻撃のクールタイム
 	m_owner->SetAttackCoolTime(kAttackCoolTime);
 }
@@ -74,12 +73,16 @@ void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//死亡状態
 		ChangeState(std::make_shared<PurpleDinosaurStateDeath>(m_owner));
 		return;
 	}
 	if (m_owner->GetHurtPoint()->IsHit())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//やられ状態
 		ChangeState(std::make_shared<PurpleDinosaurStateHit>(m_owner));
 		return;
@@ -97,8 +100,11 @@ void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr
 	//アニメーション終了後
 	if (m_owner->GetModel()->IsFinishAnim())
 	{
+		//削除
+		DeleteAttack(attackManager);
 		//待機状態に戻す
 		ChangeState(std::make_shared<PurpleDinosaurStateIdle>(m_owner));
+		return;
 	}
 
 	//減速
@@ -136,4 +142,11 @@ void PurpleDinosaurStateAttack::SpeedDown()
 	vec.x *= kMoveDeceRate;
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
+}
+
+void PurpleDinosaurStateAttack::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+{
+	//攻撃判定を消す
+	m_attack->Delete();
+	attackManager->Exit(m_attack);
 }

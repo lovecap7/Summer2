@@ -9,6 +9,7 @@
 #include "../../General/Rigidbody.h"
 #include "../../General/Collision/CollisionManager.h"
 #include "../../General/game.h"
+#include "../UI/UIManager.h"
 
 ActorManager::ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shared_ptr<Player> player):
 	m_actors(actors),
@@ -25,24 +26,23 @@ ActorManager::ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shar
 
 ActorManager::~ActorManager()
 {
-	Exit();
 }
 
-void ActorManager::Entry()
+void ActorManager::Entry(std::shared_ptr<UIManager> uiManager)
 {
 	//アクターの登録処理
 	for (auto& actor : m_actors)
 	{
-		actor->Entry(shared_from_this());
+		actor->Entry(shared_from_this(), uiManager);
 	}
 }
 
-void ActorManager::Exit()
+void ActorManager::Exit(std::shared_ptr<UIManager> uiManager)
 {
 	//アクターの登録解除
 	for (auto& actor : m_actors)
 	{
-		actor->Exit(shared_from_this());
+		actor->Exit(shared_from_this(),uiManager);
 	}
 }
 
@@ -53,18 +53,16 @@ void ActorManager::Init()
 	{
 		actor->Init();
 	}
-	//登録
-	Entry();
 }
 
-void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& camera)
+void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<UIManager> uiManager)
 {
 	//プレイヤーの索敵
 	m_enemyManager->Search();
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input, camera, m_attackManager);
+		actor->Update(input, camera, m_attackManager, uiManager);
 		actor->Gravity(Gravity::kGravity);
 	}
 	//攻撃の処理
@@ -72,12 +70,12 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 
 	//消滅フラグチェック
 	auto thisPointer = shared_from_this();
-	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [thisPointer](std::shared_ptr<Actor> actor) {
+	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [thisPointer,uiManager](std::shared_ptr<Actor> actor) {
 		bool isDead = actor->IsDelete();
 		if (isDead)//死んでるなら
 		{
 			//Exit関数を呼ぶ
-			actor->Exit(thisPointer);
+			actor->Exit(thisPointer,uiManager);
 		}
 		return isDead;
 		});

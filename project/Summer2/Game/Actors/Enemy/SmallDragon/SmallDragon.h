@@ -5,6 +5,7 @@ class Input;
 class Camera;
 class EnemyManager;
 class AttackManager;
+class UIManager;
 class SmallDragonStateBase;
 class SmallDragon :
 	public EnemyBase, public std::enable_shared_from_this<SmallDragon>
@@ -13,13 +14,13 @@ public:
 	SmallDragon(int modelHandle, Vector3 pos);
 	~SmallDragon();
 	//“o˜^ˆ—
-	void Entry(std::shared_ptr<ActorManager> actorManager)override;
+	void Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)override;
 	//“o˜^‰ğœ
-	void Exit(std::shared_ptr<ActorManager> actorManager)override;
+	void Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)override;
 	//‰Šú‰»ˆ—
 	void Init()override;
 	//XVˆ—
-	void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
+	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager) override;
 	//d—Í
 	void Gravity(const Vector3& gravity)override;
 	//Õ“ËƒCƒxƒ“ƒg
