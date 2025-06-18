@@ -19,7 +19,9 @@
 #include "../../Attack/AttackManager.h"
 #include "../../UI/UIManager.h"
 #include "../../UI/UIPlayerHP.h"
+#include "../../UI/UIPlayerUltGage.h"
 #include "../ActorManager.h"
+#include "UltGage.h"
 #include <DxLib.h>
 #include <cmath>
 
@@ -28,14 +30,16 @@ namespace
 	//当たり判定
 	const Vector3 kCapsuleHeight = { 0.0f,150.0f,0.0f };//カプセルの上端
 	constexpr float kCapsuleRadius = 20.0f; //カプセルの半径
-	constexpr int kHp = 1000; //体力
+	//体力
+	constexpr int kHp = 1000; 
+	//必殺技ゲージの最大値
+	constexpr int kMaxUltGage = 100;
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
 	Actor(ActorKind::Player),
 	m_stickVec(0.0f,0.0f),
-	m_isGround(false),
-	m_ultGage(0)
+	m_isGround(false)
 {
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
@@ -43,6 +47,8 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	Vector3 endPos = firstPos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
+	//必殺技ゲージ
+	m_ultGage = std::make_shared<UltGage>(kMaxUltGage);
 }
 
 Player::~Player()
@@ -54,7 +60,9 @@ void Player::Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<U
 	//HPのUIを用意する
 	auto uiHp = std::make_shared<UIPlayerHP>(m_hurtPoint);
 	uiManager->Entry(uiHp);
-
+	//必殺技ゲージのUIを用意する
+	auto uiUltGage = std::make_shared<UIPlayerUltGage>(m_ultGage);
+	uiManager->Entry(uiUltGage);
 }
 
 void Player::Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
@@ -82,6 +90,16 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, st
 	//スティックの向きを入れる
 	m_stickVec.x = static_cast<float>(input.GetStickInfo().leftStickX);
 	m_stickVec.y = -static_cast<float>(input.GetStickInfo().leftStickY);
+
+#if _DEBUG
+	if (input.IsTrigger("Max"))
+	{
+		//ゲージマックス
+		m_ultGage->AddUltGage(1000000);
+		//体力マックス
+		m_hurtPoint->AddHp(1000000);
+	}
+#endif
 
 	//状態に合わせた更新
 	m_state->Update(input, camera, attackManager);

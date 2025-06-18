@@ -4,6 +4,7 @@
 #include "PlayerStateDeath.h"
 #include "PlayerStateUltimate.h"
 #include "Player.h"
+#include "UltGage.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Collision/CapsuleCollider.h"
@@ -38,6 +39,8 @@ namespace
 	constexpr float kAttackMoveSpeed = 5.0f;
 	//å∏ë¨ó¶
 	constexpr float kMoveDeceRate = 0.8f;
+	//â¡éZÉQÅ[ÉWó 
+	constexpr int kAddUltGage = 1;
 }
 
 PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager) :
@@ -51,10 +54,14 @@ PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::shared
 	//çUåÇîªíËÇÃèÄîı
 	CreateAttack();
 	attackManager->Entry(m_attackC);
+	//â¡éZÉQÅ[ÉWÇÃó\ñÒ
+	m_player->GetUltGage()->SetPendingUltGage(kAddUltGage);
 }
 
 PlayerStateCA1::~PlayerStateCA1()
 {
+	//â¡éZÉQÅ[ÉWÇÃó\ñÒ
+	m_player->GetUltGage()->SetPendingUltGage(0);
 }
 void PlayerStateCA1::Init()
 {
@@ -82,7 +89,7 @@ void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& c
 		return;
 	}
 	//ÉQÅ[ÉWÇ™Ç†ÇÈÇ∆Ç´égÇ¶ÇÈ
-	if (input.IsTrigger("RB"))
+	if (input.IsTrigger("RB") && m_player->GetUltGage()->IsMaxUlt())
 	{
 		//çÌèú
 		DeleteAttack(attackManager);

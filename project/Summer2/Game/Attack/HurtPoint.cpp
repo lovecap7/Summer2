@@ -38,3 +38,10 @@ void HurtPoint::OnHitKnockBack(const Vector3& knockBackVec)
 {
 	m_owner->GetCollidable()->GetRb()->SetMoveVec(knockBackVec);
 }
+
+void HurtPoint::AddHp(int add)
+{
+	if (m_hp >= m_maxHp)return;//ç≈ëÂÇ»ÇÁ
+	m_hp += add;
+	m_hp = MathSub::ClampInt(m_hp, 0, m_maxHp);
+}

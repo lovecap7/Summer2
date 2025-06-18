@@ -10,6 +10,7 @@
 #include "PlayerStateRun.h"
 #include "PlayerStateUltimate.h"
 #include "Player.h"
+#include "UltGage.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Rigidbody.h"
@@ -79,7 +80,7 @@ void PlayerStateWalk::Update(const Input& input, const std::unique_ptr<Camera>& 
 		return;
 	}
 	//ƒQ[ƒW‚ª‚ ‚é‚Æ‚«Žg‚¦‚é
-	if (input.IsTrigger("RB"))
+	if (input.IsTrigger("RB") && m_player->GetUltGage()->IsMaxUlt())
 	{
 		//•KŽE‹Z
 		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));

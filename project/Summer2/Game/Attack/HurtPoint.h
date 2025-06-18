@@ -29,6 +29,8 @@ public:
 	bool IsDead() { return m_hp <= 0; };
 	//‘Ì—Í
 	int GetHp() { return m_hp; };
+	//‘Ì—Í‚É‰ÁZ
+	void AddHp(int add);
 	//UŒ‚‚ğó‚¯‚½‚©‚Ç‚¤‚©
 	bool IsHit() const { return m_isHit; }
 private:
@@ -38,6 +40,8 @@ private:
 	bool m_isNoDamage;
 	//‘Ì—Í
 	int m_hp;
+	//Å‘å‘Ì—Í
+	int m_maxHp;
 	//‚¿å
 	std::shared_ptr<Actor> m_owner;
 	//UŒ‚‚ğó‚¯‚½‚©‚Ç‚¤‚©

@@ -12,6 +12,7 @@ class AttackBase;
 class MeleeAttack;
 class AttackManager;
 class UIManager;
+class UltGage;
 class PlayerStateBase;
 class Player :
 	public Actor, public std::enable_shared_from_this<Player>
@@ -42,6 +43,8 @@ public:
 	Vector2 GetStickVec() { return m_stickVec; };
 	//モデルクラス
 	std::shared_ptr<Model> GetModel() const{ return m_model; };
+	//必殺技ゲージ
+	std::shared_ptr<UltGage> GetUltGage() const{ return m_ultGage; };
 private:
 	//プレイヤーの状態
 	std::shared_ptr<PlayerStateBase> m_state;
@@ -52,7 +55,7 @@ private:
 	//地面に付いているかどうか
 	bool m_isGround;
 	//必殺技ゲージ
-	int m_ultGage;
+	std::shared_ptr<UltGage> m_ultGage;
 private:
 	//やられ判定の更新
 	void UpdateHurtPoint();

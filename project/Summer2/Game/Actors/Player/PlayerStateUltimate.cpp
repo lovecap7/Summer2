@@ -1,6 +1,7 @@
 #include "PlayerStateUltimate.h"
 #include "PlayerStateIdle.h"
 #include "Player.h"
+#include "UltGage.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Collision/SphereCollider.h"
@@ -57,6 +58,8 @@ PlayerStateUltimate::PlayerStateUltimate(std::shared_ptr<Player> player, const s
 	m_player->GetModel()->SetDir(dir);
 	//無敵に
 	m_player->GetHurtPoint()->SetIsNoDamege(true);
+	//ゲージリセット
+	m_player->GetUltGage()->ResetUltGage();
 }
 
 

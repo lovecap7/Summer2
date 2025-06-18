@@ -6,6 +6,8 @@
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Rigidbody.h"
+#include "../Actors/Player/Player.h"
+#include "../Actors/Player/UltGage.h"
 
 MeleeAttack::MeleeAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, float knockBackPower, std::shared_ptr<Actor> owner) :
 	AttackBase(coll, damage, keepFrame, knockBackPower, owner)
@@ -96,5 +98,12 @@ void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 		knockBackVec.y = 0.0f;//Yê¨ï™ÇÕÇ»Çµ
 		knockBackVec = knockBackVec.Normalize() * m_knockBackPower;//ÉmÉbÉNÉoÉbÉN
 		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
+
+		//ÉvÉåÉCÉÑÅ[ÇÃçUåÇÇÃèÍçáïKéEãZÉQÅ[ÉWÇâ¡éZÇ∑ÇÈ
+		if (m_owner->GetActorKind() == ActorKind::Player)
+		{
+			auto gage = std::dynamic_pointer_cast<Player>(m_owner)->GetUltGage();
+			gage->AddPedingUltGage();//ó\ñÒÇ≥ÇÍÇƒÇ¢ÇΩâ¡éZÉQÅ[ÉWó ÇîΩâf
+		}
 	}
 }

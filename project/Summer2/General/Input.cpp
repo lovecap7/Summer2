@@ -42,10 +42,13 @@ void Input::Init()
 	m_inputActionMap["B"] = { {InputType::kKeyboard,KEY_INPUT_H}, {InputType::kPad,PAD_INPUT_2} };
 	m_inputActionMap["X"] = { {InputType::kKeyboard,KEY_INPUT_G}, {InputType::kPad,PAD_INPUT_3} };
 	m_inputActionMap["Y"] = { {InputType::kKeyboard,KEY_INPUT_Y}, {InputType::kPad,PAD_INPUT_4} };
+
 	//デバッグ用
 	m_inputActionMap["SceneChange"] = { {InputType::kKeyboard,KEY_INPUT_1} };
 	m_inputActionMap["StopUpdate"] = { {InputType::kKeyboard,KEY_INPUT_2} };
 	m_inputActionMap["Enter"] = { {InputType::kKeyboard,KEY_INPUT_RETURN} };
+	m_inputActionMap["Enter"] = { {InputType::kKeyboard,KEY_INPUT_RETURN} };
+	m_inputActionMap["Max"] = { {InputType::kKeyboard,KEY_INPUT_M} };
 }
 
 void Input::Update()

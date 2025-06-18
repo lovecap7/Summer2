@@ -6,6 +6,7 @@
 #include "PlayerStateDeath.h"
 #include "PlayerStateUltimate.h"
 #include "Player.h"
+#include "UltGage.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Collision/CapsuleCollider.h"
@@ -42,6 +43,8 @@ namespace
 	constexpr float kRightSwordRadius = 10.0f;
 	//å∏ë¨ó¶
 	constexpr float kMoveDeceRate = 0.8f;
+	//â¡éZÉQÅ[ÉWó 
+	constexpr int kAddUltGage = 3;
 }
 
 PlayerStateAttackN3::PlayerStateAttackN3(std::shared_ptr<Player> player) :
@@ -54,10 +57,14 @@ PlayerStateAttackN3::PlayerStateAttackN3(std::shared_ptr<Player> player) :
 	m_player->GetModel()->SetAnim(kAnim, false, kAN3AnimSpeed);
 	//çUåÇîªíËÇÃèÄîı
 	CreateAttack();
+	//â¡éZÉQÅ[ÉWÇÃó\ñÒ
+	m_player->GetUltGage()->SetPendingUltGage(kAddUltGage);
 }
 
 PlayerStateAttackN3::~PlayerStateAttackN3()
 {
+	//â¡éZÉQÅ[ÉWÇÃó\ñÒÉäÉZÉbÉg
+	m_player->GetUltGage()->SetPendingUltGage(0);
 }
 void PlayerStateAttackN3::Init()
 {
@@ -84,7 +91,7 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 		return;
 	}
 	//ÉQÅ[ÉWÇ™Ç†ÇÈÇ∆Ç´égÇ¶ÇÈ
-	if (input.IsTrigger("RB"))
+	if (input.IsTrigger("RB") && m_player->GetUltGage()->IsMaxUlt())
 	{
 		//çÌèú
 		DeleteAttack(attackManager);
