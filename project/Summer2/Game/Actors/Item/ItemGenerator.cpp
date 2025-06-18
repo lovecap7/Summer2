@@ -3,10 +3,12 @@
 #include "../Actor.h"
 #include "Heart.h"
 #include <DxLib.h>
+#include <cassert>
 
 ItemGenerator::ItemGenerator() :
-	m_heartHandle(LoadGraph("Data/Model/Item/Heart.mv1"))
+	m_heartHandle(MV1LoadModel("Data/Model/Item/Heart.mv1"))
 {
+	assert(m_heartHandle >= 0);
 }
 
 ItemGenerator::~ItemGenerator()

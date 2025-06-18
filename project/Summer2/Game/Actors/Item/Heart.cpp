@@ -13,20 +13,23 @@ namespace
 	//ƒWƒƒƒ“ƒv—Í
 	constexpr float kJumpPower = 10.0f;
 	//“–‚½‚è”»’è‚Ì”¼Œa
-	constexpr float kCollRadius = 20.0f;
+	constexpr float kCollRadius = 50.0f;
 	//‰ñ“]—Ê
-	constexpr float kRotaAngle = 0.1f;
+	constexpr float kRotaAngle = 1.0f;
 }
 
 Heart::Heart(int modelHandle, Vector3 pos):
 	ItemBase(ItemKind::Heart)
 {
+	auto firstPos = pos;
+	firstPos.y += kCollRadius;
 	//ƒ‚ƒfƒ‹
-	m_model = std::make_shared<Model>(modelHandle, pos.ToDxLibVector());
+	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
 	//Õ“Ë”»’è
-	m_collidable = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kCollRadius), std::make_shared<Rigidbody>(pos));
+	m_collidable = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kCollRadius), std::make_shared<Rigidbody>(firstPos));
 	//—Í‚ğ—^‚¦‚é
 	m_collidable->GetRb()->SetVecY(kJumpPower);
+
 }
 
 Heart::~Heart()

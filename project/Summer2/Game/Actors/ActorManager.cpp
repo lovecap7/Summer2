@@ -70,11 +70,13 @@ void ActorManager::Init(std::vector<std::shared_ptr<Actor>> actors)
 
 void ActorManager::End()
 {
-	//アクターの初期化処理
+	//アクターの終了処理
 	for (auto& actor : m_actors)
 	{
 		actor->Exit(shared_from_this());
 	}
+	//アイテムの終了処理
+	m_itemGenerator->End();
 }
 
 void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<UIManager> uiManager)

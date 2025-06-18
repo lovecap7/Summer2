@@ -49,7 +49,11 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 	Vector3 AtoS = sPos - cPosA;
 	//カプセルの座標AからBへの単位ベクトル
 	Vector3 AtoB = cPosB - cPosA;
-	Vector3 nomAtoB = AtoB.Normalize();
+	Vector3 nomAtoB;
+	if (AtoB.Magnitude() > 0.0f)
+	{
+		nomAtoB = AtoB.Normalize();
+	}
 
 	//それぞれのベクトルから内積をだして球から垂線を下した位置を求める
 	float dotVer = nomAtoB.Dot(AtoS);
