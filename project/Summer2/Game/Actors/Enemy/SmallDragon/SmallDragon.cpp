@@ -12,7 +12,6 @@
 #include "../../../../General/Collision/SphereCollider.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../Attack/MeleeAttack.h"
-#include "../../../UI/UIManager.h"
 #include "../../ActorManager.h"
 #include "../../../../General/game.h"
 
@@ -46,20 +45,26 @@ SmallDragon::~SmallDragon()
 {
 }
 
-void SmallDragon::Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
+void SmallDragon::Entry(std::shared_ptr<ActorManager> actorManager)
 {
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
 	//登録
 	actorManager->GetEnemyManager()->Entry(shared_from_this());
 }
 
-void SmallDragon::Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
+void SmallDragon::Exit(std::shared_ptr<ActorManager> actorManager)
 {
+	//アクターマネージャー解除
+	actorManager->Exit(shared_from_this());
 	//登録解除
 	actorManager->GetEnemyManager()->Exit(shared_from_this());
 }
 
 void SmallDragon::Init()
 {
+	//コライダーに自分のポインタを持たせる
+	m_collidable->SetOwner(shared_from_this());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = shared_from_this();
 	m_state = std::make_shared<SmallDragonStateIdle>(thisPointer);
@@ -69,7 +74,7 @@ void SmallDragon::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
+void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃のクールタイムを減らす
 	UpdateAttackCoolTime();

@@ -5,7 +5,10 @@
 #include <DxLib.h>
 #include <vector>
 #include "../General/game.h"
+//UI
 #include "../Game/UI/UIManager.h"
+#include "../Game/UI/UIPlayerHP.h"
+#include "../Game/UI/UIPlayerUltGage.h"
 //配置データ
 #include "../General/TransformDataLoader.h"
 //アクター
@@ -37,7 +40,7 @@ namespace
 }
 
 
-Stage1Scene::Stage1Scene(SceneController& controller):
+Stage1Scene::Stage1Scene(SceneController& controller) :
 	SceneBase(controller),
 	m_playerHandle(MV1LoadModel("Data/Model/Player/Player.mv1")),
 	m_wallHandle(MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1")),
@@ -60,14 +63,16 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 	assert(m_skyHandle >= 0);
 
 	//登場するオブジェクトをセットしていく
-	std::vector<std::shared_ptr<Actor>> actors;
+
 	//キャラクターの作成
-	CreateCharacter(actors);
+	CreateCharacter(m_actors);
 	//ステージのオブジェクト配置
-	CreateStage(actors);
-	actors.emplace_back(std::make_shared<InvisibleWall>(m_wallHandle, Vector3{ 0.0f,-10.0f,0.0f }, VGet(1000.0f, 1.0f, 1000.0f), VGet(0.0f, 0.0f, 0.0f)));
-	//アクターマネージャーに登録
-	m_actorManager = std::make_shared<ActorManager>(actors, m_player);
+	CreateStage(m_actors);
+
+	auto floor = std::make_shared<InvisibleWall>(m_wallHandle, Vector3{ 0.0f,-10.0f,0.0f }, VGet(1000.0f, 1.0f, 1000.0f), VGet(0.0f, 0.0f, 0.0f));
+	m_actors.emplace_back(floor);
+	//アクターマネージャー
+	m_actorManager = std::make_shared<ActorManager>(m_player);
 	//カメラの初期化
 	m_camera = std::make_unique<Camera>(kCameraPos, m_player);
 	//UIの準備
@@ -76,23 +81,19 @@ Stage1Scene::Stage1Scene(SceneController& controller):
 
 Stage1Scene::~Stage1Scene()
 {
-	//登録解除
-	m_actorManager->Exit(m_uiManager);
-	MV1DeleteModel(m_playerHandle);
-	MV1DeleteModel(m_wallHandle);
-	MV1DeleteModel(m_purpleDinosaurHandle);
-	MV1DeleteModel(m_smallDragonHandle);
-	MV1DeleteModel(m_bossDragonHandle);
-	MV1DeleteModel(m_pathHandle);
-	MV1DeleteModel(m_cubeHandle);
-	MV1DeleteModel(m_cylinderHandle);
-	MV1DeleteModel(m_skyHandle);
+
 }
 
 void Stage1Scene::Init()
 {
-	m_actorManager->Init();
-	m_actorManager->Entry(m_uiManager);
+	//初期化処理
+	m_actorManager->Init(std::move(m_actors));
+	//UIの作成
+	//プレイヤーの体力と必殺ゲージ
+	auto playerHpUI = std::make_shared<UIPlayerHP>(m_player->GetHurtPoint());
+	auto playerUltUI = std::make_shared<UIPlayerUltGage>(m_player->GetUltGage());
+	m_uiManager->Entry(playerHpUI);
+	m_uiManager->Entry(playerUltUI);
 }
 
 void Stage1Scene::Update(Input& input)
@@ -122,7 +123,7 @@ void Stage1Scene::Update(Input& input)
 		m_controller.ChangeScene(std::make_shared<ResultScene>(m_controller));
 		return;
 	}
-	
+
 
 	//デバッグで一時停止されてないなら
 #if _DEBUG
@@ -130,7 +131,7 @@ void Stage1Scene::Update(Input& input)
 #endif
 	{
 		//アクターの更新処理
-		m_actorManager->Update(input, m_camera,m_uiManager);
+		m_actorManager->Update(input, m_camera, m_uiManager);
 		//カメラの更新
 		m_camera->Update();
 		//UIの更新
@@ -143,7 +144,7 @@ void Stage1Scene::Draw()
 #if _DEBUG
 	DrawString(0, 0, "Stage1 Scene", 0xffffff);
 	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
-	
+
 	for (int z = -500; z <= 500; z += 100)
 	{
 		DrawLine3D(VGet(-500, 0, z), VGet(500, 0, z), 0xff0000);
@@ -165,6 +166,21 @@ void Stage1Scene::Draw()
 	m_actorManager->Draw();
 	//UIの描画
 	m_uiManager->Draw();
+}
+
+void Stage1Scene::End()
+{
+	//登録解除
+	m_actorManager->End();
+	MV1DeleteModel(m_playerHandle);
+	MV1DeleteModel(m_wallHandle);
+	MV1DeleteModel(m_purpleDinosaurHandle);
+	MV1DeleteModel(m_smallDragonHandle);
+	MV1DeleteModel(m_bossDragonHandle);
+	MV1DeleteModel(m_pathHandle);
+	MV1DeleteModel(m_cubeHandle);
+	MV1DeleteModel(m_cylinderHandle);
+	MV1DeleteModel(m_skyHandle);
 }
 
 void Stage1Scene::CreateCharacter(std::vector<std::shared_ptr<Actor>>& actors)
@@ -221,7 +237,7 @@ void Stage1Scene::CreateStage(std::vector<std::shared_ptr<Actor>>& actors)
 	{
 		if (stageData.name == "Path")
 		{
-			std::shared_ptr<StageObjectDraw> path = 
+			std::shared_ptr<StageObjectDraw> path =
 				std::make_shared<StageObjectDraw>(MV1DuplicateModel(m_pathHandle), stageData.pos, stageData.scale, stageData.rot);
 			actors.emplace_back(path);
 		}

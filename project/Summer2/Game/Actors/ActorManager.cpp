@@ -10,9 +10,10 @@
 #include "../../General/Collision/CollisionManager.h"
 #include "../../General/game.h"
 #include "../UI/UIManager.h"
+#include "Item/ItemGenerator.h"
 
-ActorManager::ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shared_ptr<Player> player):
-	m_actors(actors),
+ActorManager::ActorManager(std::shared_ptr<Player> player):
+	m_actors{},
 	m_player(player),
 	m_id(0)
 {
@@ -22,36 +23,57 @@ ActorManager::ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shar
 	m_enemyManager = std::make_shared<EnemyManager>(m_player);
 	//攻撃の処理
 	m_attackManager = std::make_shared<AttackManager>();
+	//アイテムジェネレーター
+	m_itemGenerator = std::make_shared<ItemGenerator>();
 }
 
 ActorManager::~ActorManager()
 {
 }
 
-void ActorManager::Entry(std::shared_ptr<UIManager> uiManager)
+void ActorManager::Entry(std::shared_ptr<Actor> actor)
 {
-	//アクターの登録処理
-	for (auto& actor : m_actors)
+	//すでに登録されているならしない
+	auto it = std::find(m_actors.begin(), m_actors.end(), actor);
+	if (it != m_actors.end())
 	{
-		actor->Entry(shared_from_this(), uiManager);
+		return;
+	}
+	//アクターをセット
+	m_actors.emplace_back(actor);
+}
+
+void ActorManager::Exit(std::shared_ptr<Actor> actor)
+{
+	//すでに登録されているならそのアクターを消す
+	auto it = std::find(m_actors.begin(), m_actors.end(), actor);
+	if (it != m_actors.end())
+	{
+		//削除
+		m_actors.erase(it);
 	}
 }
 
-void ActorManager::Exit(std::shared_ptr<UIManager> uiManager)
+void ActorManager::Init(std::vector<std::shared_ptr<Actor>> actors)
 {
-	//アクターの登録解除
-	for (auto& actor : m_actors)
+	//アクターの登録
+	for (auto& actor : actors)
 	{
-		actor->Exit(shared_from_this(),uiManager);
+		actor->Entry(shared_from_this());
+	}
+	//アクターの初期化処理
+	for (auto& actor : actors)
+	{
+		actor->Init();
 	}
 }
 
-void ActorManager::Init()
+void ActorManager::End()
 {
 	//アクターの初期化処理
 	for (auto& actor : m_actors)
 	{
-		actor->Init();
+		actor->Exit(shared_from_this());
 	}
 }
 
@@ -62,20 +84,20 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input, camera, m_attackManager, uiManager);
+		actor->Update(input, camera, m_attackManager);
 		actor->Gravity(Gravity::kGravity);
 	}
 	//攻撃の処理
 	m_attackManager->Update(m_actors);
 
 	//消滅フラグチェック
-	auto thisPointer = shared_from_this();
-	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [thisPointer,uiManager](std::shared_ptr<Actor> actor) {
+	auto itemGenerator = m_itemGenerator;
+	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [itemGenerator](std::shared_ptr<Actor> actor) {
 		bool isDead = actor->IsDelete();
-		if (isDead)//死んでるなら
+		if (isDead)
 		{
-			//Exit関数を呼ぶ
-			actor->Exit(thisPointer,uiManager);
+			//アイテムをランダム生成
+			itemGenerator->RandGenerateItem(actor->GetCollidable()->GetRb()->GetPos());
 		}
 		return isDead;
 		});
@@ -88,6 +110,9 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	{
 		actor->Complete();
 	}
+
+	//アイテムを実装
+	itemGenerator->MoveItems(shared_from_this());
 }
 
 void ActorManager::Draw() const

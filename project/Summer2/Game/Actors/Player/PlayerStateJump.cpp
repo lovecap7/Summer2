@@ -16,7 +16,7 @@
 namespace
 {
 	//ジャンプ力
-	constexpr float kJumpVec = 13.0f;
+	constexpr float kJumpPower = 13.0f;
 	//空中移動速度
 	constexpr float kMaxAirMoveSpeed = 10.00f;
 	//アニメーション
@@ -37,7 +37,7 @@ PlayerStateJump::PlayerStateJump(std::shared_ptr<Player> player):
 	//地面から離れるのでfalseにしておく
 	m_player->NoIsGround();
 	//力を与える
-	collidable->GetRb()->SetVecY(kJumpVec);
+	collidable->GetRb()->SetVecY(kJumpPower);
 }
 
 PlayerStateJump::~PlayerStateJump()

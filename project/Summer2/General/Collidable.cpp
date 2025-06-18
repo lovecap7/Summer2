@@ -5,6 +5,7 @@ Collidable::Collidable(std::shared_ptr<ColliderBase> coll, std::shared_ptr<Rigid
 	m_rb(rid),
 	m_isCollide(true),
 	m_isStatic(false),
-	m_state(State::None)
+	m_state(State::None),
+	m_owner(nullptr)
 {
 }

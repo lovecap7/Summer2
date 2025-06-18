@@ -17,7 +17,6 @@ class Input;
 class Camera;
 class Collidable;
 class HurtPoint;
-class UIManager;
 class AttackManager;
 /// <summary>
 /// ゲーム中に配置可能な物体の基底クラス
@@ -45,12 +44,12 @@ public:
 	/// <summary>
 	/// 登録処理
 	/// </summary>
-	virtual void Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)abstract;
+	virtual void Entry(std::shared_ptr<ActorManager> actorManager)abstract;
 	/// <summary>
 	/// 登録解除
 	/// </summary>
 	/// <param name="actorManager"></param>
-	virtual void Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)abstract;
+	virtual void Exit(std::shared_ptr<ActorManager> actorManager)abstract;
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -59,7 +58,7 @@ public:
 	/// 位置などの更新を行う
 	/// </summary>
 	/// <param name="">入力オブジェクト</param>
-	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager) abstract;
+	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager) abstract;
 	/// <summary>
 	/// 重力を受ける
 	/// </summary>

@@ -4,6 +4,7 @@
 #include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Rigidbody.h"
 #include "../../../General/Collidable.h"
+#include "../ActorManager.h"
 
 StageObjectCollision::StageObjectCollision(int modelHandle, VECTOR pos, VECTOR scale, VECTOR angle) :
 	Actor(ActorKind::Object),
@@ -36,12 +37,25 @@ StageObjectCollision::~StageObjectCollision()
 	//なし
 }
 
-void StageObjectCollision::Init()
+void StageObjectCollision::Entry(std::shared_ptr<ActorManager> actorManager)
 {
-	//なし
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
 }
 
-void StageObjectCollision::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
+void StageObjectCollision::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャー解除
+	actorManager->Exit(shared_from_this());
+}
+
+void StageObjectCollision::Init()
+{
+	//コライダーに自分のポインタを持たせる
+	m_collidable->SetOwner(shared_from_this());
+}
+
+void StageObjectCollision::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	//なし
 }

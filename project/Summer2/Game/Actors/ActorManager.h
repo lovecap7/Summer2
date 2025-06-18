@@ -9,17 +9,20 @@ class AttackManager;
 class CollisionManager;
 class UIManager;
 class EnemyManager;
+class ItemGenerator;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
 public:
-	ActorManager(std::vector<std::shared_ptr<Actor>> actors, std::shared_ptr<Player> player);
+	ActorManager(std::shared_ptr<Player> player);
 	virtual~ActorManager();
-	//“o˜^ˆ—
-	void Entry(std::shared_ptr<UIManager> uiManager);
+	//ƒAƒNƒ^[‚Ì“o˜^ˆ—
+	void Entry(std::shared_ptr<Actor> actor);
 	//“o˜^‰ğœ
-	void Exit(std::shared_ptr<UIManager> uiManager);
+	void Exit(std::shared_ptr<Actor> actor);
 	//‰Šú‰»ˆ—
-	void Init();
+	void Init(std::vector<std::shared_ptr<Actor>> actors);
+	//I—¹ˆ—
+	void End();
 	//XVˆ—
 	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<UIManager> uiManager);
 	//•`‰æ
@@ -39,6 +42,8 @@ private:
 	std::shared_ptr<EnemyManager> m_enemyManager;
 	//UŒ‚‚Ìˆ—
 	std::shared_ptr<AttackManager> m_attackManager;
+	//ƒAƒCƒeƒ€ƒWƒFƒlƒŒ[ƒ^[
+	std::shared_ptr<ItemGenerator> m_itemGenerator;
 private:
 	int m_id;//Š„‚èU‚é”Ô†
 	void SetUpId();

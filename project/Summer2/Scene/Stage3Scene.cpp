@@ -49,3 +49,7 @@ void Stage3Scene::Draw()
 	DrawString(0, 16, "[D]ÉLÅ[Ç≈ Debug Scene", 0xffffff);
 #endif
 }
+
+void Stage3Scene::End()
+{
+}

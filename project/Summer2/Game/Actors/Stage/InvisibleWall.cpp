@@ -2,6 +2,7 @@
 #include "../../../General/Collision/PolygonCollider.h"
 #include "../../../General/Rigidbody.h"
 #include "../../../General/Collidable.h"
+#include "../ActorManager.h"
 
 InvisibleWall::InvisibleWall(int modelHandle, Vector3 pos, VECTOR scale, VECTOR angle):
 	Actor(ActorKind::Object),
@@ -18,11 +19,25 @@ InvisibleWall::~InvisibleWall()
 {
 }
 
-void InvisibleWall::Init()
+void InvisibleWall::Entry(std::shared_ptr<ActorManager> actorManager)
 {
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
 }
 
-void InvisibleWall::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
+void InvisibleWall::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャー解除
+	actorManager->Exit(shared_from_this());
+}
+
+void InvisibleWall::Init()
+{
+	//コライダーに自分のポインタを持たせる
+	m_collidable->SetOwner(shared_from_this());
+}
+
+void InvisibleWall::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	DxLib::MV1SetPosition(m_modelHandle, m_collidable->GetRb()->GetPos().ToDxLibVector());
 }

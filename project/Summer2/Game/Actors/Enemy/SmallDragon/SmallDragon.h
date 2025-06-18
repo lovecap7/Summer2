@@ -14,13 +14,13 @@ public:
 	SmallDragon(int modelHandle, Vector3 pos);
 	~SmallDragon();
 	//“o˜^ˆ—
-	void Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)override;
+	void Entry(std::shared_ptr<ActorManager> actorManager)override;
 	//“o˜^‰ğœ
-	void Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)override;
+	void Exit(std::shared_ptr<ActorManager> actorManager)override;
 	//‰Šú‰»ˆ—
 	void Init()override;
 	//XVˆ—
-	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager) override;
+	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager) override;
 	//d—Í
 	void Gravity(const Vector3& gravity)override;
 	//Õ“ËƒCƒxƒ“ƒg

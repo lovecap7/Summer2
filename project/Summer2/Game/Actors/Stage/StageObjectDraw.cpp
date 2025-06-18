@@ -3,6 +3,7 @@
 #include "../../../General/Rigidbody.h"
 #include "../../../General/Collidable.h"
 #include "../../../General/Model.h"
+#include "../ActorManager.h"
 
 StageObjectDraw::StageObjectDraw(int modelHandle, VECTOR pos, VECTOR scale, VECTOR angle) :
 	Actor(ActorKind::None)//Noneにしたら当たり判定をしないので描画用のクラスになる
@@ -19,12 +20,24 @@ StageObjectDraw::~StageObjectDraw()
 	//なし
 }
 
+void StageObjectDraw::Entry(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
+}
+
+void StageObjectDraw::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャー解除
+	actorManager->Exit(shared_from_this());
+}
+
 void StageObjectDraw::Init()
 {
 	//なし
 }
 
-void StageObjectDraw::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
+void StageObjectDraw::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	//なし
 }

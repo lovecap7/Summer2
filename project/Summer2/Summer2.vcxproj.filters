@@ -109,6 +109,12 @@
     <Filter Include="ソース ファイル\Game\UI">
       <UniqueIdentifier>{1ece6871-1d92-44e8-8af3-3133870a53d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors\Item">
+      <UniqueIdentifier>{a307f6e7-0718-4abd-97a8-bdbcf5369ad1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Actors\Item">
+      <UniqueIdentifier>{37c67723-2a4b-469a-8972-03190516c737}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -386,6 +392,15 @@
     </ClCompile>
     <ClCompile Include="Game\Actors\Player\UltGage.cpp">
       <Filter>ソース ファイル\Game\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Item\ItemBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Item\Heart.cpp">
+      <Filter>ソース ファイル\Game\Actors\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Item\ItemGenerator.cpp">
+      <Filter>ソース ファイル\Game\Actors\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -670,6 +685,15 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\UltGage.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Item\ItemBase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Item\Heart.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Item\ItemGenerator.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

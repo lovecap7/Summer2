@@ -55,18 +55,16 @@ Player::~Player()
 {
 }
 
-void Player::Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
+void Player::Entry(std::shared_ptr<ActorManager> actorManager)
 {
-	//HPのUIを用意する
-	auto uiHp = std::make_shared<UIPlayerHP>(m_hurtPoint);
-	uiManager->Entry(uiHp);
-	//必殺技ゲージのUIを用意する
-	auto uiUltGage = std::make_shared<UIPlayerUltGage>(m_ultGage);
-	uiManager->Entry(uiUltGage);
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
 }
 
-void Player::Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager)
+void Player::Exit(std::shared_ptr<ActorManager> actorManager)
 {
+	//アクターマネージャーから登録解除
+	actorManager->Exit(shared_from_this());
 }
 
 void Player::Init()
@@ -75,6 +73,9 @@ void Player::Init()
 	//shared_from_this()を使う場合コンストラクタ時点では
 	//メモリが確定していないので使うことができない
 	//対策としてInitを使う
+
+	//コライダーに自分のポインタを持たせる
+	m_collidable->SetOwner(shared_from_this());
 
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = shared_from_this();
@@ -85,7 +86,7 @@ void Player::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
+void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	//スティックの向きを入れる
 	m_stickVec.x = static_cast<float>(input.GetStickInfo().leftStickX);

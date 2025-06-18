@@ -55,3 +55,7 @@ void ResultScene::Draw()
 	DrawString(0, 16, "[D]ÉLÅ[Ç≈ Debug Scene", 0xffffff);
 #endif
 }
+
+void ResultScene::End()
+{
+}

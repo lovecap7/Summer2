@@ -1,0 +1,104 @@
+#include "Heart.h"
+#include "../../../General/game.h"
+#include "../../../General/Collision/SphereCollider.h"
+#include "../../../General/Collision/ColliderBase.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../General/Collidable.h"
+#include "../../../General/Input.h"
+#include "../../../General/Model.h"
+#include "../ActorManager.h"
+
+namespace
+{
+	//ジャンプ力
+	constexpr float kJumpPower = 10.0f;
+	//当たり判定の半径
+	constexpr float kCollRadius = 20.0f;
+	//回転量
+	constexpr float kRotaAngle = 0.1f;
+}
+
+Heart::Heart(int modelHandle, Vector3 pos):
+	ItemBase(ItemKind::Heart)
+{
+	//モデル
+	m_model = std::make_shared<Model>(modelHandle, pos.ToDxLibVector());
+	//衝突判定
+	m_collidable = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kCollRadius), std::make_shared<Rigidbody>(pos));
+	//力を与える
+	m_collidable->GetRb()->SetVecY(kJumpPower);
+}
+
+Heart::~Heart()
+{
+}
+
+void Heart::Entry(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
+}
+
+void Heart::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャー解除
+	actorManager->Exit(shared_from_this());
+}
+
+void Heart::Init()
+{
+	//コライダーに自分のポインタを持たせる
+	m_collidable->SetOwner(shared_from_this());
+}
+
+void Heart::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+{
+	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));
+}
+
+void Heart::Gravity(const Vector3& gravity)
+{
+	//重力がかかりすぎたら止めたいので上限を設ける
+	if (m_collidable->GetRb()->GetVec().y >= Gravity::kMaxGravityY)
+	{
+		//重力
+		m_collidable->GetRb()->AddVec(gravity);
+	}
+}
+
+void Heart::OnHitColl(const std::shared_ptr<Collidable>& other)
+{
+	//プレイヤーに当たった時の処理
+	if (other->GetOwner() != nullptr)
+	{
+		if (other->GetOwner()->GetActorKind() == ActorKind::Player)
+		{
+			//削除
+			m_isDelete = true;
+		}
+	}
+}
+
+void Heart::Draw() const
+{
+#if _DEBUG
+	//衝突判定
+	DrawSphere3D(
+		m_collidable->GetRb()->GetPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<SphereCollider>(m_collidable->GetColl())->GetRadius(),
+		16,
+		0xff0000,
+		0xff0000,
+		false
+	);
+#endif
+	m_model->Draw();
+}
+
+void Heart::Complete()
+{
+	//次の座標へ
+	m_collidable->GetRb()->SetNextPos();
+	//モデルの座標更新
+	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
+}

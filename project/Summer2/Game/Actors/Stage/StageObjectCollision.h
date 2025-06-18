@@ -7,10 +7,10 @@ class Camera;
 class AttackManager;
 class UIManager;
 /// <summary>
-/// ステージのオブジェクトを描画する用のクラス
+/// ステージのオブジェクトの当たり判定用のクラス
 /// </summary>
 class StageObjectCollision :
-    public Actor
+    public Actor, public std::enable_shared_from_this<StageObjectCollision>
 {
 public:
     StageObjectCollision(int modelHandle, VECTOR pos, VECTOR scale, VECTOR angle);//ポリゴンのコリジョン
@@ -18,11 +18,11 @@ public:
     StageObjectCollision(VECTOR pos1, VECTOR pos2, float radius);//カプセルのコリジョン
     ~StageObjectCollision();
     //登録処理
-    void Entry(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager) override {};
+    void Entry(std::shared_ptr<ActorManager> actorManager) override;
     //登録解除
-    void Exit(std::shared_ptr<ActorManager> actorManager, std::shared_ptr<UIManager> uiManager) override {};
+    void Exit(std::shared_ptr<ActorManager> actorManager) override;
     void Init()override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager) override;
     void Gravity(const Vector3& gravity)override;
     void OnHitColl(const std::shared_ptr<Collidable>& other)override;
     void Draw()const override;

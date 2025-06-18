@@ -20,10 +20,14 @@ public:
 	/// “à•”•Ï”‚ÌXV
 	/// </summary>
 	/// <param name="input"></param>
-	virtual void Update(Input& input) = 0;
+	virtual void Update(Input& input) abstract;
 	/// <summary>
 	/// •`‰æ
 	/// </summary>
-	virtual void Draw() = 0;
+	virtual void Draw() abstract;
+	/// <summary>
+	/// I—¹ˆ—
+	/// </summary>
+	virtual void End() abstract;
 };
 

@@ -13,6 +13,7 @@ public:
     virtual void Init()override;
     virtual void Update(Input& input) override;
     virtual void Draw() override;
+    virtual void End() override;
 private:
     
 };

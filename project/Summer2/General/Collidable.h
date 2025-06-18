@@ -12,6 +12,7 @@ enum class State
 };
 
 class ColliderBase;
+class Actor;
 class Rigidbody;
 class Collidable
 {
@@ -31,6 +32,9 @@ public:
 	//ó‘Ô
 	State GetState() { return m_state; };
 	void SetState(State state) { m_state = state; };
+	//‚¿å
+	std::shared_ptr<Actor> GetOwner() { return m_owner; };
+	void SetOwner(std::shared_ptr<Actor> owner) { m_owner = owner; };
 private:
 	//“–‚½‚è”»’è
 	std::shared_ptr<ColliderBase> m_coll;
@@ -42,6 +46,8 @@ private:
 	bool m_isStatic;
 	//ó‘Ô
 	State m_state;
+	//‚¿å
+	std::shared_ptr<Actor> m_owner;
 };
 
 

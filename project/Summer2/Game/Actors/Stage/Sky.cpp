@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "../../../General/Model.h"
 #include "../../Camera/Camera.h"
+#include "../ActorManager.h"
 
 namespace
 {
@@ -21,7 +22,19 @@ Sky::~Sky()
 {
 }
 
-void Sky::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager, std::shared_ptr<UIManager> uiManager)
+void Sky::Entry(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャーに登録
+	actorManager->Entry(shared_from_this());
+}
+
+void Sky::Exit(std::shared_ptr<ActorManager> actorManager)
+{
+	//アクターマネージャーに登録
+	actorManager->Exit(shared_from_this());
+}
+
+void Sky::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	m_model->SetPos(camera->GetPos().ToDxLibVector());
 	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));

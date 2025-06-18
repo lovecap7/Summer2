@@ -25,7 +25,10 @@ public:
     virtual void Init()override;
     virtual void Update(Input& input) override;
     virtual void Draw() override;
+    virtual void End() override;
 private:
+    //アクター
+    std::vector<std::shared_ptr<Actor>> m_actors;
     //アクターマネージャー
     std::shared_ptr<ActorManager> m_actorManager;
     //プレイヤー

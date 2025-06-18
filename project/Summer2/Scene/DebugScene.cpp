@@ -129,3 +129,7 @@ void DebugScene::Draw()
 		break;
 	}
 }
+
+void DebugScene::End()
+{
+}

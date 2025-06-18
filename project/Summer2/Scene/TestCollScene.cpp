@@ -71,7 +71,7 @@ TestCollScene::~TestCollScene()
 
 void TestCollScene::Init()
 {
-	m_actorManager->Init();
+	//m_actorManager->Init();
 }
 
 void TestCollScene::Update(Input& input)
@@ -143,4 +143,8 @@ void TestCollScene::Draw()
 	//DrawString(screenPos.x, screenPos.y, "Z-", 0xffffff);
 	////アクターの描画
 	//m_actorManager->Draw();
+}
+
+void TestCollScene::End()
+{
 }

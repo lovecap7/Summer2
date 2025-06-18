@@ -67,3 +67,7 @@ void SelectStageScene::Draw()
 	DrawString(0, 64, "X Bottun : Stage 3", 0xffff00);
 #endif
 }
+
+void SelectStageScene::End()
+{
+}
