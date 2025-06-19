@@ -34,5 +34,7 @@ public:
 private:
 	//ƒ‚ƒfƒ‹
 	std::shared_ptr<Model> m_model;
+	//Å‰‚Ì”ƒtƒŒ[ƒ€‚Í“–‚½‚è”»’è‚ğ‚µ‚½‚­‚È‚¢‚Ì‚Å
+	int m_noHitFrame;
 };
 

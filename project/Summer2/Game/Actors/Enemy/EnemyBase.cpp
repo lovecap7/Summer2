@@ -5,7 +5,6 @@
 #include "../../../General/Collidable.h"
 #include "../../../General/Rigidbody.h"
 EnemyBase::EnemyBase():
-	Actor(ActorKind::Enemy),
 	m_isHitSearch(false),
 	m_playerPos()
 {

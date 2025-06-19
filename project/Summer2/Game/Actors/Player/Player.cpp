@@ -17,9 +17,6 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/AttackManager.h"
-#include "../../UI/UIManager.h"
-#include "../../UI/UIPlayerHP.h"
-#include "../../UI/UIPlayerUltGage.h"
 #include "../ActorManager.h"
 #include "UltGage.h"
 #include <DxLib.h>
@@ -37,7 +34,6 @@ namespace
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
-	Actor(ActorKind::Player),
 	m_stickVec(0.0f,0.0f),
 	m_isGround(false)
 {
@@ -49,6 +45,8 @@ Player::Player(int modelHandle, Position3 firstPos) :
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(firstPos));
 	//必殺技ゲージ
 	m_ultGage = std::make_shared<UltGage>(kMaxUltGage);
+	//コライダブルの初期化
+	m_collidable->Init(State::None, Priority::Middle, GameTag::Player);
 }
 
 Player::~Player()

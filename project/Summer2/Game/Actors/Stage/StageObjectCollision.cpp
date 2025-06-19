@@ -7,7 +7,6 @@
 #include "../ActorManager.h"
 
 StageObjectCollision::StageObjectCollision(int modelHandle, VECTOR pos, VECTOR scale, VECTOR angle) :
-	Actor(ActorKind::Object),
 	m_collisionHandle(modelHandle)
 {
 	//位置と大きさと回転のセット
@@ -15,20 +14,24 @@ StageObjectCollision::StageObjectCollision(int modelHandle, VECTOR pos, VECTOR s
 	m_collidable = std::make_shared<Collidable>(std::make_shared<PolygonCollider>(modelHandle), std::make_shared<Rigidbody>(pos));
 	DxLib::MV1SetScale(m_collisionHandle, scale);
 	DxLib::MV1SetRotationXYZ(m_collisionHandle, angle);
+	//初期化
+	m_collidable->Init(State::None,Priority::Static,GameTag::Object);
 }
 
 StageObjectCollision::StageObjectCollision(VECTOR pos, float radius):
-	Actor(ActorKind::Object),
 	m_collisionHandle(-1)
 {
 	m_collidable = std::make_shared<Collidable>(std::make_shared<SphereCollider>(radius),std::make_shared<Rigidbody>(pos));
+	//初期化
+	m_collidable->Init(State::None, Priority::Static, GameTag::Object);
 }
 
 StageObjectCollision::StageObjectCollision(VECTOR pos1, VECTOR pos2, float radius):
-	Actor(ActorKind::Object),
 	m_collisionHandle(-1)
 {
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(pos2, radius), std::make_shared<Rigidbody>(pos1));
+	//初期化
+	m_collidable->Init(State::None, Priority::Static, GameTag::Object);
 }
 
 

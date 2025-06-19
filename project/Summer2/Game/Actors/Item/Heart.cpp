@@ -16,10 +16,13 @@ namespace
 	constexpr float kCollRadius = 50.0f;
 	//回転量
 	constexpr float kRotaAngle = 1.0f;
+	//最初の当たらないフレーム
+	constexpr int kNoHitFrame = 30;
 }
 
 Heart::Heart(int modelHandle, Vector3 pos):
-	ItemBase(ItemKind::Heart)
+	ItemBase(ItemKind::Heart),
+	m_noHitFrame(kNoHitFrame)
 {
 	auto firstPos = pos;
 	firstPos.y += kCollRadius;
@@ -29,7 +32,10 @@ Heart::Heart(int modelHandle, Vector3 pos):
 	m_collidable = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kCollRadius), std::make_shared<Rigidbody>(firstPos));
 	//力を与える
 	m_collidable->GetRb()->SetVecY(kJumpPower);
-
+	//コライダブルの初期化
+	m_collidable->Init(State::None, Priority::Low, GameTag::Item);
+	//当たり判定をしない
+	m_collidable->SetIsCollide(false);
 }
 
 Heart::~Heart()
@@ -57,6 +63,15 @@ void Heart::Init()
 void Heart::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));
+	if (m_noHitFrame > 0)
+	{
+		--m_noHitFrame;
+	}
+	else
+	{
+		//当たり判定をする
+		m_collidable->SetIsCollide(true);
+	}
 }
 
 void Heart::Gravity(const Vector3& gravity)
@@ -72,13 +87,10 @@ void Heart::Gravity(const Vector3& gravity)
 void Heart::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
 	//プレイヤーに当たった時の処理
-	if (other->GetOwner() != nullptr)
+	if (other->GetGameTag() == GameTag::Player)
 	{
-		if (other->GetOwner()->GetActorKind() == ActorKind::Player)
-		{
-			//削除
-			m_isDelete = true;
-		}
+		//削除
+		m_isDelete = true;
 	}
 }
 

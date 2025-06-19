@@ -82,8 +82,10 @@ void BulletAttack::Draw()
 
 void BulletAttack::OnHit(std::shared_ptr<Actor> actor)
 {
-	//自分と同じ種類のアクターなら無視
-	if (m_owner->GetActorKind() == actor->GetActorKind())return;
+	auto ownerColl = m_owner->GetCollidable();
+	auto otherColl = actor->GetCollidable();
+	//自分と同じ種類なら無視
+	if (ownerColl->GetGameTag() == otherColl->GetGameTag())return;
 
 	bool isFind = false;
 	//IDがすでに記録されているか確認

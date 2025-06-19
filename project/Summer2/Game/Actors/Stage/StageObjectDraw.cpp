@@ -5,9 +5,10 @@
 #include "../../../General/Model.h"
 #include "../ActorManager.h"
 
-StageObjectDraw::StageObjectDraw(int modelHandle, VECTOR pos, VECTOR scale, VECTOR angle) :
-	Actor(ActorKind::None)//Noneにしたら当たり判定をしないので描画用のクラスになる
+StageObjectDraw::StageObjectDraw(int modelHandle, VECTOR pos, VECTOR scale, VECTOR angle)
 {
+	//描画用のクラス
+	m_isDrawOnly = true;
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, pos);
 	m_model->SetScale(scale);

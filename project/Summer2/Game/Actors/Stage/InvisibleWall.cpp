@@ -5,12 +5,13 @@
 #include "../ActorManager.h"
 
 InvisibleWall::InvisibleWall(int modelHandle, Vector3 pos, VECTOR scale, VECTOR angle):
-	Actor(ActorKind::Object),
 	m_modelHandle(modelHandle)
 {
 	//初期位置
 	m_collidable = std::make_shared<Collidable>(std::make_shared<PolygonCollider>(modelHandle), std::make_shared<Rigidbody>(pos));
-
+	//優先度
+	//コライダブルの初期化
+	m_collidable->Init(State::None, Priority::Static, GameTag::Object);
 	DxLib::MV1SetScale(m_modelHandle, scale);
 	DxLib::MV1SetRotationXYZ(m_modelHandle, angle);
 }

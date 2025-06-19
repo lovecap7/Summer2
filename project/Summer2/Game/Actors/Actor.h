@@ -2,16 +2,6 @@
 #include <memory>
 #include "../../General/Math/MyMath.h"
 
-enum class ActorKind
-{
-	None,
-	Player,		//プレイヤー
-	Enemy,		//敵
-	Item,		//アイテム
-	Object,	//障害物
-	Field,		//フィールド
-};
-
 class ActorManager;
 class Input;
 class Camera;
@@ -25,8 +15,6 @@ class AttackManager;
 class Actor abstract
 {
 protected:
-	//このアクターの種類
-	ActorKind m_actorKind;
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
 	//やられ判定
@@ -37,8 +25,10 @@ protected:
 	int m_id;
 	//IDがセットされたことを記録するフラグ
 	bool m_isSetId;
+	//描画用のクラスかどうか
+	bool m_isDrawOnly;
 public:
-	Actor(ActorKind kind);
+	Actor();
 	virtual ~Actor() {};
 	//(純粋仮想関数)
 	/// <summary>
@@ -78,11 +68,6 @@ public:
 	/// </summary>
 	virtual void Complete() abstract;
 	/// <summary>
-	/// アクターの種類
-	/// </summary>
-	/// <returns></returns>
-	ActorKind GetActorKind() { return m_actorKind; };
-	/// <summary>
 	/// 当たり判定と衝突処理に使う
 	/// </summary>
 	/// <returns></returns>
@@ -112,5 +97,10 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	void SetID(int id);
+	/// <summary>
+	/// 描画用クラス
+	/// </summary>
+	/// <returns></returns>
+	bool IsDrawOnly() { return m_isDrawOnly; };
 };
 

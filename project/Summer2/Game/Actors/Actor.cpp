@@ -4,11 +4,11 @@
 #include "../../General/Collision/CollisionManager.h"
 #include "Enemy/EnemyBase.h"
 
-Actor::Actor(ActorKind kind):
-	m_actorKind(kind),
+Actor::Actor():
 	m_isDelete(false),
 	m_id(0),
-	m_isSetId(false)
+	m_isSetId(false),
+	m_isDrawOnly(false)
 {
 }
 

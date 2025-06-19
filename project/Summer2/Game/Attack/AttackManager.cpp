@@ -55,9 +55,13 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 
 	for (auto& actor : actors)
 	{
+		//描画用のクラスは無視
+		if (actor->IsDrawOnly())continue;
+		auto coll = actor->GetCollidable();
+
 		//プレイヤーと敵のみ
-		if (actor->GetActorKind() == ActorKind::Player ||
-			actor->GetActorKind() == ActorKind::Enemy)
+		if (coll->GetGameTag() == GameTag::Player ||
+			coll->GetGameTag() == GameTag::Enemy)
 		{
 			actor->GetHurtPoint()->Init();//やられ判定の初期化
 		}
@@ -68,9 +72,13 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 		//攻撃が当たっているかをチェックする　
 		for (auto& actor : actors)
 		{
+			//描画用のクラスは無視
+			if (actor->IsDrawOnly())continue;
+
+			auto coll = actor->GetCollidable();
 			//プレイヤーと敵のみ
-			if (actor->GetActorKind() == ActorKind::Player ||
-				actor->GetActorKind() == ActorKind::Enemy)
+			if (coll->GetGameTag() == GameTag::Player ||
+				coll->GetGameTag() == GameTag::Enemy)
 			{
 				if (actor->GetHurtPoint()->IsNoDamege())continue;//無敵の時は当たらない
 				//当たってるかをチェック

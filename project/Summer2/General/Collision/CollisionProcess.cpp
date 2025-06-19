@@ -28,8 +28,11 @@ CollisionProcess::~CollisionProcess()
 
 void CollisionProcess::ProcessSS(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB)
 {
+	auto priorityA = otherA->GetPriority();
+	auto priorityB = otherB->GetPriority();
 	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic() && otherB->IsStatic())return;
+	if (priorityA == Priority::Static &&
+		priorityB == Priority::Static)return;
 
 	//AからBへのベクトル
 	Vector3 aToB = otherB->GetRb()->GetNextPos() - otherA->GetRb()->GetNextPos();
@@ -40,12 +43,12 @@ void CollisionProcess::ProcessSS(const std::shared_ptr<Collidable>& otherA, cons
 	overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 	overlap += kOverlapGap;
 
-	//動かす物体とそうじゃない物体とで処理を分ける
-	if (otherA->IsStatic() && !otherB->IsStatic())
+	//優先度から動かすほうを決める
+	if (priorityA > priorityB)
 	{
 		otherB->GetRb()->AddVec(aToB.Normalize() * overlap);
 	}
-	else if (otherB->IsStatic() && !otherA->IsStatic())
+	else if (priorityA < priorityB)
 	{
 		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap);
 	}
@@ -68,8 +71,8 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 	//当たったポリゴンの情報
 	auto hitDim = std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->GetHitDim();
 
-	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic())
+	//お互い動かないオブジェクトなら衝突しない(ポリゴンはスタティックなので片方がスタティックなら)
+	if (otherA->GetPriority() == Priority::Static)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		DxLib::MV1CollResultPolyDimTerminate(hitDim);
@@ -116,8 +119,11 @@ void CollisionProcess::ProcessSP(const std::shared_ptr<Collidable>& otherA, cons
 
 void CollisionProcess::ProcessCC(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB)
 {
+	auto priorityA = otherA->GetPriority();
+	auto priorityB = otherB->GetPriority();
 	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic() && otherB->IsStatic())return;
+	if (priorityA == Priority::Static &&
+		priorityB == Priority::Static)return;
 
 	//カプセルの押し戻しはそれぞれの当たったポイントから計算します
 
@@ -134,11 +140,11 @@ void CollisionProcess::ProcessCC(const std::shared_ptr<Collidable>& otherA, cons
 	aToB.y = 0.0f;
 
 	//動かす物体とそうじゃない物体とで処理を分ける
-	if (otherA->IsStatic() && !otherB->IsStatic())
+	if (priorityA > priorityB)
 	{
 		otherB->GetRb()->AddVec(aToB.Normalize() * overlap);
 	}
-	else if (otherB->IsStatic() && !otherA->IsStatic())
+	else if (priorityA < priorityB)
 	{
 		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap);
 	}
@@ -151,8 +157,11 @@ void CollisionProcess::ProcessCC(const std::shared_ptr<Collidable>& otherA, cons
 
 void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, const std::shared_ptr<Collidable>& otherB)
 {
+	auto priorityA = otherA->GetPriority();
+	auto priorityB = otherB->GetPriority();
 	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic() && otherB->IsStatic())return;
+	if (priorityA == Priority::Static &&
+		priorityB == Priority::Static)return;
 
 	//AからBへのベクトル
 	Vector3 aToB = otherB->GetRb()->GetNextPos() - std::dynamic_pointer_cast<CapsuleCollider>(otherA->GetColl())->GetNearPos();
@@ -165,11 +174,11 @@ void CollisionProcess::ProcessCS(const std::shared_ptr<Collidable>& otherA, cons
 	overlap += kOverlapGap;
 
 	//動かす物体とそうじゃない物体とで処理を分ける
-	if (otherA->IsStatic() && !otherB->IsStatic())
+	if (priorityA > priorityB)
 	{
 		otherB->GetRb()->AddVec(aToB.Normalize() * overlap);
 	}
-	else if (otherB->IsStatic() && !otherA->IsStatic())
+	else if (priorityA < priorityB)
 	{
 		otherA->GetRb()->AddVec(aToB.Normalize() * -overlap);
 	}
@@ -191,8 +200,8 @@ void CollisionProcess::ProcessCP(const std::shared_ptr<Collidable>& otherA, cons
 
 	//当たったポリゴンの情報
 	auto hitDim = std::dynamic_pointer_cast<PolygonCollider>(otherB->GetColl())->GetHitDim();
-	//お互い動かないオブジェクトなら衝突しない
-	if (otherA->IsStatic())
+	//お互い動かないオブジェクトなら衝突しない(ポリゴンはスタティックなので片方がスタティックなら)
+	if (otherA->GetPriority() == Priority::Static)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		DxLib::MV1CollResultPolyDimTerminate(hitDim);

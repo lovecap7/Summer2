@@ -39,6 +39,8 @@ PurpleDinosaur::PurpleDinosaur(int modelHandle, Vector3 pos) :
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
 	//索敵範囲
 	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
+	//コライダブルの初期化
+	m_collidable->Init(State::None, Priority::Middle, GameTag::Enemy);
 }
 
 PurpleDinosaur::~PurpleDinosaur()

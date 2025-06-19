@@ -74,8 +74,11 @@ void MeleeAttack::Draw()
 
 void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 {
-	//©•ª‚Æ“¯‚¶í—Ş‚ÌƒAƒNƒ^[‚È‚ç–³‹
-	if (m_owner->GetActorKind() == actor->GetActorKind())return;
+	auto ownerColl = m_owner->GetCollidable();
+	auto otherColl = actor->GetCollidable();
+
+	//©•ª‚Æ“¯‚¶í—Ş‚È‚ç–³‹
+	if (ownerColl->GetGameTag() == otherColl->GetGameTag())return;
 
 	bool isFind = false;
 	//ID‚ª‚·‚Å‚É‹L˜^‚³‚ê‚Ä‚¢‚é‚©Šm”F
@@ -100,7 +103,7 @@ void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
 
 		//ƒvƒŒƒCƒ„[‚ÌUŒ‚‚Ìê‡•KE‹ZƒQ[ƒW‚ğ‰ÁZ‚·‚é
-		if (m_owner->GetActorKind() == ActorKind::Player)
+		if (ownerColl->GetGameTag() == GameTag::Player)
 		{
 			auto gage = std::dynamic_pointer_cast<Player>(m_owner)->GetUltGage();
 			gage->AddPedingUltGage();//—\–ñ‚³‚ê‚Ä‚¢‚½‰ÁZƒQ[ƒW—Ê‚ğ”½‰f

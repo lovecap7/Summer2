@@ -10,9 +10,10 @@ namespace
 	constexpr float kRotaAngle = 0.01f;
 }
 
-Sky::Sky(int handle):
-	Actor(ActorKind::None)//Noneにしたら当たり判定をしないので描画用のクラスになる
+Sky::Sky(int handle)
 {
+	//描画用のクラス
+	m_isDrawOnly = true;
 	//モデル
 	m_model = std::make_shared<Model>(handle, Vector3::Zero().ToDxLibVector());
 	m_model->SetScale(VGet(kScale, kScale, kScale));

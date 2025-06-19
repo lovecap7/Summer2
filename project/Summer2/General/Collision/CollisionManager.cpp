@@ -9,7 +9,7 @@
 namespace
 {
 	//確認回数
-	constexpr int kTryNum = 3;
+	constexpr int kTryNum = 10;
 }
 
 CollisionManager::CollisionManager():
@@ -24,21 +24,32 @@ CollisionManager::~CollisionManager()
 
 void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 {
+	//一度も当たっていないのならループを終了する
+	bool isOneMore = false;
 	//補正したことで別のオブジェクトに当たる可能性があるので一定回数チャックする
 	for (int i = 0;i < kTryNum;++i)
 	{
+		isOneMore = false;
 		//当たり判定をチェック
 		for (auto& actorA : actors)
 		{
+			//描画用のクラスは無視
+			if (actorA->IsDrawOnly())continue;
+			auto collA = actorA->GetCollidable();
+
 			//当たり判定を行わないなら飛ばす
-			if (actorA->GetActorKind() == ActorKind::None)continue;
-			if (!actorA->GetCollidable()->IsCollide())continue;
+			if (collA->GetGameTag() == GameTag::None)continue;
+			if (!collA->IsCollide())continue;
 
 			for (auto& actorB : actors)
 			{
+				//描画用のクラスは無視
+				if (actorB->IsDrawOnly())continue;
+				auto collB = actorB->GetCollidable();
+
 				//当たり判定を行わないなら飛ばす
-				if (actorB->GetActorKind() == ActorKind::None)continue;
-				if (!actorB->GetCollidable()->IsCollide())continue;
+				if (collB->GetGameTag() == GameTag::None)continue;
+				if (!collB->IsCollide())continue;
 
 				//自分とは当たり判定をしない
 				if (actorA == actorB)continue;
@@ -47,94 +58,94 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 				bool isHit = false;
 
 				//球と
-				if (actorA->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
+				if (collA->GetColl()->GetShape() == Shape::Sphere)
 				{
 					//球
-					if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
+					if (collB->GetColl()->GetShape() == Shape::Sphere)
 					{
-						isHit = m_collChecker->CheckCollSS(actorA->GetCollidable(), actorB->GetCollidable());
+						isHit = m_collChecker->CheckCollSS(collA, collB);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessSS(actorA->GetCollidable(), actorB->GetCollidable());
+							m_collProcessor->ProcessSS(collA, collB);
 						}
 					}
 					//カプセル
-					else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
+					else if (collB->GetColl()->GetShape() == Shape::Capsule)
 					{
-						isHit = m_collChecker->CheckCollCS(actorB->GetCollidable(), actorA->GetCollidable());
+						isHit = m_collChecker->CheckCollCS(collB, collA);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessCS(actorB->GetCollidable(), actorA->GetCollidable());
+							m_collProcessor->ProcessCS(collB, collA);
 						}
 					}
 					//ポリゴン
-					else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Polygon)
+					else if (collB->GetColl()->GetShape() == Shape::Polygon)
 					{
-						isHit = m_collChecker->CheckCollSP(actorA->GetCollidable(), actorB->GetCollidable());
+						isHit = m_collChecker->CheckCollSP(collA, collB);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessSP(actorA->GetCollidable(), actorB->GetCollidable());
+							m_collProcessor->ProcessSP(collA, collB);
 						}
 					}
 				}
 				//カプセルと
-				else if (actorA->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
+				else if (collA->GetColl()->GetShape() == Shape::Capsule)
 				{
 					//球
-					if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
+					if (collB->GetColl()->GetShape() == Shape::Sphere)
 					{
-						isHit = m_collChecker->CheckCollCS(actorA->GetCollidable(), actorB->GetCollidable());
+						isHit = m_collChecker->CheckCollCS(collA, collB);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessCS(actorA->GetCollidable(), actorB->GetCollidable());
+							m_collProcessor->ProcessCS(collA, collB);
 						}
 					}
 					//カプセル
-					else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
+					else if (collB->GetColl()->GetShape() == Shape::Capsule)
 					{
-						isHit = m_collChecker->CheckCollCC(actorA->GetCollidable(), actorB->GetCollidable());
+						isHit = m_collChecker->CheckCollCC(collA, collB);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessCC(actorA->GetCollidable(), actorB->GetCollidable());
+							m_collProcessor->ProcessCC(collA, collB);
 						}
 					}
 					//ポリゴン
-					else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Polygon)
+					else if (collB->GetColl()->GetShape() == Shape::Polygon)
 					{
-						isHit = m_collChecker->CheckCollCP(actorA->GetCollidable(), actorB->GetCollidable());
+						isHit = m_collChecker->CheckCollCP(collA, collB);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessCP(actorA->GetCollidable(), actorB->GetCollidable());
+							m_collProcessor->ProcessCP(collA, collB);
 						}
 					}
 				}
 				//ポリゴンと
-				else if (actorA->GetCollidable()->GetColl()->GetShape() == Shape::Polygon)
+				else if (collA->GetColl()->GetShape() == Shape::Polygon)
 				{
 					//球
-					if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Sphere)
+					if (collB->GetColl()->GetShape() == Shape::Sphere)
 					{
-						isHit = m_collChecker->CheckCollSP(actorB->GetCollidable(), actorA->GetCollidable());
+						isHit = m_collChecker->CheckCollSP(collB, collA);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessSP(actorB->GetCollidable(), actorA->GetCollidable());
+							m_collProcessor->ProcessSP(collB, collA);
 						}
 					}
 					//カプセル
-					else if (actorB->GetCollidable()->GetColl()->GetShape() == Shape::Capsule)
+					else if (collB->GetColl()->GetShape() == Shape::Capsule)
 					{
-						isHit = m_collChecker->CheckCollCP(actorB->GetCollidable(), actorA->GetCollidable());
+						isHit = m_collChecker->CheckCollCP(collB, collA);
 						if (isHit)
 						{
 							//ベクトルを補正する
-							m_collProcessor->ProcessCP(actorB->GetCollidable(), actorA->GetCollidable());
+							m_collProcessor->ProcessCP(collB, collA);
 						}
 					}
 				}
@@ -143,10 +154,14 @@ void CollisionManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 				if (isHit)
 				{
 					//当たった時の処理
-					actorA->OnHitColl(actorB->GetCollidable());
-					actorB->OnHitColl(actorA->GetCollidable());
+					actorA->OnHitColl(collB);
+					actorB->OnHitColl(collA);
+					isOneMore = true;
 				}
 			}
 		}
+		
+		//チェックの必要がないなら
+		if (!isOneMore)break;
 	}
 }
