@@ -57,7 +57,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 
 	//それぞれのベクトルから内積をだして球から垂線を下した位置を求める
 	float dotVer = nomAtoB.Dot(AtoS);
-	Vector3 verPos = cPosA + (nomAtoB * dotVer);//垂線を下した座標
+	Vector3 verPos = cPosA + (AtoB * dotVer);//垂線を下した座標
 
 	//垂線を下した座標がカプセルのAB間の間にあるか外にあるかをチェックする
 	float rate = dotVer / AtoB.Magnitude();//割合
@@ -70,8 +70,9 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 
 		//posBと球の間距離から当たっているかをチェック
 		Vector3 BtoS = sPos - cPosB;
+		auto len = BtoS.Magnitude();
 		//最短距離より大きいなら当たっていない
-		if (BtoS.Magnitude() >= shortDis)
+		if (len >= shortDis)
 		{
 			return false;
 		}
@@ -81,10 +82,10 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 	{
 		//衝突判定で使うので一番近い座標を覚えておく
 		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosA);
-
+		auto len = AtoS.Magnitude();
 		//posAと球の間の距離から当たっているかチェック
 		//最短距離より大きいなら当たっていない
-		if (AtoS.Magnitude() >= shortDis)
+		if (len >= shortDis)
 		{
 			return false;
 		}
@@ -97,8 +98,9 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 
 		//垂線を下した座標と球の間の距離から当たっているかチェック
 		Vector3 VtoS = sPos - verPos;
+		auto len = VtoS.Magnitude();
 		//最短距離より大きいなら当たっていない
-		if (VtoS.Magnitude() >= shortDis)
+		if (len >= shortDis)
 		{
 			return false;
 		}
