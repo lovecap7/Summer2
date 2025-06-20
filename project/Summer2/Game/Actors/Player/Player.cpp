@@ -182,6 +182,11 @@ void Player::Complete()
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
 
+void Player::OnHitSearchTarget(const Vector3& targetPos)
+{
+	m_targetPos = targetPos;
+}
+
 void Player::UpdateHurtPoint()
 {
 	//ˆÚ“®—Ê‚ðŽæ“¾

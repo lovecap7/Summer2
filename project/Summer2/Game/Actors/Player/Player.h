@@ -44,6 +44,8 @@ public:
 	std::shared_ptr<Model> GetModel() const{ return m_model; };
 	//必殺技ゲージ
 	std::shared_ptr<UltGage> GetUltGage() const{ return m_ultGage; };
+	//敵を索敵
+	void OnHitSearchTarget(const Vector3& playerPos);
 private:
 	//プレイヤーの状態
 	std::shared_ptr<PlayerStateBase> m_state;
@@ -55,6 +57,10 @@ private:
 	bool m_isGround;
 	//必殺技ゲージ
 	std::shared_ptr<UltGage> m_ultGage;
+	//前方にターゲット(敵とか)がいるかをチェックするためのトリガー
+	std::shared_ptr<Collidable> m_searchTrigger;
+	//ターゲットのポジション
+	Vector3 m_targetPos;
 private:
 	//やられ判定の更新
 	void UpdateHurtPoint();

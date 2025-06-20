@@ -10,7 +10,7 @@ EnemyBase::EnemyBase():
 {
 }
 
-void EnemyBase::OnHitSearch(const Vector3& playerPos)
+void EnemyBase::OnHitSearchPlayer(const Vector3& playerPos)
 {
 	//ÉTÅ[É`
 	m_isHitSearch = true;

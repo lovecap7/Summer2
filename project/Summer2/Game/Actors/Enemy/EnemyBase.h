@@ -12,7 +12,7 @@ public:
     EnemyBase();
     virtual ~EnemyBase() {};
     //範囲内にプレイヤーがいた場合位置を取得
-    void OnHitSearch(const Vector3& playerPos);
+    void OnHitSearchPlayer(const Vector3& playerPos);
     //索敵に成功したか
     bool IsHitSearch() const { return m_isHitSearch; };
     //プレイヤーへのベクトルを返す関数

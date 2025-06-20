@@ -40,7 +40,7 @@ void EnemyManager::Search()
 		if (m_collChecker->CheckCollCS(m_player->GetCollidable(), std::dynamic_pointer_cast<EnemyBase>(enemy)->GetSearchTrigger()))
 		{
 			//“–‚½‚Á‚½‚Ìˆ—
-			std::dynamic_pointer_cast<EnemyBase>(enemy)->OnHitSearch(m_player->GetCollidable()->GetRb()->GetPos());
+			std::dynamic_pointer_cast<EnemyBase>(enemy)->OnHitSearchPlayer(m_player->GetCollidable()->GetRb()->GetPos());
 		}
 	}
 }
