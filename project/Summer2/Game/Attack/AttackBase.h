@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
 #include <vector>
-
+#include "Battle.h"
+#include "../../General/Math/Vector3.h"
 
 class Collidable;
 class Actor;
@@ -31,6 +32,10 @@ public:
 	void SetKeepFrame(int keepFrame);
 	//ノックバック
 	float GetKnockBackPower() { return m_knockBackPower; };
+	Vector3 GetKnockBackVec(Vector3 other);
+	//攻撃の強さ
+	Battle::AttackPower GetAttackPower() { return m_attackPower; };
+	void SetAttackPower(Battle::AttackPower ap) { m_attackPower = ap; };
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -49,5 +54,7 @@ protected:
 	//初期化用
 	int m_initDamage;//初期化用
 	int m_initKeepFrame;//初期化用
+	//攻撃の強さ
+	Battle::AttackPower m_attackPower;
 };
 

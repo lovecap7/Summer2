@@ -57,7 +57,7 @@ void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>
 		return;
 	}
 	//UŒ‚‚ğó‚¯‚½
-	if (m_player->GetHurtPoint()->IsHit())
+	if (m_player->GetHurtPoint()->IsHitReaction())
 	{
 		//‚â‚ç‚êó‘Ô
 		ChangeState(std::make_shared<PlayerStateHit>(m_player));

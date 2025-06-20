@@ -53,7 +53,7 @@ void BossDragonStateChase::Update(const Input& input, const std::unique_ptr<Came
 		ChangeState(std::make_shared<BossDragonStateDeath>(m_owner));
 		return;
 	}
-	if (m_owner->GetHurtPoint()->IsHit())
+	if (m_owner->GetHurtPoint()->IsHitReaction())
 	{
 		//‚â‚ç‚êó‘Ô
 		ChangeState(std::make_shared<BossDragonStateHit>(m_owner));

@@ -2,6 +2,7 @@
 #include "../Actors/Actor.h"
 #include "../../General/Collidable.h"
 #include "../../General/Rigidbody.h"
+#include "AttackBase.h"
 
 HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<Actor> owner):
 	m_collidable(coll),
@@ -9,7 +10,8 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_hp(hp),
 	m_maxHp(hp),
 	m_owner(owner),
-	m_isHit(false)
+	m_isHitReaction(false),
+	m_armor(Battle::Armor::Low)
 {
 }
 
@@ -20,14 +22,30 @@ HurtPoint::~HurtPoint()
 
 void HurtPoint::Init()
 {
-	m_isHit = false; //攻撃を受けていない状態にする
+	//初期化
+	m_isHitReaction = false;
+}
+
+void HurtPoint::OnHit(std::shared_ptr<AttackBase> attack)
+{
+	//ダメージを喰らう
+	OnHitDamage(attack->GetDamage());
+
+	//リアクションをするか
+	if (Battle::CheckFlinch(attack->GetAttackPower(), m_armor))
+	{
+		//ヒットリアクションをする
+		m_isHitReaction = true;	
+		//ノックバック
+		auto vec = attack->GetKnockBackVec(m_owner->GetCollidable()->GetRb()->GetNextPos());
+		OnHitKnockBack(vec);
+	}
 }
 
 void HurtPoint::OnHitDamage(int damage)
 {
 	//無敵なら
 	if (m_isNoDamage)return;
-	m_isHit = true; //攻撃を受けた
 	m_hp -= damage;
 	if (m_hp <= 0)
 	{
@@ -37,7 +55,7 @@ void HurtPoint::OnHitDamage(int damage)
 
 void HurtPoint::OnHitKnockBack(const Vector3& knockBackVec)
 {
-	m_owner->GetCollidable()->GetRb()->SetMoveVec(knockBackVec);
+	m_owner->GetCollidable()->GetRb()->SetMoveVec(knockBackVec);//のけぞる
 }
 
 void HurtPoint::AddHp(int add)

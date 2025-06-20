@@ -101,13 +101,9 @@ void BulletAttack::OnHit(std::shared_ptr<Actor> actor)
 	{
 		//記録されていなければ記録する
 		m_hitId.emplace_back(actor->GetID());
-		//ダメージを与える
-		actor->GetHurtPoint()->OnHitDamage(m_damage);
-		//ノックバック
-		Vector3 knockBackVec = actor->GetCollidable()->GetRb()->GetNextPos() - m_owner->GetCollidable()->GetRb()->GetNextPos();//離れるベクトル
-		knockBackVec.y = 0.0f;//Y成分はなし
-		knockBackVec = knockBackVec.Normalize() * m_knockBackPower;//ノックバック
-		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
+		//攻撃を喰らった時の処理をする
+		auto hurtPoint = actor->GetHurtPoint();
+		hurtPoint->OnHit(shared_from_this());
 		//削除
 		m_isDelete = true;
 	}

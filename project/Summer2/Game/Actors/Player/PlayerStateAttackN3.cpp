@@ -82,7 +82,7 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 		return;
 	}
 	//UŒ‚‚ğó‚¯‚½
-	if (m_player->GetHurtPoint()->IsHit())
+	if (m_player->GetHurtPoint()->IsHitReaction())
 	{
 		//íœ
 		DeleteAttack(attackManager);

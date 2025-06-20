@@ -2,7 +2,7 @@
 #include "AttackBase.h"
 #include "../../General/Math/Vector3.h"
 class BulletAttack :
-    public AttackBase
+	public AttackBase, public std::enable_shared_from_this<BulletAttack>
 {
 public:
 	/// <summary>

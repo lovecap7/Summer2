@@ -74,6 +74,7 @@
     <ClCompile Include="Game\Actors\Stage\StageObjectDraw.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
     <ClCompile Include="Game\Attack\AttackManager.cpp" />
+    <ClCompile Include="Game\Attack\Battle.cpp" />
     <ClCompile Include="Game\Attack\BulletAttack.cpp" />
     <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\MeleeAttack.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Game\Actors\Stage\StageObjectDraw.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />
     <ClInclude Include="Game\Attack\AttackManager.h" />
+    <ClInclude Include="Game\Attack\Battle.h" />
     <ClInclude Include="Game\Attack\BulletAttack.h" />
     <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\MeleeAttack.h" />

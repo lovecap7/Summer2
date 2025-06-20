@@ -94,14 +94,9 @@ void MeleeAttack::OnHit(std::shared_ptr<Actor> actor)
 	{
 		//‹L˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‹L˜^‚·‚é
 		m_hitId.emplace_back(actor->GetID());
-		//ƒ_ƒ[ƒW‚ð—^‚¦‚é
-		actor->GetHurtPoint()->OnHitDamage(m_damage);
-		//ƒmƒbƒNƒoƒbƒN
-		Vector3 knockBackVec = actor->GetCollidable()->GetRb()->GetNextPos() - m_owner->GetCollidable()->GetRb()->GetNextPos();//—£‚ê‚éƒxƒNƒgƒ‹
-		knockBackVec.y = 0.0f;//Y¬•ª‚Í‚È‚µ
-		knockBackVec = knockBackVec.Normalize() * m_knockBackPower;//ƒmƒbƒNƒoƒbƒN
-		actor->GetHurtPoint()->OnHitKnockBack(knockBackVec);
-
+		//UŒ‚‚ð‹ò‚ç‚Á‚½Žž‚Ìˆ—‚ð‚·‚é
+		auto hurtPoint = actor->GetHurtPoint();
+		hurtPoint->OnHit(shared_from_this());
 		//ƒvƒŒƒCƒ„[‚ÌUŒ‚‚Ìê‡•KŽE‹ZƒQ[ƒW‚ð‰ÁŽZ‚·‚é
 		if (ownerColl->GetGameTag() == GameTag::Player)
 		{

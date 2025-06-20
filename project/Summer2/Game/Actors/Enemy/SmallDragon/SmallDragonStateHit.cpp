@@ -47,7 +47,7 @@ void SmallDragonStateHit::Update(const Input& input, const std::unique_ptr<Camer
 		return;
 	}
 	//やられリアクション中に攻撃を食らったらアニメーションを初めから
-	if (m_owner->GetHurtPoint()->IsHit())
+	if (m_owner->GetHurtPoint()->IsHitReaction())
 	{
 		//リプレイ
 		m_owner->GetModel()->ReplayAnim();

@@ -2,8 +2,10 @@
 //やられ判定クラス
 #include <memory>
 #include "../../General/Math/MyMath.h"
+#include "Battle.h"
 class Collidable;
 class Actor;
+class AttackBase;
 class HurtPoint
 {
 public:
@@ -18,6 +20,8 @@ public:
 	std::shared_ptr<Collidable> GetCollidable() const { return m_collidable; }
 	//初期化処理
 	void Init();
+	//喰らった時の処理
+	void OnHit(std::shared_ptr<AttackBase> attack);
 	//無敵
 	bool IsNoDamege() { return m_isNoDamage; };
 	void SetIsNoDamege(bool isNoDamage) { m_isNoDamage = isNoDamage; };
@@ -31,8 +35,11 @@ public:
 	int GetHp() { return m_hp; };
 	//体力に加算
 	void AddHp(int add);
-	//攻撃を受けたかどうか
-	bool IsHit() const { return m_isHit; }
+	//ヒットリアクションをするか
+	bool IsHitReaction() const { return m_isHitReaction; }
+	//アーマー
+	Battle::Armor GetArmor() { return m_armor; };
+	void SetArmor(Battle::Armor am) { m_armor = am; };
 private:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -45,6 +52,8 @@ private:
 	//持ち主
 	std::shared_ptr<Actor> m_owner;
 	//攻撃を受けたかどうか
-	bool m_isHit;
+	bool m_isHitReaction;
+	//アーマー
+	Battle::Armor m_armor;
 };
 

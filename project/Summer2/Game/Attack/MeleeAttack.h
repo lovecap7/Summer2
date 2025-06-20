@@ -1,7 +1,7 @@
 #pragma once
 #include "AttackBase.h"
 class MeleeAttack :
-    public AttackBase
+    public AttackBase, public std::enable_shared_from_this<MeleeAttack>
 {
 public:
 	/// <summary>
