@@ -7,6 +7,7 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_collidable(coll),
 	m_isNoDamage(false),
 	m_hp(hp),
+	m_maxHp(hp),
 	m_owner(owner),
 	m_isHit(false)
 {

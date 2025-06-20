@@ -86,8 +86,6 @@ bool Quaternion::operator!=(const Quaternion& q) const
 float Quaternion::DotQ(const Quaternion& q)const
 {
 	float result = this->w * q.w + this->x * q.x + this->y * q.y + this->z * q.z;
-	//ƒNƒ‰ƒ“ƒv
-	result = MathSub::ClampFloat(result, -1.0f, 1.0f);
 	return result;
 }
 

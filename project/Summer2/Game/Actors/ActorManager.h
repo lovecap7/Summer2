@@ -47,5 +47,7 @@ private:
 private:
 	int m_id;//割り振る番号
 	void SetUpId();
+	//消滅フラグが立っているアクターの削除
+	void CheckDeleteActor(std::shared_ptr<ItemGenerator> itemGenerator);
 };
 

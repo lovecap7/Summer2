@@ -7,9 +7,13 @@
 #include "../../../General/Input.h"
 #include "../../../General/Model.h"
 #include "../ActorManager.h"
+#include "../Player/Player.h"
+#include "../../Attack/HurtPoint.h"
 
 namespace
 {
+	//回復量
+	constexpr float kHealValue = 100.0f;
 	//ジャンプ力
 	constexpr float kJumpPower = 10.0f;
 	//当たり判定の半径
@@ -86,9 +90,14 @@ void Heart::Gravity(const Vector3& gravity)
 
 void Heart::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
+	//消滅フラグが立ってるならリターン
+	if (m_isDelete)return;
 	//プレイヤーに当たった時の処理
 	if (other->GetGameTag() == GameTag::Player)
 	{
+		//回復
+		auto player = std::dynamic_pointer_cast<Player>(other->GetOwner());
+		player->GetHurtPoint()->AddHp(kHealValue);
 		//削除
 		m_isDelete = true;
 	}

@@ -93,20 +93,14 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	m_attackManager->Update(m_actors);
 
 	//消滅フラグチェック
-	auto itemGenerator = m_itemGenerator;
-	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [itemGenerator](std::shared_ptr<Actor> actor) {
-		bool isDead = actor->IsDelete();
-		if (isDead)
-		{
-			//アイテムをランダム生成
-			itemGenerator->RandGenerateItem(actor->GetCollidable()->GetRb()->GetPos());
-		}
-		return isDead;
-		});
-	m_actors.erase(remIt, m_actors.end());//削除
+	CheckDeleteActor(m_itemGenerator);
 
 	//アクターの衝突処理
 	m_collManager->Update(m_actors);
+
+	//消滅フラグチェック
+	CheckDeleteActor(m_itemGenerator);
+
 	//更新確定
 	for (auto& actor : m_actors)
 	{
@@ -114,7 +108,7 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	}
 
 	//アイテムを実装
-	itemGenerator->MoveItems(shared_from_this());
+	m_itemGenerator->MoveItems(shared_from_this());
 }
 
 void ActorManager::Draw() const
@@ -136,4 +130,23 @@ void ActorManager::SetUpId()
 		actor->SetID(m_id);
 		++m_id;
 	}
+}
+
+void ActorManager::CheckDeleteActor(std::shared_ptr<ItemGenerator> itemGenerator)
+{
+	//消滅フラグチェック
+	auto remIt = std::remove_if(m_actors.begin(), m_actors.end(), [itemGenerator](std::shared_ptr<Actor> actor) {
+		bool isDead = actor->IsDelete();
+		if (isDead)
+		{
+			//敵が消滅したとき
+			if (actor->GetCollidable()->GetGameTag() == GameTag::Enemy)
+			{
+				//アイテムをランダム生成
+				itemGenerator->RandGenerateItem(actor->GetCollidable()->GetRb()->GetPos());
+			}
+		}
+		return isDead;
+		});
+	m_actors.erase(remIt, m_actors.end());//削除
 }

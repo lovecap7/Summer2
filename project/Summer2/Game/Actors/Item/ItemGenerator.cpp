@@ -24,11 +24,12 @@ void ItemGenerator::RandGenerateItem(Vector3 pos)
 {
 	std::shared_ptr<ItemBase> item = nullptr;
 	//ƒ‰ƒ“ƒ_ƒ€‚ÉŒˆ’è
-	auto rand = GetRand(1);
+	auto rand = 0;//GetRand(1);
 	switch (rand)
 	{
 	case static_cast<int>(ItemKind::Heart):
 		item = std::make_shared<Heart>(MV1DuplicateModel(m_heartHandle), pos);
+		break;
 	default:
 		break;
 	}

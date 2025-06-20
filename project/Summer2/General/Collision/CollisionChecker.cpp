@@ -49,63 +49,25 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 	Vector3 AtoS = sPos - cPosA;
 	//カプセルの座標AからBへの単位ベクトル
 	Vector3 AtoB = cPosB - cPosA;
-	Vector3 nomAtoB;
-	if (AtoB.Magnitude() > 0.0f)
+
+	//内積
+	float dot = AtoS.Dot(AtoB);
+	//ABの長さの二乗で割る
+	float t = dot / AtoB.SqMagnitude();
+	//クランプ
+	t = MathSub::ClampFloat(t, 0.0f, 1.0f);
+	//最短座標を出す
+	Vector3 minPos = cPosA + (AtoB * t);
+	
+	float distance = (sPos - minPos).Magnitude();
+	//最短より大きいなら
+	if (distance >= shortDis)
 	{
-		nomAtoB = AtoB.Normalize();
+		return false;
 	}
-
-	//それぞれのベクトルから内積をだして球から垂線を下した位置を求める
-	float dotVer = nomAtoB.Dot(AtoS);
-	Vector3 verPos = cPosA + (AtoB * dotVer);//垂線を下した座標
-
-	//垂線を下した座標がカプセルのAB間の間にあるか外にあるかをチェックする
-	float rate = dotVer / AtoB.Magnitude();//割合
-
-	//1より大きいならposBが球に一番近い座標
-	if (rate >= 1.0f)
-	{
-		//衝突判定で使うので一番近い座標を覚えておく
-		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosB);
-
-		//posBと球の間距離から当たっているかをチェック
-		Vector3 BtoS = sPos - cPosB;
-		auto len = BtoS.Magnitude();
-		//最短距離より大きいなら当たっていない
-		if (len >= shortDis)
-		{
-			return false;
-		}
-	}
-	//0より小さいならposAが球に一番近い座標
-	else if (rate <= 0.0f)
-	{
-		//衝突判定で使うので一番近い座標を覚えておく
-		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(cPosA);
-		auto len = AtoS.Magnitude();
-		//posAと球の間の距離から当たっているかチェック
-		//最短距離より大きいなら当たっていない
-		if (len >= shortDis)
-		{
-			return false;
-		}
-	}
-	//0~1の間なら垂線を下した座標が球に一番近い座標
-	else
-	{
-		//衝突判定で使うので一番近い座標を覚えておく
-		std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(verPos);
-
-		//垂線を下した座標と球の間の距離から当たっているかチェック
-		Vector3 VtoS = sPos - verPos;
-		auto len = VtoS.Magnitude();
-		//最短距離より大きいなら当たっていない
-		if (len >= shortDis)
-		{
-			return false;
-		}
-	}
-
+	
+	//衝突判定で使うので一番近い座標を覚えておく
+	std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(minPos);
 	//ここまでくれば当たっている
 	return true;
 }
@@ -180,53 +142,35 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable>& collA, con
 			Vector3 lineAtoP = checkPoint - lineStart;
 			//線分ABの単位ベクトル
 			Vector3 lineAB = lineEnd - lineStart;
-			Vector3 nomLineAB = lineAB.Normalize();
 
 			//それぞれのベクトルから内積をだして球から垂線を下した位置を求める
-			float dotVer = nomLineAB.Dot(lineAtoP);
-			Vector3 verPos = lineStart + (nomLineAB * dotVer);//垂線を下した座標
+			float dot = lineAtoP.Dot(lineAB);
+			//ABの長さの二乗で割る
+			float t = dot / lineAB.SqMagnitude();
+			//クランプ
+			t = MathSub::ClampFloat(t, 0.0f, 1.0f);
 
-			//垂線を下した座標が線分AB間の間にあるか外にあるかをチェックする
-			float rate = dotVer / lineAB.Magnitude();//割合
-
-			//最短距離候補を入れていく
-			float shortCandidate;
-			//衝突判定に使うので最短座標を入れる
-			Vector3 shortPos;
-			if (rate >= 1.0f)
-			{
-				//座標Bに近い
-				shortCandidate = (lineEnd - checkPoint).Magnitude();
-				shortPos = lineEnd;
-			}
-			else if (rate <= 0.0f)
-			{
-				//座標Aに近い
-				shortCandidate = (lineStart - checkPoint).Magnitude();
-				shortPos = lineStart;
-			}
-			else
-			{
-				//垂線を下した座標に近い
-				shortCandidate = (verPos - checkPoint).Magnitude();
-				shortPos = verPos;
-			}
-
+			//最短座標を出す
+			Vector3 minPos = lineStart + (lineAB * t);
+			
+			//最短距離
+			float distance = (checkPoint - minPos).Magnitude();
+			
 			//初回または前回の最短距離より小さいなら現在の最短距離とする
-			if (nowShortDis > shortCandidate)
+			if (distance < nowShortDis)
 			{
-				nowShortDis = shortCandidate;
+				nowShortDis = distance;
 
 				//最短座標を記録
 				if (i == 0)
 				{
 					//衝突判定で使うので一番近い座標を覚えておく
-					std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(shortPos);
+					std::dynamic_pointer_cast<CapsuleCollider>(collB->GetColl())->SetNearPos(minPos);
 				}
 				else
 				{
 					//衝突判定で使うので一番近い座標を覚えておく
-					std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(shortPos);
+					std::dynamic_pointer_cast<CapsuleCollider>(collA->GetColl())->SetNearPos(minPos);
 				}
 			}
 		}

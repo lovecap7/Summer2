@@ -74,6 +74,8 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 		{
 			//描画用のクラスは無視
 			if (actor->IsDrawOnly())continue;
+			//消滅フラグが立ってるなら無視
+			if (actor->IsDelete())continue;
 
 			auto coll = actor->GetCollidable();
 			//プレイヤーと敵のみ
@@ -113,8 +115,7 @@ void AttackManager::Update(std::vector<std::shared_ptr<Actor>> actors)
 					//カプセル
 					else if (actorHurtPointCollidable->GetColl()->GetShape() == Shape::Capsule)
 					{
-						//ちょっと軽い
-						isHit = m_collChecker->CheckCollCCVerDxLib(attackCollidable, actorHurtPointCollidable);
+						isHit = m_collChecker->CheckCollCC(attackCollidable, actorHurtPointCollidable);
 					}
 				}
 

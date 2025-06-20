@@ -9,7 +9,7 @@
 namespace
 {
 	//Šm”F‰ñ”
-	constexpr int kTryNum = 10;
+	constexpr int kTryNum = 30;
 }
 
 CollisionManager::CollisionManager():
