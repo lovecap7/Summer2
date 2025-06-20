@@ -10,6 +10,7 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_hp(hp),
 	m_maxHp(hp),
 	m_owner(owner),
+	m_isHit(false),
 	m_isHitReaction(false),
 	m_armor(Battle::Armor::Low)
 {
@@ -23,14 +24,18 @@ HurtPoint::~HurtPoint()
 void HurtPoint::Init()
 {
 	//‰Šú‰»
+	m_isHit = false;
 	m_isHitReaction = false;
 }
 
 void HurtPoint::OnHit(std::shared_ptr<AttackBase> attack)
 {
+	//–³“G‚È‚ç
+	if (m_isNoDamage)return;
+	//UŒ‚‚ð‹ò‚ç‚Á‚½
+	m_isHit = true;
 	//ƒ_ƒ[ƒW‚ð‹ò‚ç‚¤
 	OnHitDamage(attack->GetDamage());
-
 	//ƒŠƒAƒNƒVƒ‡ƒ“‚ð‚·‚é‚©
 	if (Battle::CheckFlinch(attack->GetAttackPower(), m_armor))
 	{
@@ -44,8 +49,6 @@ void HurtPoint::OnHit(std::shared_ptr<AttackBase> attack)
 
 void HurtPoint::OnHitDamage(int damage)
 {
-	//–³“G‚È‚ç
-	if (m_isNoDamage)return;
 	m_hp -= damage;
 	if (m_hp <= 0)
 	{

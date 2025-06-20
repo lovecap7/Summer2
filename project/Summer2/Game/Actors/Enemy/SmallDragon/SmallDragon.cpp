@@ -93,6 +93,12 @@ void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& came
 	m_model->Update();
 	//やられ判定の更新
 	UpdateHurtPoint();
+	//攻撃を喰らったならモデルを赤くする
+	if (m_hurtPoint->IsHit())
+	{
+		//赤色に
+		m_model->ModelHit();
+	}
 }
 
 void SmallDragon::Gravity(const Vector3& gravity)

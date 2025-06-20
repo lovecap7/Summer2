@@ -74,6 +74,8 @@ void BossDragon::Init()
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
+	//アーマーをHighにしておく
+	m_hurtPoint->SetArmor(Battle::Armor::High);
 }
 
 void BossDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
@@ -93,6 +95,12 @@ void BossDragon::Update(const Input& input, const std::unique_ptr<Camera>& camer
 	m_model->Update();
 	//やられ判定の更新
 	UpdateHurtPoint();
+	//攻撃を喰らったならモデルを赤くする
+	if (m_hurtPoint->IsHit())
+	{
+		//赤色に
+		m_model->ModelHit();
+	}
 }
 
 void BossDragon::Gravity(const Vector3& gravity)

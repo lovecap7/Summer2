@@ -18,7 +18,12 @@ public:
 	void SetScale(VECTOR pos);
 	void SetRot(VECTOR rot);
 	void SetDir(Vector2 vec);
+	void SetDiffuseColor(float r, float g, float b, float a);
+	void SetDiffuseColor(COLOR_F color);
+	//向き
 	Vector3 GetDir();
+	//攻撃を喰らった時のモデルのリアクション(攻撃を喰らった時に呼ぶ)
+	void ModelHit();
 	//アニメーション関係
 	void SetAnim(const char* animName,bool isLoop);//アニメーション変更
 	void SetAnim(const char* animName,bool isLoop,const float& animSpeed);//アニメーション変更(再生速度も)
@@ -50,9 +55,14 @@ private:
 	Quaternion m_rotaQ;
 	//回転フレーム
 	int m_rotaFrame;
-
-
+	//自分の座標
 	Vector3 m_pos;
+	//大きさ
 	Vector3 m_scale;
+
+	//攻撃を喰らった時にもとの状態に戻るのを数えるフレーム
+	int m_hitCountFrame;
+	//攻撃を喰らった時に赤色から元に戻す処理に使う
+	COLOR_F m_diffColor;
 };
 

@@ -6,7 +6,8 @@ namespace Battle
 	{
 		Low		= 0,
 		Middle	= 1,
-		High	= 2
+		High	= 2,
+		Highest = 3,
 	};
 	//çUåÇÇ≈Ç–ÇÈÇ‹Ç»Ç¢ã≠Ç≥
 	typedef AttackPower Armor;

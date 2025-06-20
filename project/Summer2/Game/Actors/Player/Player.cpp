@@ -113,6 +113,12 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, st
 	m_model->Update();
 	//やられ判定の位置更新
 	UpdateHurtPoint();
+	//攻撃を喰らったならモデルを赤くする
+	if (m_hurtPoint->IsHit())
+	{
+		//赤色に
+		m_model->ModelHit();
+	}
 }
 
 void Player::Gravity(const Vector3& gravity)

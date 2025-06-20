@@ -35,6 +35,8 @@ public:
 	int GetHp() { return m_hp; };
 	//体力に加算
 	void AddHp(int add);
+	//攻撃を喰らったかどうか
+	bool IsHit() { return m_isHit; };
 	//ヒットリアクションをするか
 	bool IsHitReaction() const { return m_isHitReaction; }
 	//アーマー
@@ -51,6 +53,8 @@ private:
 	int m_maxHp;
 	//持ち主
 	std::shared_ptr<Actor> m_owner;
+	//攻撃を喰らったかどうか
+	bool m_isHit;
 	//攻撃を受けたかどうか
 	bool m_isHitReaction;
 	//アーマー

@@ -9,17 +9,20 @@ namespace
 	constexpr float kAnimSpeed = 0.5f;//再生速度
 	//回転フレーム
 	constexpr int kRotaFrame = 10;
+	//ヒット効果フレーム
+	constexpr int kHitFrame = 30.0f;
 }
 
 Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHandle(modelHandle),
-	m_forward{0.0f,0.0f,1.0f},
-	m_nextForward{0.0f,0.0f,1.0f},
+	m_forward{ 0.0f,0.0f,1.0f },
+	m_nextForward{ 0.0f,0.0f,1.0f },
 	m_rotation(Quaternion::AngleAxis(180 * MyMath::DEG_2_RAD, Vector3::Up())),
 	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0),
 	m_pos(pos),
-	m_scale{ 1.0f,1.0f,1.0f }
+	m_scale{ 1.0f,1.0f,1.0f },
+	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f }
 {
 	//座標
 	MV1SetPosition(m_modelHandle, pos);
@@ -35,7 +38,8 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0),
 	m_pos(),
-	m_scale{ 1.0f,1.0f,1.0f }
+	m_scale{ 1.0f,1.0f,1.0f },
+	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f }
 {
 	//座標
 	m_pos = pos;
@@ -56,7 +60,7 @@ void Model::Update()
 	//向きの更新
 	if (m_rotaFrame > 0)
 	{
-		m_rotaFrame--;
+		--m_rotaFrame;
 		//回転
 		m_rotation = m_rotaQ * m_rotation;
 		//正規化
@@ -70,7 +74,15 @@ void Model::Update()
 		//正規化
 		if (m_forward.Magnitude() > 0.0f)m_forward = m_forward.Normalize();
 	}
-
+	//ヒット効果から元の状態に戻していく
+	if (m_hitCountFrame > 0)
+	{
+		--m_hitCountFrame;
+		//もとに戻してく
+		m_diffColor.g += 1.0f / kHitFrame;
+		m_diffColor.b += 1.0f / kHitFrame;
+		SetDiffuseColor(m_diffColor);
+	}
 }
 
 void Model::Draw() const
@@ -143,6 +155,19 @@ void Model::SetDir(Vector2 vec)
 	m_nextForward = dir.XZ();
 }
 
+void Model::SetDiffuseColor(float r, float g, float b, float a)
+{
+	COLOR_F color = { r, g, b, a };
+	m_diffColor = color;
+	MV1SetDifColorScale(m_modelHandle, m_diffColor);
+}
+
+void Model::SetDiffuseColor(COLOR_F color)
+{
+	m_diffColor = color;
+	MV1SetDifColorScale(m_modelHandle, m_diffColor);
+}
+
 Vector3 Model::GetDir()
 {
 	Vector3 dir = m_forward;
@@ -151,6 +176,13 @@ Vector3 Model::GetDir()
 		dir = dir.Normalize();
 	}
 	return dir;
+}
+void Model::ModelHit()
+{
+	//赤に
+	SetDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
+	//フレームをセット
+	m_hitCountFrame = kHitFrame;
 }
 //
 //void Model::DrawBoundingBox()const
