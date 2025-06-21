@@ -408,6 +408,9 @@
     <ClCompile Include="Game\Attack\Battle.cpp">
       <Filter>ソース ファイル\Game\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="General\Collision\SearchTrigger.cpp">
+      <Filter>ソース ファイル\General\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -706,6 +709,9 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Player\PlayerManager.h">
       <Filter>ヘッダー ファイル\Game\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Collision\SearchTrigger.h">
+      <Filter>ヘッダー ファイル\General\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

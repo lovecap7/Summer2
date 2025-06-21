@@ -93,6 +93,7 @@
     <ClCompile Include="General\Collision\CollisionManager.cpp" />
     <ClCompile Include="General\Collision\CollisionProcess.cpp" />
     <ClCompile Include="General\Collision\PolygonCollider.cpp" />
+    <ClCompile Include="General\Collision\SearchTrigger.cpp" />
     <ClCompile Include="General\Collision\SphereCollider.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="General\Collision\CollisionManager.h" />
     <ClInclude Include="General\Collision\CollisionProcess.h" />
     <ClInclude Include="General\Collision\PolygonCollider.h" />
+    <ClInclude Include="General\Collision\SearchTrigger.h" />
     <ClInclude Include="General\Collision\SphereCollider.h" />
     <ClInclude Include="General\game.h" />
     <ClInclude Include="General\Input.h" />

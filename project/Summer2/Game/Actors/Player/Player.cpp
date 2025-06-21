@@ -6,9 +6,11 @@
 #include "../../../General/game.h"
 #include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Collision/PolygonCollider.h"
+#include "../../../General/Collision/SphereCollider.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Rigidbody.h"
 #include "../../../General/Collidable.h"
+#include "../../../General/Collision/SearchTrigger.h"
 #include "../../../General/Input.h"
 #include "../../../General/Model.h"
 #include "../../../General/Animator.h"
@@ -31,6 +33,10 @@ namespace
 	constexpr int kHp = 1000; 
 	//必殺技ゲージの最大値
 	constexpr int kMaxUltGage = 100;
+	//トリガーの半径
+	constexpr float kSearchTriggerRadius = 200.0f;
+	//視野角
+	constexpr float kSearchAngle = 20.0f * MyMath::DEG_2_RAD;
 }
 
 Player::Player(int modelHandle, Position3 firstPos) :
@@ -74,7 +80,8 @@ void Player::Init()
 
 	//コライダーに自分のポインタを持たせる
 	m_collidable->SetOwner(shared_from_this());
-
+	//索敵範囲
+	m_searchTrigger = std::make_shared<SearchTrigger>(kSearchTriggerRadius,kSearchAngle,shared_from_this());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = shared_from_this();
 	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
@@ -168,6 +175,14 @@ void Player::Draw() const
 	);
 	printf("POS = %2f, %2f, %2f\n", m_collidable->GetRb()->GetPos().x, m_collidable->GetRb()->GetPos().y, m_collidable->GetRb()->GetPos().z);
 	printf("VEC = %2f, %2f, %2f\n", m_collidable->GetRb()->GetVec().x, m_collidable->GetRb()->GetVec().y, m_collidable->GetRb()->GetVec().z);
+	DrawSphere3D(
+		m_searchTrigger->GetCollidable()->GetRb()->GetPos().ToDxLibVector(),
+		kSearchTriggerRadius,
+		16,
+		0x00ff00,
+		0x00ff00,
+		false
+	);
 #endif
 	m_model->Draw();
 }
@@ -180,11 +195,10 @@ void Player::Complete()
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);//カプセルの移動
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
-}
-
-void Player::OnHitSearchTarget(const Vector3& targetPos)
-{
-	m_targetPos = targetPos;
+	//索敵位置更新
+	m_searchTrigger->SetPos(m_collidable->GetRb()->GetPos());
+	//索敵の前を更新
+	m_searchTrigger->SetViewForward(m_model->GetDir());
 }
 
 void Player::UpdateHurtPoint()

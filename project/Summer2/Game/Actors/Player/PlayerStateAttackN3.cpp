@@ -20,6 +20,8 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
+#include "../../../General/Collision/SearchTrigger.h"
+
 namespace
 {
 	//通常攻撃3のダメージと持続フレーム
@@ -45,6 +47,10 @@ namespace
 	constexpr float kMoveDeceRate = 0.8f;
 	//加算ゲージ量
 	constexpr int kAddUltGage = 3;
+	//移動フレーム
+	constexpr int kMoveFrame = 10;
+	//移動量
+	constexpr float kMoveSpeed = 10.0f;
 }
 
 PlayerStateAttackN3::PlayerStateAttackN3(std::shared_ptr<Player> player) :
@@ -145,6 +151,8 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 	UpdateAttack();
 	//少しずつ減速する
 	SpeedDown();
+	//攻撃時に前進する
+	AttackMove();
 }
 
 void PlayerStateAttackN3::CreateAttack()
@@ -199,4 +207,26 @@ void PlayerStateAttackN3::DeleteAttack(const std::shared_ptr<AttackManager>& att
 	//攻撃判定を消す
 	m_attackN3->Delete();
 	attackManager->Exit(m_attackN3);
+}
+
+void PlayerStateAttackN3::AttackMove()
+{
+	//移動フレーム中は前に進む
+	if (m_attackCountFrame <= kMoveFrame)
+	{
+		//ターゲットを索敵してるなら(ターゲットのほうを向く)
+		auto trigger = m_player->GetSearchTrigger();
+		//向き
+		Vector3 dir = m_player->GetStickVec().XZ();
+		//ターゲットが発見できた時
+		if (trigger->IsTargetHit())
+		{
+			auto pToT = trigger->GetTargetPos() - m_player->GetCollidable()->GetRb()->GetPos();
+			dir = pToT;
+		}
+		//向きの更新
+		m_player->GetModel()->SetDir(dir.XZ());
+		//向いてる方向に移動
+		m_player->GetCollidable()->GetRb()->SetMoveVec(m_player->GetModel()->GetDir() * kMoveSpeed);
+	}
 }

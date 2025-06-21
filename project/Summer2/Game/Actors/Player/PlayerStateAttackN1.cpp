@@ -16,6 +16,7 @@
 #include "../../../General/Input.h"
 #include "../../../General/Model.h"
 #include "../../../General/Animator.h"
+#include "../../../General/Collision/SearchTrigger.h"
 #include "../../../Game/Camera/Camera.h"
 #include "../../Attack/AttackManager.h"
 #include "../../Attack/AttackBase.h"
@@ -46,14 +47,19 @@ namespace
 	constexpr float kMoveDeceRate = 0.8f;
 	//攻撃がヒットしたときの加算ゲージ量
 	constexpr int kAddUltGage = 1;
+	//移動フレーム
+	constexpr int kMoveFrame = 5;
+	//移動量
+	constexpr float kMoveSpeed = 10.0f;
 }
 
 PlayerStateAttackN1::PlayerStateAttackN1(std::shared_ptr<Player> player):
 	PlayerStateBase(player),
 	m_attackCountFrame(0)
 {
+	auto coll = m_player->GetCollidable();
 	//通常攻撃1
-	m_player->GetCollidable()->SetState(State::None);
+	coll->SetState(State::None);
 	//攻撃1
 	m_player->GetModel()->SetAnim(kAnim, false, kAN1AnimSpeed);
 	//攻撃判定の準備
@@ -154,6 +160,8 @@ void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camer
 	UpdateAttack();
 	//少しずつ減速する
 	SpeedDown();
+	//攻撃時に前進する
+	AttackMove();
 }
 
 void PlayerStateAttackN1::CreateAttack()
@@ -208,4 +216,26 @@ void PlayerStateAttackN1::DeleteAttack(const std::shared_ptr<AttackManager>& att
 	//攻撃判定を消す
 	m_attackN1->Delete();
 	attackManager->Exit(m_attackN1);
+}
+
+void PlayerStateAttackN1::AttackMove()
+{
+	//移動フレーム中は前に進む
+	if (m_attackCountFrame <= kMoveFrame)
+	{
+		//ターゲットを索敵してるなら(ターゲットのほうを向く)
+		auto trigger = m_player->GetSearchTrigger();
+		//向き
+		Vector3 dir = m_player->GetStickVec().XZ();
+		//ターゲットが発見できた時
+		if (trigger->IsTargetHit())
+		{
+			auto pToT = trigger->GetTargetPos() - m_player->GetCollidable()->GetRb()->GetPos();
+			dir = pToT;
+		}
+		//向きの更新
+		m_player->GetModel()->SetDir(dir.XZ());
+		//向いてる方向に移動
+		m_player->GetCollidable()->GetRb()->SetMoveVec(m_player->GetModel()->GetDir() * kMoveSpeed);
+	}
 }

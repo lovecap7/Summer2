@@ -9,6 +9,7 @@ class AttackManager;
 class CollisionManager;
 class UIManager;
 class EnemyManager;
+class PlayerManager;
 class ItemGenerator;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
@@ -31,6 +32,8 @@ public:
 	std::shared_ptr<CollisionManager> GetCollisionManager() const{ return m_collManager; };
 	//エネミーマネージャー
 	std::shared_ptr<EnemyManager> GetEnemyManager() const{ return m_enemyManager; };
+	//プレイヤーマネージャー
+	std::shared_ptr<PlayerManager> GetPlayerManager() const{ return m_playerManager; };
 private:
 	//アクター
 	std::vector<std::shared_ptr<Actor>> m_actors;
@@ -40,6 +43,8 @@ private:
 	std::shared_ptr<CollisionManager> m_collManager;
 	//敵の補助的な処理をする
 	std::shared_ptr<EnemyManager> m_enemyManager;
+	//プレイヤーの補助的な処理をする
+	std::shared_ptr<PlayerManager> m_playerManager;
 	//攻撃の処理
 	std::shared_ptr<AttackManager> m_attackManager;
 	//アイテムジェネレーター

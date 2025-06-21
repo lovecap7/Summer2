@@ -11,6 +11,8 @@ namespace
 	constexpr int kRotaFrame = 10;
 	//ヒット効果フレーム
 	constexpr int kHitFrame = 30.0f;
+	//ヒット効果でモデルが大きくなる倍率
+	constexpr float kHiScaleRate = 1.1f;
 }
 
 Model::Model(int modelHandle, VECTOR pos) :
@@ -22,8 +24,10 @@ Model::Model(int modelHandle, VECTOR pos) :
 	m_rotaFrame(0),
 	m_pos(pos),
 	m_scale{ 1.0f,1.0f,1.0f },
+	m_hitCountFrame(0),
 	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f },
-	m_beforeScale(m_scale)
+	m_beforeScale(m_scale),
+	m_beforeScaleDif{}
 {
 	//座標
 	MV1SetPosition(m_modelHandle, pos);
@@ -40,8 +44,10 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_rotaFrame(0),
 	m_pos(),
 	m_scale{ 1.0f,1.0f,1.0f },
+	m_hitCountFrame(0),
 	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f },
-	m_beforeScale(m_scale)
+	m_beforeScale(m_scale),
+	m_beforeScaleDif{}
 {
 	//座標
 	m_pos = pos;
@@ -85,7 +91,7 @@ void Model::Update()
 		m_diffColor.b += 1.0f / kHitFrame;
 		SetDiffuseColor(m_diffColor);
 		//大きさ
-		m_scale -= m_beforeScale * 1.2f / kHitFrame;
+		m_scale -= m_beforeScaleDif / kHitFrame;
 	}
 }
 
@@ -189,7 +195,9 @@ void Model::ModelHit()
 	//フレームをセット
 	m_hitCountFrame = kHitFrame;
 	//少し大きくする
-	m_scale *= 1.2f;
+	m_scale = m_beforeScale;						//一旦元の大きさ
+	m_scale *= kHiScaleRate;						//大きくする
+	m_beforeScaleDif = (m_scale - m_beforeScale);	//差を計算
 
 }
 //

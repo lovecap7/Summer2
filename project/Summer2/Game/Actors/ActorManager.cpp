@@ -5,6 +5,7 @@
 #include "../Camera/Camera.h"
 #include "../Attack/AttackManager.h"
 #include "Enemy/EnemyManager.h"
+#include "Player/PlayerManager.h"
 #include "../../General/Collidable.h"
 #include "../../General/Rigidbody.h"
 #include "../../General/Collision/CollisionManager.h"
@@ -21,6 +22,8 @@ ActorManager::ActorManager(std::shared_ptr<Player> player):
 	m_collManager = std::make_shared<CollisionManager>();
 	//エネミーマネージャー
 	m_enemyManager = std::make_shared<EnemyManager>(m_player);
+	//プレイヤーマネージャー
+	m_playerManager = std::make_shared<PlayerManager>(m_player);
 	//攻撃の処理
 	m_attackManager = std::make_shared<AttackManager>();
 	//アイテムジェネレーター
@@ -82,7 +85,9 @@ void ActorManager::End()
 void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<UIManager> uiManager)
 {
 	//プレイヤーの索敵
-	m_enemyManager->Search();
+	m_enemyManager->Update();
+	//敵の索敵
+	m_playerManager->Update(m_actors);
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{

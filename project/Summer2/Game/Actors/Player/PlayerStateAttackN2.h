@@ -30,5 +30,7 @@ private:
     void SpeedDown();
     //íœ
     void DeleteAttack(const std::shared_ptr<AttackManager>& attackManager);
+    //UŒ‚‚Ì‘Oiˆ—
+    void AttackMove();
 };
 

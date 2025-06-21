@@ -28,7 +28,13 @@ void EnemyManager::Exit(std::shared_ptr<EnemyBase> enemy)
 	}
 }
 
-void EnemyManager::Search()
+void EnemyManager::Update()
+{
+	//õ“G
+	SearchPlayer();
+}
+
+void EnemyManager::SearchPlayer()
 {
 	//‹ó‚È‚çˆ—‚µ‚È‚¢
 	if (m_enemies.empty())return;

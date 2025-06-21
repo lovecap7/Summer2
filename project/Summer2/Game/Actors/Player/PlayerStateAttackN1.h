@@ -21,6 +21,7 @@ private:
     std::shared_ptr<Collidable> m_rightSword;
     //UŒ‚
     std::shared_ptr<MeleeAttack> m_attackN1;//’Êí1
+private:
     //Œ•(UŒ‚)‚Ì“–‚½‚è”»’èì¬
     void CreateAttack();
     //Œ•(UŒ‚)‚ÌˆÊ’uXV
@@ -29,5 +30,7 @@ private:
     void SpeedDown();
     //UŒ‚íœ
     void DeleteAttack(const std::shared_ptr<AttackManager>& attackManager);
+    //UŒ‚‚Ì‘Oiˆ—
+    void AttackMove();
 };
 
