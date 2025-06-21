@@ -39,7 +39,7 @@ namespace
 	//アニメーションの速度
 	constexpr float kAnimSpeed = 0.4f;
 	//次の攻撃フレーム
-	constexpr int kAttackCoolTime = 150;//2.5秒くらいの感覚で攻撃
+	constexpr int kAttackCoolTime = 40;
 }
 
 BossDragonStatePunchAttack::BossDragonStatePunchAttack(std::shared_ptr<BossDragon> owner) :

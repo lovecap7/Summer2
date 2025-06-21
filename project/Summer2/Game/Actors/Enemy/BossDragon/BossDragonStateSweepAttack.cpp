@@ -49,7 +49,7 @@ namespace
 	constexpr float kAttackAnimSpeed = 0.6f;
 	constexpr float kStartAnimSpeed = 0.5f;
 	//Ÿ‚ÌUŒ‚ƒtƒŒ[ƒ€
-	constexpr int kAttackCoolTime = 150;//2.5•b‚­‚ç‚¢‚ÌŠ´Šo‚ÅUŒ‚
+	constexpr int kAttackCoolTime = 30;
 }
 
 

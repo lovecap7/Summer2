@@ -22,7 +22,8 @@ Model::Model(int modelHandle, VECTOR pos) :
 	m_rotaFrame(0),
 	m_pos(pos),
 	m_scale{ 1.0f,1.0f,1.0f },
-	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f }
+	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f },
+	m_beforeScale(m_scale)
 {
 	//座標
 	MV1SetPosition(m_modelHandle, pos);
@@ -39,7 +40,8 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_rotaFrame(0),
 	m_pos(),
 	m_scale{ 1.0f,1.0f,1.0f },
-	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f }
+	m_diffColor{ 1.0f,1.0f ,1.0f ,1.0f },
+	m_beforeScale(m_scale)
 {
 	//座標
 	m_pos = pos;
@@ -78,10 +80,12 @@ void Model::Update()
 	if (m_hitCountFrame > 0)
 	{
 		--m_hitCountFrame;
-		//もとに戻してく
+		//もとに戻してく(色)
 		m_diffColor.g += 1.0f / kHitFrame;
 		m_diffColor.b += 1.0f / kHitFrame;
 		SetDiffuseColor(m_diffColor);
+		//大きさ
+		m_scale -= m_beforeScale * 1.2f / kHitFrame;
 	}
 }
 
@@ -113,6 +117,7 @@ void Model::SetPos(VECTOR pos)
 void Model::SetScale(VECTOR scale)
 {
 	m_scale = scale;
+	m_beforeScale = m_scale;
 }
 
 void Model::SetRot(VECTOR rot)
@@ -183,6 +188,9 @@ void Model::ModelHit()
 	SetDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	//フレームをセット
 	m_hitCountFrame = kHitFrame;
+	//少し大きくする
+	m_scale *= 1.2f;
+
 }
 //
 //void Model::DrawBoundingBox()const

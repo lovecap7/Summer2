@@ -64,5 +64,8 @@ private:
 	int m_hitCountFrame;
 	//攻撃を喰らった時に赤色から元に戻す処理に使う
 	COLOR_F m_diffColor;
+	//攻撃を食らった時に少し大きくするので差を覚えておく
+	Vector3 m_beforeScaleDif;
+	Vector3 m_beforeScale;
 };
 
