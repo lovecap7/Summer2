@@ -1,5 +1,6 @@
 #include "EnemyManager.h"
 #include "../../../General/Collision/CollisionChecker.h"
+#include "../../../General/Collision/SearchTrigger.h"
 #include "../Player/Player.h"
 #include "../Actor.h"
 #include "EnemyBase.h"
@@ -42,11 +43,15 @@ void EnemyManager::SearchPlayer()
 	//範囲内にプレイヤーがいるか判定をチェック
 	for (auto& enemy : m_enemies)
 	{
+		//トリガー
+		auto trigger = enemy->GetSearchTrigger();
+		//プレイヤー
+		auto collP = m_player->GetCollidable();
 		//範囲内にプレイヤーがいるかチェック
-		if (m_collChecker->CheckCollCS(m_player->GetCollidable(), std::dynamic_pointer_cast<EnemyBase>(enemy)->GetSearchTrigger()))
+		if (m_collChecker->CheckCollCS(collP, trigger->GetCollidable()))
 		{
 			//当たった時の処理
-			std::dynamic_pointer_cast<EnemyBase>(enemy)->OnHitSearchPlayer(m_player->GetCollidable()->GetRb()->GetPos());
+			trigger->OnHitTarget(collP->GetRb()->GetPos());
 		}
 	}
 }

@@ -8,6 +8,7 @@ class SearchTrigger
 {
 public:
 	SearchTrigger(float radius, float viewAngle,std::shared_ptr<Actor> owner);
+	SearchTrigger(float radius ,std::shared_ptr<Actor> owner);
 	~SearchTrigger();
 	//‰Šú‰»
 	void Init();

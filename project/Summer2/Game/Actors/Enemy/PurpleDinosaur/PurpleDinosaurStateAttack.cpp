@@ -31,15 +31,19 @@ namespace
 	//攻撃の持続フレーム
 	constexpr int kAttackKeepFrame = 2;
 	//攻撃の発生フレーム
-	constexpr int kAttackStartFrame = 30;
+	constexpr int kAttackStartFrame = 40;
 	//ノックバックの大きさ
 	constexpr float kKnockBackPower = 3.0f;
 	//アニメーション
 	const char* kAnim = "CharacterArmature|Weapon";
 	//アニメーションの速度
-	constexpr float kAnimSpeed = 0.4f;
+	constexpr float kAnimSpeed = 0.3f;
 	//次の攻撃フレーム
 	constexpr int kAttackCoolTime = 150;//2.5秒くらいの感覚で攻撃
+	//移動フレーム
+	constexpr int kMoveFrame = 5;
+	//移動量
+	constexpr float kMoveSpeed = 10.0f;
 }
 
 PurpleDinosaurStateAttack::PurpleDinosaurStateAttack(std::shared_ptr<PurpleDinosaur> owner):
@@ -109,6 +113,8 @@ void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr
 
 	//減速
 	SpeedDown();
+	//攻撃時に前進する
+	AttackMove();
 }
 
 void PurpleDinosaurStateAttack::CreateAttack()
@@ -149,4 +155,14 @@ void PurpleDinosaurStateAttack::DeleteAttack(const std::shared_ptr<AttackManager
 	//攻撃判定を消す
 	m_attack->Delete();
 	attackManager->Exit(m_attack);
+}
+
+void PurpleDinosaurStateAttack::AttackMove()
+{
+	//移動フレーム中は前に進む
+	if (m_attackCountFrame <= kMoveFrame)
+	{
+		//向いてる方向に移動
+		m_owner->GetCollidable()->GetRb()->SetMoveVec(m_owner->GetModel()->GetDir() * kMoveSpeed);
+	}
 }

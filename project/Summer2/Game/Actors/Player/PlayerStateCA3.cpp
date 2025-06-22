@@ -36,7 +36,7 @@ namespace
 	//¶‘«‚Ì”¼Œa
 	constexpr float kLeftLegRadius = 20.0f;
 	//ˆÚ“®‘¬“x
-	constexpr float kAttackMoveSpeed = 14.0f;
+	constexpr float kAttackMoveSpeed = 10.0f;
 	//Œ¸‘¬—¦
 	constexpr float kMoveDeceRate = 0.8f;
 	//‰ÁZƒQ[ƒW—Ê

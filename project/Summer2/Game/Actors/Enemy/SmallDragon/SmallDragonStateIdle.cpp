@@ -6,6 +6,7 @@
 #include "SmallDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/Collision/ColliderBase.h"
+#include "../../../../General/Collision/SearchTrigger.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../../General/Rigidbody.h"
 #include "../../../../General/Collidable.h"
@@ -61,7 +62,7 @@ void SmallDragonStateIdle::Update(const Input& input, const std::unique_ptr<Came
 	//減速
 	SpeedDown();
 	//プレイヤーを発見したとき
-	if (m_owner->IsHitSearch())
+	if (m_owner->GetSearchTrigger()->IsTargetHit())
 	{
 		//プレイヤーを向く
 		LookPlayer();

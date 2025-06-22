@@ -12,6 +12,14 @@ SearchTrigger::SearchTrigger(float radius, float viewAngle, std::shared_ptr<Acto
 	m_serchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(radius), owner->GetCollidable()->GetRb());
 }
 
+SearchTrigger::SearchTrigger(float radius, std::shared_ptr<Actor> owner):
+	m_viewAngle(360.0f * MyMath::DEG_2_RAD),
+	m_isHit(false),
+	m_target(Vector3::Zero())
+{
+	m_serchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(radius), owner->GetCollidable()->GetRb());
+}
+
 SearchTrigger::~SearchTrigger()
 {
 }

@@ -13,11 +13,12 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Animator.h"
+#include "../../../../General/Collision/SearchTrigger.h"
 #include "../../../../Game/Camera/Camera.h"
 namespace
 {
 	//プレイヤー戦闘状態になる距離
-	constexpr float kBattleDistance = 120.0f;
+	constexpr float kBattleDistance = 200.0f;
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	//アニメーション
@@ -61,7 +62,7 @@ void PurpleDinosaurStateChase::Update(const Input& input, const std::unique_ptr<
 	}
 
 	//プレイヤーを発見したとき
-	if (m_owner->IsHitSearch())
+	if (m_owner->GetSearchTrigger()->IsTargetHit())
 	{
 		//プレイヤーを向く
 		LookPlayer();

@@ -4,18 +4,9 @@
 #include "../../../General/Model.h"
 #include "../../../General/Collidable.h"
 #include "../../../General/Rigidbody.h"
-EnemyBase::EnemyBase():
-	m_isHitSearch(false),
-	m_playerPos()
+#include "../../../General/Collision/SearchTrigger.h"
+EnemyBase::EnemyBase()
 {
-}
-
-void EnemyBase::OnHitSearchPlayer(const Vector3& playerPos)
-{
-	//サーチ
-	m_isHitSearch = true;
-	//プレイヤーの位置を取得
-	m_playerPos = playerPos;
 }
 
 //攻撃判定を出す
@@ -28,13 +19,13 @@ void EnemyBase::AppearAttack(const std::shared_ptr<AttackBase>& attack, const st
 
 Vector3 EnemyBase::GetPlayerVec() const
 {
-	Vector3 playerVec = m_playerPos - m_collidable->GetRb()->GetPos();
+	Vector3 playerVec = m_searchTrigger->GetTargetPos() - m_collidable->GetRb()->GetPos();
 	return playerVec;
 }
 
 Vector3 EnemyBase::GetPlayerNomVecXZ() const
 {
-	Vector3 playerVec = m_playerPos - m_collidable->GetRb()->GetPos();
+	Vector3 playerVec = m_searchTrigger->GetTargetPos() - m_collidable->GetRb()->GetPos();
 	playerVec.y = 0.0f; //y成分を0にしてXZ平面上のベクトルにする
 	if (playerVec.Magnitude() > 0.0f)
 	{

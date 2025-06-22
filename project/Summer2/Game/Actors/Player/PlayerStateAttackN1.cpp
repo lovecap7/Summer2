@@ -26,7 +26,7 @@ namespace
 {
 	//通常攻撃1のダメージと持続フレームと発生フレーム
 	constexpr int kAN1Damege = 100.0f;
-	constexpr int kAN1KeepFrame = 6;
+	constexpr int kAN1KeepFrame = 4;
 	constexpr int kAN1StartFrame = 15;
 	//ノックバックの大きさ
 	constexpr float kKnockBackPower = 3.0f;

@@ -14,6 +14,7 @@
 #include "../../../Attack/MeleeAttack.h"
 #include "../../ActorManager.h"
 #include "../../../../General/game.h"
+#include "../../../../General/Collision/SearchTrigger.h"
 
 namespace
 {
@@ -37,8 +38,6 @@ SmallDragon::SmallDragon(int modelHandle, Vector3 pos) :
 	Vector3 endPos = pos;
 	endPos += kCapsuleHeight; //カプセルの上端
 	m_collidable = std::make_shared<Collidable>(std::make_shared<CapsuleCollider>(endPos, kCapsuleRadius), std::make_shared<Rigidbody>(pos));
-	//索敵範囲
-	m_searchTrigger = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kSearchTriggerRadius), std::make_shared<Rigidbody>(pos));
 	//コライダブルの初期化
 	m_collidable->Init(State::None, Priority::Middle, GameTag::Enemy);
 }
@@ -74,6 +73,8 @@ void SmallDragon::Init()
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
+	//索敵範囲
+	m_searchTrigger = std::make_shared<SearchTrigger>(kSearchTriggerRadius, shared_from_this());
 }
 
 void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
@@ -139,8 +140,8 @@ void SmallDragon::Draw() const
 	);
 	//索敵範囲
 	DrawSphere3D(
-		m_searchTrigger->GetRb()->GetPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<SphereCollider>(m_searchTrigger->GetColl())->GetRadius(),
+		m_searchTrigger->GetCollidable()->GetRb()->GetPos().ToDxLibVector(),
+		kSearchTriggerRadius,
 		16,
 		0xff00ff,
 		0xff00ff,
@@ -158,11 +159,9 @@ void SmallDragon::Complete()
 	endPos += kCapsuleHeight;
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->SetEndPos(endPos);//カプセルの移動
 	//プレイヤーを探すトリガー
-	m_searchTrigger->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
+	m_searchTrigger->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
-	//索敵状態をリセット
-	m_isHitSearch = false;
 }
 
 void SmallDragon::UpdateHurtPoint()

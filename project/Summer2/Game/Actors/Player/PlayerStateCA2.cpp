@@ -35,8 +35,6 @@ namespace
 	constexpr int kToeIndex = 68;
 	//左足の半径
 	constexpr float kLeftLegRadius = 20.0f;
-	//移動速度
-	constexpr float kAttackMoveSpeed = 10.0f;
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	//加算ゲージ量
@@ -113,17 +111,8 @@ void PlayerStateCA2::Update(const Input& input, const std::unique_ptr<Camera>& c
 		//初期化
 		m_attackC->Init();
 	}
-	//入力があるなら
-	if (input.GetStickInfo().IsLeftStickInput())
-	{
-		//移動
-		m_player->GetCollidable()->GetRb()->SetMoveVec(GetForwardVec(input, camera) * kAttackMoveSpeed);
-	}
-	else
-	{
-		//少しずつ減速する
-		SpeedDown();
-	}
+	//少しずつ減速する
+	SpeedDown();
 	//攻撃の位置更新
 	UpdateAttack();
 }

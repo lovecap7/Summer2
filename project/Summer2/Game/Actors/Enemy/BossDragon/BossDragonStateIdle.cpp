@@ -7,6 +7,7 @@
 #include "BossDragon.h"
 #include "../EnemyBase.h"
 #include "../../../../General/Collision/ColliderBase.h"
+#include "../../../../General/Collision/SearchTrigger.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../../General/Rigidbody.h"
 #include "../../../../General/Collidable.h"
@@ -62,7 +63,7 @@ void BossDragonStateIdle::Update(const Input& input, const std::unique_ptr<Camer
 	//減速
 	SpeedDown();
 	//プレイヤーを発見したとき
-	if (m_owner->IsHitSearch())
+	if (m_owner->GetSearchTrigger()->IsTargetHit())
 	{
 		//プレイヤーを向く
 		LookPlayer();

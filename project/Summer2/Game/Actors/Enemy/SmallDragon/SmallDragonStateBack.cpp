@@ -7,6 +7,7 @@
 #include "../../Actor.h"
 #include "../../../../General/Rigidbody.h"
 #include "../../../../General/Collidable.h"
+#include "../../../../General/Collision/SearchTrigger.h"
 #include "../../../Attack/HurtPoint.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
@@ -57,7 +58,7 @@ void SmallDragonStateBack::Update(const Input& input, const std::unique_ptr<Came
 	}
 
 	//プレイヤーを発見したとき
-	if (m_owner->IsHitSearch())
+	if (m_owner->GetSearchTrigger()->IsTargetHit())
 	{
 		//プレイヤーを向く
 		LookPlayer();
