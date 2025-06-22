@@ -1,13 +1,17 @@
 #pragma once
 #include "SceneBase.h"
-class Input;
+#include <vector>
+#include <memory>
+
 class SceneController;
-class Stage2Scene :
+class Input;
+class GameManager;
+class StageScene :
     public SceneBase
 {
 public:
-    Stage2Scene(SceneController& controller);
-    ~Stage2Scene();
+    StageScene(SceneController& controller);
+    ~StageScene();
     /// <summary>
     /// ”h¶ƒNƒ‰ƒX‚ÅÀ‘•‚ğÀ‘•
     /// virtual ‚Í‚±‚ê‚ğŒp³‚·‚é‚©‚à‚µ‚ê‚È‚¢‚©‚ç
@@ -17,5 +21,7 @@ public:
     virtual void Update(Input& input) override;
     virtual void Draw() override;
     virtual void End() override;
+private:
+    std::unique_ptr<GameManager> m_gameManager;
 };
 

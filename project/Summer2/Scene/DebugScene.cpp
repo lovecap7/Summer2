@@ -1,9 +1,7 @@
 #include "DebugScene.h"
 #include "TitleScene.h"
 #include "SelectStageScene.h"
-#include "Stage1Scene.h"
-#include "Stage2Scene.h"
-#include "Stage3Scene.h"
+#include "StageScene.h"
 #include "ResultScene.h"
 #include "TestCollScene.h"
 #include <DxLib.h>
@@ -61,17 +59,17 @@ void DebugScene::Update(Input& input)
 			break;
 		case 2:
 			//次のシーンへ
-			m_controller.ChangeScene(std::make_shared<Stage1Scene>(m_controller));
+			m_controller.ChangeScene(std::make_shared<StageScene>(m_controller));
 			return;
 			break;
 		case 3:
 			//次のシーンへ
-			m_controller.ChangeScene(std::make_shared<Stage2Scene>(m_controller));
+			m_controller.ChangeScene(std::make_shared<StageScene>(m_controller));
 			return;
 			break;
 		case 4:
 			//次のシーンへ
-			m_controller.ChangeScene(std::make_shared<Stage3Scene>(m_controller));
+			m_controller.ChangeScene(std::make_shared<StageScene>(m_controller));
 			return;
 			break;
 		case 5:

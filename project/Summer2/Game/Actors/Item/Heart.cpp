@@ -66,6 +66,9 @@ void Heart::Init()
 
 void Heart::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
+	//ˆÚ“®—Ê‚ð‰Šú‰»
+	m_collidable->GetRb()->SetMoveVec(Vector3::Zero());
+	//‰ñ‚é
 	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));
 	if (m_noHitFrame > 0)
 	{

@@ -1,29 +1,29 @@
-#include "Stage3Scene.h"
+#include "StageScene.h"
+#include "../Game/GameManager.h"
 #include "ResultScene.h"
+#include "DebugScene.h"
 #include "SceneController.h"
 #include "../General/Input.h"
-#include <memory>
 #include <DxLib.h>
-#if _DEBUG
-//デバッグモード
-#include "DebugScene.h"
-#endif
+#include <vector>
+#include "../General/game.h"
 
-Stage3Scene::Stage3Scene(SceneController& controller):
+StageScene::StageScene(SceneController& controller):
 	SceneBase(controller)
 {
+	m_gameManager = std::make_unique<GameManager>();
 }
 
-Stage3Scene::~Stage3Scene()
+StageScene::~StageScene()
 {
 }
 
-void Stage3Scene::Init()
+void StageScene::Init()
 {
-	//なし
+	m_gameManager->Init();
 }
 
-void Stage3Scene::Update(Input& input)
+void StageScene::Update(Input& input)
 {
 #if _DEBUG
 	//デバッグシーン
@@ -40,16 +40,15 @@ void Stage3Scene::Update(Input& input)
 		m_controller.ChangeScene(std::make_shared<ResultScene>(m_controller));
 		return;
 	}
+	m_gameManager->Update(input);
 }
 
-void Stage3Scene::Draw()
+void StageScene::Draw()
 {
-#if _DEBUG
-	DrawString(0, 0, "Stage3 Scene", 0xffffff);
-	DrawString(0, 16, "[D]キーで Debug Scene", 0xffffff);
-#endif
+	m_gameManager->Draw();
 }
 
-void Stage3Scene::End()
+void StageScene::End()
 {
+	m_gameManager->End();
 }

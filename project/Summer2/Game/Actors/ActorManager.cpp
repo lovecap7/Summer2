@@ -1,6 +1,7 @@
 #include "ActorManager.h"
 #include "Actor.h"
 #include "Player/Player.h"
+#include "../StageSetup.h"
 #include "../../General/Input.h"
 #include "../Camera/Camera.h"
 #include "../Attack/AttackManager.h"
@@ -57,15 +58,17 @@ void ActorManager::Exit(std::shared_ptr<Actor> actor)
 	}
 }
 
-void ActorManager::Init(std::vector<std::shared_ptr<Actor>> actors)
+void ActorManager::Init(std::shared_ptr<StageSetup> setup)
 {
+	//アクターを受け取る
+	setup->MoveActorsPointer(m_actors);
 	//アクターの登録
-	for (auto& actor : actors)
+	for (auto& actor : m_actors)
 	{
 		actor->Entry(shared_from_this());
 	}
 	//アクターの初期化処理
-	for (auto& actor : actors)
+	for (auto& actor : m_actors)
 	{
 		actor->Init();
 	}

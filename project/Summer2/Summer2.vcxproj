@@ -80,6 +80,8 @@
     <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\MeleeAttack.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
+    <ClCompile Include="Game\GameManager.cpp" />
+    <ClCompile Include="Game\StageSetup.cpp" />
     <ClCompile Include="Game\UI\UIBase.cpp" />
     <ClCompile Include="Game\UI\UIHPBase.cpp" />
     <ClCompile Include="Game\UI\UIManager.cpp" />
@@ -112,9 +114,7 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneController.cpp" />
     <ClCompile Include="Scene\SelectStageScene.cpp" />
-    <ClCompile Include="Scene\Stage1Scene.cpp" />
-    <ClCompile Include="Scene\Stage2Scene.cpp" />
-    <ClCompile Include="Scene\Stage3Scene.cpp" />
+    <ClCompile Include="Scene\StageScene.cpp" />
     <ClCompile Include="Scene\TestCollScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
   </ItemGroup>
@@ -180,6 +180,8 @@
     <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\MeleeAttack.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
+    <ClInclude Include="Game\GameManager.h" />
+    <ClInclude Include="Game\StageSetup.h" />
     <ClInclude Include="Game\UI\UIBase.h" />
     <ClInclude Include="Game\UI\UIHPBase.h" />
     <ClInclude Include="Game\UI\UIManager.h" />
@@ -214,9 +216,7 @@
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneController.h" />
     <ClInclude Include="Scene\SelectStageScene.h" />
-    <ClInclude Include="Scene\Stage1Scene.h" />
-    <ClInclude Include="Scene\Stage2Scene.h" />
-    <ClInclude Include="Scene\Stage3Scene.h" />
+    <ClInclude Include="Scene\StageScene.h" />
     <ClInclude Include="Scene\TestCollScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
   </ItemGroup>

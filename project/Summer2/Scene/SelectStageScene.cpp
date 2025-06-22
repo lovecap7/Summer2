@@ -1,7 +1,5 @@
 #include "SelectStageScene.h"
-#include "Stage1Scene.h"
-#include "Stage2Scene.h"
-#include "Stage3Scene.h"
+#include "StageScene.h"
 #include "SceneController.h"
 #include "../General/Input.h"
 #include <memory>
@@ -40,19 +38,19 @@ void SelectStageScene::Update(Input& input)
 	if (input.IsTrigger("A"))
 	{
 		//次のシーンへ
-		m_controller.ChangeScene(std::make_shared<Stage1Scene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<StageScene>(m_controller));
 		return;
 	}
 	if (input.IsTrigger("B"))
 	{
 		//次のシーンへ
-		m_controller.ChangeScene(std::make_shared<Stage2Scene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<StageScene>(m_controller));
 		return;
 	}
 	if (input.IsTrigger("X"))
 	{
 		//次のシーンへ
-		m_controller.ChangeScene(std::make_shared<Stage3Scene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<StageScene>(m_controller));
 		return;
 	}
 }

@@ -11,6 +11,7 @@ class UIManager;
 class EnemyManager;
 class PlayerManager;
 class ItemGenerator;
+class StageSetup;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
 public:
@@ -21,7 +22,7 @@ public:
 	//“o˜^‰ğœ
 	void Exit(std::shared_ptr<Actor> actor);
 	//‰Šú‰»ˆ—
-	void Init(std::vector<std::shared_ptr<Actor>> actors);
+	void Init(std::shared_ptr<StageSetup> setup);
 	//I—¹ˆ—
 	void End();
 	//XVˆ—
