@@ -21,6 +21,13 @@
   <ItemGroup>
     <ClCompile Include="Game\Actors\Actor.cpp" />
     <ClCompile Include="Game\Actors\ActorManager.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\Bomber.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateAttack.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateBase.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateChase.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateDeath.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateHit.cpp" />
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateIdle.cpp" />
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragon.cpp" />
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateBase.cpp" />
     <ClCompile Include="Game\Actors\Enemy\BossDragon\BossDragonStateBreathAttack.cpp" />
@@ -121,6 +128,13 @@
   <ItemGroup>
     <ClInclude Include="Game\Actors\Actor.h" />
     <ClInclude Include="Game\Actors\ActorManager.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\Bomber.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateAttack.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateBase.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateChase.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateDeath.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateHit.h" />
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateIdle.h" />
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragon.h" />
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateBase.h" />
     <ClInclude Include="Game\Actors\Enemy\BossDragon\BossDragonStateBreathAttack.h" />

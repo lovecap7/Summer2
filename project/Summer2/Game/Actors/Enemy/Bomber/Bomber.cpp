@@ -1,6 +1,6 @@
-#include "PurpleDinosaur.h"
-#include "PurpleDinosaurStateBase.h"
-#include "PurpleDinosaurStateIdle.h"
+#include "Bomber.h"
+#include "BomberStateBase.h"
+#include "BomberStateIdle.h"
 #include "../EnemyManager.h"
 #include <memory>
 #include "../../../../General/Model.h"
@@ -15,7 +15,6 @@
 #include "../../../../General/Collision/SearchTrigger.h"
 #include "../../ActorManager.h"
 #include "../../../../General/game.h"
-
 namespace
 {
 	//当たり判定
@@ -28,9 +27,8 @@ namespace
 	//体力
 	constexpr int kHp = 500;
 }
-PurpleDinosaur::PurpleDinosaur(int modelHandle, Vector3 pos) :
-	EnemyBase(),
-	m_attackCoolTime(0)
+
+Bomber::Bomber(int modelHandle, Vector3 pos)
 {
 	//モデルの初期化
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
@@ -42,11 +40,11 @@ PurpleDinosaur::PurpleDinosaur(int modelHandle, Vector3 pos) :
 	m_collidable->Init(State::None, Priority::Middle, GameTag::Enemy);
 }
 
-PurpleDinosaur::~PurpleDinosaur()
+Bomber::~Bomber()
 {
 }
 
-void PurpleDinosaur::Entry(std::shared_ptr<ActorManager> actorManager)
+void Bomber::Entry(std::shared_ptr<ActorManager> actorManager)
 {
 	//アクターマネージャーに登録
 	actorManager->Entry(shared_from_this());
@@ -54,7 +52,7 @@ void PurpleDinosaur::Entry(std::shared_ptr<ActorManager> actorManager)
 	actorManager->GetEnemyManager()->Entry(shared_from_this());
 }
 
-void PurpleDinosaur::Exit(std::shared_ptr<ActorManager> actorManager)
+void Bomber::Exit(std::shared_ptr<ActorManager> actorManager)
 {
 	//アクターマネージャー解除
 	actorManager->Exit(shared_from_this());
@@ -62,7 +60,7 @@ void PurpleDinosaur::Exit(std::shared_ptr<ActorManager> actorManager)
 	actorManager->GetEnemyManager()->Exit(shared_from_this());
 }
 
-void PurpleDinosaur::Init()
+void Bomber::Init()
 {
 	//コライダーに自分のポインタを持たせる
 	m_collidable->SetOwner(shared_from_this());
@@ -70,14 +68,14 @@ void PurpleDinosaur::Init()
 	m_searchTrigger = std::make_shared<SearchTrigger>(kSearchTriggerRadius, shared_from_this());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = shared_from_this();
-	m_state = std::make_shared<PurpleDinosaurStateIdle>(thisPointer);
+	m_state = std::make_shared<BomberStateIdle>(thisPointer);
 	//次の状態を待機状態に
 	m_state->ChangeState(m_state);
 	//やられ判定(衝突判定と同じにする)
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void PurpleDinosaur::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void Bomber::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃のクールタイムを減らす
 	UpdateAttackCoolTime();
@@ -102,7 +100,7 @@ void PurpleDinosaur::Update(const Input& input, const std::unique_ptr<Camera>& c
 	}
 }
 
-void PurpleDinosaur::Gravity(const Vector3& gravity)
+void Bomber::Gravity(const Vector3& gravity)
 {
 	//重力がかかりすぎたら止めたいので上限を設ける
 	if (m_collidable->GetRb()->GetVec().y >= Gravity::kMaxGravityY)
@@ -112,12 +110,12 @@ void PurpleDinosaur::Gravity(const Vector3& gravity)
 	}
 }
 
-void PurpleDinosaur::OnHitColl(const std::shared_ptr<Collidable>& other)
+void Bomber::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
 	//なし
 }
 
-void PurpleDinosaur::Draw() const
+void Bomber::Draw() const
 {
 #if _DEBUG
 	DrawCapsule3D(
@@ -152,7 +150,7 @@ void PurpleDinosaur::Draw() const
 	m_model->Draw();
 }
 
-void PurpleDinosaur::Complete()
+void Bomber::Complete()
 {
 	//コライダー
 	m_collidable->GetRb()->SetNextPos();//次の座標へ
@@ -165,7 +163,7 @@ void PurpleDinosaur::Complete()
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
 }
 
-void PurpleDinosaur::UpdateHurtPoint()
+void Bomber::UpdateHurtPoint()
 {
 	//移動量を取得
 	m_hurtPoint->GetCollidable()->GetRb()->SetVec(m_collidable->GetRb()->GetVec());
@@ -174,7 +172,7 @@ void PurpleDinosaur::UpdateHurtPoint()
 	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
 }
 
-void PurpleDinosaur::UpdateAttackCoolTime()
+void Bomber::UpdateAttackCoolTime()
 {
 	m_attackCoolTime--;
 	if (m_attackCoolTime < 0)

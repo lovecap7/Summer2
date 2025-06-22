@@ -37,6 +37,7 @@ private:
     int m_playerHandle;
     int m_purpleDinosaurHandle;
     int m_smallDragonHandle;
+    int m_bomberHandle;
     int m_bossDragonHandle;
     //ステージのオブジェクト
     int m_wallHandle;

@@ -16,6 +16,7 @@
 #include "../Game/Actors/Enemy/EnemyManager.h"
 #include "../Game/Actors/Enemy/PurpleDinosaur/PurpleDinosaur.h"
 #include "../Game/Actors/Enemy/SmallDragon/SmallDragon.h"
+#include "../Game/Actors/Enemy/Bomber/Bomber.h"
 #include "../Game/Actors/Enemy/BossDragon/BossDragon.h"
 #include "../Game/Actors/Enemy/EnemyBase.h"
 //ステージ
@@ -88,6 +89,7 @@ void StageSetup::LoadHandle()
 		m_wallHandle = MV1LoadModel("Data/Model/Stage/InvisibleWall.mv1");
 		m_purpleDinosaurHandle = MV1LoadModel("Data/Model/Enemy/PurpleDinosaur.mv1");
 		m_smallDragonHandle = MV1LoadModel("Data/Model/Enemy/SmallDragon.mv1");
+		m_bomberHandle = MV1LoadModel("Data/Model/Enemy/Bomber.mv1");
 		m_bossDragonHandle = MV1LoadModel("Data/Model/Enemy/BossDragon.mv1");
 		m_pathHandle = MV1LoadModel("Data/Model/Stage/1/Path.mv1");
 		m_cubeHandle = MV1LoadModel("Data/Model/Collision/Cube.mv1");
@@ -154,6 +156,14 @@ void StageSetup::CreateCharacter(std::vector<std::shared_ptr<Actor>>& actors)
 			bossDragon->GetModel()->SetScale(charaData.scale);
 			bossDragon->GetModel()->SetRot(charaData.rot);
 			actors.emplace_back(bossDragon);
+		}
+		else if (charaData.name == "Bomber")
+		{
+			std::shared_ptr<EnemyBase> bomber = std::make_shared<Bomber>(MV1DuplicateModel(m_bomberHandle),
+				charaData.pos);
+			bomber->GetModel()->SetScale(charaData.scale);
+			bomber->GetModel()->SetRot(charaData.rot);
+			actors.emplace_back(bomber);
 		}
 		else if (charaData.name == "PurpleDinosaur")
 		{

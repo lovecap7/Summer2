@@ -115,6 +115,12 @@
     <Filter Include="ソース ファイル\Game\Actors\Item">
       <UniqueIdentifier>{37c67723-2a4b-469a-8972-03190516c737}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Actors\Enemy\Bomber">
+      <UniqueIdentifier>{dc8d410c-2b05-4ece-93d0-4db9796f3260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Actors\Enemy\Bomber">
+      <UniqueIdentifier>{ccfd3ea5-332e-47fc-a3ff-e38fc07851d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main\Application.cpp">
@@ -410,6 +416,27 @@
     </ClCompile>
     <ClCompile Include="Game\StageSetup.cpp">
       <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\Bomber.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateBase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateIdle.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateHit.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateDeath.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateChase.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateAttack.cpp">
+      <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -712,6 +739,27 @@
     </ClInclude>
     <ClInclude Include="Game\StageSetup.h">
       <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\Bomber.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateBase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateIdle.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateHit.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateDeath.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateChase.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateAttack.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
