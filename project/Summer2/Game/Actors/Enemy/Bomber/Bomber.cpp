@@ -28,7 +28,9 @@ namespace
 	constexpr int kHp = 500;
 }
 
-Bomber::Bomber(int modelHandle, Vector3 pos)
+Bomber::Bomber(int modelHandle, Vector3 pos):
+	EnemyBase(),
+	m_attackCoolTime(0)
 {
 	//モデルの初期化
 	m_model = std::make_unique<Model>(modelHandle, pos.ToDxLibVector());
@@ -39,7 +41,6 @@ Bomber::Bomber(int modelHandle, Vector3 pos)
 	//コライダブルの初期化
 	m_collidable->Init(State::None, Priority::Middle, GameTag::Enemy);
 }
-
 Bomber::~Bomber()
 {
 }

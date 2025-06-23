@@ -47,7 +47,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable>& collA, con
 
 	//カプセルの座標Aから球へのベクトル
 	Vector3 AtoS = sPos - cPosA;
-	//カプセルの座標AからBへの単位ベクトル
+	//カプセルの座標AからBへのベクトル
 	Vector3 AtoB = cPosB - cPosA;
 
 	//内積

@@ -10,6 +10,7 @@
 BlastAttack::BlastAttack(std::shared_ptr<Collidable> coll, int damage, int keepFrame, float knockBackPower, std::shared_ptr<Actor> owner) :
 	AttackBase(coll, damage, keepFrame, knockBackPower, owner)
 {
+	Init();
 }
 
 BlastAttack::~BlastAttack()

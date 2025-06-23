@@ -14,12 +14,16 @@ public:
 	int GetModelHandle() { return m_modelHandle; };
 	void Update();
 	void Draw()const;
+	//セッター
 	void SetPos(VECTOR pos);
 	void SetScale(VECTOR pos);
 	void SetRot(VECTOR rot);
 	void SetDir(Vector2 vec);
 	void SetDiffuseColor(float r, float g, float b, float a);
 	void SetDiffuseColor(COLOR_F color);
+	//ゲッター
+	Vector3 GetPos() const { return m_pos; };
+	Vector3 GetScale() const { return m_scale; };
 	//向き
 	Vector3 GetDir();
 	//攻撃を喰らった時のモデルのリアクション(攻撃を喰らった時に呼ぶ)
@@ -36,9 +40,6 @@ public:
 	void DeleteAnim();//再生中のアニメーションを削除
 	void SetFixedLoopFrame(float loopFrame);//指定ループ再生
 	bool IsFinishFixedLoop();//指定ループ再生終了
-
-	//バウンディングボックス
-	//void DrawBoundingBox()const;
 private:
 	int m_modelHandle;
 	//アニメーション

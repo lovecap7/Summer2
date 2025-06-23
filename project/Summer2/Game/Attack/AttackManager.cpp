@@ -23,7 +23,6 @@ void AttackManager::Entry(std::shared_ptr<AttackBase> attack)
 	{
 		return;
 	}
-
 	//UŒ‚‚ğƒZƒbƒg
 	m_attacks.emplace_back(attack);
 }

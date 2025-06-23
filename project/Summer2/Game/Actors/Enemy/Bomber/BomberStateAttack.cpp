@@ -36,6 +36,10 @@ namespace
 	constexpr float kAnimSpeed = 0.3f;
 	//Ÿ‚ÌUŒ‚ƒtƒŒ[ƒ€
 	constexpr int kAttackCoolTime = 150;//2.5•b‚­‚ç‚¢‚ÌŠ´Šo‚ÅUŒ‚
+	//”š’e‚Ìã¸—Ê
+	constexpr float kBombUpVecY = 10.0f; //”š’e‚Ìã¸—Ê
+	//”š’e‚ÌˆÚ“®—Ê
+	constexpr float kBombMoveVecPower = 3.0f; //”š’e‚ÌˆÚ“®—Ê
 }
 
 BomberStateAttack::BomberStateAttack(std::shared_ptr<Bomber> owner) :
@@ -100,8 +104,13 @@ void BomberStateAttack::Update(const Input& input, const std::unique_ptr<Camera>
 
 void BomberStateAttack::CreateBomb(const std::shared_ptr<ItemGenerator> itemGenerator)
 {
+	//¶¬ˆÊ’u
 	VECTOR leftHand = MV1GetFramePosition(m_owner->GetModel()->GetModelHandle(), kLeftHandIndex);//è‚Ìwæ
-	itemGenerator->GenerateBomb(leftHand);
+	//ˆÚ“®—Ê
+	Vector3 moveVec = m_owner->GetModel()->GetDir();
+	moveVec *= kBombMoveVecPower;
+	moveVec.y = kBombUpVecY; //ã¸—Ê‚ğ’Ç‰Á
+	itemGenerator->GenerateBomb(leftHand, moveVec);
 }
 
 void BomberStateAttack::SpeedDown()

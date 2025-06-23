@@ -17,7 +17,7 @@ public:
 	//回復の生成
 	void GenerateHeart(Vector3 pos);
 	//爆弾の生成
-	void GenerateBomb(Vector3 pos);
+	void GenerateBomb(Vector3 pos, Vector3 vec);
 private:
 	//アイテムをまとめた配列
 	std::vector<std::shared_ptr<ItemBase>> m_items;

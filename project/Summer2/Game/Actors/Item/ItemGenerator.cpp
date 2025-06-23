@@ -32,7 +32,7 @@ void ItemGenerator::RandGenerateItem(Vector3 pos)
 		GenerateHeart(pos);
 		break;
 	case static_cast<int>(ItemKind::Bomb):
-
+		GenerateBomb(pos, Vector3::Zero());
 	default:
 		break;
 	}
@@ -55,9 +55,9 @@ void ItemGenerator::GenerateHeart(Vector3 pos)
 	m_items.emplace_back(item);
 }
 
-void ItemGenerator::GenerateBomb(Vector3 pos)
+void ItemGenerator::GenerateBomb(Vector3 pos, Vector3 vec)
 {
 	std::shared_ptr<ItemBase> item = nullptr;
-	item = std::make_shared<Bomb>(MV1DuplicateModel(m_bombHandle), pos);
+	item = std::make_shared<Bomb>(MV1DuplicateModel(m_bombHandle), pos, vec);
 	m_items.emplace_back(item);
 }

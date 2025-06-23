@@ -10,33 +10,58 @@
 #include "../Player/Player.h"
 #include "../../Attack/HurtPoint.h"
 #include "../../Attack/BlastAttack.h"
+#include "../../Attack/AttackManager.h"
+#include <DxLib.h>
+#include <cmath>
 
 namespace
 {
-	//ジャンプ力
-	constexpr float kJumpPower = 10.0f;
+	//モデルの大きさ
+	const VECTOR kModelScale = { 0.5f, 0.5f, 0.5f };
 	//当たり判定の半径
-	constexpr float kCollRadius = 50.0f;
+	constexpr float kCollRadius = 30.0f;
 	//爆発の当たり判定の半径
-	constexpr float kBlastRadius = 90.0f;
+	constexpr float kBlastRadius = 170.0f;
 	//爆発までのフレーム数
 	constexpr int kBlastFrame = 180;
+	//爆発寸前のフレーム
+	constexpr int kBeforeBlastFrame = 60;
+	//モデルの拡大縮小のスピード
+	constexpr float kSlowScaleSpeed = 10.0f;
+	constexpr float kFastScaleSpeed = 25.0f;
+	//拡大縮小の大きさ
+	const Vector3 kAddScaleSize = { 0.1f, 0.1f, 0.1f };
+	//爆発のダメージ
+	constexpr int kBlastDamage = 300;
+	//爆発のノックバック力
+	constexpr float kBlastKnockBackPower = 25.0f;
+	//爆発の持続時間
+	constexpr float kBlastKeepFrame = 5.0f;
+	//減速率
+	constexpr float kMoveDeceRate = 0.8f;
 }
 
-Bomb::Bomb(int modelHandle, Vector3 pos) :
+Bomb::Bomb(int modelHandle, Vector3 pos, Vector3 vec) :
 	ItemBase(ItemKind::Heart),
-	m_blastCountFrame(kBlastFrame)
+	m_blastCountFrame(kBlastFrame),
+	m_scaleSpeed(0.0f)
 {
 	auto firstPos = pos;
 	firstPos.y += kCollRadius;
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
+	//モデルの大きさを設定
+	m_model->SetScale(kModelScale);
 	//衝突判定
 	m_collidable = std::make_shared<Collidable>(std::make_shared<SphereCollider>(kCollRadius), std::make_shared<Rigidbody>(firstPos));
-	//力を与える
-	m_collidable->GetRb()->SetVecY(kJumpPower);
 	//コライダブルの初期化
 	m_collidable->Init(State::None, Priority::Low, GameTag::Item);
+	//モデルのサイズを保持
+	m_originalScale = m_model->GetScale();
+	//モデルの向きを180度回転させる
+	m_model->SetRot({ 0.0f, 180.0f, 0.0f });
+	//移動量
+	m_collidable->GetRb()->SetVec(vec);
 }
 
 Bomb::~Bomb()
@@ -63,8 +88,6 @@ void Bomb::Init()
 
 void Bomb::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
-	//移動量を初期化
-	m_collidable->GetRb()->SetMoveVec(Vector3::Zero());
 	//爆発のカウントを減らす
 	m_blastCountFrame--;
 	//爆発までのフレームが0になったら爆発
@@ -72,10 +95,32 @@ void Bomb::Update(const Input& input, const std::unique_ptr<Camera>& camera, con
 	{
 		//爆発の当たり判定を作成
 		CreateAttack();
+		//攻撃を登録
+		actorManager->GetAttackManager()->Entry(m_blastAttack);
 		//削除フラグを立てる
 		m_isDelete = true;
 		return;
 	}
+	//爆弾のアニメーション
+	BombAnim();
+	//減速
+	SpeedDown();
+}
+
+void Bomb::BombAnim()
+{
+	if (m_blastCountFrame <= kBeforeBlastFrame)
+	{
+		//爆発までの残り時間が短いとき早くなる
+		m_scaleSpeed += kFastScaleSpeed;
+	}
+	else
+	{
+		//それ以外はゆっくり拡大縮小
+		m_scaleSpeed += kSlowScaleSpeed;
+	}
+	Vector3 modelScale = m_originalScale + kAddScaleSize * cosf(m_scaleSpeed * MyMath::DEG_2_RAD);
+	m_model->SetScale(modelScale.ToDxLibVector());
 }
 
 void Bomb::Gravity(const Vector3& gravity)
@@ -90,7 +135,7 @@ void Bomb::Gravity(const Vector3& gravity)
 
 void Bomb::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
-	
+
 }
 
 void Bomb::Draw() const
@@ -121,5 +166,14 @@ void Bomb::CreateAttack()
 {
 	std::dynamic_pointer_cast<SphereCollider>(m_collidable->GetColl())->SetRadius(kBlastRadius);
 	//爆発の当たり判定を作成
-	m_blastAttack = std::make_shared<BlastAttack>(m_collidable, 100.0f, 5,20.0f, shared_from_this());
+	m_blastAttack = std::make_shared<BlastAttack>(m_collidable, kBlastDamage, kBlastKeepFrame, kBlastKnockBackPower, shared_from_this());
+}
+
+void Bomb::SpeedDown()
+{
+	//減速
+	Vector3 vec = m_collidable->GetRb()->GetVec();
+	vec.x *= kMoveDeceRate;
+	vec.z *= kMoveDeceRate;
+	m_collidable->GetRb()->SetVec(vec);
 }

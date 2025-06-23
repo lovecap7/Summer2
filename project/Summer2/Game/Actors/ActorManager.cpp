@@ -64,9 +64,9 @@ void ActorManager::Exit(std::shared_ptr<Actor> actor)
 void ActorManager::Init(std::shared_ptr<StageSetup> setup)
 {
 	//アクターを受け取る
-	setup->MoveActorsPointer(m_actors);
+	setup->MoveActorsPointer(m_addActors);
 	//アクターの登録
-	for (auto& actor : m_actors)
+	for (auto& actor : m_addActors)
 	{
 		actor->Entry(shared_from_this());
 	}
@@ -75,6 +75,7 @@ void ActorManager::Init(std::shared_ptr<StageSetup> setup)
 	{
 		actor->Init();
 	}
+	m_addActors.clear(); //追加予定のアクターをクリア
 }
 
 void ActorManager::End()

@@ -13,7 +13,7 @@ class Heart :
 	public ItemBase, public std::enable_shared_from_this<Heart>
 {
 public:
-    Heart(int modelHandle, Vector3 pos);
+	Heart(int modelHandle, Vector3 pos);
 	virtual ~Heart();
 	//“o˜^ˆ—
 	void Entry(std::shared_ptr<ActorManager> actorManager)override;
