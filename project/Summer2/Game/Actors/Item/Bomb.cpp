@@ -32,7 +32,7 @@ namespace
 	//拡大縮小の大きさ
 	const Vector3 kAddScaleSize = { 0.1f, 0.1f, 0.1f };
 	//爆発のダメージ
-	constexpr int kBlastDamage = 300;
+	constexpr int kBlastDamage = 200;
 	//爆発のノックバック力
 	constexpr float kBlastKnockBackPower = 25.0f;
 	//爆発の持続時間

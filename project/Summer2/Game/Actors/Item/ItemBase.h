@@ -6,6 +6,9 @@ enum class ItemKind : int
 {
     Heart = 0,
     Bomb = 1,
+    UltGageUp = 2,
+    AttackUp = 3,
+    DefenseUp = 4,
 };
 
 class ItemBase abstract:
