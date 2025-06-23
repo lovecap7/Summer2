@@ -47,6 +47,9 @@ public:
 	std::shared_ptr<UltGage> GetUltGage() const{ return m_ultGage; };
 	//索敵
 	std::shared_ptr<SearchTrigger> GetSearchTrigger() { return m_searchTrigger; };
+	//アイテム
+	//ダメージカット
+	void SetDamageCut(float cutRate, int keepFrame);
 private:
 	//プレイヤーの状態
 	std::shared_ptr<PlayerStateBase> m_state;
@@ -60,6 +63,8 @@ private:
 	std::shared_ptr<UltGage> m_ultGage;
 	//索敵トリガー
 	std::shared_ptr<SearchTrigger> m_searchTrigger;
+	//ダメージカットフレーム
+	int m_damageCutFrame;
 private:
 	//やられ判定の更新
 	void UpdateHurtPoint();

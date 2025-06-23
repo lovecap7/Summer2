@@ -20,6 +20,11 @@ namespace
 	constexpr float kRotaAngle = 1.0f;
 	//最初の当たらないフレーム
 	constexpr int kNoHitFrame = 30;
+
+	//ダメージカット率
+	constexpr float kDamageCutRate = 0.5f;
+	//持続フレーム
+	constexpr int kDamageCutKeepFrame = 60 * 15;//15秒
 }
 
 DefenseUp::DefenseUp(int modelHandle, Vector3 pos) :
@@ -96,7 +101,8 @@ void DefenseUp::OnHitColl(const std::shared_ptr<Collidable>& other)
 	//プレイヤーに当たった時の処理
 	if (other->GetGameTag() == GameTag::Player)
 	{
-	
+		//ダメージカット
+		std::dynamic_pointer_cast<Player>(other->GetOwner())->SetDamageCut(kDamageCutRate, kDamageCutKeepFrame);
 		//削除
 		m_isDelete = true;
 	}

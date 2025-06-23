@@ -41,7 +41,8 @@ namespace
 
 Player::Player(int modelHandle, Position3 firstPos) :
 	m_stickVec(0.0f,0.0f),
-	m_isGround(false)
+	m_isGround(false),
+	m_damageCutFrame(0)
 {
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
@@ -118,7 +119,7 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, co
 	}
 	//アニメーションの更新
 	m_model->Update();
-	//やられ判定の位置更新
+	//やられ判定の更新
 	UpdateHurtPoint();
 	//攻撃を喰らったならモデルを赤くする
 	if (m_hurtPoint->IsHit())
@@ -201,6 +202,15 @@ void Player::Complete()
 	m_searchTrigger->SetViewForward(m_model->GetDir());
 }
 
+void Player::SetDamageCut(float cutRate, int keepFrame)
+{
+	//ダメージカット
+	m_hurtPoint->SetDamageCutRate(cutRate);
+	m_damageCutFrame = keepFrame;
+	//アーマーを強く
+	m_hurtPoint->SetArmor(Battle::Armor::High);
+}
+
 void Player::UpdateHurtPoint()
 {
 	//移動量を取得
@@ -208,4 +218,15 @@ void Player::UpdateHurtPoint()
 	//座標更新
 	m_hurtPoint->GetCollidable()->GetRb()->SetPos(m_collidable->GetRb()->GetPos());
 	std::dynamic_pointer_cast<CapsuleCollider>(m_hurtPoint->GetCollidable()->GetColl())->SetEndPos(std::dynamic_pointer_cast<CapsuleCollider>(m_collidable->GetColl())->GetEndPos());
+	//ダメージカットのフレームの更新
+	if (m_damageCutFrame > 0)
+	{
+		--m_damageCutFrame;
+	}
+	else
+	{
+		//もとに戻る
+		m_hurtPoint->SetDamageCutRate(1.0f);
+		m_hurtPoint->SetArmor(Battle::Armor::Middle);
+	}
 }

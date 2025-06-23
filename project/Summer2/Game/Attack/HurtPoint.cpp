@@ -12,7 +12,8 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_owner(owner),
 	m_isHit(false),
 	m_isHitReaction(false),
-	m_armor(Battle::Armor::Low)
+	m_armor(Battle::Armor::Low),
+	m_damageCutRate(1.0f)
 {
 }
 
@@ -49,7 +50,7 @@ void HurtPoint::OnHit(std::shared_ptr<AttackBase> attack)
 
 void HurtPoint::OnHitDamage(int damage)
 {
-	m_hp -= damage;
+	m_hp -= damage * m_damageCutRate;
 	if (m_hp <= 0)
 	{
 		m_hp = 0;
@@ -66,4 +67,9 @@ void HurtPoint::AddHp(int add)
 	if (m_hp >= m_maxHp)return;//ç≈ëÂÇ»ÇÁ
 	m_hp += add;
 	m_hp = MathSub::ClampInt(m_hp, 0, m_maxHp);
+}
+
+void HurtPoint::SetDamageCutRate(float damageCutRate)
+{
+	m_damageCutRate = damageCutRate;
 }

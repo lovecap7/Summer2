@@ -42,6 +42,8 @@ public:
 	//アーマー
 	Battle::Armor GetArmor() { return m_armor; };
 	void SetArmor(Battle::Armor am) { m_armor = am; };
+	//ダメージカット
+	void SetDamageCutRate(float damageCutRate);
 private:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -59,5 +61,7 @@ private:
 	bool m_isHitReaction;
 	//アーマー
 	Battle::Armor m_armor;
+	//ダメージカット率
+	float m_damageCutRate;
 };
 
