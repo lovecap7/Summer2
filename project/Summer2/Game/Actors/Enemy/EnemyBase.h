@@ -28,6 +28,6 @@ protected:
     //‚â‚ç‚ê”»’è‚ÌXV
     virtual void UpdateHurtPoint()abstract;
     //UŒ‚”»’è‚ğo‚·
-    void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager>& attackManager);
+    void AppearAttack(const std::shared_ptr<AttackBase>& attack, const std::unique_ptr<AttackManager> attackManager);
 };
 

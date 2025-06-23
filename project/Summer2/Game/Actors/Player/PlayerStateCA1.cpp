@@ -18,6 +18,7 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
+#include "../ActorManager.h"
 namespace
 {
 	//ƒ`ƒƒ[ƒWUŒ‚‚Ì’iŠK•Êƒ_ƒ[ƒW
@@ -41,7 +42,7 @@ namespace
 	constexpr int kAddUltGage = 1;
 }
 
-PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager) :
+PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::shared_ptr<ActorManager> actorManager) :
 	PlayerStateBase(player)
 {
 	m_player->GetCollidable()->SetState(State::None);
@@ -51,6 +52,7 @@ PlayerStateCA1::PlayerStateCA1(std::shared_ptr<Player> player, const std::shared
 	model->SetFixedLoopFrame(kCA1KeepFrame);//w’èƒ‹[ƒv
 	//UŒ‚”»’è‚Ì€”õ
 	CreateAttack();
+	auto attackManager = actorManager->GetAttackManager();
 	attackManager->Entry(m_attackC);
 	//‰ÁZƒQ[ƒW‚Ì—\–ñ
 	m_player->GetUltGage()->SetPendingUltGage(kAddUltGage);
@@ -67,8 +69,9 @@ void PlayerStateCA1::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	auto attackManager = actorManager->GetAttackManager();
 	//€–S
 	if (m_player->GetHurtPoint()->IsDead())
 	{
@@ -92,7 +95,7 @@ void PlayerStateCA1::Update(const Input& input, const std::unique_ptr<Camera>& c
 		//íœ
 		DeleteAttack(attackManager);
 		//•KE‹Z
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	auto model = m_player->GetModel();
@@ -154,7 +157,7 @@ void PlayerStateCA1::SpeedDown()
 	collidable->GetRb()->SetVec(vec);
 }
 
-void PlayerStateCA1::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateCA1::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//UŒ‚”»’è‚ğÁ‚·
 	m_attackC->Delete();

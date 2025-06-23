@@ -438,6 +438,12 @@
     <ClCompile Include="Game\Actors\Enemy\Bomber\BomberStateAttack.cpp">
       <Filter>ソース ファイル\Game\Actors\Enemy\Bomber</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Attack\BlastAttack.cpp">
+      <Filter>ソース ファイル\Game\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actors\Item\Bomb.cpp">
+      <Filter>ソース ファイル\Game\Actors\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -760,6 +766,12 @@
     </ClInclude>
     <ClInclude Include="Game\Actors\Enemy\Bomber\BomberStateAttack.h">
       <Filter>ヘッダー ファイル\Game\Actors\Enemy\Bomber</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\BlastAttack.h">
+      <Filter>ヘッダー ファイル\Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Item\Bomb.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

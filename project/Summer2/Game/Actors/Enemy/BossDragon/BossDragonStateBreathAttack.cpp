@@ -16,6 +16,8 @@
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/BulletAttack.h"
+#include "../../../Attack/AttackManager.h"
+#include "../../ActorManager.h"
 #include "../../../../General/Math/Quaternion.h"
 
 namespace
@@ -70,8 +72,10 @@ void BossDragonStateBreathAttack::Init()
 	ChangeState(shared_from_this());
 }
 
-void BossDragonStateBreathAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStateBreathAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{

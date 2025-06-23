@@ -34,7 +34,7 @@ void BomberStateDeath::Init()
 	ChangeState(shared_from_this());
 }
 
-void BomberStateDeath::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void BomberStateDeath::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//アニメーション終了後
 	if (m_owner->GetModel()->IsFinishAnim())

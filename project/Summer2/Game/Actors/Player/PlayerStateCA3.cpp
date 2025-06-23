@@ -18,6 +18,7 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
+#include "../ActorManager.h"
 namespace
 {
 	//チャージ攻撃の段階別ダメージ
@@ -43,7 +44,7 @@ namespace
 	constexpr int kAddUltGage = 3;
 }
 
-PlayerStateCA3::PlayerStateCA3(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager) :
+PlayerStateCA3::PlayerStateCA3(std::shared_ptr<Player> player, const std::shared_ptr<ActorManager> actorManager) :
 	PlayerStateBase(player)
 {
 	m_player->GetCollidable()->SetState(State::None);
@@ -53,6 +54,8 @@ PlayerStateCA3::PlayerStateCA3(std::shared_ptr<Player> player, const std::shared
 	model->SetFixedLoopFrame(kCA3KeepFrame);//指定ループ
 	//攻撃判定の準備
 	CreateAttack();
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	attackManager->Entry(m_attackC);
 	//加算ゲージの予約
 	m_player->GetUltGage()->SetPendingUltGage(kAddUltGage);
@@ -69,8 +72,10 @@ void PlayerStateCA3::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateCA3::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateCA3::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())
 	{
@@ -94,7 +99,7 @@ void PlayerStateCA3::Update(const Input& input, const std::unique_ptr<Camera>& c
 		//削除
 		DeleteAttack(attackManager);
 		//必殺技
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	auto model = m_player->GetModel();
@@ -165,7 +170,7 @@ void PlayerStateCA3::SpeedDown()
 	collidable->GetRb()->SetVec(vec);
 }
 
-void PlayerStateCA3::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateCA3::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃判定を消す
 	m_attackC->Delete();

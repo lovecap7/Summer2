@@ -1,4 +1,4 @@
-#include "Heart.h"
+#include "Bomb.h"
 #include "../../../General/game.h"
 #include "../../../General/Collision/SphereCollider.h"
 #include "../../../General/Collision/ColliderBase.h"
@@ -9,24 +9,23 @@
 #include "../ActorManager.h"
 #include "../Player/Player.h"
 #include "../../Attack/HurtPoint.h"
+#include "../../Attack/BlastAttack.h"
 
 namespace
 {
-	//回復量
-	constexpr float kHealValue = 100.0f;
 	//ジャンプ力
 	constexpr float kJumpPower = 10.0f;
 	//当たり判定の半径
 	constexpr float kCollRadius = 50.0f;
-	//回転量
-	constexpr float kRotaAngle = 1.0f;
-	//最初の当たらないフレーム
-	constexpr int kNoHitFrame = 30;
+	//爆発の当たり判定の半径
+	constexpr float kBlastRadius = 90.0f;
+	//爆発までのフレーム数
+	constexpr int kBlastFrame = 180;
 }
 
-Heart::Heart(int modelHandle, Vector3 pos):
+Bomb::Bomb(int modelHandle, Vector3 pos) :
 	ItemBase(ItemKind::Heart),
-	m_noHitFrame(kNoHitFrame)
+	m_blastCountFrame(kBlastFrame)
 {
 	auto firstPos = pos;
 	firstPos.y += kCollRadius;
@@ -38,50 +37,48 @@ Heart::Heart(int modelHandle, Vector3 pos):
 	m_collidable->GetRb()->SetVecY(kJumpPower);
 	//コライダブルの初期化
 	m_collidable->Init(State::None, Priority::Low, GameTag::Item);
-	//当たり判定をしない
-	m_collidable->SetIsCollide(false);
 }
 
-Heart::~Heart()
+Bomb::~Bomb()
 {
 }
 
-void Heart::Entry(std::shared_ptr<ActorManager> actorManager)
+void Bomb::Entry(std::shared_ptr<ActorManager> actorManager)
 {
 	//アクターマネージャーに登録
 	actorManager->Entry(shared_from_this());
 }
 
-void Heart::Exit(std::shared_ptr<ActorManager> actorManager)
+void Bomb::Exit(std::shared_ptr<ActorManager> actorManager)
 {
 	//アクターマネージャー解除
 	actorManager->Exit(shared_from_this());
 }
 
-void Heart::Init()
+void Bomb::Init()
 {
 	//コライダーに自分のポインタを持たせる
 	m_collidable->SetOwner(shared_from_this());
 }
 
-void Heart::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
+void Bomb::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//移動量を初期化
 	m_collidable->GetRb()->SetMoveVec(Vector3::Zero());
-	//回る
-	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));
-	if (m_noHitFrame > 0)
+	//爆発のカウントを減らす
+	m_blastCountFrame--;
+	//爆発までのフレームが0になったら爆発
+	if (m_blastCountFrame <= 0 && !m_isDelete)
 	{
-		--m_noHitFrame;
-	}
-	else
-	{
-		//当たり判定をする
-		m_collidable->SetIsCollide(true);
+		//爆発の当たり判定を作成
+		CreateAttack();
+		//削除フラグを立てる
+		m_isDelete = true;
+		return;
 	}
 }
 
-void Heart::Gravity(const Vector3& gravity)
+void Bomb::Gravity(const Vector3& gravity)
 {
 	//重力がかかりすぎたら止めたいので上限を設ける
 	if (m_collidable->GetRb()->GetVec().y >= Gravity::kMaxGravityY)
@@ -91,22 +88,12 @@ void Heart::Gravity(const Vector3& gravity)
 	}
 }
 
-void Heart::OnHitColl(const std::shared_ptr<Collidable>& other)
+void Bomb::OnHitColl(const std::shared_ptr<Collidable>& other)
 {
-	//消滅フラグが立ってるならリターン
-	if (m_isDelete)return;
-	//プレイヤーに当たった時の処理
-	if (other->GetGameTag() == GameTag::Player)
-	{
-		//回復
-		auto player = std::dynamic_pointer_cast<Player>(other->GetOwner());
-		player->GetHurtPoint()->AddHp(kHealValue);
-		//削除
-		m_isDelete = true;
-	}
+	
 }
 
-void Heart::Draw() const
+void Bomb::Draw() const
 {
 #if _DEBUG
 	//衝突判定
@@ -122,10 +109,17 @@ void Heart::Draw() const
 	m_model->Draw();
 }
 
-void Heart::Complete()
+void Bomb::Complete()
 {
 	//次の座標へ
 	m_collidable->GetRb()->SetNextPos();
 	//モデルの座標更新
 	m_model->SetPos(m_collidable->GetRb()->GetPos().ToDxLibVector());
+}
+
+void Bomb::CreateAttack()
+{
+	std::dynamic_pointer_cast<SphereCollider>(m_collidable->GetColl())->SetRadius(kBlastRadius);
+	//爆発の当たり判定を作成
+	m_blastAttack = std::make_shared<BlastAttack>(m_collidable, 100.0f, 5,20.0f, shared_from_this());
 }

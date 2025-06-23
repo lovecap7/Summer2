@@ -22,6 +22,7 @@
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
 #include "../../../General/Collision/SearchTrigger.h"
+#include "../ActorManager.h"
 namespace
 {
 	//通常攻撃2のダメージと持続フレーム
@@ -77,8 +78,10 @@ void PlayerStateAttackN2::Init()
 	//次の状態を自分の状態を入れる
 	ChangeState(shared_from_this());
 }
-void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())
 	{
@@ -102,7 +105,7 @@ void PlayerStateAttackN2::Update(const Input& input, const std::unique_ptr<Camer
 		//削除
 		DeleteAttack(attackManager);
 		//必殺技
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	//カウント
@@ -207,7 +210,7 @@ void PlayerStateAttackN2::SpeedDown()
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
 }
-void PlayerStateAttackN2::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN2::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃判定を消す
 	m_attackN2->Delete();

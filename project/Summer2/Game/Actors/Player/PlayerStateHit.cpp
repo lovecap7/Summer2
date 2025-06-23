@@ -20,8 +20,8 @@ namespace
 	const char* kHit1Anim = "Player|Hit1";
 	const char* kHit2Anim = "Player|Hit2";
 	//アニメーション速度
-	constexpr float kHit1AnimSpeed = 1.2f;
-	constexpr float kHit2AnimSpeed = 1.4f;
+	constexpr float kHit1AnimSpeed = 1.1f;
+	constexpr float kHit2AnimSpeed = 1.1f;
 	//減速率
 	constexpr float kDeceRate = 0.95f;
 }
@@ -45,7 +45,7 @@ void PlayerStateHit::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateHit::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())

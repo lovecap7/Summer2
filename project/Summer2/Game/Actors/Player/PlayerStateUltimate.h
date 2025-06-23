@@ -3,17 +3,17 @@
 class Player;
 class Input;
 class Camera;
-class AttackManager;
+class ActorManager;
 class Collidable;
 class MeleeAttack;
 class PlayerStateUltimate :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateUltimate>
 {
 public:
-    PlayerStateUltimate(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager);
+    PlayerStateUltimate(std::shared_ptr<Player> player, const std::shared_ptr<ActorManager> actorManager);
     ~PlayerStateUltimate();
     void Init()override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager) override;
 private:
     //アニメーションのフレーム
     int m_animCountFrame;
@@ -28,7 +28,7 @@ private:
     //減速していく
     void SpeedDown();
     //削除
-    void DeleteAttack(const std::shared_ptr<AttackManager>& attackManager);
+    void DeleteAttack(const std::shared_ptr<AttackManager> attackManager);
 };
 
 

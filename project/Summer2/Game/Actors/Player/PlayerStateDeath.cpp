@@ -36,7 +36,7 @@ void PlayerStateDeath::Init()
 	//次の状態を自分の状態を入れる
 	ChangeState(shared_from_this());
 }
-void PlayerStateDeath::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateDeath::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//アニメーション終了後
 	if (m_player->GetModel()->IsFinishAnim())

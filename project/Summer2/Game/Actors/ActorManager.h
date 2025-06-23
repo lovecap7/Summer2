@@ -29,15 +29,23 @@ public:
 	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<UIManager> uiManager);
 	//描画
 	void Draw()const;
+	//新しくアクターを追加する
+	void SetNewActor(std::shared_ptr<Actor> actor);
 	//コリジョンマネージャー
 	std::shared_ptr<CollisionManager> GetCollisionManager() const{ return m_collManager; };
 	//エネミーマネージャー
 	std::shared_ptr<EnemyManager> GetEnemyManager() const{ return m_enemyManager; };
 	//プレイヤーマネージャー
 	std::shared_ptr<PlayerManager> GetPlayerManager() const{ return m_playerManager; };
+	//攻撃マネージャー
+	std::shared_ptr<AttackManager> GetAttackManager() const { return m_attackManager; };
+	//アイテムジェネレーター
+	std::shared_ptr<ItemGenerator> GetItemGenerator() const { return m_itemGenerator; };
 private:
 	//アクター
 	std::vector<std::shared_ptr<Actor>> m_actors;
+	//追加予定のアクター
+	std::vector<std::shared_ptr<Actor>> m_addActors;
 	//プレイヤー
 	std::shared_ptr<Player> m_player;
 	//当たり判定と衝突処理
@@ -52,8 +60,10 @@ private:
 	std::shared_ptr<ItemGenerator> m_itemGenerator;
 private:
 	int m_id;//割り振る番号
-	void SetUpId();
+	void SetUpId(std::shared_ptr<Actor> actor);
 	//消滅フラグが立っているアクターの削除
 	void CheckDeleteActor(std::shared_ptr<ItemGenerator> itemGenerator);
+	//新しいアクターの実装
+	void AddNewActors();
 };
 

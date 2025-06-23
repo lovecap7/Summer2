@@ -16,6 +16,7 @@
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/BulletAttack.h"
+#include "../../ActorManager.h"
 
 namespace
 {
@@ -65,8 +66,10 @@ void SmallDragonStateAttack::Init()
 	ChangeState(shared_from_this());
 }
 
-void SmallDragonStateAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void SmallDragonStateAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{

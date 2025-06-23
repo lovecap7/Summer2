@@ -1,16 +1,16 @@
 #include "PlayerManager.h"
 #include "Player.h"
-#include "../../General/Collision/SphereCollider.h"
-#include "../../General/Rigidbody.h"
-#include "../../Game/Actors/Actor.h"
-#include "../../General/Collidable.h"
-#include "../../General/Collision/CollisionChecker.h"
-#include "../../General/Collision/SearchTrigger.h"
-#include "../../General/Math/MyMath.h"
+#include "../../../General/Collision/SphereCollider.h"
+#include "../../../General/Rigidbody.h"
+#include "../../../Game/Actors/Actor.h"
+#include "../../../General/Collidable.h"
+#include "../../../General/Collision/CollisionChecker.h"
+#include "../../../General/Collision/SearchTrigger.h"
+#include "../../../General/Math/MyMath.h"
 
 PlayerManager::PlayerManager(std::shared_ptr<Player> player):
 	m_player(player),
-	m_collChecker(std::make_shared<CollisionChecker>())
+	m_triggerChecker(std::make_shared<CollisionChecker>())
 {
 }
 
@@ -51,7 +51,7 @@ void PlayerManager::SearchTarget(std::vector<std::shared_ptr<Actor>> actors)
 			if (collE->GetColl()->GetShape() == Shape::Sphere)
 			{
 				//範囲内に敵がいるかチェック
-				if (m_collChecker->CheckCollSS(collP, collE))
+				if (m_triggerChecker->CheckCollSS(collP, collE))
 				{
 					isHit = true;
 				}
@@ -60,7 +60,7 @@ void PlayerManager::SearchTarget(std::vector<std::shared_ptr<Actor>> actors)
 			else if (collE->GetColl()->GetShape() == Shape::Capsule)
 			{
 				//範囲内に敵がいるかチェック
-				if (m_collChecker->CheckCollCS(collE, collP))
+				if (m_triggerChecker->CheckCollCS(collE, collP))
 				{
 					isHit = true;
 				}

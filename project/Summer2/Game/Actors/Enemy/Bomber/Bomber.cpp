@@ -75,12 +75,12 @@ void Bomber::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void Bomber::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void Bomber::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<ActorManager> actorManager)
 {
 	//攻撃のクールタイムを減らす
 	UpdateAttackCoolTime();
 	//状態に合わせた更新
-	m_state->Update(input, camera, attackManager);
+	m_state->Update(input, camera, actorManager);
 	//状態が変わったかをチェック
 	if (m_state != m_state->GetNextState())
 	{

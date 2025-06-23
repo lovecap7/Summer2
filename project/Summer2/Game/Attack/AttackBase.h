@@ -32,7 +32,7 @@ public:
 	void SetKeepFrame(int keepFrame);
 	//ノックバック
 	float GetKnockBackPower() { return m_knockBackPower; };
-	Vector3 GetKnockBackVec(Vector3 other);
+	virtual Vector3 GetKnockBackVec(Vector3 other);
 	//攻撃の強さ
 	Battle::AttackPower GetAttackPower() { return m_attackPower; };
 	void SetAttackPower(Battle::AttackPower ap) { m_attackPower = ap; };

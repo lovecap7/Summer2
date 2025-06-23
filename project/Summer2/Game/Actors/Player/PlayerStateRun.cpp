@@ -49,7 +49,7 @@ void PlayerStateRun::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateRun::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateRun::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())
@@ -83,7 +83,7 @@ void PlayerStateRun::Update(const Input& input, const std::unique_ptr<Camera>& c
 	if (input.IsTrigger("RB") && m_player->GetUltGage()->IsMaxUlt())
 	{
 		//必殺技
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	//ジャンプボタンを押してるならジャンプ

@@ -21,6 +21,7 @@
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
 #include "../../../General/Collision/SearchTrigger.h"
+#include "../ActorManager.h"
 
 namespace
 {
@@ -77,8 +78,10 @@ void PlayerStateAttackN3::Init()
 	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
 	ChangeState(shared_from_this());
 }
-void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//UŒ‚ƒ}ƒl[ƒWƒƒ[
+	auto attackManager = actorManager->GetAttackManager();
 	//€–S
 	if (m_player->GetHurtPoint()->IsDead())
 	{
@@ -102,7 +105,7 @@ void PlayerStateAttackN3::Update(const Input& input, const std::unique_ptr<Camer
 		//íœ
 		DeleteAttack(attackManager);
 		//•KE‹Z
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	//ƒJƒEƒ“ƒg
@@ -202,7 +205,7 @@ void PlayerStateAttackN3::SpeedDown()
 	collidable->GetRb()->SetVec(vec);
 }
 
-void PlayerStateAttackN3::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN3::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//UŒ‚”»’è‚ğÁ‚·
 	m_attackN3->Delete();

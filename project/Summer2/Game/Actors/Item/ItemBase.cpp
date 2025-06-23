@@ -1,6 +1,7 @@
 #include "ItemBase.h"
 
-ItemBase::ItemBase(ItemKind kind)
+ItemBase::ItemBase(ItemKind kind):
+	m_kind(kind)
 {
 }
 

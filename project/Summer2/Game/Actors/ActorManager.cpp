@@ -16,6 +16,7 @@
 
 ActorManager::ActorManager(std::shared_ptr<Player> player):
 	m_actors{},
+	m_addActors{},
 	m_player(player),
 	m_id(0)
 {
@@ -43,6 +44,8 @@ void ActorManager::Entry(std::shared_ptr<Actor> actor)
 	{
 		return;
 	}
+	//IDをセット
+	SetUpId(actor);
 	//アクターをセット
 	m_actors.emplace_back(actor);
 }
@@ -94,7 +97,7 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
-		actor->Update(input, camera, m_attackManager);
+		actor->Update(input, camera, shared_from_this());
 		actor->Gravity(Gravity::kGravity);
 	}
 	//攻撃の処理
@@ -115,8 +118,9 @@ void ActorManager::Update(const Input& input, const std::unique_ptr<Camera>& cam
 		actor->Complete();
 	}
 
-	//アイテムを実装
-	m_itemGenerator->MoveItems(shared_from_this());
+	//ゲーム中に新しいアクターが追加された場合
+	//実装する
+	AddNewActors();
 }
 
 void ActorManager::Draw() const
@@ -130,14 +134,23 @@ void ActorManager::Draw() const
 	m_attackManager->Draw();
 }
 
-void ActorManager::SetUpId()
+void ActorManager::SetNewActor(std::shared_ptr<Actor> actor)
+{
+	//すでに登録されているならしない
+	auto it = std::find(m_actors.begin(), m_actors.end(), actor);
+	if (it != m_actors.end())
+	{
+		return;
+	}
+	//追加予定のアクターに追加
+	m_addActors.emplace_back(actor);
+}
+
+void ActorManager::SetUpId(std::shared_ptr<Actor> actor)
 {
 	//IDを登録
-	for (auto& actor : m_actors)
-	{
-		actor->SetID(m_id);
-		++m_id;
-	}
+	actor->SetID(m_id);
+	++m_id;
 }
 
 void ActorManager::CheckDeleteActor(std::shared_ptr<ItemGenerator> itemGenerator)
@@ -157,4 +170,19 @@ void ActorManager::CheckDeleteActor(std::shared_ptr<ItemGenerator> itemGenerator
 		return isDead;
 		});
 	m_actors.erase(remIt, m_actors.end());//削除
+}
+void ActorManager::AddNewActors()
+{
+	//追加予定のアイテムを実装
+	m_itemGenerator->MoveItems(shared_from_this());
+	//追加予定のアクターを実装
+	if (!m_addActors.empty())
+	{
+		for (auto& actor : m_addActors)
+		{
+			//アクターの登録
+			Entry(actor);
+		}
+		m_addActors.clear();//追加予定のアクターをクリア
+	}
 }

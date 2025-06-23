@@ -9,10 +9,10 @@ class PlayerStateCA3 :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateCA3>
 {
 public:
-    PlayerStateCA3(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager);
+    PlayerStateCA3(std::shared_ptr<Player> player, const std::shared_ptr<ActorManager> actorManager);
     ~PlayerStateCA3();
     void Init()override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager) override;
 private:
     //¶‘«
     std::shared_ptr<Collidable> m_leftLeg;
@@ -25,7 +25,7 @@ private:
     //Œ¸‘¬
     void SpeedDown();
     //íœ
-    void DeleteAttack(const std::shared_ptr<AttackManager>& attackManager);
+    void DeleteAttack(const std::shared_ptr<AttackManager> attackManager);
 };
 
 

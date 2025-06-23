@@ -91,7 +91,7 @@ void Player::Init()
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 }
 
-void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//スティックの向きを入れる
 	m_stickVec.x = static_cast<float>(input.GetStickInfo().leftStickX);
@@ -108,7 +108,7 @@ void Player::Update(const Input& input,const std::unique_ptr<Camera>& camera, st
 #endif
 
 	//状態に合わせた更新
-	m_state->Update(input, camera, attackManager);
+	m_state->Update(input, camera, actorManager);
 	//状態が変わったかをチェック
 	if (m_state != m_state->GetNextState())
 	{

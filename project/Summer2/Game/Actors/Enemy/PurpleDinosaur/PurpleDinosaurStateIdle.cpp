@@ -43,7 +43,7 @@ void PurpleDinosaurStateIdle::Init()
 	ChangeState(shared_from_this());
 }
 
-void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PurpleDinosaurStateIdle::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//Ž€‚ñ‚Å‚é‚È‚ç
 	if (m_owner->GetHurtPoint()->IsDead())

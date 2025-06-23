@@ -48,7 +48,7 @@ void PlayerStateCharge::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//Ž€–S
 	if (m_player->GetHurtPoint()->IsDead())
@@ -67,7 +67,7 @@ void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>
 	if (input.IsTrigger("RB") && m_player->GetUltGage()->IsMaxUlt())
 	{
 		//•KŽE‹Z
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	auto collidable = m_player->GetCollidable();
@@ -100,19 +100,19 @@ void PlayerStateCharge::Update(const Input& input, const std::unique_ptr<Camera>
 		if (m_chargeFrame <= kChargeLevel1)
 		{
 			//CA1
-			ChangeState(std::make_shared<PlayerStateCA1>(m_player,attackManager));
+			ChangeState(std::make_shared<PlayerStateCA1>(m_player,actorManager));
 			return;
 		}
 		else if (m_chargeFrame <= kChargeLevel2)
 		{
 			//CA2
-			ChangeState(std::make_shared<PlayerStateCA2>(m_player, attackManager));
+			ChangeState(std::make_shared<PlayerStateCA2>(m_player, actorManager));
 			return;
 		}
 		else if (m_chargeFrame <= kChargeLevel3)
 		{
 			//CA3
-			ChangeState(std::make_shared<PlayerStateCA3>(m_player, attackManager));
+			ChangeState(std::make_shared<PlayerStateCA3>(m_player, actorManager));
 			return;
 		}
 	}

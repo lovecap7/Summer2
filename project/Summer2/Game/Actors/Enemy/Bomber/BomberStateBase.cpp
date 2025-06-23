@@ -15,7 +15,7 @@ BomberStateBase::~BomberStateBase()
 {
 }
 
-void BomberStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager>& attackManager)
+void BomberStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager> attackManager)
 {
 	//UŒ‚‚ğ“ü‚ê‚é
 	attack->Init();//ó‘Ô‚ğƒŠƒZƒbƒg

@@ -4,6 +4,7 @@ class Player;
 class Input;
 class Camera;
 class AttackManager;
+class ActorManager;
 class Collidable;
 class MeleeAttack;
 class PlayerStateAttackN2 :
@@ -13,7 +14,7 @@ public:
     PlayerStateAttackN2(std::shared_ptr<Player>  player);
     ~PlayerStateAttackN2();
     void Init() override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager) override;
    
 private:
     //攻撃のフレームを数える
@@ -29,7 +30,7 @@ private:
     //減速していく
     void SpeedDown();
     //削除
-    void DeleteAttack(const std::shared_ptr<AttackManager>& attackManager);
+    void DeleteAttack(const std::shared_ptr<AttackManager> attackManager);
     //攻撃時の前進処理
     void AttackMove();
 };

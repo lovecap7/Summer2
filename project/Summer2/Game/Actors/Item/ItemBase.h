@@ -2,9 +2,10 @@
 #include "../Actor.h"
 
 //ƒAƒCƒeƒ€‚Ìí—Ş
-enum class ItemKind
+enum class ItemKind : int
 {
-    Heart,
+    Heart = 0,
+    Bomb = 1,
 };
 
 class ItemBase abstract:

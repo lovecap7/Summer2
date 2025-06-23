@@ -14,6 +14,7 @@
 #include "../../../Attack/HurtPoint.h"
 #include "../../../Attack/MeleeAttack.h"
 #include "../../ActorManager.h"
+#include "../../../Attack/AttackManager.h"
 #include "../../../../General/game.h"
 namespace
 {
@@ -79,12 +80,12 @@ void BossDragon::Init()
 	m_hurtPoint->SetArmor(Battle::Armor::High);
 }
 
-void BossDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void BossDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<ActorManager> actorManager)
 {
 	//攻撃のクールタイムを減らす
 	UpdateAttackCoolTime();
 	//状態に合わせた更新
-	m_state->Update(input, camera, attackManager);
+	m_state->Update(input, camera, actorManager);
 	//状態が変わったかをチェック
 	if (m_state != m_state->GetNextState())
 	{

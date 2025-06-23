@@ -53,6 +53,7 @@
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateDeath.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateHit.cpp" />
     <ClCompile Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateIdle.cpp" />
+    <ClCompile Include="Game\Actors\Item\Bomb.cpp" />
     <ClCompile Include="Game\Actors\Item\Heart.cpp" />
     <ClCompile Include="Game\Actors\Item\ItemBase.cpp" />
     <ClCompile Include="Game\Actors\Item\ItemGenerator.cpp" />
@@ -83,6 +84,7 @@
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
     <ClCompile Include="Game\Attack\AttackManager.cpp" />
     <ClCompile Include="Game\Attack\Battle.cpp" />
+    <ClCompile Include="Game\Attack\BlastAttack.cpp" />
     <ClCompile Include="Game\Attack\BulletAttack.cpp" />
     <ClCompile Include="Game\Attack\HurtPoint.cpp" />
     <ClCompile Include="Game\Attack\MeleeAttack.cpp" />
@@ -160,6 +162,7 @@
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateDeath.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateHit.h" />
     <ClInclude Include="Game\Actors\Enemy\SmallDragon\SmallDragonStateIdle.h" />
+    <ClInclude Include="Game\Actors\Item\Bomb.h" />
     <ClInclude Include="Game\Actors\Item\Heart.h" />
     <ClInclude Include="Game\Actors\Item\ItemBase.h" />
     <ClInclude Include="Game\Actors\Item\ItemGenerator.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="Game\Attack\AttackBase.h" />
     <ClInclude Include="Game\Attack\AttackManager.h" />
     <ClInclude Include="Game\Attack\Battle.h" />
+    <ClInclude Include="Game\Attack\BlastAttack.h" />
     <ClInclude Include="Game\Attack\BulletAttack.h" />
     <ClInclude Include="Game\Attack\HurtPoint.h" />
     <ClInclude Include="Game\Attack\MeleeAttack.h" />

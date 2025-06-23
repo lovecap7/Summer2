@@ -38,7 +38,7 @@ void StageObjectDraw::Init()
 	//‚È‚µ
 }
 
-void StageObjectDraw::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void StageObjectDraw::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//‚È‚µ
 }

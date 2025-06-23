@@ -18,6 +18,7 @@
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/MeleeAttack.h"
+#include "../../ActorManager.h"
 namespace
 {
 	//減速率
@@ -25,7 +26,7 @@ namespace
 	//右手のインデックス
 	constexpr int kRightHandIndex = 36;
 	//パンチの当たり判定の大きさ(攻撃の大きさ)
-	constexpr float kPunchRadius = 80.0f;
+	constexpr float kPunchRadius = 100.0f;
 	//攻撃のダメージ
 	constexpr int kAttackDamage = 100;
 	//攻撃の持続フレーム
@@ -68,8 +69,10 @@ void BossDragonStatePunchAttack::Init()
 	ChangeState(shared_from_this());
 }
 
-void BossDragonStatePunchAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStatePunchAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
@@ -139,7 +142,7 @@ void BossDragonStatePunchAttack::SpeedDown()
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
 }
-void BossDragonStatePunchAttack::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStatePunchAttack::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃判定を消す
 	m_attack->Delete();

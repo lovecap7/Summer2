@@ -7,14 +7,13 @@ class ActorManager;
 class Input;
 class Camera;
 class Model;
-class AttackManager;
-class UIManager;
-class Heart :
-	public ItemBase, public std::enable_shared_from_this<Heart>
+class BlastAttack;
+class Bomb :
+	public ItemBase, public std::enable_shared_from_this<Bomb>
 {
 public:
-    Heart(int modelHandle, Vector3 pos);
-	virtual ~Heart();
+	Bomb(int modelHandle, Vector3 pos);
+	virtual ~Bomb();
 	//“o˜^ˆ—
 	void Entry(std::shared_ptr<ActorManager> actorManager)override;
 	//“o˜^‰ğœ
@@ -34,7 +33,12 @@ public:
 private:
 	//ƒ‚ƒfƒ‹
 	std::shared_ptr<Model> m_model;
-	//Å‰‚Ì”ƒtƒŒ[ƒ€‚Í“–‚½‚è”»’è‚ğ‚µ‚½‚­‚È‚¢‚Ì‚Å
-	int m_noHitFrame;
+	//UŒ‚
+	std::shared_ptr<BlastAttack> m_blastAttack;
+	//”š”­‚ÌƒJƒEƒ“ƒg
+	int m_blastCountFrame;
+private:
+	//”š”­‚Ì“–‚½‚è”»’èì¬
+	void CreateAttack();
 };
 

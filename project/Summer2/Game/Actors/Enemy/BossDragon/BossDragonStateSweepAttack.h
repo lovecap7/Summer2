@@ -3,6 +3,7 @@
 class Input;
 class Camera;
 class AttackManager;
+class ActorManager;
 class Collidable;
 class MeleeAttack;
 class BossDragon;
@@ -13,7 +14,7 @@ public:
     BossDragonStateSweepAttack(std::shared_ptr<BossDragon> owner);
     ~BossDragonStateSweepAttack();
     void Init()override;
-    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager) override;
+    void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager) override;
 private:
     //UŒ‚‚ÌƒtƒŒ[ƒ€‚ğ”‚¦‚é
     int m_attackCountFrame;
@@ -28,6 +29,6 @@ private:
     //Œ¸‘¬‚µ‚Ä‚¢‚­
     void SpeedDown();
     //íœ
-    void DeleteAttack(const std::shared_ptr<AttackManager>& attackManager);
+    void DeleteAttack(const std::shared_ptr<AttackManager> attackManager);
 };
 

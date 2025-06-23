@@ -77,12 +77,12 @@ void SmallDragon::Init()
 	m_searchTrigger = std::make_shared<SearchTrigger>(kSearchTriggerRadius, shared_from_this());
 }
 
-void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void SmallDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	//攻撃のクールタイムを減らす
 	UpdateAttackCoolTime();
 	//状態に合わせた更新
-	m_state->Update(input, camera, attackManager);
+	m_state->Update(input, camera, actorManager);
 	//状態が変わったかをチェック
 	if (m_state != m_state->GetNextState())
 	{

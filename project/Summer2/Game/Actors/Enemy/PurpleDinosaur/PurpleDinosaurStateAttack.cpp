@@ -17,6 +17,7 @@
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/MeleeAttack.h"
+#include "../../ActorManager.h"
 namespace
 {
 	//減速率
@@ -72,8 +73,10 @@ void PurpleDinosaurStateAttack::Init()
 	ChangeState(shared_from_this());
 }
 
-void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PurpleDinosaurStateAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
@@ -150,7 +153,7 @@ void PurpleDinosaurStateAttack::SpeedDown()
 	collidable->GetRb()->SetVec(vec);
 }
 
-void PurpleDinosaurStateAttack::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void PurpleDinosaurStateAttack::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃判定を消す
 	m_attack->Delete();

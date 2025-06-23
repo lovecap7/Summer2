@@ -22,6 +22,7 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
+#include "../ActorManager.h"
 namespace
 {
 	//通常攻撃1のダメージと持続フレームと発生フレーム
@@ -80,8 +81,10 @@ void PlayerStateAttackN1::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死亡
 	if (m_player->GetHurtPoint()->IsDead())
 	{
@@ -105,7 +108,7 @@ void PlayerStateAttackN1::Update(const Input& input, const std::unique_ptr<Camer
 		//削除
 		DeleteAttack(attackManager);
 		//必殺技
-		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, attackManager));
+		ChangeState(std::make_shared<PlayerStateUltimate>(m_player, actorManager));
 		return;
 	}
 	//カウント

@@ -16,6 +16,6 @@ private:
 	//プレイヤー
 	std::shared_ptr<Player> m_player;
 	//トリガーの当たり判定のチェックをするクラス
-	std::shared_ptr<CollisionChecker> m_collChecker;
+	std::shared_ptr<CollisionChecker> m_triggerChecker;
 };
 

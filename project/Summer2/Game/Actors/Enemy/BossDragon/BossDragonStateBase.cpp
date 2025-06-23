@@ -14,7 +14,7 @@ BossDragonStateBase::BossDragonStateBase(std::shared_ptr<BossDragon> owner) :
 BossDragonStateBase::~BossDragonStateBase()
 {
 }
-void BossDragonStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStateBase::AppearAttack(std::shared_ptr<AttackBase> attack, const std::shared_ptr<AttackManager> attackManager)
 {
 	//UŒ‚‚ğ“ü‚ê‚é
 	attack->Init();//ó‘Ô‚ğƒŠƒZƒbƒg

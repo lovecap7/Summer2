@@ -18,6 +18,7 @@
 #include "../../../../Game/Camera/Camera.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/MeleeAttack.h"
+#include "../../ActorManager.h"
 #include "../../../../General/Math/Quaternion.h"
 namespace
 {
@@ -79,8 +80,10 @@ void BossDragonStateSweepAttack::Init()
 	//次の状態を今の状態に更新
 	ChangeState(shared_from_this());
 }
-void BossDragonStateSweepAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStateSweepAttack::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//死んでるなら
 	if (m_owner->GetHurtPoint()->IsDead())
 	{
@@ -171,7 +174,7 @@ void BossDragonStateSweepAttack::SpeedDown()
 	vec.z *= kMoveDeceRate;
 	collidable->GetRb()->SetVec(vec);
 }
-void BossDragonStateSweepAttack::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void BossDragonStateSweepAttack::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃判定を消す
 	m_attack->Delete();

@@ -38,7 +38,7 @@ void InvisibleWall::Init()
 	m_collidable->SetOwner(shared_from_this());
 }
 
-void InvisibleWall::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void InvisibleWall::Update(const Input& input, const std::unique_ptr<Camera>& camera,const std::shared_ptr<ActorManager> actorManager)
 {
 	DxLib::MV1SetPosition(m_modelHandle, m_collidable->GetRb()->GetPos().ToDxLibVector());
 }

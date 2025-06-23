@@ -20,7 +20,7 @@ public:
 	//初期化処理
 	void Init()override;
 	//更新処理
-	void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager) override;
+	void Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager) override;
 	//重力
 	void Gravity(const Vector3& gravity)override;
 	//衝突イベント

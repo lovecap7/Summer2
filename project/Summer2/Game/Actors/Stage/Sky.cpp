@@ -35,7 +35,7 @@ void Sky::Exit(std::shared_ptr<ActorManager> actorManager)
 	actorManager->Exit(shared_from_this());
 }
 
-void Sky::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager)
+void Sky::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	m_model->SetPos(camera->GetPos().ToDxLibVector());
 	m_model->SetRot(VGet(0.0f, kRotaAngle, 0.0f));

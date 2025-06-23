@@ -15,6 +15,7 @@
 #include "../../Attack/AttackBase.h"
 #include "../../Attack/MeleeAttack.h"
 #include "../../Attack/HurtPoint.h"
+#include "../ActorManager.h"
 namespace
 {
 	//Ultのダメージと持続フレーム
@@ -39,7 +40,7 @@ namespace
 	constexpr float kMoveDeceRate = 0.8f;
 }
 
-PlayerStateUltimate::PlayerStateUltimate(std::shared_ptr<Player> player, const std::shared_ptr<AttackManager>& attackManager) :
+PlayerStateUltimate::PlayerStateUltimate(std::shared_ptr<Player> player, const std::shared_ptr<ActorManager> actorManager) :
 	PlayerStateBase(player),
 	m_animCountFrame(0),
 	m_animSpeed(kAnimSpeed)
@@ -52,6 +53,8 @@ PlayerStateUltimate::PlayerStateUltimate(std::shared_ptr<Player> player, const s
 	model->SetFixedLoopFrame(kUltKeepFrame);//指定ループ
 	//攻撃判定の準備
 	CreateAttack();
+	//攻撃マネージャーに登録
+	auto attackManager = actorManager->GetAttackManager();
 	attackManager->Entry(m_attackUlt);
 	//向きの更新
 	Vector2 dir = m_player->GetStickVec();
@@ -75,10 +78,12 @@ void PlayerStateUltimate::Init()
 	ChangeState(shared_from_this());
 }
 
-void PlayerStateUltimate::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateUltimate::Update(const Input& input, const std::unique_ptr<Camera>& camera, const std::shared_ptr<ActorManager> actorManager)
 {
 	++m_animCountFrame;
 	auto model = m_player->GetModel();
+	//攻撃マネージャー
+	auto attackManager = actorManager->GetAttackManager();
 	//アニメーションが終了したら
 	if (model->IsFinishFixedLoop())
 	{
@@ -142,7 +147,7 @@ void PlayerStateUltimate::SpeedDown()
 	collidable->GetRb()->SetVec(vec);
 }
 
-void PlayerStateUltimate::DeleteAttack(const std::shared_ptr<AttackManager>& attackManager)
+void PlayerStateUltimate::DeleteAttack(const std::shared_ptr<AttackManager> attackManager)
 {
 	//攻撃判定を消す
 	m_attackUlt->Delete();

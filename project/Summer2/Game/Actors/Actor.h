@@ -7,7 +7,6 @@ class Input;
 class Camera;
 class Collidable;
 class HurtPoint;
-class AttackManager;
 /// <summary>
 /// ゲーム中に配置可能な物体の基底クラス
 /// </summary>
@@ -48,7 +47,7 @@ public:
 	/// 位置などの更新を行う
 	/// </summary>
 	/// <param name="">入力オブジェクト</param>
-	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<AttackManager> attackManager) abstract;
+	virtual void Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<ActorManager> actorManager) abstract;
 	/// <summary>
 	/// 重力を受ける
 	/// </summary>
