@@ -12,7 +12,7 @@ AttackBase::AttackBase(std::shared_ptr<Collidable> coll, int damage, int keepFra
 	m_owner(owner),
 	m_initDamage(damage),
 	m_initKeepFrame(keepFrame),
-	m_attackPower(Battle::AttackPower::Middle)
+	m_attackPower(Battle::AttackWeight::Middle)
 {
 }
 

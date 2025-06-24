@@ -126,7 +126,7 @@ void PlayerStateUltimate::CreateAttack()
 	//UŒ‚‚ÌÀ•W‚Æ“–‚½‚è”»’è‚ğUŒ‚‚É•R}‚¯‚é
 	m_attackUlt = std::make_shared<MeleeAttack>(attackColl, kUltDamege, kUltKeepFrame, kKnockBackPower,m_player);
 	//‹­‚³‚ğÅ‚‚É
-	m_attackUlt->SetAttackPower(Battle::AttackPower::Highest);
+	m_attackUlt->SetAttackPower(Battle::AttackWeight::Heaviest);
 }
 
 void PlayerStateUltimate::UpdateAttack()

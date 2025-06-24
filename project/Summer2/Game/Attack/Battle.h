@@ -1,17 +1,17 @@
 #pragma once
 namespace Battle
 {
-	//UŒ‚‚Ì‹­‚³
-	enum class AttackPower : int
+	//UŒ‚‚Ìd‚³
+	enum class AttackWeight : int
 	{
-		Low		= 0,
-		Middle	= 1,
-		High	= 2,
-		Highest = 3,
+		Light		= 0,
+		Middle		= 1,
+		Heavy		= 2,
+		Heaviest	= 3,
 	};
 	//UŒ‚‚Å‚Ğ‚é‚Ü‚È‚¢‹­‚³
-	typedef AttackPower Armor;
+	typedef AttackWeight Armor;
 
 	//UŒ‚‚ÆƒA[ƒ}[‚Ì”äŠr
-	bool CheckFlinch(AttackPower ap, Armor am);
+	bool CheckFlinchAttackAndArmor(AttackWeight aw, Armor am);
 }

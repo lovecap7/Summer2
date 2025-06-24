@@ -65,6 +65,10 @@ private:
 	std::shared_ptr<SearchTrigger> m_searchTrigger;
 	//ダメージカットフレーム
 	int m_damageCutFrame;
+	//ダメージアップ率
+	float m_damageUpRate;
+	//ダメージアップの持続フレーム
+	int m_damageUpKeepFrame;	
 private:
 	//やられ判定の更新
 	void UpdateHurtPoint();

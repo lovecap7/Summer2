@@ -12,7 +12,7 @@ HurtPoint::HurtPoint(std::shared_ptr<Collidable> coll, int hp, std::shared_ptr<A
 	m_owner(owner),
 	m_isHit(false),
 	m_isHitReaction(false),
-	m_armor(Battle::Armor::Low),
+	m_armor(Battle::Armor::Light),
 	m_damageCutRate(1.0f)
 {
 }
@@ -38,7 +38,7 @@ void HurtPoint::OnHit(std::shared_ptr<AttackBase> attack)
 	//ダメージを喰らう
 	OnHitDamage(attack->GetDamage());
 	//リアクションをするか
-	if (Battle::CheckFlinch(attack->GetAttackPower(), m_armor))
+	if (Battle::CheckFlinchAttackAndArmor(attack->GetAttackPower(), m_armor))
 	{
 		//ヒットリアクションをする
 		m_isHitReaction = true;	

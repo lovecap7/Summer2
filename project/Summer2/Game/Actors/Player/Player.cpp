@@ -42,7 +42,9 @@ namespace
 Player::Player(int modelHandle, Position3 firstPos) :
 	m_stickVec(0.0f,0.0f),
 	m_isGround(false),
-	m_damageCutFrame(0)
+	m_damageCutFrame(0),
+	m_damageUpRate(1.0f),
+	m_damageUpKeepFrame(0)
 {
 	//モデル
 	m_model = std::make_shared<Model>(modelHandle, firstPos.ToDxLibVector());
@@ -208,7 +210,7 @@ void Player::SetDamageCut(float cutRate, int keepFrame)
 	m_hurtPoint->SetDamageCutRate(cutRate);
 	m_damageCutFrame = keepFrame;
 	//アーマーを強く
-	m_hurtPoint->SetArmor(Battle::Armor::High);
+	m_hurtPoint->SetArmor(Battle::Armor::Heavy);
 }
 
 void Player::UpdateHurtPoint()

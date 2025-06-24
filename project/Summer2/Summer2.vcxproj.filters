@@ -450,6 +450,9 @@
     <ClCompile Include="Game\Actors\Item\DefenseUp.cpp">
       <Filter>ソース ファイル\Game\Actors\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actors\Item\DamageUp.cpp">
+      <Filter>ソース ファイル\Game\Actors\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -783,6 +786,9 @@
       <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actors\Item\DefenseUp.h">
+      <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actors\Item\DamageUp.h">
       <Filter>ヘッダー ファイル\Game\Actors\Item</Filter>
     </ClInclude>
   </ItemGroup>

@@ -34,8 +34,8 @@ public:
 	float GetKnockBackPower() { return m_knockBackPower; };
 	virtual Vector3 GetKnockBackVec(Vector3 other);
 	//攻撃の強さ
-	Battle::AttackPower GetAttackPower() { return m_attackPower; };
-	void SetAttackPower(Battle::AttackPower ap) { m_attackPower = ap; };
+	Battle::AttackWeight GetAttackPower() { return m_attackPower; };
+	void SetAttackPower(Battle::AttackWeight ap) { m_attackPower = ap; };
 protected:
 	//当たり判定や座標を持ったクラス
 	std::shared_ptr<Collidable> m_collidable;
@@ -55,6 +55,6 @@ protected:
 	int m_initDamage;//初期化用
 	int m_initKeepFrame;//初期化用
 	//攻撃の強さ
-	Battle::AttackPower m_attackPower;
+	Battle::AttackWeight m_attackPower;
 };
 

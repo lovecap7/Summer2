@@ -77,7 +77,7 @@ void BossDragon::Init()
 	//やられ判定(衝突判定と同じにする)
 	m_hurtPoint = std::make_shared<HurtPoint>(m_collidable, kHp, thisPointer);
 	//アーマーをHighにしておく
-	m_hurtPoint->SetArmor(Battle::Armor::High);
+	m_hurtPoint->SetArmor(Battle::Armor::Heavy);
 }
 
 void BossDragon::Update(const Input& input, const std::unique_ptr<Camera>& camera, std::shared_ptr<ActorManager> actorManager)
